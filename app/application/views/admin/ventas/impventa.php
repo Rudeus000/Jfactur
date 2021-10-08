@@ -1,0 +1,171 @@
+<div class="w120">
+	<div class="w30">
+		<img style="max-width: 170px" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" > 
+	</div>
+	<div class="w40 text-center">
+		<p style="font-size: 18px; padding-left: -70px;"><b><?= $empresa->razon_social ?></b></p>
+		<p style="font-size: 14px; padding-left: -70px; padding-top: -11px;"><b> <?= $empresa->direcc_emp ?></b> </p>
+		<!-- <p style="font-size: 10px; padding-left: -70px; padding-top: -9px;"><b> Telefono: <?= $empresa->telf_emp ?></b> </p>
+		<p style="font-size: 10px; padding-left: -70px; padding-top: -9px;"><b> Email: <?= $empresa->email_emp ?> </b></p> --> 
+			<!-- <b style="font-size: 12px;"> AYACUHO - LIMA </b> -->
+		<p style="font-size: 10px; padding-left: -70px; padding-top: -11px;"><b> <?= $ventas->direccion_puntoventa ?></b> </p>
+		<p style="font-size: 10px; padding-left: -70px; padding-top: -9px;"><b> Telefono: <?= $ventas->telefono_puntoventa ?></b> </p>
+		<p style="font-size: 10px; padding-left: -70px; padding-top: -9px;"><b> Email: <?= $ventas->email_puntoventa ?> </b></p> 
+			
+		
+		
+	</div>
+
+	<div class="w25 text-center" style="float: right; border: 1.5px solid #070707">
+		<br>
+		<b style="font-size: 15px;">R.U.C <?= $empresa->ruc_emp ?><b><p>
+		<div class="bg-primary" ><b  style="font-size: 15px;"><?= $ventas->nom_tipdocumento ?></b></div>
+		<br>
+		<b  style="font-size: 15px;"><?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>
+		
+	</div>
+</div>
+<br><br>
+
+<div class="Com-Datos" style="background: #0280B7;color:white">
+	DATOS CLIENTE
+</div>
+
+
+<br>
+<div class="w100">
+	<div class="w60">
+		<p><b style="font-size: 11px;">Nombre/ Razon Social:</b> &nbsp;&nbsp;<?= $ventas->nomb_cliente ?></p>
+		<p><b style="font-size: 11px;">R.U.C:</b>&nbsp;&nbsp; <?= $ventas->doc_cliente ?></p>
+		<p><b style="font-size: 11px;">Dirección:</b>&nbsp;&nbsp; <?= $ventas->direc_cliente ?></p>
+		<p><b>Condición de pago:</b>&nbsp;&nbsp;<?= ($ventas->tipopago=='CREDITO')?'Crédito':'Contado' ?></p>		
+
+	</div>
+	<div class="w40">
+		<p><b style="font-size: 11px;">Moneda:</b> &nbsp;&nbsp;SOLES</p>
+		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $ventas->fecha_vent ?></p>
+		<p><b>Fecha de Vencimiento:</b> 26/29/2021</p>			
+		<p><b>Numero de cuotas:</b> 3</p>		
+	</div>
+</div>
+
+
+<div class="w100">
+	   
+
+
+ 		  <table class="table table-bordered">
+	<thead>	
+		<tr>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 5px;" height="5">Item</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 5px;" height="5">Codigo</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 240px;">Nombre o Descripcion</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 50px;">Und.</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 60px">Cantidad</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 70px">P.Unitario</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 70px">Descuento</th>
+			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 20px">Importe</th>
+
+		</tr>
+	</thead>
+ 	<tbody>
+		<?php 
+		$item = 1;
+		$sumDescuento = 0;
+		?>
+		<?php foreach ($ventas->detalle as $dt): ?>
+		<tr>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $item ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= (!is_null($dt->cod_producto)?$dt->cod_producto:$dt->cod_servicio) ?></td>
+			 <td style="border:1px solid #070707; padding: 6px;  "><?= $dt->producto_ventdet?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center;  "><?= $dt->unidad_ventdet ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cant_ventdet ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->precunit_ventdet ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V')?$dt->descuento_ventdet:'' ?></td> 
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V')?$dt->subtotal_ventdet:'' ?></td>  
+		</tr>
+		<?php 
+			$sumDescuento += $dt->descuento_ventdet * $dt->cant_ventdet;
+			$item++;
+		?>
+		<?php endforeach ?>
+	</tbody> 
+</table>
+
+</div>
+
+<div class="w100">
+
+	<div class="w30" style="float: right; padding: 5px;border:2px solid #070707;">
+		<div class="w100">
+			<div class="w50"><b>Valor Venta</b></div>
+			<div class="w50" style="text-align:right"><?= $ventas->subtotal_vent ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>IGV (18%)</b></div>
+			<div class="w50" style="text-align:right"><?= $ventas->igv_vent ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>Descuento</b></div>
+			<div class="w50" style="text-align:right"><?= number_format($sumDescuento, 2, '.', '') ?></div>
+		</div>
+		<div class="w100" style="border-bottom:1px solid black;margin:5px 0">
+		</div>
+		<div class="w100">
+			<div class="w50"><b>Importe Total</b></div>
+			<div class="w50" style="text-align:right"><?= $ventas->total_vent ?></div>
+		</div>
+	</div>
+</div>
+
+<div class="w100" style="font-size:12px;">
+	<?= strtoupper(convertir($ventas->total_vent)) ?> Y 00/100 SOLES
+</div>
+<br>
+<div class="w100" style="border:1px solid black;padding:2px">
+	<b style="font-size:13px">Observación</b><br>
+	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, Venta a credito para pagar en 3 coutas, la primera couta se pagara xxxxxx ysdskfhbsjfhjkhdjksd.
+</div>
+<br>
+<br>
+<div class="w100">
+		<p style="font-size: 12px; padding-top: -10px;"><b>CONDICIÓN DE PAGO: Crédito</b></p>		
+        <p style="font-size: 12px; padding-top: -10px;">• Cuota #1 / Fecha: 24-09-2021 / Monto: S/2.36</p>       
+		<p style="font-size: 12px; padding-top: -10px;">• Cuota #2 / Fecha: 24-09-2021 / Monto: S/2.36</p>
+		<p style="font-size: 12px; padding-top: -10px;">• Cuota #3 / Fecha: 24-09-2021 / Monto: S/2.36</p>        
+</div>
+<br>
+<div class="w100" style="border:1px solid black;padding:2px">
+	<b style="font-size:13px">Observaciones SUNAT</b><br>
+	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"> <?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>, ha sido aceptada.
+</div>
+
+<!-- <table class="table table-bordered" style="width:70%;margin-top:10px">
+	<tr>
+		<td style="border:1px solid #070707"><b>1</b></td>
+		<td style="border:1px solid #070707">Detracciones: NÚMERO DE CUENTA EN BN</td>
+		<td style="border:1px solid #070707">00-098-139710</td>
+	</tr>
+	<tr>
+		<td style="border:1px solid #070707"><b>2</b></td>
+		<td style="border:1px solid #070707">Detracciones: CODIGO DE BB Y SS SUJETOS A DETRACCIÓN </td>
+		<td style="border:1px solid #070707">037</td>
+	</tr>
+</table> -->
+
+
+<br>
+<br>
+<br>
+<div class="w100">
+		<p style="font-size: 12px; padding-top: -10px;">Autorizado a ser emisor electrónico mediante <b>R.I. N° 182 - 2016 SUNAT</b></p>		
+        <p style="font-size: 12px; padding-top: -10px;">Representacion impresa de su Factura electronica, este puede ser consultado en <b><?= WEBSITE ?></b></p>       
+
+		<p>Codigo de seguridad (Hash): <?= $ventas->hash_vent ?></p>
+</div>
+
+<div class="w100">
+<barcode code="<?= $qr ?>" type="QR" class="barcode" size="1.5" error="M" disableborder="1" />
+</div>
+
+

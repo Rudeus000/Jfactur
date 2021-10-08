@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Invoice xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+	<ext:UBLExtensions>
+		<ext:UBLExtension>
+			<ext:ExtensionContent>
+			<ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>DkyVrPeDS827HtxdBwS7cWSSaZ8=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>cO14YuUIfWgQv99iWMFAP6JY0LzEDOtakNDZ8lz15sUehlttCNP8onR1LljZrd/IUNRc5YEZAFKz8qp8u5HH1nrcrqETcIh5gz8KqQJ8ZCBtcedZlPFmIbx5FHCxq6GBBKsrH+8ZKJ8sKFxbyXW1NK27Rxw0V7nzTLujSVtMgAa1DkeBqt3VRsp19Mw70PSRh/scMUARrbTpk9RVmg5veOrrNmUpfLbuT1MRS0fHfYGN14tQ52nyOh2DKDWBberdvT3DFz+zb6APzfmbssPSAAwZAcckGuU6COBti2OEXHNcWs/N4ZXtsVAtgn7a+Ix3GirXYp4Bss4z+vFy5NPymg==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
+		</ext:UBLExtension>
+	</ext:UBLExtensions>
+	<cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+	<cbc:CustomizationID schemeAgencyName="PE:SUNAT">2.0</cbc:CustomizationID>
+	<cbc:ProfileID schemeName="Tipo de Operacion" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">0101</cbc:ProfileID>
+	<cbc:ID>F001-459</cbc:ID>
+	<cbc:IssueDate>2021-02-02</cbc:IssueDate>
+	<cbc:IssueTime>00:00:00</cbc:IssueTime>
+	<cbc:DueDate>2021-02-02</cbc:DueDate>
+	<cbc:InvoiceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Documento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01" listID="0101" name="Tipo de Operacion" listSchemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">01</cbc:InvoiceTypeCode><cbc:Note languageLocaleID="1000">SON DOSCIENTOS CINCUENTA Y CINCO</cbc:Note><cbc:DocumentCurrencyCode listID="ISO 4217 Alpha" listName="Currency" listAgencyName="United Nations Economic Commission for Europe">PEN</cbc:DocumentCurrencyCode>
+            <cbc:LineCountNumeric>1</cbc:LineCountNumeric><cac:Signature>
+		<cbc:ID>F001-459</cbc:ID>
+		<cac:SignatoryParty>
+			<cac:PartyIdentification>
+				<cbc:ID>10285268210</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>AGUILAR TAYPE EULOGIO</cbc:Name>
+			</cac:PartyName>
+		</cac:SignatoryParty>
+		<cac:DigitalSignatureAttachment>
+			<cac:ExternalReference>
+				<cbc:URI>#F001-459</cbc:URI>
+			</cac:ExternalReference>
+		</cac:DigitalSignatureAttachment>
+	</cac:Signature>
+	<cac:AccountingSupplierParty>
+		<cac:Party>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="6" schemeName="Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">10285268210</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name><![CDATA[AGROFERRETERIA SANTA LUCIA]]></cbc:Name>
+			</cac:PartyName>
+			<cac:PartyTaxScheme>
+				<cbc:RegistrationName><![CDATA[AGUILAR TAYPE EULOGIO]]></cbc:RegistrationName>
+				<cbc:CompanyID schemeID="6" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">10285268210</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID schemeID="" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">10285268210</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName><![CDATA[AGUILAR TAYPE EULOGIO]]></cbc:RegistrationName>
+				<cac:RegistrationAddress>
+					<cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">050401</cbc:ID>
+					<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">0000</cbc:AddressTypeCode>
+					<cbc:CityName><![CDATA[AYACUCHO]]></cbc:CityName>
+					<cbc:CountrySubentity><![CDATA[HUANTA]]></cbc:CountrySubentity>
+					<cbc:District><![CDATA[HUANTA]]></cbc:District>
+					<cac:AddressLine>
+						<cbc:Line><![CDATA[AV. MARISCAL CASTILLA NUMERO 958]]></cbc:Line>
+					</cac:AddressLine>
+					<cac:Country>
+						<cbc:IdentificationCode listID="ISO 3166-1" listAgencyName="United Nations Economic Commission for Europe" listName="Country">PE</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:RegistrationAddress>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name><![CDATA[]]></cbc:Name>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingSupplierParty>
+	<cac:AccountingCustomerParty>
+		<cac:Party>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="6" schemeName="Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06"> 2060580976</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name><![CDATA[CORPORACION URRIBURU S.A.C.]]></cbc:Name>
+			</cac:PartyName>
+			<cac:PartyTaxScheme>
+				<cbc:RegistrationName><![CDATA[CORPORACION URRIBURU S.A.C.]]></cbc:RegistrationName>
+				<cbc:CompanyID schemeID="6" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06"> 2060580976</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID schemeID="6" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06"> 2060580976</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName><![CDATA[CORPORACION URRIBURU S.A.C.]]></cbc:RegistrationName>
+				<cac:RegistrationAddress>
+					<cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">050101</cbc:ID>
+					<cbc:CityName><![CDATA[AYACUCHO]]></cbc:CityName>
+					<cbc:CountrySubentity><![CDATA[HUAMANGA]]></cbc:CountrySubentity>
+					<cbc:District><![CDATA[AYACUCHO]]></cbc:District>
+					<cac:AddressLine>
+						<cbc:Line><![CDATA[AV. DEL EJERCITO NRO. 120 (CEMENTERIO GENERAL DE HUANTA) AYACUCHO - HUANTA - HUANTA]]></cbc:Line>
+					</cac:AddressLine>                                        
+					<cac:Country>
+						<cbc:IdentificationCode listID="ISO 3166-1" listAgencyName="United Nations Economic Commission for Europe" listName="Country">PE</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:RegistrationAddress>
+			</cac:PartyLegalEntity>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReasonCode listName="Cargo/descuento" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">02</cbc:AllowanceChargeReasonCode>
+		<cbc:MultiplierFactorNumeric>0.00</cbc:MultiplierFactorNumeric>
+		<cbc:Amount currencyID="PEN">0.00</cbc:Amount>
+		<cbc:BaseAmount currencyID="PEN">0.00</cbc:BaseAmount>
+	</cac:AllowanceCharge>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="PEN">38.90</cbc:TaxAmount>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="PEN">216.10</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="PEN">38.90</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">S</cbc:ID>
+				<cac:TaxScheme>
+					<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
+					<cbc:Name>IGV</cbc:Name>
+					<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal></cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="PEN">216.10</cbc:LineExtensionAmount>
+		<cbc:TaxInclusiveAmount currencyID="PEN">255.00</cbc:TaxInclusiveAmount>
+		<cbc:AllowanceTotalAmount currencyID="PEN">0</cbc:AllowanceTotalAmount>
+		<cbc:ChargeTotalAmount currencyID="PEN">0.00</cbc:ChargeTotalAmount>
+		<cbc:PayableAmount currencyID="PEN">255.00</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal><cac:InvoiceLine>
+		<cbc:ID>1</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="NIU" unitCodeListID="UN/ECE rec 20" unitCodeListAgencyName="United Nations Economic Commission for Europe">10</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="PEN">216.10</cbc:LineExtensionAmount>
+		<cac:PricingReference>
+			<cac:AlternativeConditionPrice>
+				<cbc:PriceAmount currencyID="PEN">25.5</cbc:PriceAmount>
+				<cbc:PriceTypeCode listName="Tipo de Precio" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo16">01</cbc:PriceTypeCode>
+			</cac:AlternativeConditionPrice>
+		</cac:PricingReference>
+		<cac:TaxTotal>
+			<cbc:TaxAmount currencyID="PEN">38.90</cbc:TaxAmount>
+			<cac:TaxSubtotal>
+				<cbc:TaxableAmount currencyID="PEN">216.10</cbc:TaxableAmount>
+				<cbc:TaxAmount currencyID="PEN">38.90</cbc:TaxAmount>
+				<cac:TaxCategory>
+					<cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">S</cbc:ID>
+					<cbc:Percent>18.00</cbc:Percent>
+					<cbc:TaxExemptionReasonCode listName="Afectacion del IGV" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07">10</cbc:TaxExemptionReasonCode>
+					<cac:TaxScheme>
+						<cbc:ID schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05" schemeName="Codigo de tributos" schemeAgencyName="PE:SUNAT">1000</cbc:ID>
+						<cbc:Name>IGV</cbc:Name>
+						<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+					</cac:TaxScheme>
+				</cac:TaxCategory>
+			</cac:TaxSubtotal>
+		</cac:TaxTotal>
+		<cac:Item>
+			<cbc:Description><![CDATA[CEMENTO ANDINO TIPO 1]]></cbc:Description>
+			<cac:SellersItemIdentification>
+				<cbc:ID><![CDATA[80]]></cbc:ID>
+			</cac:SellersItemIdentification>
+
+			<cac:CommodityClassification>
+				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">23251602</cbc:ItemClassificationCode>
+			</cac:CommodityClassification>
+
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="PEN">21.61</cbc:PriceAmount>
+		</cac:Price>
+	</cac:InvoiceLine></Invoice>

@@ -1,0 +1,324 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Regtraspasos extends CI_Controller {
+    private $permisos;
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('traspasos_model');
+		$this->load->model('modelgeneral');
+        $this->load->helper('general');
+        $this->permisos = $this->backend_lib->control();
+	}
+
+	public function index()
+	{
+		$data['permisos'] =$this->permisos;
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('admin/traspasos/panel',$data);    
+		$this->load->view('layouts/footer');
+	}
+
+	public function agregar()
+	{
+	
+	$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+	$this->load->view('layouts/header');
+    $this->load->view('layouts/aside');
+    $this->load->view('admin/traspasos/agregar',$data);    
+    $this->load->view('layouts/footer');
+	}
+
+	public function getDestinos()
+	{
+		$origen = $this->input->get('origen');
+		$query = $this->db->from('tb_almacen')
+		->where_not_in('cod_almacen',[$origen])
+		->get()->result();
+		echo json_encode($query);
+	}
+
+	public function jsonTraspasos()
+	{
+		$data['start'] = $this->input->get_post('start', true);
+		$data['length'] = $this->input->get_post('length', true);
+	    $data['sEcho']  = $this->input->get_post('_', true);
+	    $columns= ['fecha_tras'];
+		$orderCampo = $this->input->get_post('order', true);
+		$orderCampo = $orderCampo[0]['column'];
+		$orderCampo = $columns[$orderCampo];
+		$orderDireccion = $this->input->get_post('order', true);
+		$orderDireccion = $orderDireccion[0]['dir'];
+		$data['orderCampo'] = $orderCampo;
+		$data['orderDireccion'] = $orderDireccion;
+
+		$data['desde'] = $this->input->get_post('desde');
+		$data['hasta'] = $this->input->get_post('hasta');
+		$data['origen'] = $this->input->get_post('origen');
+		$data['destino'] = $this->input->get_post('destino');
+
+		$datos = $this->traspasos_model->getTraspasos($data);
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($datos);
+	}
+
+	public function getProductoBusqueda()
+	{
+		$producto = $this->input->get('producto');
+		$result = $this->db->from('tb_producto')
+		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad')
+		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
+		->where('est_product',1)
+		->like('nomb_product',$producto)
+		->get()->result();
+		echo json_encode($result);
+	}
+
+	public function verificaCantidadTraspaso()
+	{
+		$origen = $this->input->get('origen');
+		$destino = $this->input->get('destino');
+		$producto = $this->input->get('producto');
+		$cantidad = $this->input->get('cantidad');
+		$query = $this->db->from('tb_producto')
+		->join('tb_producto_stock','tb_producto.cod_producto = tb_producto_stock.cod_producto')
+		->where('cod_almacen',$origen)
+		->where('tb_producto.cod_producto',$producto)
+		->get()->row();
+
+		$queryDestino = $this->db->from('tb_producto')
+		->join('tb_producto_stock','tb_producto.cod_producto = tb_producto_stock.cod_producto')
+		->where('cod_almacen',$destino)
+		->where('tb_producto.cod_producto',$producto)
+		->get()->row();
+
+
+		$resp = [];
+		$resp['success'] = false;
+		$resp['destino'] = true;
+		$resp['mensaje_destino'] = 'El producto no existe en el almacen de destino';
+		if (!is_null($queryDestino)) {
+			$resp['destino'] = true;
+		}
+		if (!is_null($query)) {
+			if (!is_null($query->stock)) {
+				if ($query->stock >= $cantidad) {
+					$stockTemp = $query->stock - $cantidad;
+					if ($stockTemp >= $query->stockmin_product) {
+						$resp['series'] = (isset($_GET['series']))?$this->getSeries($origen,$producto,$_GET['series']):[];
+						$resp['success'] = true;
+						$resp['stock'] = $query->stock;
+						$resp['producto'] = $this->getProducto($producto);
+						$resp['actual'] = $stockTemp;
+					}else{
+						$resp['mensaje'] = 'La cantidad ingresada supera el stock mínimo.';	
+					}
+				}else{
+					$resp['mensaje'] = 'El producto no tiene stock suficiente';	
+				}
+			}else{
+				$resp['mensaje'] = 'El producto no tiene stock disponible';
+			}
+		}else{
+			$resp['mensaje'] = 'El producto no esta disponible en el almacen de origen';
+		}
+
+		echo json_encode($resp);
+	}
+
+	function getSeries($almacen,$producto,$series)
+	{
+		$verificados = [];
+		foreach ($series as $key => $value) {
+			$query = $this->db->from('tb_producto_serie')
+			->where('cod_almacen',$almacen)
+			->where('cod_producto',$producto)
+			->where('serie_descripcion',$value)
+			->where('serie_estado','D')
+			->get();
+			if($query->num_rows() > 0){
+				$verificados[] = $value;
+			}
+		}
+
+		return $verificados;
+	}
+
+	function getProducto($producto)
+	{
+		return $this->db->from('tb_producto')
+		->where('cod_producto',$producto)
+		->join('tb_marca','tb_producto.cod_marca = tb_marca.cod_marca')
+		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
+		->get()->row();
+	}
+
+	function agregarTraspaso()
+	{
+		$data['origen_tras'] = $this->input->post('origen');
+		$data['destino_tras'] = $this->input->post('destino');
+		$data['fecha_tras'] = $this->input->post('fecha');
+		$data['observacion_tras'] = $this->input->post('observacion');
+		$data['cod_usu'] = $this->session->userdata('cod_usu');
+		$insert =		$this->modelgeneral->insertRegist('tb_traspasos',$data);
+
+		$resp = [];
+		if (!is_null($insert)) {
+			foreach ($_POST['id_producto'] as $key => $value) {
+				$detalle['cod_tras'] = $insert;
+				$detalle['cod_producto'] = $_POST['id_producto'][$key];
+				$detalle['cant_trasdet'] = $_POST['cant_producto'][$key];
+				if(isset($_POST['serie_producto'][$value])){
+					if (is_array($_POST['serie_producto'][$value])) {
+						$detalle['serie_trasdet'] = implode(',',$_POST['serie_producto'][$value]);
+					}else{
+						$detalle['serie_trasdet'] = $_POST['serie_producto'][$value];
+					}
+					$this->traspasarSerie($detalle['cod_producto'],$_POST['serie_producto'][$value],$data['origen_tras'],$data['destino_tras']);
+				}
+				$this->modelgeneral->insertRegist('tb_traspasos_detalles',$detalle);
+
+				//RESTAR DE ALMACEN
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$_POST['cant_producto'][$key]." WHERE cod_almacen = ".$data['origen_tras']." AND cod_producto = ".$_POST['id_producto'][$key]);
+				
+				//OBTENER PRODUCTO EN ALMACEN DESTINO
+				$queryDestino = $this->db->from('tb_producto')
+				->join('tb_producto_stock','tb_producto.cod_producto = tb_producto_stock.cod_producto')
+				->where('cod_almacen',$data['destino_tras'])
+				->where('tb_producto.cod_producto',$detalle['cod_producto'])
+				->get();
+
+				if ($queryDestino->num_rows() > 0){
+					
+					//SUMAR EN ALMACEN
+					$this->db->query("UPDATE tb_producto_stock SET stock = stock + ".$_POST['cant_producto'][$key]." WHERE cod_almacen = ".$data['destino_tras']." AND cod_producto = ".$_POST['id_producto'][$key]);
+				}else{
+					//CREAR NUEVO PRODUCTO EN ALMACEN DESTINO
+					$productoStock['cod_producto'] = $_POST['id_producto'][$key];
+					$productoStock['cod_almacen'] = $data['destino_tras'];
+					$productoStock['stock'] = $_POST['cant_producto'][$key];
+					$productoStock['stock_inicial'] = 0;
+					$this->modelgeneral->insertRegist('tb_producto_stock',$productoStock);
+				}
+
+			}
+			$resp['success'] = true;
+		}else{
+			$resp['success'] = false;
+		}
+
+		echo json_encode($resp);
+	}
+
+	function traspasarSerie($producto,$serie,$origen,$destino)
+	{
+		if (is_array($serie)) {
+			foreach ($serie as $key => $value) {
+				$this->db->where('cod_producto',$producto)
+				->where('serie_descripcion',$value)
+				->where('cod_almacen',$origen)
+				->set('cod_almacen',$destino)
+				->update('tb_producto_serie');
+			}
+		}else{
+			$this->db->where('cod_producto',$producto)
+				->where('serie_descripcion',$serie)
+				->where('cod_almacen',$origen)
+				->set('cod_almacen',$destino)
+				->update('tb_producto_serie');
+		}
+	}
+
+
+	public function editar($id)
+	{
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$data['traspaso'] = $this->modelgeneral->getTableWhereRow('tb_traspasos',['cod_tras'=>$id]);
+		$data['detalles'] =  $this->db->from('tb_traspasos_detalles')
+		->join('tb_producto','tb_traspasos_detalles.cod_producto = tb_producto.cod_producto')
+		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
+		->where('cod_tras',$id)
+		->get()->result();
+		$this->load->view('layouts/header');
+    $this->load->view('layouts/aside');
+    $this->load->view('admin/traspasos/editar',$data);    
+    $this->load->view('layouts/footer');
+	}
+
+	public function editarGuardar()
+	{
+		$data['fecha_tras'] = $this->input->post('fecha');
+		$data['observacion_tras'] = $this->input->post('observacion');
+		$where['cod_tras'] = $this->input->post('id');
+		$edit = $this->modelgeneral->editRegist('tb_traspasos',$where,$data);
+		$resp = [];
+		if ($edit) {
+			$resp['success'] = true;
+			$resp['redirect'] = 'administrador/regtraspasos';
+		}else{
+			$resp['success'] = false;
+		}
+		echo json_encode($resp);
+	}
+
+	public function reportePdf()
+	{
+		$this->mpdf = new \Mpdf\Mpdf([
+			'mode' => 'utf-8',
+			'format' => 'A4',
+			'orientation' => 'L',
+			'margin_left' => 10,
+			'margin_right' => 10,
+			'margin_top' => 10,
+			'margin_bottom' => 10,
+			'margin_header' => 10,
+			'margin_footer' => 10
+		]);		
+	  $data['datos'] = $this->getTraspasosReporte();
+		$html = $this->load->view('admin/traspasos/reporte_pdf',$data,TRUE);
+		$css = $css = file_get_contents('assets/styles_pdf.css');
+		$this->mpdf->SetTitle('Compras');
+		$this->mpdf->writeHTML($css,1);
+		$this->mpdf->writeHTML($html,2);
+		$this->mpdf->Output('Compras','I');
+	}
+
+	function reporteExcel()
+  {
+  	$data['datos'] = $this->getTraspasosReporte();
+  	$this->load->view('admin/traspasos/reporte_excel',$data);
+  }
+
+	public function getTraspasosReporte()
+	{
+		$desde = $this->input->get('desde');
+		$hasta = $this->input->get('hasta');
+		$origen = $this->input->get('origen');
+		$destino = $this->input->get('destino');
+		$this->db->from('tb_traspasos');
+	   	$this->db->select('tb_traspasos.cod_tras,detallet.cod_tras,fecha_tras,origen.nomb_almacen as origen, destino.nomb_almacen as destino,observacion_tras,nomb_product,cant_trasdet,serie_trasdet,tb_usuario.nomb_usu as usuario');
+	    $this->db->join('tb_almacen origen',' tb_traspasos.origen_tras = origen.cod_almacen');
+	    $this->db->join('tb_almacen destino',' tb_traspasos.destino_tras = destino.cod_almacen');     
+	    $this->db->join('tb_traspasos_detalles detallet','tb_traspasos.cod_tras = detallet.cod_tras'); 
+	    $this->db->join('tb_producto','detallet.cod_producto = tb_producto.cod_producto');
+	    $this->db->join('tb_usuario','tb_traspasos.cod_usu = tb_usuario.cod_usu');    
+
+	    $this->db->where('fecha_tras >= ',$desde);
+	    $this->db->where('fecha_tras <=',$hasta);
+    if ($origen!='') {
+    	$this->db->like('origen.cod_almacen',$origen);
+    }
+    if ($destino!='') {
+    	$this->db->like('destino.cod_almacen',$desino);
+    }
+    return $this->db->get()->result();
+
+	}
+
+}
+
+/* End of file Regtraspasos.php */
+/* Location: ./application/controllers/administrador/Regtraspasos.php */

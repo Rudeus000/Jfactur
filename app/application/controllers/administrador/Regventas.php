@@ -1,0 +1,1322 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+require(APP_TENANTPATH.'config.php');
+class Regventas extends CI_Controller {
+	private $permisos;
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('ventas_model');
+		$this->load->model('empresa_model');
+		$this->load->model('modelgeneral');
+		$this->load->helper('general');
+    $this->permisos = $this->backend_lib->control();
+	}
+
+	public function index()
+	{
+		$data['permisos'] =$this->permisos;
+		$data['vendedores'] = $this->ventas_model->getVendedores();
+		$data['puntos'] = $this->ventas_model->getPuntos();
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('admin/ventas/listgetventas',$data);    
+		$this->load->view('layouts/footer');
+	}
+
+	public function jsonVentas()
+  {
+    $data['start'] = $this->input->get_post('start', true);
+	$data['length'] = $this->input->get_post('length', true);
+    $data['sEcho']  = $this->input->get_post('_', true);
+    $columns= ['fecha_vent','nom_tipdocumento','fecha_vent','nomb_cliente'];
+		$orderCampo = $this->input->get_post('order', true);
+		$orderCampo = $orderCampo[0]['column'];
+		$orderCampo = $columns[$orderCampo];
+		$orderDireccion = $this->input->get_post('order', true);
+		$orderDireccion = $orderDireccion[0]['dir'];
+		$data['orderCampo'] = $orderCampo;
+		$data['orderDireccion'] = $orderDireccion;
+
+		$data['desde'] = $this->input->get_post('desde');
+		$data['hasta'] = $this->input->get_post('hasta');
+		$cliente = $this->input->get_post('cliente');
+
+		// if ($cliente!='') {
+			$data['cliente'] = $cliente;
+		// }
+		$data['vendedor'] = $this->input->get_post('vendedor');
+		$data['punto'] = $this->input->get_post('punto');
+		$data['estado'] = $this->input->get_post('estado');
+
+		$datos = $this->ventas_model->getVentas($data);
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($datos);
+  }
+
+  public function verificarCoberturaCliente()
+  {
+  	$saldo = $this->input->get('saldo');
+  	$cliente = $this->input->get('cliente');
+  	$query = $this->db->from('tb_cliente_cobertura')
+  	->where('id_cliente',$cliente)
+  	->where('inicio_cobertura <=',date('Y-m-d'))
+  	->where('limite_cobertura >=',date('Y-m-d'))
+  	->get();
+  	$resp = [];
+  	if ($query->num_rows()>0) {
+  		$queryCobros = $this->db->from('tb_venta')
+  		->select('SUM(pendiente_vent) as pendientes')
+  		->where('id_cliente',$cliente)
+  		->group_by('id_cliente')
+  		->get()->row();
+
+  		$resp['monto_cobertura'] = $query->row()->monto_cobertura;
+  		$resp['pendientes'] = $queryCobros->pendientes;
+
+  		if ($query->row()->monto_cobertura > $queryCobros->pendientes) {
+	  		$cobertura = $query->row()->monto_cobertura - $queryCobros->pendientes;
+	  		$resp['cobertura'] = $cobertura;
+	  		if ($cobertura >= $saldo) {
+	  			$resp['success'] = true;
+	  		}else{
+	  			$resp['success'] = false;
+	  			$resp['mensaje'] = 'El cliente tiene una cobertura disponible de: '.$cobertura;
+	  		}
+  		}else{
+  			$resp['success'] = false;
+	  		$resp['mensaje'] = 'El cliente ya no tiene cobertura disponible';
+  		}
+  	}else{
+  		$resp['success'] = false;
+  		$resp['mensaje'] = 'El cliente no tiene cobertura';
+  	}
+
+  	echo json_encode($resp);
+  }
+
+	public function agregar()
+	{
+		$data['tipos_pagos'] = $this->modelgeneral->getTableWhere('tb_tipo_pago',['estado_tipopago'=>1]);
+		$data['tipos_tarjetas'] = $this->modelgeneral->getTableWhere('tb_tarjeta',['estado_tarj'=>1]);
+		$data['punto'] = $this->modelgeneral->getTableWhereRow('tb_puntoventa',['cod_puntoventa'=>$this->session->userdata('puntoventa')]);
+		$data['almacenes'] = $this->ventas_model->getAlmacenesDisponibles();
+		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
+		$data['tipos'] = $this->ventas_model->getTiposVentas();
+		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
+		$data['apertura'] = $this->ventas_model->getCajaApertura();
+		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();
+		$this->load->view('layouts/header');
+    $this->load->view('layouts/aside');
+    $this->load->view('admin/ventas/ventagregar',$data);    
+		$this->load->view('layouts/footer');
+	}
+
+	public function numeracion($tipo=NULL)
+	{
+		if (is_null($tipo)) {
+			$id = $this->input->get('id');
+		}else{
+			$id = $tipo;
+		}
+		$query =  $this->db->from('tb_talonario')
+							->select('correlativo_actual,serie')
+							->where('cod_puntoventa',$this->session->userdata('puntoventa'))
+							->where('cod_talonario',$id)
+							->get()->row();
+		if (is_null($tipo)) {
+			echo json_encode($query);
+		}else{
+			return $query->correlativo_actual;
+		}
+	}
+
+	private function aumentarNumeracion($tipo,$actual)
+	{
+		$nuevo = $actual + 1;
+		$this->db->set('correlativo_actual',$nuevo)
+		->where('cod_puntoventa',$this->session->userdata('puntoventa'))
+		->where('cod_talonario',$tipo)
+		->update('tb_talonario');
+	}
+
+	public function getClientes()
+	{
+		$q = $this->input->get('q');
+		$dni = $this->input->get('dni');
+		$ruc = $this->input->get('ruc');
+
+		$array = [];
+		if ($dni=='1') {
+			$array[] = 1;
+		}
+		if ($ruc=='1') {
+			$array[] = 6;
+		}
+		$this->db->from('tb_cliente');
+		$this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as ruc, direc_cliente as direccion, precio_cliente');
+		$this->db->join('tb_tipodocumentocliente','tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli');
+		
+		$this->db->where('(nomb_cliente like "%'.$q.'%" OR doc_cliente like "%'.$q.'%")',null);
+		$this->db->where_in('codsunat_tipdocucli',$array);
+		$result = $this->db->get()->result();
+
+		echo json_encode($result);
+	}
+
+	public function getProductoBusqueda()
+	{
+		$queryLike = $this->input->get('producto');
+		$almacen = $this->input->get('almacen');
+		$cambio = $this->input->get('cambio');
+		$precioCliente = $this->input->get('precio_cliente');
+
+		if($precioCliente=='Normal'){
+			$precioVenta = 'prec_venta';
+		}else if($precioCliente=='Mayor'){
+			$precioVenta = 'prec_mayor_venta';
+		}else if($precioCliente=='Especial'){
+			$precioVenta = 'prec_especial_venta';
+		}
+
+		$resultProducto = $this->db->from('tb_producto')
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock", FALSE)
+			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
+			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+			->where('est_product', 1)
+			->where('cod_tiparticulo', 1)
+			->where('(tb_producto_stock.cod_almacen = "' . $almacen . '" AND (nomb_product LIKE "%' . $queryLike
+				. '%" OR barra_product LIKE "%' . $queryLike . '%"))', NULL)
+			->where('(nomb_product LIKE "%' . $queryLike
+				. '%" OR barra_product LIKE "%' . $queryLike . '%")', NULL)
+
+			->get()->result_array();
+
+		if (empty($resultProducto)) {
+			$resultProducto = $this->db->from('tb_producto')
+				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock", FALSE)
+				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+				->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct')
+				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+				->where('est_product', 1)
+				->where('cod_tiparticulo', 1)
+				->where('(tb_producto_stock.cod_almacen = "' . $almacen . '" AND (nomb_product LIKE "%' . $queryLike
+					. '%" OR barra_product LIKE "%' . $queryLike . '%"))', NULL)
+				// ->where('(nomb_product LIKE "%' . $queryLike
+				// 	. '%" OR barra_product LIKE "%' . $queryLike . '%")', NULL)
+
+				->get()->result_array();
+		}
+
+		$this->db->flush_cache();
+
+		$resultServicio = $this->db->from('tb_producto')
+		->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / ".$cambio.") as costo,(".$precioVenta." / ".$cambio.") as venta,nomb_unid as unidad, '1' as estado,peso_product",FALSE)
+		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
+		->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+		->where('est_product',1)
+		->where('(cod_tiparticulo = 2 AND (nomb_product LIKE "%'.$queryLike
+		.'%" OR barra_product LIKE "%'.$queryLike.'%"))',NULL)
+		->get()->result_array();
+
+		$merge = array_merge($resultProducto,$resultServicio);
+		echo json_encode($merge);
+	}
+
+	public function getProducto()
+	{
+		$almacen = $this->input->get('almacen');
+		$cambio = $this->input->get('cambio');
+		$cantidad = $this->input->get('cantidad');
+		$producto = $this->input->get('producto');
+		$series = $this->input->get('series');
+
+		$prod = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$producto]);
+		if ($prod->typeAssignmentProduct == 'H') {
+			$ResultypeAssignmentProduct = array('tb_producto.cod_producto' => $producto, 'tb_producto.idTypeAssignmentProduct' => $prod->idTypeAssignmentProduct);
+			$JoinAssignmentProduct = 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct';
+			$querySeriestypeAssignmentProduct = array('cod_producto' => $prod->idTypeAssignmentProduct);
+		} else {
+			$ResultypeAssignmentProduct = array('tb_producto.cod_producto' => $producto);
+			$JoinAssignmentProduct = 'tb_producto_stock.cod_producto = tb_producto.cod_producto';
+			$querySeriestypeAssignmentProduct = array('cod_producto' => $producto);
+		}
+
+		$resp = [];
+		$resp['tipo'] = $prod->cod_tiparticulo;
+		if ($prod->cod_tiparticulo==1) { //PRODUCTOS
+		
+		$result = $this->db->from('tb_producto')
+				->select("tb_producto.*,tb_marca.*,tb_unidades.*,tb_producto_stock.*,(prec_costo / " . $cambio . ") as costo,(prec_venta / " . $cambio . ") as venta,(tb_producto_stock.stock - stockmin_product ) as stock_disponible,cod_tiparticulo", FALSE)
+				->join('tb_producto_stock', $JoinAssignmentProduct)
+				->join('tb_marca', 'tb_producto.cod_marca = tb_marca.cod_marca')
+				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+				->where('tb_producto_stock.cod_almacen', $almacen)
+				->where($ResultypeAssignmentProduct)				
+				->where('cod_tiparticulo', 1)
+				->get()->row();
+
+				$querySeries = $this->db->from('tb_producto_serie')
+				->where($querySeriestypeAssignmentProduct)
+				->where('cod_almacen', $almacen)
+				->where('serie_estado', 'N')
+				->get();
+
+			if ($result->stock_disponible > $querySeries->num_rows()) {
+				$result->stock_disponible -= $querySeries->num_rows();
+			}		
+		
+			$resp['response'] = $result;
+
+			if (!empty($resp['response'])) {
+				$resp['response']->cod_producto = $producto;
+			}
+
+
+			if ($result->stock_disponible >= $cantidad) {
+				if (is_array($series)) {
+					$querySeries = $this->db->from('tb_producto_serie')
+					->select('serie_descripcion as id, serie_descripcion as text')
+					// ->where('cod_producto',$producto)
+					->where($querySeriestypeAssignmentProduct)
+					->where('cod_almacen',$almacen)
+					->where('serie_estado','D')
+					->get()->result();
+					foreach ($querySeries as $q) {
+						if(in_array($q->text,$series)){
+							$q->selected = true;
+						}else{
+							$q->selected = false;
+						}
+					}
+					$resp['series'] = $querySeries;
+				}
+				$resp['estado'] = true;
+			}else{
+				$resp['estado'] = false;
+			}
+		}else{ //SERVICIOS
+			$result = $this->db->from('tb_producto')
+			->select("tb_producto.*,tb_marca.*,tb_unidades.*,(prec_costo / ".$cambio.") as costo,(prec_venta / ".$cambio.") as venta,cod_tiparticulo",FALSE)
+			->join('tb_marca','tb_producto.cod_marca = tb_marca.cod_marca')
+			->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
+			// ->where('tb_producto.cod_producto',$producto)
+			->where($ResultypeAssignmentProduct)
+			->where('cod_tiparticulo',2)
+			->get()->row();
+
+			$querySeries = $this->db->from('tb_producto_serie')
+			->select('serie_descripcion as id, serie_descripcion as text')
+			// ->where('cod_producto',$producto)
+			->where($ResultypeAssignmentProduct)
+			->where('cod_almacen',$almacen)
+			->where('serie_estado','D')
+			->get()->result();
+			if(is_array($series)){
+				foreach ($querySeries as $q) {
+					if(in_array($q->text,$series)){
+						$q->selected = true;
+					}else{
+						$q->selected = false;
+					}
+				}
+			}
+			
+			$resp['response'] = $result;
+
+		}
+
+		echo json_encode($resp);
+	}
+
+	public function getSeriesProducto()
+	{
+		$producto = $this->input->get('producto');
+		$almacen = $this->input->get('almacen');
+		$query = $this->db->from('tb_producto_serie')
+		->select('serie_descripcion as id, serie_descripcion as text')
+		->where('cod_producto',$producto)
+		->where('cod_almacen',$almacen)
+		->where('serie_estado','D')
+		->get()->result();
+
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($query);
+	}
+
+	public function agregarVenta()
+	{
+		$apertura = $this->ventas_model->getCajaApertura();
+		if ($apertura==false) {
+			return false;
+		}
+
+		$data['fecha_vent'] = $this->input->post('fecha');
+		$data['hora_vent'] = date('H:i:s');
+		$data['id_cliente'] = $this->input->post('cliente');
+		$data['cod_almacen'] = $this->input->post('almacen');
+		$data['cod_talonario'] = $this->input->post('tipoPedido');
+		$talonario = $this->modelgeneral->getTableWhereRow('tb_talonario',['cod_talonario'=>$data['cod_talonario']]);
+		$data['numero_vent'] = $this->numeracion($data['cod_talonario']);
+		$data['moneda_vent'] = $this->input->post('moneda');
+		if ($data['moneda_vent']=='S') {
+			$data['codmoneda_vent'] = 'PEN';
+		}else {
+			$data['codmoneda_vent'] = 'USD';
+		}
+		$data['cambio_vent'] = $this->input->post('tipoCambio');
+		$data['monto_vent'] = $this->input->post('monto');
+		$data['pago_vent'] = $this->input->post('pago');
+		$data['igv_vent'] = ($this->input->post('total') / 1.18) * 0.18;
+		$data['subtotal_vent'] = $this->input->post('total') - $data['igv_vent'];
+		$data['total_vent'] = $this->input->post('total');
+		$data['montorecibido_vent'] = $this->input->post('montoRecibido');
+		$data['vuelto_vent'] = $this->input->post('vuelto');
+		$data['pendiente_vent'] = $data['total_vent'] - $data['monto_vent'];
+		$data['estado_vent'] = 'G';
+		$data['cod_usu'] = $this->session->userdata('cod_usu');
+		$printType = $this->modelgeneral->getTableWhere('tb_usuario_documento', ['cod_usu' => $data['cod_usu'], 'serie_usudoc' => $this->input->post('serie')]);
+		$data['login_usu'] = $this->session->userdata('login_usu');
+		$data['cod_puntoventa'] = $this->session->userdata('puntoventa');
+		$data['cod_caja'] = $apertura->cod_caja;
+		$data['cod_tipopago'] =   $this->input->post('tipoPago');
+		$data['operacion'] =  $this->input->post('operacion');
+		if (isset($_POST['tipoTarjeta'])) {
+			$data['cod_tarj'] =   $this->input->post('tipoTarjeta');
+		}
+		$data['cod_apertura'] =  $apertura->cod_apertura;
+		if (isset($_POST['dias'])) {
+			$data['dias_vent'] = $this->input->post('dias');
+			$data['fechavenc_vent'] = $this->input->post('fecVenc');
+			$data['saldo_vent'] = $data['total_vent'] - $data['monto_vent'];
+		}
+		$insert = $this->modelgeneral->insertRegist('tb_venta',$data);
+
+		$venta = $this->db->from('tb_venta')
+							->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
+							->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+							->get()->row();
+		$cobro['cod_vent'] = $insert;
+		if ($this->input->post('pago')=='CO') {
+			$tipo_cobro = 'Contado';
+		}else{
+			$tipo_cobro = 'Credito';
+		}
+		$cobro['tipo_cobro'] = $tipo_cobro;
+		$cobro['cod_caja'] = $apertura->cod_caja;
+		$cobro['fecha_cobro'] = $this->input->post('fecha');
+		$cobro['detalle_cobro'] = 'PAGO COBRO: '.$venta->nom_tipdocumento.'-'.$venta->serie.'-'.$venta->numero_vent;
+		$cobro['monto_cobro'] = $this->input->post('monto');
+		$this->modelgeneral->insertRegist('tb_cobro',$cobro);
+
+
+		$resp = [];
+		if (!is_null($insert)) {
+			$this->aumentarNumeracion($data['cod_talonario'],$data['numero_vent']);
+		foreach ($_POST['id_prod'] as $key => $value) {
+				$pos = strpos($value, 'ser-');
+				if ($pos !== false) {
+					$precio_unitario = $_POST['prec_prod'][$value];
+					$codigo_producto = null;
+					$detalle['cod_servicio'] = substr($value,4).'-'.$insert;
+				}else{
+					$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
+					$codigo_producto = $_POST['id_prod'][$key];
+					$precio_unitario = $producto->prec_costo;
+				}			
+							
+				$detalle['cod_vent'] = $insert;
+				if(isset($_POST['idTypeAssignmentProduct'][$key])){
+					$idTypeAssignmentProduct = $_POST['idTypeAssignmentProduct'][$key];
+				if ($_POST['idTypeAssignmentProduct'][$key] !== "null") {
+						$detalle['cod_father_product'] = $_POST['idTypeAssignmentProduct'][$key];
+					} else {
+						$detalle['cod_father_product'] = $codigo_producto;
+					}
+				}
+				$detalle['cod_producto'] = $codigo_producto;
+				// $idTypeAssignmentProduct = $_POST['idTypeAssignmentProduct'][$key];
+				$detalle['producto_ventdet'] = $_POST['nombre_prod'][$key];
+				$detalle['producto_isdn'] = $_POST['producto_isdn'][$key];
+				$detalle['cant_ventdet'] = $_POST['cant_prod'][$key];
+				$detalle['precunitcomp_ventdet'] = $precio_unitario;
+				$detalle['precunit_ventdet'] = $_POST['prec_prod'][$key];
+				if($_POST['desc_prod'][$key]==''){
+					$descuento = 0;
+				}else{
+					$descuento = $_POST['desc_prod'][$key];
+				}
+				$detalle['subtotal_ventdet'] = (($detalle['precunit_ventdet'] - $descuento) * $detalle['cant_ventdet']);
+				$detalle['igv_ventdet'] = (($detalle['subtotal_ventdet'])  / 1.18) * 0.18;
+				$detalle['prec_ventdet'] = $detalle['subtotal_ventdet'] - $detalle['igv_ventdet'];
+				$detalle['descuento_ventdet'] = $descuento;
+				$detalle['estado_ventdet'] = 'S';
+
+				$detalle['unidad_ventdet'] = $_POST['unidad_prod'][$key];
+				$detalle['peso_ventdet'] = $_POST['peso_prod'][$key];
+
+				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
+				$insertDetalle = $this->modelgeneral->insertRegist('tb_venta_detalle',$detalle);
+			
+				
+				if ($pos === false) {
+					if ($producto->cod_tiparticulo==1) { //SI ES PRODUCTO 
+						// $this->descontarDeAlmacen($detalle,$data['cod_almacen']); //DESCONTAR STOCK
+						$this->descontarDeAlmacen($detalle, $data['cod_almacen'],$idTypeAssignmentProduct); //DESCONTAR STOCK
+						// var_dump($_POST);
+						if (isset($_POST['series'][$producto->cod_producto])) {//si existe la serie del producto tal
+							
+							$series = $_POST['series'][$producto->cod_producto];
+							
+							if(is_array($series)){
+								foreach ($series as $key => $value) {
+									$whereSeries['cod_almacen'] = $data['cod_almacen'];
+									$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct=='H' AND !is_null($producto->idTypeAssignmentProduct))?$producto->idTypeAssignmentProduct:$producto->cod_producto;
+									$whereSeries['serie_descripcion'] = $value;
+									$dataSeries['cod_vent'] = $insert;
+									$dataSeries['serie_estado'] = 'N';
+									$this->modelgeneral->editRegist('tb_producto_serie',$whereSeries,$dataSeries);
+		
+									$dataVentaDetalleSerie['cod_ventdet '] = $insertDetalle;
+									$dataVentaDetalleSerie['cod_producto'] = $producto->cod_producto;
+									$dataVentaDetalleSerie['serie_ventdetserie '] = $value;
+									$this->modelgeneral->insertRegist('tb_venta_detalle_serie',$dataVentaDetalleSerie);
+								}
+							}else{
+								$whereSeries['cod_almacen'] = $data['cod_almacen'];
+								$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct=='H' AND !is_null($producto->idTypeAssignmentProduct))?$producto->idTypeAssignmentProduct:$producto->cod_producto;
+								$whereSeries['serie_descripcion'] = $series;
+								$dataSeries['cod_vent'] = $insert;
+								$dataSeries['serie_estado'] = 'N';
+								$this->modelgeneral->editRegist('tb_producto_serie',$whereSeries,$dataSeries);
+		
+								$dataVentaDetalleSerie['cod_ventdet '] = $insertDetalle;
+								$dataVentaDetalleSerie['cod_producto'] = $producto->cod_producto;
+								$dataVentaDetalleSerie['serie_ventdetserie '] = $series;
+								$this->modelgeneral->insertRegist('tb_venta_detalle_serie',$dataVentaDetalleSerie);
+							}
+						}
+					}
+				}
+			}
+			//var_dump ($_POST);
+			//exit();
+			$resp['success'] = true;
+			$resp['id'] = $insert;
+			$resp['printType'] = $printType[0]->type_formt;
+			if ($talonario->siglas_talonario=='FC') {
+				$resp['xml'] = $this->xmlHash($insert);
+			}else{
+				$resp['xml']['archivo'] = $this->generarNoXml($insert);
+			}
+		}else{
+			$resp['success'] = false;
+		}
+		// header('content-type: application/json; charset=utf-8');
+
+		echo json_encode($resp);
+	}
+
+	private function generarNoXml($id)
+	{
+		$res = $this->db->from('tb_venta')
+		->select('doc_cliente,serie,numero_vent')
+	    ->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente')
+	    ->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
+		->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+		->where('cod_vent',$id)
+		->get()->row();
+		$noxml = $res->doc_cliente.'-0-'.$res->serie.'-'.$res->numero_vent;
+		$this->db->where('cod_vent',$id)
+		->set('noxml_vent',$noxml)
+		->update('tb_venta');
+		return $noxml;
+	}
+
+	// private function descontarDeAlmacen($data,$almacen)
+	private function descontarDeAlmacen($data, $almacen,$idTypeAssignmentProduct)
+	{
+		//RESTAR DE ALMACEN
+		// $this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$data['cant_ventdet']." WHERE cod_almacen = ".$almacen." AND cod_producto = ".$data['cod_producto']);
+		if($idTypeAssignmentProduct !== "null"){
+			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+		}else{
+			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+		}
+	}
+
+	public function deudasCliente()
+	{
+		$cliente = $this->input->get('cliente');
+		$query = $this->db->from('tb_venta')
+		->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente')
+		->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
+    ->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+		->where('tb_venta.id_cliente',$cliente)
+		->where('pendiente_vent >',0)
+		->get()->result();
+
+		echo json_encode($query);
+	}
+
+	public function editar($id)
+	{
+		$data['venta'] = $this->ventas_model->getVenta($id);
+		$data['almacenes'] = $this->ventas_model->getAlmacenesDisponibles();
+		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
+		$data['tipos'] = $this->ventas_model->getTiposVentas();
+		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
+		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();
+		$this->load->view('layouts/header');
+    $this->load->view('layouts/aside');
+    $this->load->view('admin/ventas/venteditar',$data);    
+    $this->load->view('layouts/footer');
+	}
+
+	public function anular()
+	{
+		$data['estado_vent'] = 'A'; //ANULAR	
+    $where['cod_vent'] = $this->input->get('id');  
+		
+		/*=======================================
+		=            SUMAR STOCK            =
+		=======================================*/
+		$venta = $this->modelgeneral->getTableWhereRow('tb_venta',$where);
+		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle',$where);
+
+		foreach ($detalle as $d) {
+			$whereStock['cod_producto'] = $d->cod_father_product;
+			$producto_row = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$d->cod_father_product]);
+			if ($producto_row->cod_tiparticulo == 1) { //SI ES DEL TIPO PRODUCTO SE SUMA EL STOCK
+				$whereStock['cod_almacen'] = $venta->cod_almacen;
+				$productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock',$whereStock);
+
+				$nuevoStock = $productoStock->stock + $d->cant_ventdet;
+				$edit = $this->modelgeneral->editRegist('tb_producto_stock',$whereStock,['stock'=>$nuevoStock]);
+
+				//REGRESAR DISPONIBILIDAD A SERIE
+				$this->db->where('cod_vent',$where['cod_vent'])
+				->set('serie_estado','D')
+				->set('cod_vent',null)
+				->update('tb_producto_serie');
+			}
+		}
+		/*=====  End of SUMAR STOCK  ======*/
+		
+		$edit = $this->modelgeneral->editRegist('tb_venta',$where,$data);
+		$resp = [];
+		$resp['where'] = $whereStock;
+		if ($edit) {
+			$resp['success'] = true;
+		}else{
+			$resp['success'] = false;
+		}
+		echo json_encode($resp);
+	}
+
+	function agregarCliente()
+	{
+		$this->form_validation->set_rules('tipo','','required');
+		$this->form_validation->set_rules('nombre','','required');
+		$this->form_validation->set_rules('documento','','required');
+		// $this->form_validation->set_rules('telefono','','required');
+    if($this->form_validation->run() == TRUE){
+    	$data['cod_tipdocucli '] = $this->input->post('tipo');
+    	$data['nomb_cliente'] = $this->input->post('nombre');
+    	$data['doc_cliente'] = $this->input->post('documento');
+    	$data['fena_pac'] = $this->input->post('fnacimiento');
+    	$data['precio_cliente'] = $this->input->post('precio_venta');
+    	$data['telf_cliente'] = $this->input->post('telefono');
+    	$data['direc_cliente'] = $this->input->post('direccion');
+    	$data['contac_cliente'] = $this->input->post('contacto');
+    	$data['email_cliente'] = $this->input->post('email');
+    	$insert = $this->modelgeneral->insertRegist('tb_cliente',$data);
+
+    	$resp = [];
+    	if (!is_null($insert)) {
+				$resp['cliente'] = $this->modelgeneral->getTableWhereRow('tb_cliente',['id_cliente'=>$insert]);
+    		$resp['success'] = true;
+    	}else{
+    		$resp['success'] = false;
+    	}
+
+    	echo json_encode($resp);
+    }
+	}
+
+	public function getCliente()
+  {
+	  $id = $this->input->get('id');
+	  $cliente = $this->modelgeneral->getTableWhereRow('tb_cliente',['id_cliente'=>$id]);
+	  echo json_encode($cliente);
+  }
+
+	public function editarCLiente()
+  {
+    $this->form_validation->set_rules('id','','required');
+    $this->form_validation->set_rules('nombre','','required');
+    $this->form_validation->set_rules('documento','','required');
+    // $this->form_validation->set_rules('telefono','','required');
+    if($this->form_validation->run() == TRUE){
+      $data['nomb_cliente'] = $this->input->post('nombre');
+      $data['doc_cliente'] = $this->input->post('documento');
+      $data['fena_pac'] = $this->input->post('fnacimiento');
+      $data['precio_cliente'] = $this->input->post('precio_venta');
+      $data['telf_cliente'] = $this->input->post('telefono');
+      $data['direc_cliente'] = $this->input->post('direccion');
+      $data['contac_cliente'] = $this->input->post('contacto');
+      $data['email_cliente'] = $this->input->post('email');
+      $data['estado_cliente'] = $this->input->post('estado');
+      $where['id_cliente'] = $this->input->post('id');
+      $editar = $this->modelgeneral->editRegist('tb_cliente',$where,$data);
+
+      $resp = [];
+      if ($editar) {
+        $resp['success'] = true;
+      }else{
+        $resp['success'] = false;
+      }
+
+      echo json_encode($resp);
+    }
+  }
+
+
+  public function reportePdf()
+  {
+  	$this->mpdf = new \Mpdf\Mpdf([
+			'mode' => 'utf-8',
+			'format' => 'A4',
+			'orientation' => 'L',
+			'margin_left' => 10,
+			'margin_right' => 10,
+			'margin_top' => 10,
+			'margin_bottom' => 10,
+			'margin_header' => 10,
+			'margin_footer' => 10
+		]);	
+	  $data['datos'] = $this->getVentaReporte();
+		$html = $this->load->view('admin/ventas/reporte_pdf',$data,TRUE);
+		$css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
+		$this->mpdf->SetTitle('Ventas');
+		$this->mpdf->writeHTML($css,1);
+		$this->mpdf->writeHTML($html,2);
+		$this->mpdf->Output('Ventas','I');
+  }
+
+  public function reporteExcel()
+  {
+  	$data['datos'] = $this->getVentaReporte();
+  	$this->load->view('admin/ventas/reporte_excel',$data);
+  }
+
+  public function getVentaReporte()
+  {
+  	$this->db->from('tb_venta');
+    $this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
+    $this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
+    $this->db->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu');
+    $this->db->where('fecha_vent >= ',$this->input->get('desde'));
+    $this->db->where('fecha_vent <=',$this->input->get('hasta'));
+    if ($this->input->get('cliente')!='') {
+      $this->db->like('nomb_cliente',$this->input->get('cliente'));
+    }
+    if ($this->input->get('vendedor')!='') {
+      $this->db->where('tb_venta.cod_usu',$this->input->get('vendedor'));
+    }
+    if ($this->input->get('punto')!='') {
+      $this->db->where('tb_venta.cod_puntoventa',$this->input->get('punto'));
+    }
+    if ($this->input->get('estado')!='') {
+      $this->db->where('tb_venta.estado_vent',$this->input->get('estado'));
+    }
+		$query = $this->db->get();
+
+		foreach ($query->result() as $q) {
+			$q->detalle = $this->ventas_model->getDetalle($q->cod_vent);
+		}
+	  return $query;
+  }
+
+
+   function imprimirVenta($archivoxml,$guardar=NULL)
+	{
+		$this->mpdf = new \Mpdf\Mpdf([
+			'mode' => 'utf-8', //MODE
+			'format' => 'A4',
+			'margin_left' => 5,
+			'margin_right' => 5,
+			'margin_top' => 5,
+			'margin_bottom' => 5,
+			'margin_header' => 10,
+			'margin_footer' => 10
+		]);
+		$data['ventas'] = $this->ventas_model->getImpresionVenta($archivoxml);
+		$data['empresa'] = $this->empresa_model->getEmpresa();
+		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
+		$html = $this->load->view('admin/ventas/impventa',$data,TRUE);
+		$css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
+		$this->mpdf->SetTitle('Ventas');
+		$this->mpdf->writeHTML($css,1);
+		$this->mpdf->writeHTML($html,2);
+ 
+	if(is_null($guardar)){
+    $this->mpdf->Output($data['ventas']->archivoxml_vent.'.pdf','I');
+    }else{
+			$resp = [];
+			$this->limpiarComprobantesTemporales();
+			$archivo = $archivoxml.'_'.time().'.pdf';
+			$this->mpdf->Output('assets/temporal/whatsapp_email/'.$archivo,'F');
+			
+			$resp['xml'] = '';
+			if ($data['ventas']->rutaxml_vent!='') {
+				$resp['xml'] = $this->crearXMLTemporal($data['ventas']);
+			}
+			
+			$resp['success'] = true;
+			$resp['archivo'] = $archivo;
+			$resp['telefono'] = trim($data['ventas']->telf_cliente);
+			$resp['email'] = trim($data['ventas']->email_cliente);
+			$resp['cliente'] = $data['ventas']->nomb_cliente;
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($resp);
+		}
+		
+	}
+
+	private function crearXMLTemporal($data)
+	{
+		$xml = $data->archivoxml_vent.'_'.time().'.XML';
+		copy(APP_PATH.'facturacion/'.$data->rutaxml_vent.'/'.$data->archivoxml_vent.'.XML',APP_PATH.'assets/temporal/whatsapp_email/'.$xml);
+		return $xml;
+	}
+
+	function enviarEmail()
+	{
+		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		$config['protocol'] = 'mail'; 
+		$config['mailtype'] = 'html'; 	
+		$this->email->initialize($config); 
+		$this->email->from($empresa->email_emp, $empresa->nombre_comercial); 
+		$this->email->to($this->input->post('email')); 
+		$this->email->subject('Comprobante de Pago'); 
+		$this->email->attach(APP_PATH.'assets/temporal/whatsapp_email/'.$this->input->post('archivo'));
+		if($this->input->post('xml')!=''){
+			$this->email->attach(APP_PATH.'assets/temporal/whatsapp_email/'.$this->input->post('xml')); 
+		}
+		$this->email->message('Saludos '.$this->input->post('cliente').', adjuntamos el comprobante de pago.'); 
+		$this->email->send();
+
+		$resp = [];
+		$resp['success'] = true;
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($resp);
+
+
+	}
+
+	function getQR($id)
+	{
+		/***** FACTURA: DATOS OBLIGATORIOS PARA EL CÓDIGO QR *****/
+		/*RUC | TIPO DE DOCUMENTO | SERIE | NUMERO | MTO TOTAL IGV | MTO TOTAL DEL COMPROBANTE | FECHA DE EMISION |TIPO DE DOCUMENTO ADQUIRENTE | NUMERO DE DOCUMENTO ADQUIRENTE |*/
+		$venta = $this->ventas_model->getVenta($id);
+		$ruc = getEmisor()['ruc'];
+		$tipo_documento = $venta->codsunat_tipdocu;
+		$serie = $venta->serie;
+		$numero = $venta->numero_vent;
+		$monto_total_igv = $venta->igv_vent;
+		$monto_total = $venta->total_vent;
+		$fecha_emision = date('d/m/Y',strtotime($venta->fecha_registro));
+		$tipo_doc_cliente = $venta->codsunat_tipdocucli;
+		$documento_cliente = $venta->doc_cliente;
+		
+		$text_qr = $ruc.'|'.$tipo_documento.'|'.$serie.'|'.$numero.'|'.$monto_total_igv.'|'.$monto_total.'|'.$fecha_emision.'|'.$tipo_doc_cliente.'|'.$documento_cliente.'|';
+
+		return $text_qr;
+	}
+
+	function imprimirticketVenta($archivoxml)
+	{
+		$data['ventas'] = $this->ventas_model->getImpresionVenta($archivoxml);
+		$filas = count($data['ventas']->detalle);
+		$alturaTicket = 200 + ($filas * 80);
+
+		$this->mpdf = new \Mpdf\Mpdf([
+			'mode' => 'utf-8', //MODE
+			'format' => [75,$alturaTicket], //FORMAT
+			'margin_left' => 2,
+			'margin_right' => 4,
+			'margin_top' => 2,
+			'margin_bottom' => 2,
+			'margin_header' => 0,
+			'margin_footer' => 0
+		]);
+		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
+		$data['empresa'] = $this->empresa_model->getEmpresa($data);
+		$html = $this->load->view('admin/ventas/ticketventa',$data,TRUE);
+		$css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
+		$this->mpdf->SetTitle($data['ventas']->archivoxml_vent);
+		//$this->mpdf->setHTMLHeader($htmlHeader);
+		//$this->mpdf->setHTMLFooter($htmlFooter);
+		$this->mpdf->writeHTML($css,1);
+		$this->mpdf->writeHTML($html,2);
+		$this->mpdf->Output($data['ventas']->archivoxml_vent.'.pdf','I');
+
+	}
+
+	private function xmlHash($id)
+	{
+		$res = $this->ventas_model->getVenta($id);
+		
+		// RUTA para enviar documentos: Tu puedes definir tu propia ruta, en nustro caso la tenemos en la siguiente dirección
+		$ruta = base_url_app()."/facturacion/api_facturacion/factura_xml.php";
+ 
+		//se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
+		$tipo_proceso = getTipoProceso();
+		$data = array(
+
+			//Cabecera del documento
+			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
+			"tipo_operacion"				=> "0101", //Venta interna pag 28
+			"total_gravadas"               	=> strval($res->subtotal_vent),
+			"total_inafecta"                => "0",
+			"total_exoneradas"				=> "0",
+			"total_gratuitas"			    => "0",
+			"total_exportacion"		    	=> "0",
+			"total_descuento"	    		=> "0",
+			"sub_total"              		=> strval($res->subtotal_vent),
+			"porcentaje_igv"                => "18.00",
+			"total_igv"                     => strval($res->igv_vent),
+			"total_isc"                   	=> "0",
+			"total_otr_imp"                 => "0",
+			"total"                  		=> strval($res->total_vent),
+			"total_letras"              	=> 'SON '.strtoupper(convertir(intval($res->total_vent))),
+			"nro_guia_remision"             => "",
+			"cod_guia_remision"             => "",
+			"nro_otr_comprobante"           => "",
+			"serie_comprobante"             => $res->serie, //Para Facturas la serie debe comenzar por la letra F, seguido de tres dígitos
+			"numero_comprobante"            => (string)$res->numero_vent,
+			"fecha_comprobante"             => $res->fecha_vent,
+			"fecha_vto_comprobante"         => date('Y-m-d'),
+			"cod_tipo_documento"            => strval($res->codsunat_tipdocu),
+			"cod_moneda"                    => $res->codmoneda_vent,
+
+			//Datos del cliente
+				"cliente_numerodocumento"       => $res->doc_cliente,
+				"cliente_nombre"                => $res->nomb_cliente,
+				"cliente_tipodocumento"         => (string)$res->codsunat_tipdocucli,
+				"cliente_direccion"             => $res->direc_cliente,
+				"cliente_pais"         			=> "PE",
+				"cliente_ciudad"				=> "AYACUCHO",
+				"cliente_codigoubigeo"          => "050101",
+				"cliente_departamento"          => "AYACUCHO",
+				"cliente_provincia"         	=> "HUAMANGA",
+				"cliente_distrito"              => "AYACUCHO",
+
+			//data de la empresa emisora o contribuyente que entrega el documento electrónico.
+				"emisor" => getEmisor()
+			//items del documento
+		);
+
+		$detalle = [];
+		$n = 1;
+		foreach ($res->detalle as $d) {
+				if($d->tipo_ventdet=='V'){
+				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
+				$det['txtITEM'] = $n;
+				$det['txtUNIDAD_MEDIDA_DET'] = (!is_null($d->cod_producto))?'NIU':'ZZ'; //NIU = BIENES, ZZ = SERVICIOS
+				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
+				$det['txtPRECIO_DET'] = (string)$precio;
+				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
+				$det['txtPRECIO_TIPO_CODIGO'] = '01';
+				
+				$det['txtIGV'] = $d->igv_ventdet;
+				$det['txtISC'] = '0';
+				$det['txtIMPORTE_DET'] = (string)$d->prec_ventdet;
+				$det['txtCOD_TIPO_OPERACION'] = '10';
+				$det['txtCODIGO_DET'] = (string)(!is_null($d->cod_producto))?$d->cod_producto:$d->cod_servicio;
+				$det['txtDESCRIPCION_DET'] = (string)$d->producto_ventdet;
+				$precioSinIGV = $precio - ($precio / 1.18) * 0.18;
+				$det['txtPRECIO_SIN_IGV_DET'] = (string)round($precioSinIGV,4);
+				$det['txtCODIGO_PROD_SUNAT'] = '23251602';
+				$detalle[] = $det;
+				$n++;
+			}
+		}
+
+		$data['detalle'] = $detalle;
+
+
+		//Invocamos el servicio
+		$token = ''; //en caso quieras utilizar algún token generado desde tu sistema
+
+		//codificamos la data
+	
+		$data_json = json_encode($data);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $ruta);
+		curl_setopt(
+			$ch, CURLOPT_HTTPHEADER, array(
+			'Authorization: Token token="'.$token.'"',
+			'Content-Type: application/json',
+			)
+		);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$respuesta  = curl_exec($ch);
+		curl_close($ch);
+		$response = json_decode($respuesta,true);
+		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		if($response['respuesta']=='ok'){
+			$this->db->where('cod_vent',$id)
+			->set('rutaxml_vent',$response['ruta'])
+			->set('archivoxml_vent',$response['archivo'])
+			->set('hash_vent',$response['hash_cpe'])
+			->update('tb_venta');
+				if($empresa->enviar_factura_emp==1){
+				$response['factura_enviada'] = true;
+					if($data['cod_tipo_documento']=='01'){
+					$response['response_factura_enviada'] = $this->enviarDocumento($id);
+				}
+
+				if($data['cod_tipo_documento']=='03'){
+					$response['response_factura_enviada'] = $this->resumenBoleta($id);
+				}
+				return $response;
+			}else{
+				$response['factura_enviada'] = false;
+				return $response;
+			}
+		}else{
+			return false;
+		}
+		
+	}
+
+	private function enviarDocumento($id)
+	{
+		$res = $this->ventas_model->getVenta($id);
+		
+		// RUTA para enviar documentos: Tu puedes definir tu propia ruta, en nustro caso la tenemos en la siguiente dirección
+		$ruta = base_url_app()."/facturacion/api_facturacion/factura_enviardocumento.php";
+ 
+		//se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
+
+		$emisor = getEmisor();
+		//EMISOR
+		$data['ruc'] = $emisor['ruc'];
+		$data['usuariosol'] = $emisor['usuariosol'];
+		$data['clavesol'] = $emisor['clavesol'];
+
+		//RUTAS
+		$data['ruta_xml'] = '../'.$res->rutaxml_vent.'/'.$res->archivoxml_vent;
+		$data['ruta_cdr'] = '../'.$res->rutaxml_vent.'/';
+		$data['nombre_archivo'] = $res->archivoxml_vent;
+
+		$tipo_proceso = getTipoProceso();
+		$data['ruta_ws'] = $tipo_proceso['ruta_ws'];
+		$data_json = json_encode($data);
+		$token='';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $ruta);
+		curl_setopt(
+			$ch, CURLOPT_HTTPHEADER, array(
+			'Authorization: Token token="'.$token.'"',
+			'Content-Type: application/json',
+			)
+		);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$respuesta  = curl_exec($ch);
+		curl_close($ch);
+		$response = json_decode($respuesta,true);
+		
+		$query = $this->db->select('cod_vent,rutaxml_vent,archivoxml_vent')
+		->where('cod_vent',$id)
+		->from('tb_venta')
+		->get();
+
+		$queryFacturacion = $this->db->from('tb_facturacion')
+		->where('cod_vent',$id)
+		->get();
+		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '') {	
+			$hash = $response['hash_cdr'];
+			$estado = 1;
+		}else{
+			$hash = '';
+			$estado = 2;
+		}
+
+		if($queryFacturacion->num_rows()==0){
+			$this->db->set('cod_fecha',date('Y-m-d'))
+			->set('cod_vent',$id)
+			->set('cod_usu',$this->session->userdata('cod_usu'))
+			->set('hashcdr_fac',$hash)
+			->set('estado_fac',$estado)
+			->insert('tb_facturacion');
+		}else{
+			$this->db->set('cod_fecha',date('Y-m-d'))
+			->set('cod_usu',$this->session->userdata('cod_usu'))
+			->set('hashcdr_fac',$hash)
+			->set('estado_fac',$estado)
+			->where('cod_vent',$id)
+			->update('tb_facturacion');
+		}
+		
+		$response['query'] = $query->row();
+		$response['estado'] = $estado;
+		return $response;
+	}
+
+	public function resumenBoleta($id)
+	{
+    $secuencia = $this->modelgeneral->getSecuencia('tb_resumenboleta','secuencia_res');
+		$fecha = date('Y-m-d');
+    $query = $this->db->from('tb_venta')
+    ->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,nomb_cliente')
+    ->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
+    ->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+    ->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente')
+    ->where('codsunat_tipdocu','03')
+    ->where('tb_venta.cod_vent',$id)
+    ->get()->row();
+
+
+    $data['codigo_res'] = 'RC';
+    $data['serie_res'] = date("Ymd", strtotime($fecha));
+    $data['secuencia_res'] = $secuencia;
+    $data['fechareferencia_res'] = $fecha;
+    $data['fechadocumento_res'] = $fecha;
+    $insert = $this->modelgeneral->insertRegist('tb_resumenboleta',$data);
+
+    
+		$detalle['cod_res'] = $insert;
+		$detalle['cod_vent'] = $query->cod_vent;
+		$this->modelgeneral->insertRegist('tb_resumenboletadetalle',$detalle);
+
+    $resp = [];
+    if (!is_null($insert)) {
+      $resp['success'] = true;
+      $resp['resp'] = $this->resumenDocumento($insert,$fecha,$secuencia);
+
+      $editData['rutaxml_res'] = $resp['resp']['ruta'];
+      $editData['archivoxml_res'] = $resp['resp']['archivo'];
+      $editData['hash_res'] = $resp['resp']['hash_cpe'];
+      $editData['ticket_res'] = $resp['resp']['id_ticket'];
+      $this->modelgeneral->editRegist('tb_resumenboleta',['cod_res'=>$insert],$editData);
+
+    }else{
+      $resp['success'] = false;
+    }
+
+    return $resp;
+	}
+
+	public function resumenDocumento($id,$fecha,$secuencia)
+  {
+
+    $query = $this->db->from('tb_resumenboletadetalle')
+    ->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,codmoneda_vent,nomb_cliente,serie,numero_vent,codsunat_tipdocucli,doc_cliente')
+    ->join('tb_venta','tb_resumenboletadetalle.cod_vent = tb_venta.cod_vent')
+    ->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
+    ->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+    ->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente')
+    ->join('tb_tipodocumentocliente','tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli')
+    ->where('codsunat_tipdocu','03')
+    ->where('cod_res',$id)
+    ->get()->result();
+
+    // RUTA para enviar documentos: Tu puedes definir tu propia ruta, en nustro caso la tenemos en la siguiente dirección
+    $ruta = base_url_app()."/facturacion/api_facturacion/resumen_boletas.php";
+    //se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
+
+		$tipo_proceso = getTipoProceso();
+    $data = array(
+      
+			//Cabecera del documento
+			
+			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
+      "codigo"						=> 'RC',
+      "serie"							=> date("Ymd", strtotime($fecha)),
+      "secuencia"             		=> (string)$secuencia,
+      "fecha_referencia"             	=> $fecha,
+      "fecha_documento"          		=> $fecha,
+
+      //data de la empresa emisora o contribuyente que entrega el documento electrónico.
+      "emisor" => getEmisor()
+    );
+
+    //items
+    $detalle = [];
+    $n = 1;
+    foreach ($query as $q) {
+      $det['ITEM'] = (string)$n;
+      $det['TIPO_COMPROBANTE'] = '03';
+      $det['NRO_COMPROBANTE'] = (string)$q->serie.'-'.$q->numero_vent;
+      $det['NRO_DOCUMENTO'] = (string)$q->doc_cliente;
+      $det['TIPO_DOCUMENTO'] = (string)$q->codsunat_tipdocucli;
+      $det['NRO_COMPROBANTE_REF'] = '0';
+      $det['TIPO_COMPROBANTE_REF'] = '0';
+      $det['STATUS'] = '1';
+      $det['COD_MONEDA'] = $q->codmoneda_vent;
+      $det['TOTAL'] = (string)$q->total_vent;
+      $det['GRAVADA'] = (string)$q->subtotal_vent;
+      $det['EXONERADO'] = '0';
+      $det['INAFECTO'] = '0';
+      $det['EXPORTACION'] = '0';
+      $det['GRATUITAS'] = '0';
+      $det['MONTO_CARGO_X_ASIG'] = '0';
+      $det['CARGO_X_ASIGNACION'] = '0';
+      $det['ISC'] = '0';
+      $det['IGV'] = (string)$q->igv_vent;
+      $det['OTROS'] = '0';
+      $detalle[] = $det;
+			$n++;
+    }
+    $data['detalle'] = $detalle;
+
+    //Invocamos el servicio
+    $token = ''; //en caso quieras utilizar algún token generado desde tu sistema
+
+    //codificamos la data
+    $data_json = json_encode($data);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $ruta);
+    curl_setopt(
+      $ch, CURLOPT_HTTPHEADER, array(
+      'Authorization: Token token="'.$token.'"',
+      'Content-Type: application/json',
+      )
+    );
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $respuesta  = curl_exec($ch);
+    curl_close($ch);
+
+    $response = json_decode($respuesta,true);
+    return $response;
+  }
+
+
+	function limpiarComprobantesTemporales(){
+
+		$directorio = APP_PATH.'assets/temporal/whatsapp_email';
+		// Array en el que obtendremos los resultados
+		$res = array();
+	
+		// Agregamos la barra invertida al final en caso de que no exista
+		if(substr($directorio, -1) != "/") $directorio .= "/";
+	
+		// Creamos un puntero al directorio y obtenemos el listado de archivos
+		$dir = @dir($directorio) or die("getFileList: Error abriendo el directorio $directorio para leerlo");
+		while(($archivo = $dir->read()) !== false) {
+				// Obviamos los archivos ocultos
+				if($archivo[0] == ".") continue;
+				if(is_dir($directorio . $archivo)) {
+						$res[] = array(
+							"Nombre" => $directorio . $archivo . "/",
+							"Archivo" => $archivo,
+							"Tamaño" => 0,
+							"Modificado" => filemtime($directorio . $archivo)
+						);
+				} else if (is_readable($directorio . $archivo)) {
+						$res[] = array(
+							"Nombre" => $directorio . $archivo,
+							"Archivo" => $archivo,
+							"Tamaño" => filesize($directorio . $archivo),
+							"Modificado" => filemtime($directorio . $archivo)
+						);
+				}
+		}
+		$dir->close();
+		
+
+		$dias_eliminacion = 7;
+		$dias_tiempo = 60*60*24 * $dias_eliminacion;
+		foreach ($res as $key => $value) {
+			
+			$archivo_tiempo = explode('_',trim($value['Archivo'],'.pdf'))[1];
+
+			$sumado = $archivo_tiempo + $dias_tiempo;
+			if(time() > $sumado){
+				unlink($value['Nombre']);
+			}
+		}
+	}
+	public function ConsultarEstadoTicket()
+	{
+		//$res = $this->ventas_model->getVenta($id);		
+		$idticket = $this->input->post('idticket');
+		$id= $this->input->post('idres');
+		$archivo= $this->input->post('nombre');
+		// RUTA para enviar documentos: Tu puedes definir tu propia ruta, en nustro caso la tenemos en la siguiente dirección
+		$ruta = base_url_app()."/facturacion/api_facturacion/resumen_boletas_consul_ticket.php";
+ 
+		
+		$tipo_proceso = getTipoProceso();
+		$data = array(
+			//Cabecera del documento
+			"archivoxml_res"=>$archivo,
+			"ticket_res"=>$idticket,
+			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
+			//data de la empresa emisora o contribuyente que entrega el documento electrónico.
+				"emisor" => getEmisor()
+		);
+
+		//Invocamos el servicio
+		$token = ''; //en caso quieras utilizar algún token generado desde tu sistema
+
+		//codificamos la data
+		//var_export($data);
+		$data_json = json_encode($data);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $ruta);
+		curl_setopt(
+			$ch, CURLOPT_HTTPHEADER, array(
+			'Authorization: Token token="'.$token.'"',
+			'Content-Type: application/json',
+			)
+		);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$respuesta  = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		$response = json_decode($respuesta,true);
+		//var_export($httpcode);
+		$resp[]=null;
+		if ($httpcode == 200) {//======LA PAGINA SI RESPONDE
+			//{"respuesta":"error","cod_sunat":"","mensaje":"SUNAT ESTA FUERA SERVICIO: ","hash_cdr":"","ruta_cdr":"","msj_sunat":""}1
+			if($response["respuesta"]=="error"){
+				$resp["codrpta"]=0;
+			}
+			else{
+				$resp["codrpta"]=1;
+				$resp["ruta_cdr"]=$response['ruta_cdr'];
+				$editData['CodRptaSunat'] =$response['cod_sunat'];
+				$editData['DesRptaSunat'] = $response['mensaje'];
+				$editData['RutaCdrXML'] = $response['ruta_cdr'];	  
+				//var_export($editData);
+				//var_export($id);
+				$this->modelgeneral->editRegist('tb_resumenboleta',['cod_res'=>$id],$editData);				
+			}
+		}
+		else{
+			$resp["codrpta"]=0;
+		}
+		echo json_encode($response);			
+	}
+
+}
