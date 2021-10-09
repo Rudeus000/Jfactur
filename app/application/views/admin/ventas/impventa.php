@@ -122,19 +122,24 @@
 	<?= strtoupper(convertir($ventas->total_vent)) ?> Y 00/100 SOLES
 </div>
 <br>
+<?php if(!is_null($ventas->observacion_vent) AND $ventas->observacion_vent!=''): ?>
+
 <div class="w100" style="border:1px solid black;padding:2px">
 	<b style="font-size:13px">Observación</b><br>
-	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, Venta a credito para pagar en 3 coutas, la primera couta se pagara xxxxxx ysdskfhbsjfhjkhdjksd.
+	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, <?= $ventas->observacion_vent ?>
 </div>
 <br>
 <br>
-<div class="w100">
-		<p style="font-size: 12px; padding-top: -10px;"><b>CONDICIÓN DE PAGO: Crédito</b></p>		
-        <p style="font-size: 12px; padding-top: -10px;">• Cuota #1 / Fecha: 24-09-2021 / Monto: S/2.36</p>       
-		<p style="font-size: 12px; padding-top: -10px;">• Cuota #2 / Fecha: 24-09-2021 / Monto: S/2.36</p>
-		<p style="font-size: 12px; padding-top: -10px;">• Cuota #3 / Fecha: 24-09-2021 / Monto: S/2.36</p>        
-</div>
-<br>
+	<?php endif ?>
+<?php if(!is_null($ventas->cuotas)): ?>
+	<div class="w100">
+		<p style="font-size: 12px; padding-top: -10px;"><b>CONDICIÓN DE PAGO: Crédito Cuotas</b></p>
+		<?php foreach($ventas->cuotas as $key => $value): ?>
+			<p style="font-size: 12px; padding-top: -10px;">• Cuota #<?= $key+1 ?> / Fecha: <?= $value->fecha_ventcuo?> / Monto: <?= $value->monto_ventcuo?></p>             
+		<?php endforeach ?>
+	</div>
+	<br>
+<?php endif ?>
 <div class="w100" style="border:1px solid black;padding:2px">
 	<b style="font-size:13px">Observaciones SUNAT</b><br>
 	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"> <?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>, ha sido aceptada.

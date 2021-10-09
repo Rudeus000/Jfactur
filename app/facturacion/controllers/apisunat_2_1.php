@@ -8,6 +8,27 @@ class Apisunat {
         //$doc->encoding = 'ISO-8859-1';
 		$doc->encoding = 'utf-8';
 
+        if(is_null($cabecera['CUOTAS'])){
+            $formaPago = '<cac:PaymentTerms>
+            <cbc:ID>FormaPago</cbc:ID>
+            <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
+          </cac:PaymentTerms>';
+        }else{
+            $formaPago = '<cac:PaymentTerms>
+                            <cbc:ID>FormaPago</cbc:ID>
+                            <cbc:PaymentMeansID>Credito</cbc:PaymentMeansID>
+                            <cbc:Amount currencyID="PEN">'.$cabecera["TOTAL"].'</cbc:Amount>
+                        </cac:PaymentTerms>';
+            foreach ($cabecera['CUOTAS'] as $key => $value) {
+                $formaPago .= '<cac:PaymentTerms>
+                                    <cbc:ID>FormaPago</cbc:ID>
+                                    <cbc:PaymentMeansID>Cuota00'.($key+1).'</cbc:PaymentMeansID>
+                                    <cbc:Amount currencyID="PEN">'.strval($value['monto_ventcuo']).'</cbc:Amount>
+                                    <cbc:PaymentDueDate>'.$value['fecha_ventcuo'].'</cbc:PaymentDueDate>
+                                </cac:PaymentTerms>';
+            }
+        }
+
         $xmlCPE = '<?xml version="1.0" encoding="utf-8"?>
 <Invoice xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
 	<ext:UBLExtensions>
@@ -130,10 +151,7 @@ class Apisunat {
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingCustomerParty>
-	 <cac:PaymentTerms>
-      <cbc:ID>FormaPago</cbc:ID>
-      <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
-   </cac:PaymentTerms>
+	'.$formaPago.'
 	<cac:AllowanceCharge>
 		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
 		<cbc:AllowanceChargeReasonCode listName="Cargo/descuento" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">02</cbc:AllowanceChargeReasonCode>

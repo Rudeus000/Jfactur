@@ -182,25 +182,68 @@
                                 <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-rounded btn-pink waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>               
                               </div>
                              </div>
-                              <div class="col-md-2" style="display: none">
+                              <div id="pagocredito" class="col-md-2" style="display: none">
                                 <div class="form-group">
-                                  <label class="control-label">Dias</label>
-                                  <input type="checkbox" data-plugin="switchery" data-color="#ff5d48" data-size="small" id="servicioChecked" name="servicioChecked"/>
-                                  <label class="control-label">Cuotas</label>
-                                  <input type="number" min="1" disabled name="dias" class="form-control">
+                                  <label class="control-label">Dias / Cuotas</label>
+                                  <div>
+                                    <input type="checkbox" data-plugin="switchery" data-color="#ff5d48" data-size="small" id="switch-dias-cuotas" name="dias_cuotas"/>
+                                  </div>
                                 </div>
-                              </div>                      
-                              <div class="col-md-2" style="display: none">
+                              </div>
+
+                              
+                              <div class="col-md-2 pagocredito-cuotas form-group" style="display: none">
+                                <label class="control-label">Periodo</label>
+                                <select name="periodo" class="form-control">
+                                  <option value="Mensual">Mensual</option>
+                                  <option value="Quincenal">Quincenal</option>
+                                  <option value="Semanal">Semanal</option>
+                                </select>
+                              </div>
+                              <div class="col-md-2 pagocredito-cuotas form-group" style="display: none">
+                                <label class="control-label">N° Cuotas</label>
+                                <input type="number" min="1" name="numero_cuotas" class="form-control" value="2">
+                              </div>
+                              <div class="col-md-2 pagocredito-cuotas form-group" style="display: none">
+                                <button id="calcular-cuotas" style="margin-top:27px" type="button" class="btn btn-md btn-primary">Calcular</button>
+                              </div>
+
+
+                              <div class="col-md-2 pagocredito-dias form-group" style="display: none">
+                                <label class="control-label">Dias</label>
+                                <input type="number" min="1" disabled name="dias" class="form-control">
+                              </div>                   
+                              <div class="col-md-2 pagocredito-dias" style="display: none">
                                 <div class="form-group">
                                   <label class="control-label">Fecha</label>
                                   <input type="text" name="fecVenc" class="form-control" readonly>
                                 </div>
                               </div>
-                              <div class="col-md-2" style="display: none">
+                              <div class="col-md-2 pagocredito-dias" style="display: none">
                                 <div class="form-group">
                                   <label class="control-label">Saldo</label>
                                   <input type="text" name="saldo" value="0" disabled class="form-control" readonly>
                                 </div>
+                              </div>
+                            </div>
+
+                            <div class="row" id="TableCuotasContent" style="display:none">
+                              <div class="col-md-12">
+                                <table id="TableCuotas" class="table table-bordered">
+                                  <thead>
+                                    <tr>
+                                      <th>Fecha</th>
+                                      <th>Monto</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th>Total</th>
+                                      <td id="total-cuotas"></td>
+                                    </tr>
+                                  </tfoot>
+                                </table>
                               </div>
                             </div>
                           </fieldset>
@@ -408,7 +451,7 @@
                       <div class="col-md-12" style="display: none" id="observacion-a">
                         <div class="form-group">
                         <label for="exampleFormControlTextarea1">Observación</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" name="obervacion" rows="3"></textarea>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                       </div>
                     </div>                     
                    </div>

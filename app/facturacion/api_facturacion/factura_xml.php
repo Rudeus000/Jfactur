@@ -122,7 +122,8 @@
 			//==================================================
 	        'EMISOR_RUC' => $emisor['ruc'],
 	        'EMISOR_USUARIO_SOL' => $emisor['usuariosol'],
-			'EMISOR_PASS_SOL' => $emisor['clavesol']
+			'EMISOR_PASS_SOL' => $emisor['clavesol'],
+			'CUOTAS' => (!is_null($data['cuotas']))?$data['cuotas']:null
 		);
 		
 		return $cabecera;

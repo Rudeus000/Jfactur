@@ -6596,7 +6596,6 @@ function guardarProducto()
 	// check observacion 
 	$('#observacionCheck').change(function() {
 		if(this.checked) {
-		
 			$('#observacion-a').prop('disabled',false).show();
 			
 		}else{
@@ -7212,18 +7211,108 @@ function guardarProducto()
 	$('.FormVenta select[name=pago]').change(function (event) {
 		var total = parseFloat($('#VentaTotal').html());
 		if ($(this).val() == 'CRE') {
-			$('input[name=dias]').prop('disabled', false).parent().parent().show();
-			$('input[name=fecVenc]').parent().parent().show();
-			$('input[name=saldo]').parent().parent().show();
+			$('#pagocredito').show();
+			$('.pagocredito-dias').show();
+			$('.pagocredito-cuotas').hide();
+			$('input[name=dias]').prop('disabled', false);
 			$('input[name=saldo]').val(total);
 			$('input[name=monto]').val(0).prop('readonly', false);
 		} else {
-			$('input[name=dias]').prop('disabled', true).parent().parent().hide();
-			$('input[name=fecVenc]').parent().parent().hide();
-			$('input[name=saldo]').parent().parent().hide();
+			$('#pagocredito').hide();
+			$('.pagocredito-dias').hide();
+			$('.pagocredito-cuotas').hide();
+			$('input[name=dias]').prop('disabled', true);
 			$('input[name=saldo]').val(0);
 			$('input[name=monto]').val(total).prop('readonly', true);
 		}
+	});
+
+	$('#switch-dias-cuotas').change(function() {
+		$('#TableCuotasContent').hide();
+		if(this.checked) {
+			$('.pagocredito-dias').hide();
+			$('.pagocredito-cuotas').show();
+			$('input[name=dias]').prop('disabled', true);
+		}else{
+			$('.pagocredito-dias').show();
+			$('.pagocredito-cuotas').hide();
+			$('input[name=dias]').prop('disabled', false);
+		}
+	});
+
+	$('#calcular-cuotas').click(function(){
+		let total = parseFloat($('#VentaTotal').html());
+		if(total==0){
+			Swal.fire({
+				title: "Error",
+				text: "No se puede calcular cuando el total es 0",
+				type: "error"
+			});
+			return;
+		}
+		$('#total-cuotas').html(total);
+		$('#TableCuotasContent').show();
+		let periodo = $('select[name=periodo]').val();
+		let numero = $('input[name=numero_cuotas]').val();
+		$.post(path+"administrador/regventas/calcularCuotas", {periodo,numero,total},
+			function (data, textStatus, jqXHR) {
+				var tr = '';
+				$.each(data, function (index, value) { 
+					tr += `
+					<tr>
+						<td><input name="cuotas_fecha[]" class="form-control" value="${value.fecha}"/></td>
+						<td><input name="cuotas_monto[]" class="form-control cuota-monto" value="${value.monto}"/></td>
+					</tr>
+					`;
+				});
+				$('#TableCuotas tbody').html(tr);
+				$.each($('#TableCuotas tbody input[name^="cuotas_fecha"]'), function(index, val) {
+					$(val).datepicker({
+						autoclose: true,
+						language: "es",
+						format: "yyyy-mm-dd",
+						todayHighlight: true
+					});
+				});
+			},
+			"JSON"
+		);
+	});
+
+	$('#TableCuotas tbody').on('focusout','.cuota-monto', function () {
+		if($(this).val()==''){
+			return;
+		}
+		var numero = parseFloat($(this).val());
+		if(typeof numero != 'number'){
+			$(this).val('0');
+			return;
+		}
+
+		$('button[form="FormVentaAgregar"]').prop('disabled',false);
+
+		var suma = 0;
+		var total = $('#VentaTotal').html();
+		$.each($('.cuota-monto'), function(index, val) {
+			suma += $(this).val();
+		});
+
+		
+		if(suma < total){
+			Swal.fire({
+				title: "Error",
+				text: "La suma es menor al total",
+				type: "error"
+			});
+		}
+		if(suma > total){
+			Swal.fire({
+				title: "Error",
+				text: "La suma es mayor al total",
+				type: "error"
+			});
+		}
+
 	});
 
 

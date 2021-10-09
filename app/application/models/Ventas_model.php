@@ -185,6 +185,10 @@ class Ventas_model extends CI_Model {
     ->get()->row();
 
     $venta->detalle = $this->getDetalle($id);
+    $venta->cuotas = $this->db->from('tb_venta_cuotas')
+    ->where('cod_vent',$id)
+    ->get()->result();
+    
     return $venta;
   }
 
@@ -213,7 +217,7 @@ class Ventas_model extends CI_Model {
     function getImpresionVenta($archivoxml)
       {
         $tb_venta= $this->db->from('tb_venta')
-       ->select("tb_venta.*, fecha_vent, nom_tipdocumento, serie, nomb_cliente, direc_cliente, doc_cliente, email_cliente, telf_cliente, contac_cliente,CASE pago_vent WHEN 'CO' THEN 'CONTADO' ELSE 'CREDITO' END as tipopago, nomb_caja,hash_vent,codsunat_tipdocucli,nomb_usu,apell_usu, tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento")
+       ->select("tb_venta.*, fecha_vent,pago_vent,num_cuotas_vent,observacion_vent, nom_tipdocumento, serie, nomb_cliente, direc_cliente, doc_cliente, email_cliente, telf_cliente, contac_cliente,CASE pago_vent WHEN 'CO' THEN 'CONTADO' ELSE 'CREDITO' END as tipopago, nomb_caja,hash_vent,codsunat_tipdocucli,nomb_usu,apell_usu, tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento")
 				->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente')
 				->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
 				->join('tb_caja','tb_venta.cod_caja = tb_caja.cod_caja')
@@ -228,12 +232,19 @@ class Ventas_model extends CI_Model {
 				->or_where('noxml_vent',$archivoxml)
         ->get()->row();
 
-          $tb_venta->detalle =  $this->db->from('tb_venta_detalle')
+        $tb_venta->detalle =  $this->db->from('tb_venta_detalle')
         ->select('tb_venta_detalle.*,tb_producto.cod_producto, tb_producto.nomb_product, tb_unidades.abreviatura_unid')
         ->join('tb_producto','tb_venta_detalle.cod_producto = tb_producto.cod_producto','left')
         ->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid','left')
         ->where('tb_venta_detalle.cod_vent',$tb_venta->cod_vent)
         ->get()->result();
+
+        $tb_venta->cuotas = null;
+        if(!is_null($tb_venta->num_cuotas_vent)){
+          $tb_venta->cuotas = $this->db->from('tb_venta_cuotas')
+          ->where('cod_vent',$tb_venta->cod_vent)
+          ->get()->result();
+        }
 
         return $tb_venta;
 

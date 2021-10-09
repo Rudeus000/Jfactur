@@ -345,6 +345,35 @@ class Regventas extends CI_Controller {
 		echo json_encode($query);
 	}
 
+	public function calcularCuotas()
+	{
+		$peridiocidad = $this->input->post('periodo');
+		$numero = $this->input->post('numero');
+		$total = $this->input->post('total');
+
+		if ($peridiocidad=='Semanal') {
+			$periodo = '+7 day';
+		}elseif($peridiocidad=='Quincenal'){
+			$periodo = '+14 day';
+		}elseif($peridiocidad=='Mensual'){
+			$periodo = '+28 day';
+		}
+
+		$monto = $total / $numero;
+		$cuotas = [];
+		$fecha = date('Y-m-d');
+		for ($i=1; $i <= $numero ; $i++) {
+			$fecha = strtotime($periodo,strtotime($fecha));
+			$fecha = date('Y-m-d',$fecha);
+			$cuotas[] = [
+				'fecha' => $fecha,
+				'monto' => round($monto,2)
+			];
+		}
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($cuotas);
+	}
+
 	public function agregarVenta()
 	{
 		$apertura = $this->ventas_model->getCajaApertura();
@@ -391,6 +420,10 @@ class Regventas extends CI_Controller {
 			$data['fechavenc_vent'] = $this->input->post('fecVenc');
 			$data['saldo_vent'] = $data['total_vent'] - $data['monto_vent'];
 		}
+
+		if(isset($_POST['observacion'])){
+			$data['observacion_vent'] = $this->input->post('observacion');
+		}
 		$insert = $this->modelgeneral->insertRegist('tb_venta',$data);
 
 		$venta = $this->db->from('tb_venta')
@@ -413,6 +446,8 @@ class Regventas extends CI_Controller {
 
 		$resp = [];
 		if (!is_null($insert)) {
+			$this->guardarCuotas($insert);
+
 			$this->aumentarNumeracion($data['cod_talonario'],$data['numero_vent']);
 		foreach ($_POST['id_prod'] as $key => $value) {
 				$pos = strpos($value, 'ser-');
@@ -513,9 +548,24 @@ class Regventas extends CI_Controller {
 		}else{
 			$resp['success'] = false;
 		}
-		// header('content-type: application/json; charset=utf-8');
 
+		header('content-type: application/json; charset=utf-8');
 		echo json_encode($resp);
+	}
+
+	private function guardarCuotas($cod_venta)
+	{
+		if($this->input->post('pago')=='CRE' AND $this->input->post('dias_cuotas')=='on'){
+			$this->modelgeneral->editRegist('tb_venta',['cod_vent' => $cod_venta],['num_cuotas_vent' => count($_POST['cuotas_fecha'])]);
+
+			$data = [];
+			$data['cod_vent'] = $cod_venta;
+			foreach ($_POST['cuotas_fecha'] as $key => $value) {
+				$data['fecha_ventcuo'] = $_POST['cuotas_fecha'][$key];
+				$data['monto_ventcuo'] = $_POST['cuotas_monto'][$key];
+				$this->modelgeneral->insertRegist('tb_venta_cuotas',$data);
+			}
+		}
 	}
 
 	private function generarNoXml($id)
@@ -901,6 +951,7 @@ class Regventas extends CI_Controller {
 			"fecha_vto_comprobante"         => date('Y-m-d'),
 			"cod_tipo_documento"            => strval($res->codsunat_tipdocu),
 			"cod_moneda"                    => $res->codmoneda_vent,
+			"cuotas" 												=> (!empty($res->cuotas))?$res->cuotas:null,
 
 			//Datos del cliente
 				"cliente_numerodocumento"       => $res->doc_cliente,
@@ -918,6 +969,7 @@ class Regventas extends CI_Controller {
 				"emisor" => getEmisor()
 			//items del documento
 		);
+
 
 		$detalle = [];
 		$n = 1;
@@ -968,9 +1020,11 @@ class Regventas extends CI_Controller {
 		curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$respuesta  = curl_exec($ch);
+
 		curl_close($ch);
 		$response = json_decode($respuesta,true);
 		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		
 		if($response['respuesta']=='ok'){
 			$this->db->where('cod_vent',$id)
 			->set('rutaxml_vent',$response['ruta'])
