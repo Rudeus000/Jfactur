@@ -7292,26 +7292,24 @@ function guardarProducto()
 		$('button[form="FormVentaAgregar"]').prop('disabled',false);
 
 		var suma = 0;
-		var total = $('#VentaTotal').html();
+		var total = parseFloat($('#VentaTotal').html());
 		$.each($('.cuota-monto'), function(index, val) {
-			suma += $(this).val();
+			suma += parseFloat($(this).val());
 		});
 
+		suma = Math.ceil(suma);
 		
 		if(suma < total){
-			Swal.fire({
-				title: "Error",
-				text: "La suma es menor al total",
-				type: "error"
-			});
+			$('.cuotas-error').show().html('La suma es menor al total');
 		}
 		if(suma > total){
-			Swal.fire({
-				title: "Error",
-				text: "La suma es mayor al total",
-				type: "error"
-			});
+			$('.cuotas-error').show().html('La suma es mayor al total')
 		}
+
+		if(suma==total){
+			$('.cuotas-error').hide();
+		}
+
 
 	});
 

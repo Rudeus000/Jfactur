@@ -44,8 +44,12 @@
 	<div class="w40">
 		<p><b style="font-size: 11px;">Moneda:</b> &nbsp;&nbsp;SOLES</p>
 		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $ventas->fecha_vent ?></p>
-		<p><b>Fecha de Vencimiento:</b> 26/29/2021</p>			
-		<p><b>Numero de cuotas:</b> 3</p>		
+		<?php if(!is_null($ventas->fechavenc_vent)): ?>	
+			<p><b>Fecha de Vencimiento:</b> <?= $ventas->fechavenc_vent ?></p>
+		<?php endif ?>
+		<?php if(!is_null($ventas->num_cuotas_vent)): ?>
+			<p><b>Numero de cuotas:</b> <?= $ventas->num_cuotas_vent ?></p>		
+		<?php endif ?>		
 	</div>
 </div>
 

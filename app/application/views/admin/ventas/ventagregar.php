@@ -229,6 +229,9 @@
 
                             <div class="row" id="TableCuotasContent" style="display:none">
                               <div class="col-md-12">
+                                <div style="display:none" class="alert alert-danger cuotas-error" role="alert"></div>
+                              </div>
+                              <div class="col-md-12">
                                 <table id="TableCuotas" class="table table-bordered">
                                   <thead>
                                     <tr>
@@ -244,6 +247,9 @@
                                     </tr>
                                   </tfoot>
                                 </table>
+                              </div>
+                              <div class="col-md-12">
+                                <div style="display:none" class="alert alert-danger cuotas-error" role="alert"></div>
                               </div>
                             </div>
                           </fieldset>
