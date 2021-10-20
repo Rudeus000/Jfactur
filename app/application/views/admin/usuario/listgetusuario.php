@@ -13,9 +13,9 @@
           <div class="row">
             <div class="col-12">
               <div class="page-title-box">
-                <h4 class="page-title float-left">Usuario General</h4>
+                <!-- <h4 class="page-title float-left">Gestion de usuarios</h4> -->
                 <ol class="breadcrumb float-right">
-                  <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                  <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                   <li class="breadcrumb-item"><a href="#">Usuario</a></li>
                   <li class="breadcrumb-item active">Listado</li>
                 </ol>
@@ -30,6 +30,7 @@
           <div class="row">             
             <div class="col-sm-12">
               <div class="card">
+              <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestion de usuario<a data-toggle="modal" data-target="#ModalAgregarUsuario" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                 <div class="card-body"> 
                   <ol class="breadcrumb">
                     <li><a href="<?= base_url('administrador/regusuario') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
@@ -79,7 +80,7 @@
                        <div class="input-group">
                         <input type="text"  name="tb_usuario" class="form-control">
                         <span class="input-group-btn">
-                          <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                          <button type="submit" class="btn btn-effect-ripple btn-primary"><i class="fa fa-search"></i></button>
                         </span>
                       </div>
                     </div>
@@ -92,18 +93,14 @@
 
                 </form>
                 <!-- End #wizard-vertical -->
-              </div>
-            </div>
-          </div>
-
-        </div><!-- End row -->  
+          
         
         
         <!-- Vertical Steps Example -->
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12">
             <div class="card">
-              <div class="card-body table-responsive">
+              <div class="card-body table-responsive"> -->
 
 
 
@@ -123,7 +120,7 @@
                   </div>
                   <br>
                   <thead>
-                    <tr class="bg-info text-white">
+                    <tr class="bg-primary text-white">
                       <th style="text-aling:center;">ID</th>
                       <th  style="text-aling:center;">Apellidos</th>
                       <th  style="text-aling:center;">Usuario</th>

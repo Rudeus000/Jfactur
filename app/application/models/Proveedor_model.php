@@ -62,13 +62,13 @@ function getProveedor($data)
 		data-toggle="modal" data-target="#ModalEditarProveedor" data-placement="top" title data-original-title="Edit"><i style="color:#4285F4;" class="fas fa-pencil-alt"></i></a>';                                      
 		$botones .= '&nbsp;&nbsp;&nbsp;<a data-id="'.$q->tb_proveedor_id.'" class="anular-proveedor on-default remove-row"><i style="color:#ff4444;"class="far fa-trash-alt"></i></a>';
 
-         if ($q->tb_proveedor_tip=='1') {
-				$tb_proveedor_tip = '<label class="label label-purple">Ruc</label>';
+         if ($q->tb_proveedor_tip=='4') {
+				$q->tb_proveedor_tip = '<label class="label label-purple">Ruc</label>';
 		}elseif($q->tb_proveedor_tip=='2'){
-				$tb_proveedor_tip = '<label class="label label-danger">Dni</label>';
+				$q->tb_proveedor_tip = '<label class="label label-danger">Dni</label>';
 		}
 		
-			$row[] = [$q->tb_proveedor_id,$tb_proveedor_tip,$q->tb_proveedor_nom,$q->tb_proveedor_doc,$q->tb_proveedor_dir,$q->tb_proveedor_con,$q->tb_proveedor_tel,$q->tb_proveedor_ema,$estado,$botones];
+			$row[] = [$q->tb_proveedor_id,$q->tb_proveedor_tip,$q->tb_proveedor_nom,$q->tb_proveedor_doc,$q->tb_proveedor_dir,$q->tb_proveedor_con,$q->tb_proveedor_tel,$q->tb_proveedor_ema,$estado,$botones];
 		}
 		$result['aaData'] = $row;
 		return $result;

@@ -13,11 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title float-left">Inventario Inicial (Ingresos)</h4>
+                            <!-- <h4 class="page-title float-left">Inventario Inicial (Ingresos)</h4> -->
                             <ol class="breadcrumb float-right">
                                
-                                <li class="breadcrumb-item"><a href="#">Inventario Inicial</a></li>
-                                <li class="breadcrumb-item active">Listado</li>
+                                <li class="breadcrumb-item"><a href="#">Gestion</a></li>
+                                <li class="breadcrumb-item active">Sucursal</li>
+                                <li class="breadcrumb-item active">Lista</li>
                             </ol>
                    
                         </div>
@@ -30,13 +31,14 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
+                        <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar sucursal<a data-toggle="modal" data-target="#ModalAgregarUsuario" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                             <div class="card-body">
                                 <form id="FormAsignaPuntoVentaFiltro" action="" method="post" autocomplete="off">
                                   <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">Grupo</label>
-                                            <select name="grupo" class="form-control">
+                                            <select name="grupo" class="form-control select2">
                                               <option value=""></option>
                                               <?php foreach ($grupos as $g): ?>
                                               <option value="<?= $g->cod_grupo ?>"><?= $g->nombre_grupo ?></option>
@@ -49,7 +51,7 @@
                                 <div class="table-responsive">
                                     <table id="TableAsignarPuntoVenta" class="table mb-0" cellspacing="0" width="100%">
                                         <thead>
-                                            <tr class="bg-info text-white">
+                                            <tr class="bg-primary text-white">
                                                 <th>Id</th>
                                                 <th>Nombres</th>
                                                 <th>Apellidos</th>

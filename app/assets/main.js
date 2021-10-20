@@ -7359,58 +7359,37 @@ function guardarProducto()
 	// 	}
 	// });
 
+
 	$('#FormVentaAgregarCliente').validate({
 		ignore: [],
 		rules: {
 			tipo: { required: true },
 			nombre: { required: true },
 			documento: { required: true,
-			remote:{
-				url: path+"administrador/regcliente/validaClienteUnico",
-				type: "POST",
-				data: {
-					documento: function() {
-						return $("#FormVentaAgregarCliente input[name=documento]").val();
-					},
-					id: function(){
-						return $("input[name=codigo]").val();
+			// telefono: { required: true },			
+				remote:{
+					url: path+"administrador/regcliente/validaClienteUnico",
+					type: "POST",
+					data: {
+						documento: function() {
+							return $("#FormVentaAgregarCliente input[name=documento]").val();
+						},
+						id: function(){
+							return $("input[name=codigo]").val();
+						}
 					}
 				}
-			}
-	 },
-			// telefono: { required: true },
-			direccion: { required: true }
-					},
+			 },
+			 direccion: { required: true}	
+
+		},
 		messages:{
-		documento:{
-			remote:'Este número de documento ya existe'						
-
-		}
-
-		},
-		submitHandler: function () {
-			enviarFormulario('#FormVentaAgregarCliente', function (json) {
-				if (json.success) {
-					$('#TableListarClientes').DataTable().ajax.reload();
-				}
-				$('#ModalAgregarCliente').modal('hide');
-				$('#FormVentaAgregarCliente select[name=tipo]').select('val', '');
-				$('#FormVentaAgregarCliente input[name=documento]').val('');									
-			})
-		}
-	});
-
-
-	$('#FormVentaAgregarCliente').validate({
-		ignore: [],
-		rules: {
-			tipo: { required: true },
-			nombre: { required: true },
-			documento: { required: true },
-			// telefono: { required: true },
-			direccion: { required: true },
-
-		},
+			documento:{
+				remote:'Este número de documento ya existe'
+				
+			}
+	
+			},		
 		submitHandler: function () {
 			enviarFormulario('#FormVentaAgregarCliente', function (json) {
 				$('#ModalAgregarCliente').modal('hide');
@@ -9014,12 +8993,12 @@ $('#TableCreditoProductos tbody').on('click', '.removerProducto', function (even
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		]
 	});
@@ -11729,11 +11708,11 @@ $(".custom-file-input").on("change", function() {
 		"columns": [
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
-			{ "orderable": true },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false },
 
 		],
@@ -11963,7 +11942,7 @@ $('#GastosReportePdf').click(function (event) {
 		"columns": [
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": true },
+			{ "orderable": false },
 			{ "orderable": false },
 
 		]

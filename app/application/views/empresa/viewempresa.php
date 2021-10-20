@@ -5,11 +5,12 @@
 				<div class="row">
 					<div class="col-12 mb-2">
 						<div class="page-title-box">
-							<h4 class="page-title float-left"> <i class="fas fa-box-open"></i> Informacion de Empresa</h4>
+							<!-- <h4 class="page-title float-left"> <i class="fas fa-box-open"></i></h4> -->
 						</div>
 					</div>
 				</div>
         <div class="card">
+		<div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar mi empresa<a data-toggle="modal" data-target="#ModalAgregarPunto" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
           <div class="card-body">
             <form id="FormEmpresa" action="<?= base_url('empresa/Regempresa/guardarDatos') ?>"  enctype="multipart/form-data" method="POST">           	
 

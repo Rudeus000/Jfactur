@@ -1,3 +1,6 @@
+.table td {
+  text-align: center;
+  } 
  .password-icon {
         float: right;
         position: relative;

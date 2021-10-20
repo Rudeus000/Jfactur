@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solutions - perfil</title>
+        <title>BFacturas - perfil</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,10 +27,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Perfil Usuario</h4>
+                                    <!-- <h4 class="page-title float-left">Gestion</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
-                                        <li class="breadcrumb-item"><a href="#">Perfil</a></li>
+                                        <li class="breadcrumb-item"><a href="#">perfil</a></li>
+                                        <li class="breadcrumb-item"><a href="#">usuario</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
                            
@@ -54,6 +54,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Perfil - usuario<a href="<?= base_url('administrador/regperfil/nuevo') ?>" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                                     <div class="card-body"> 
                                     <ol class="breadcrumb">
                                         <li><a href="<?= base_url('administrador/regperfil') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
@@ -66,30 +67,27 @@
                                             <div class="input-group">
                                                 <input type="text"  name="tb_perfil" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-primary"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
                                             </form>
                                     </div>  
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End row -->  
+                           <br>
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-body table-responsive">
+                                    <div class="card-body table-responsive"> -->
                                    
                                   
                                          
                                                 <table id="TableMantenimientoPerfil" class="table  table-striped" cellspacing="0" width="100%">
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th style="text-aling:center;">Secuencia</th>
                                                             <th  style="text-aling:center;">Descripcion</th>
                                                             <th  style="text-aling:center;">Estado</th>
