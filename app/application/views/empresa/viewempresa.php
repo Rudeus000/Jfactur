@@ -19,10 +19,10 @@
 								<div class="row">
 									<div class="dropzone" id="dropzone">
 									<div class="col-md-12">
-										<div class="form-group">
+										<!-- <div class="form-group"> -->
 											<!-- <img width="150px" id="logo-archivo" src="<?= base_url_app('assets/images/logo/'.$empresa->photo) ?>" alt="Logo"> -->
 											<img width="150px" id="logo-archivo" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" alt="Logo">
-										</div>
+										<!-- </div> -->
 									
 										<label class="control-label mt-4"></label>
 										
@@ -31,6 +31,14 @@
 												<label class="custom-file-label" for="customFileLogo">Seleccionar Logo</label>
 											</div>
 											</div>									
+									</div>
+									 <div class="col-md-6">
+									 <!-- <div class="form-group"> -->
+										<!-- <div class="switchery-demo"> -->
+											<!-- <input type="checkbox" class="custom-control-input" > -->                      
+                      <input  class="activar" type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck"/>
+											<label for="servicioChecked">Modulo avanzado</label>
+										<!-- </div> -->
 									</div>
 								</div>
 
