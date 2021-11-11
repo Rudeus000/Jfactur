@@ -35,10 +35,10 @@
 									 <div class="col-md-6">
 									 <!-- <div class="form-group"> -->
 										<!-- <div class="switchery-demo"> -->
-											<!-- <input type="checkbox" class="custom-control-input" > -->                      
+											<!-- <input type="checkbox" class="custom-control-input" >                   
                       <input  class="activar" type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck"/>
 											<label for="servicioChecked">Modulo avanzado</label>
-										<!-- </div> -->
+										</div> -->
 									</div>
 								</div>
 
