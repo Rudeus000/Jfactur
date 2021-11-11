@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left"><i class="ion ion-ios-cube"></i> Tipo Gastos</h4>
+                                    <!-- <h4 class="page-title float-left"><i class="ion ion-ios-cube"></i> Tipo Gastos</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                                         <li class="breadcrumb-item"><a href="#">Tipo Gastos</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -43,60 +43,53 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Tipo de gastos<a class="btn btn-pink btn-rounded  w-md waves-effect float-right" data-toggle="modal" data-target="#ModalAgregarTipoGastos"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                                     <div class="card-body"> 
                                 
+                                <fieldset>
+                                <legend>Filtro</legend>
+                                <form id="TipoGastosFormBusqueda" action="" method="post" autocomplete="off">
+                                <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Descripcion</label>                                  
                                     
-                                    <div class="col-md-8">
-                                    <form id="TipoGastosFormBusqueda" autocomplete="off">
-                                         <label class="control-label " >Buscar por descripción:</label>
-                                            <div class="input-group">
-                                                <input type="text"  name="tb_tipo_gastos" class="form-control">
-                                                    <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
-                                                    </span>
-                                            </div>
-                                            </form>
-                                    </div>  
-  
-                                        <!-- End #wizard-vertical -->
+                                        <div class="input-group">                                        
+                                        <input type="text" name="tb_tipo_gastos" class="form-control">
+                                        
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary waves-effect waves-light" ><i class="fa fa-search"></i> Buscar</button>
                                     </div>
-                                </div>
-                            </div>
-                        </div><!-- End row -->  
-        
+                                        </div>
+                                    </div>
+                                    </div>              
+
+                                </form>
+                                </fieldset>
+                          
+                            <br>        
         
                         <!-- Vertical Steps Example -->
                         <div class="row">
-                            <div class="col-sm-12">
-                                 <div class="card">
-                               
-                                    <div class="card-body table-responsive">
-                                   
-                                  
-                                         
+                            <div class="col-sm-12">                           
+                                                                     
+                                    <div class="row">
+                                    <div class="col-md-12">                                  
+                                        <a id="ProveedorReportePdf" href="#" class="btn btn-info" target="_blank">PDF</a>
+                                        <a id="ProveedorReporteExcel" href="#" class="btn btn-warning" target="_blank">EXCEL</a>
+                                    </div>
+                                    </div>
                                                 <table id="TableMantenimientoTipoGastos" class="table  table-striped" cellspacing="0" width="100%" >
                                                      
-                                                        <div class="col-sm-12 col-md-6">
-                                                            <div class="dt-buttons btn-group" data-toggle="modal" data-target="#ModalAgregarTipoGastos">
-                                                                <a class="btn btn-secondary" tabindex="0" aria-controls="datatable-buttons"><i style="color:#0099CC;" class="fas fa-user-plus"></i><span style="color:#0099CC;"> Agregar</span></a>
-                                                                
-                                                            </div>
-                                                            <div class="row">
-                                                              <a class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" href=""><i
-                                                            style="color:#00C851;" class="far fa-file-excel"></i><span style="color:#00C851;"> Excel</span></a>
-                                                                <a class="btn btn-secondary buttons-pdf buttons-html5" tabindex="0" aria-controls="datatable-buttons" href=""><i style="color:#ff4444;"class="far fa-file-pdf"></i><span style="color:#ff4444;"> PDF</span></a>  
-                                                            </div>
-                                                            
-                                                        </div>
+                                                       
                                                         <div class="col-sm-12 col-md-6">
                                                             <div id="datatable-buttons_filter" class="dataTables_filter"></div>
                                                      </div>
                                                 
                                                     <br>
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th class="text-center">ID</th>
-                                                            <th  class="text-center">Nombre</th>
+                                                            <th  class="text-center">Descripcion</th>
                                                              <th  class="text-center">Estado</th>
                                                             <th  class="text-center">Acciones</th>
                                                            

@@ -12,7 +12,7 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Clientes</h4>
+              <!-- <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Clientes</h4> -->
               <ol class="breadcrumb float-right">
 
                 <li class="breadcrumb-item"><a href="#">Clientes</a></li>
@@ -28,6 +28,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
+            <div class="card-header bg-primary"><h3 class="my-0 text-white">Administracion de clientes<a class="btn btn-pink btn-rounded  w-md waves-effect float-right" data-toggle="modal" data-target="#ModalAgregarCliente"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
               <div class="card-body">             
                 <fieldset>
                   <legend>Filtro</legend>
@@ -68,7 +69,7 @@
                 <br>
                 <div class="row">
                   <div class="col-md-12">
-                     <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-pink"><i class="fa fa-plus"></i>  Agregar</button>
+                     <!-- <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-pink"><i class="fa fa-plus"></i>  Agregar</button> -->
                     <a id="ComprasReportePdf" href="#" class="btn btn-info" target="_blank">PDF</a>
                     <a id="ComprasReporteExcel" href="#" class="btn btn-warning" target="_blank">EXCEL</a>
                     <button data-toggle="modal" data-target="#ModalCumpleanos" type="button"  class="btn btn-purple" ><i class="fa fa-calendar"></i> Cumpleaños</button>
@@ -78,7 +79,7 @@
                 <div class="table-responsive">
                   <table id="TableListarClientes" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="bg-info text-white">
+                      <tr class="bg-primary text-white">
                        
                         <th>ID</th>
                         <th>Cliente</th>

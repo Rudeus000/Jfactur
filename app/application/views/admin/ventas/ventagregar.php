@@ -633,7 +633,7 @@
                                                 <div class="input-group">
                                                 <input type="text" id="txt_documento" name="documento" class="form-control" maxlength="11" minlength="8" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
                                                 <div class="input-group-append">
-                                                  <button class="btn btn-info waves-effect waves-light" type="button"  onclick="buscar();">RENIEC-SUNAT
+                                                  <button class="btn btn-info waves-effect waves-light" id="scan"  type="button"  onclick="buscar();">RENIEC-SUNAT
                                                     <i class="fa fa-search"></i>
                                                   </button>                                                           
                                                 </div>

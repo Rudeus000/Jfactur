@@ -205,6 +205,7 @@
             <li><a href="<?php echo base_url();?>administrador/regbanco"><i class="fas fa-clipboard-list"></i>Banco</a></li>                 
         
             <li><a href="<?php echo base_url();?>administrador/regnuevo"><i class="ion ion-ios-create"></i>Editor wysiwyg</a></li>
+            <li><a href="<?php echo base_url();?>administrador/regnuevo"><i class="ion ion-ios-create"></i>Modulo telefonia</a></li>
            
           </ul>
         </li>
