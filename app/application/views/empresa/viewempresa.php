@@ -33,9 +33,9 @@
 									</div>
 								</div>
 
-								<div class="row">								
-								<div class="col-md-4" hidden="">
-					              <div class="form-group">
+								<div class="row mt-4">								
+									<div class="col-md-4" hidden="">
+					            <div class="form-group">
 					                <label class="control-label">Tipo:</label>
 					                <select name="tipo" id="tipo_documento" class="form-control">
 					                  <option value="4">RUC</option>
@@ -44,7 +44,14 @@
 					              </div>
 					            </div>																		
 
-																	
+																		<div class="col-md-12">
+																			<div class="form-group">
+																				<div class="switchery-demo">
+																					<input <?= $empresa->movilexpert_emp==1?'checked':'' ?> id="movil-expert" type="checkbox"  data-plugin="switchery" data-color="#1bb99a" data-size="small"/>
+																					<label for="movil-expert">Movil Expert </label>                                       
+																				</div>
+																			</div>
+																		</div>
                                     <div class="col-md-6">
                                     	<div id="capa_load"></div>
                                       <label class="control-label">RUC</label>
@@ -215,3 +222,33 @@
     </div>
     <!-- content -->
   </div>
+
+
+
+
+	<div class="modal fade" id="ModalMovilExpertConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <form id="FormConfirmarMovilExpert" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title text-white" id="exampleModalLabel"><i class="fab fa-expeditedssl m-r-5"></i>Confirmar permiso</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+						<div class="col-md-12">         
+							<label>Confirmar permiso del Administrador</label>
+							<input type="password" name="contrasena" class="form-control">
+						</div>
+					</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary btn-rounded">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

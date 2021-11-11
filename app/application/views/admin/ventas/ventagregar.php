@@ -344,7 +344,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-2" id="isdn_product">
+                  <div class="col-md-2" id="isdn_product" style="<?= ($this->session->userdata('movil_expert')==1?'display:none':'')?>">
                     <div class="form-group">
                       <label class="control-label">Numero ISDN</label>
                       <input type="text" name="numeroisdn" class="form-control" id="producto_isdn">
@@ -362,7 +362,7 @@
                     <th></th>
                     <th style="text-align: center;">Código</th>
                     <th style="text-align: center;">Artículo</th>
-                    <th style="text-align: center;">ISDN</th>
+                    <th style="text-align: center;<?= ($this->session->userdata('movil_expert')==1?'display:none':'')?>">ISDN</th>
                     <th style="text-align: center;">Marca</th>
                     <th style="text-align: center;">Unidad</th>
                     <th style="text-align: center;">Cant.</th>
@@ -435,8 +435,8 @@
 
                        <div class="col-md-2">
                         <div class="form-group">
-                          <label class="control-label">Descuento</label>
-                          <input type="text" name="DescuentoGe" class="form-control" value="0.00">
+                          <label class="control-label">% Descuento</label>
+                          <input type="number" min="0" max="99" name="descuento" class="form-control" value="0">
                         </div>
                       </div>                      
 

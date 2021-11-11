@@ -127,4 +127,14 @@ class Regempresa extends CI_Controller {
 		->get()->result();
 	}
 
+	public function movilExpert()
+	{
+		$estado = $this->input->post('estado');
+		$this->modelgeneral->editRegist('tb_empresa',
+			['cod_empresa' => 1],
+			['movilexpert_emp' => $estado]
+		);
+		$this->session->set_userdata('movil_expert',$estado);
+	}
+
 }

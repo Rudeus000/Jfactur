@@ -62,6 +62,7 @@
 
 
 <div style="font-size:12px">
+<div class="w100">
 	<div class="w100">
 		<div class="w1-3"><b>Subtotal:</b></div>
 		<div class="w1-3 text-right">S/</div>

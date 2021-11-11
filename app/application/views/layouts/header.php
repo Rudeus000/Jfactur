@@ -57,7 +57,7 @@
 
     </head>
 
-    <body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" >
+    <body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>" >
         <!-- Begin page -->
         <div id="wrapper">
 
