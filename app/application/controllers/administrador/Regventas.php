@@ -180,7 +180,7 @@ class Regventas extends CI_Controller {
 		}
 
 		$resultProducto = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -195,7 +195,7 @@ class Regventas extends CI_Controller {
 
 		if (empty($resultProducto)) {
 			$resultProducto = $this->db->from('tb_producto')
-				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo", FALSE)
+				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock", FALSE)
 				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 				->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct')
 				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -212,7 +212,7 @@ class Regventas extends CI_Controller {
 		$this->db->flush_cache();
 
 		$resultServicio = $this->db->from('tb_producto')
-		->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / ".$cambio.") as costo,(".$precioVenta." / ".$cambio.") as venta,nomb_unid as unidad, '1' as estado,peso_product,cod_tiparticulo",FALSE)
+		->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / ".$cambio.") as costo,(".$precioVenta." / ".$cambio.") as venta,nomb_unid as unidad, '1' as estado,peso_product",FALSE)
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 		->where('est_product',1)
@@ -309,7 +309,7 @@ class Regventas extends CI_Controller {
 			$querySeries = $this->db->from('tb_producto_serie')
 			->select('serie_descripcion as id, serie_descripcion as text')
 			// ->where('cod_producto',$producto)
-			//->where($ResultypeAssignmentProduct)
+			->where($ResultypeAssignmentProduct)
 			->where('cod_almacen',$almacen)
 			->where('serie_estado','D')
 			->get()->result();
