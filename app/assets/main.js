@@ -6955,7 +6955,7 @@ function guardarProducto()
             </td>
             <td>${resp.response.cod_producto}</td>
             <td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
-            <td><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
+            <td class="${(movilexpert=='0')?'d-none':''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
 						<td>${resp.response.nomb_marca}</td>						
             <td>${resp.response.nomb_unid}</td>
             <td style="width:110px"><input min="1" type="${(seriesCheckBox)?'hidden':'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox)?cantidad:''}</td>

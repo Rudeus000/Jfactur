@@ -362,7 +362,7 @@
                     <th></th>
                     <th style="text-align: center;">Código</th>
                     <th style="text-align: center;">Artículo</th>
-                    <th style="text-align: center; <?= ($this->session->userdata('movil_expert')==1?'display:none':'')?>" >ISDN</th>
+                    <th style="text-align: center; <?= ($this->session->userdata('movil_expert')=='0'?'display:none':'')?>" >ISDN</th>
                     <th style="text-align: center;">Marca</th>
                     <th style="text-align: center;">Unidad</th>
                     <th style="text-align: center;">Cant.</th>
