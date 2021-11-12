@@ -36,6 +36,7 @@ class Auth extends CI_Controller
 		$perfil=$this->input->post('perfil');
 		$res = $this->user_model->login($username,sha1($paswoord));
 		$logo = $this->confempresa_model->getEmpresa($data);
+		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
 		if(!$res){
 			$this->session->set_flashdata('message','Acceso denegado, contacte con el administrador del sistema 921842183');
 			redirect(base_url());
@@ -56,7 +57,8 @@ class Auth extends CI_Controller
 				//'puntoventa_reportes' => $puntoventa->cod_puntoventa,
 				'almacen' => $almacen->cod_almacen,
 				'login' => TRUE,
-				'stock_minimo' => TRUE
+				'stock_minimo' => TRUE,
+				'movil_expert' => $empresa->movilexpert_emp
 			);
 			$this->session->set_userdata($data);
 			redirect(base_url('perfil'));

@@ -6,6 +6,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $objPHPExcel = new Spreadsheet();
 
+
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
@@ -189,6 +190,13 @@ $objPHPExcel->getActiveSheet()
 	->setCellValueByColumnAndRow(14,$row,$total)
 	->getStyleByColumnAndRow(14,$row)
 	->applyFromArray($styleNormal);
+
+
+if($this->session->userdata('movil_expert')=='0'){
+	$objPHPExcel->getActiveSheet()->removeColumnByIndex(8);
+}
+
+
 
 $writer = new Xlsx($objPHPExcel);
 

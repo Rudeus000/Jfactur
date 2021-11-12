@@ -1,5 +1,6 @@
 var path = $('body').data('path');
 var path_app = $('body').data('path-app');
+var movilexpert = $('body').data('movilexpert');
 // $('body').addClass('enlarged');
 // $('ul.collapse').removeClass('in');
 
@@ -6555,7 +6556,11 @@ function guardarProducto()
 			if (element.estado == '0') {
 				disponible = ' (No Disponible)';
 			}else{
-				disponible = ' (stock'+' '+element.stock+')'				
+				if(element.cod_tiparticulo==1){
+					disponible = ' (stock'+' '+element.stock+')'				
+				}else{
+					disponible = '';
+				}
 			}
 			return element.nombre + disponible;
 		},
@@ -6950,7 +6955,7 @@ function guardarProducto()
             </td>
             <td>${resp.response.cod_producto}</td>
             <td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
-            <td><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
+            <td class="${(movilexpert==0)?'d-none':''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
 						<td>${resp.response.nomb_marca}</td>						
             <td>${resp.response.nomb_unid}</td>
             <td style="width:110px"><input min="1" type="${(seriesCheckBox)?'hidden':'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox)?cantidad:''}</td>
@@ -7183,6 +7188,26 @@ function guardarProducto()
 
 	}
 
+	function calcularDescuento()
+	{
+		var descuentoTotal = parseFloat($('input[name=descuento]').val());
+		$('#TableVentaProductos tbody .fila-producto').each(function () {
+			var id = $(this).data('id');
+			var prec = parseFloat($(this).find('.prec').val());
+			var desc = (prec * descuentoTotal) / 100;
+			var tdDesc = `
+				<input type="hidden" class="desc" name="desc_prod[${id}]" value="${desc}"></input>
+				${desc}
+			`;
+			$(this).find('.desc').parent().html(tdDesc);
+		})
+	}
+
+	$('input[name=descuento]').focusout(function (e) { 
+		calcularDescuento();
+		calcularTotalVenta();
+	});
+
 
 	$('.FormVenta input[name=monto]').focusout(function (event) {
 		var total = parseFloat($('#VentaTotal').text());
@@ -7254,7 +7279,8 @@ function guardarProducto()
 		$('#TableCuotasContent').show();
 		let periodo = $('select[name=periodo]').val();
 		let numero = $('input[name=numero_cuotas]').val();
-		$.post(path+"administrador/regventas/calcularCuotas", {periodo,numero,total},
+		let descuento = $('input[name=descuento]').val();
+		$.post(path+"administrador/regventas/calcularCuotas", {periodo,numero,total,descuento},
 			function (data, textStatus, jqXHR) {
 				var tr = '';
 				$.each(data, function (index, value) { 
@@ -7359,8 +7385,7 @@ function guardarProducto()
 	// 	}
 	// });
 
-
-	$('#FormVentaAgregarCliente').validate({
+	/*$('#FormVentaAgregarCliente').validate({
 		ignore: [],
 		rules: {
 			tipo: { required: true },
@@ -7379,8 +7404,40 @@ function guardarProducto()
 						}
 					}
 				}
-			 },
-			 direccion: { required: true}	
+			}
+	 },
+			// telefono: { required: true },
+			direccion: { required: true }
+					},
+		messages:{
+		documento:{
+			remote:'Este número de documento ya existe'						
+
+		}
+
+		},
+		submitHandler: function () {
+			enviarFormulario('#FormVentaAgregarCliente', function (json) {
+				if (json.success) {
+					$('#TableListarClientes').DataTable().ajax.reload();
+				}
+				$('#ModalAgregarCliente').modal('hide');
+				$('#FormVentaAgregarCliente select[name=tipo]').select('val', '');
+				$('#FormVentaAgregarCliente input[name=documento]').val('');									
+			})
+		}
+	});
+	*/
+
+
+	$('#FormVentaAgregarCliente').validate({
+		ignore: [],
+		rules: {
+			tipo: { required: true },
+			nombre: { required: true },
+			documento: { required: true },
+			// telefono: { required: true },
+			direccion: { required: true },
 
 		},
 		messages:{
@@ -11182,6 +11239,8 @@ var TableReporteDetalladoVentas = $('#TableReporteDetalladoVentas').DataTable({
 	}
 });
 
+TableReporteDetalladoVentas.column(7).visible(movilexpert=='0'?false:true);
+
 $('#FormReporteVentasDetalladasBusqueda').validate({
 	submitHandler: function () {
 		$('#TableReporteDetalladoVentas').DataTable().ajax.reload(function (json) {
@@ -11544,61 +11603,7 @@ $('#FormEmpresa').validate({
 		})
 	}
 });
-$('#FormEmpresa').change('.activar', function () {
-	event.preventDefault();
-	var id = $(this).is('checked');
-	Swal.fire({
-		title: 'Activar modulo movil expert',
-		input: 'text',
-		inputAttributes: {
-		  autocapitalize: 'off'
-		},
-		showCancelButton: true,
-		confirmButtonText: 'Look up',
-		showLoaderOnConfirm: true,
-		preConfirm: (login) => {
-		  return fetch(`//api.github.com/users/${login}`)
-			.then(response => {
-			  if (!response.ok) {
-				throw new Error(response.statusText)
-			  }
-			  return response.json()
-			})
-			.catch(error => {
-			  Swal.showValidationMessage(
-				`Request failed: ${error}`
-			  )
-			})
-		},
-		allowOutsideClick: () => !Swal.isLoading()
-	  }).then((result) => {
-		if (result.isConfirmed) {
-		  Swal.fire({
-			title: `${result.value.login}'s avatar`,
-			imageUrl: result.value.avatar_url
-		  })
-		}
-	  }).then((result) => {
-		if (result.value) {
-			$.getJSON(path + 'administrador/regempresa/activarm', { id }, function (json, textStatus) {
-				if (json.success) {
-					Swal.fire({
-						title: "Buen trabajo",
-						text: "Se activo correctamente el modulo movil.",
-						type: "success"
-					});
-					$('#TableVentas').DataTable().ajax.reload();
-				} else {
-					Swal.fire({
-						title: "Error",
-						text: "Ocurrio un error, vuelva a intentarlo.",
-						type: "error"
-					});
-				}
-			});
-		}
-	});
-});
+
    
 /* ======================== */
 /*        END EMPRESA       */
@@ -12246,4 +12251,64 @@ function calcularEdad(fecha) {
 
 /* ============================================ */
 /*              END CUMPLEAÑOS                  */
+/* ============================================ */
+
+
+
+/* ============================================ */
+/*                 MOVIL EXPERT                 */
+/* ============================================ */
+$('#movil-expert').change(function (e) { 
+	//e.preventDefault();
+	var check = $(this);
+	if(check.is(':checked')){
+		$('#movil-expert').trigger('click');
+		$('#ModalMovilExpertConfirmar').modal();
+	}else{
+		$.post(path+"empresa/regempresa/movilExpert", {'estado': 0},
+			function (data, textStatus, jqXHR) {
+			},
+			"HTML"
+		);
+		return;
+	}
+});
+
+
+$('#FormConfirmarMovilExpert').validate({
+	rules: {
+		contrasena: { required: true }
+	},
+	submitHandler: function () {
+		var contrasena = $('input[name=contrasena]').val();
+		$.post(path+"administrador/regcajaapertura/verificaContrasena", {contrasena},
+			function (data, textStatus, jqXHR) {
+				if(data['success'] == true){
+					$.post(path+"empresa/regempresa/movilExpert", {'estado': 1},
+						function (data, textStatus, jqXHR) {
+						},
+						"HTML"
+					);
+					$('#movil-expert').trigger('click');
+					Swal.fire({
+						title: "Buen trabajo",
+						text: "El módulo movil expert se activo correctamente.",
+						type: "success"
+					});
+				}else{
+					Swal.fire({
+						title: "Error",
+						text: "La contraseña es incorrecta.",
+						type: "error"
+					});
+				}
+				$('#ModalMovilExpertConfirmar').modal('hide');
+			},
+			"JSON"
+		);
+	}
+});
+
+/* ============================================ */
+/*               END MOVIL EXPERT               */
 /* ============================================ */
