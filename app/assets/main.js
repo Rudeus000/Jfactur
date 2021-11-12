@@ -12142,7 +12142,7 @@ $('#BalanceExcel').click(function(event) {
 
 
 /*=========================================
-=           VERIFICAR STICJ MINIMOS        =
+=           VERIFICAR STOCK MINIMO       =
 ===========================================*/
 if($('#wrapper[data-stockminimos]').length){
 	$.post(path+"reportes/regdashboard/productosStockMinimos", {},
@@ -12163,6 +12163,8 @@ if($('#wrapper[data-stockminimos]').length){
 					`;
 				});
 				$('#TableStockMinimos tbody').html(tr);
+			
+				
 				$('#ModalStockMinimos').modal();
 			}
 		},
@@ -12181,7 +12183,7 @@ $('#posponer-stockminimo').click(function(){
 })
 
 /*=========================================
-=         END VERIFICAR STICJ MINIMOS      =
+=         END VERIFICAR STOCK MINIMO      =
 ===========================================*/
 
 /* ============================================ */
@@ -12246,4 +12248,132 @@ function calcularEdad(fecha) {
 
 /* ============================================ */
 /*              END CUMPLEAÑOS                  */
+/* ============================================ */
+
+/* ============================================ */
+/*              IMPORTAR PRODUCTOS                  */
+/* ============================================ */
+
+$('#ImportarPlantilla').fileupload({
+	url: path+'administrador/regproducto/uploadPlantilla',
+	  dataType: 'json',
+	  autoUpload: false,
+	  acceptFileTypes: /(\.|\/)(xlsx)$/i,
+	done: function (e, data) {
+		  $("#ImportarPlantilla").find(".files").empty();
+		  $('.progress').hide();
+		  if(data.result.success==true){
+			  if(data.result.importar.success==false){
+				  var error = '';
+				  $.each(data.result.importar, function (indexError, valueError) { 
+					  $.each(valueError, function (indexColumna, valueColumna) { 
+						  $.each(valueColumna, function (indexI, value) { 
+							  error += `<li>${value}</li>`;							 
+						  });
+					  });
+				  });
+				  $('#errores-plantilla').html(error);
+				  $('#alert-errres-plantilla').show();
+			  }else{
+				  Swal.fire({
+					  title: "Buen trabajo",
+					  text: "Se importaron "+data.result.importar.num_filas+" registros.",
+					  type: "success"
+				  });
+			  }
+		  }else{
+			  $('#alert-errres-plantilla').html('<li>'+data.result.error+'</li>').show();
+		  }
+	},
+	progressall: function (e, data) {
+	  var progress = parseInt(data.loaded / data.total * 100, 10);
+	  $('.progress').show();
+	  $('.progress .progress-bar').css(
+		'width',
+		progress + '%'
+	  );
+	},
+	  add: function (e, data) {
+		  
+		  if(data.originalFiles[0].type!='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+			  Swal.fire({
+				  title: "Error",
+				  text: "El archivo no es válido",
+				  type: "error"
+			  });
+			  return;
+		  }
+		  $('#alert-errres-plantilla').hide();
+		  $('.label-productos').html(data.originalFiles[0].name);
+		  $("#iniciarImportacionProducto").off('click').on('click', function () {
+				  data.submit();
+		  });
+	  }
+  })
+  .prop('disabled', !$.support.fileInput)
+	  .parent().addClass($.support.fileInput ? undefined : 'disabled'); 
+  
+   
+  
+	  $('#ImportarPlantillaStock').fileupload({
+		  url: path+'administrador/regproducto/uploadPlantillaStock',
+		  dataType: 'json',
+		  autoUpload: false,
+		  acceptFileTypes: /(\.|\/)(xlsx)$/i,
+		  done: function (e, data) {
+			  $("#ImportarPlantillaStock").find(".files").empty();
+			  $('.progressStock').hide();
+			  if(data.result.success==true){
+				  if(data.result.importar.success==false){
+					  var error = '';
+					  $.each(data.result.importar, function (indexError, valueError) { 
+						  $.each(valueError, function (indexColumna, valueColumna) { 
+							  $.each(valueColumna, function (indexI, value) { 
+								  error += `<li>${value}</li>`;							 
+							  });
+						  });
+					  });
+					  $('#errores-plantilla').html(error);
+					  $('#alert-errres-plantilla').show();
+				  }else{
+					  Swal.fire({
+						  title: "Buen trabajo",
+						  text: "Se importaron "+data.result.importar.num_filas+" registros.",
+						  type: "success"
+					  });
+				  }
+			  }else{
+				  $('#alert-errres-plantilla').html('<li>'+data.result.error+'</li>').show();
+			  }
+		  },
+		  progressall: function (e, data) {
+			  var progress = parseInt(data.loaded / data.total * 100, 10);
+			  $('.progressStock').show();
+			  $('.progressStock .progress-bar').css(
+				  'width',
+				  progress + '%'
+			  );
+		  },
+		  add: function (e, data) {
+			  
+			  if(data.originalFiles[0].type!='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+				  Swal.fire({
+					  title: "Error",
+					  text: "El archivo no es válido",
+					  type: "error"
+				  });
+				  return;
+			  }
+			  $('#alert-errres-plantilla').hide();
+			  $('.label-stock').html(data.originalFiles[0].name);
+			  $("#iniciarImportacionStock").off('click').on('click', function () {
+					  data.submit();
+			  });
+		  }
+	  })
+	  .prop('disabled', !$.support.fileInput)
+	.parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+/* ============================================ */
+/*              END IMPORTAR                  */
 /* ============================================ */
