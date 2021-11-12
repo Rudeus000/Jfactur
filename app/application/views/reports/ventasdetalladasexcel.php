@@ -190,6 +190,11 @@ $objPHPExcel->getActiveSheet()
 	->getStyleByColumnAndRow(14,$row)
 	->applyFromArray($styleNormal);
 
+
+if($this->session->userdata('movil_expert')=='0'){
+	$objPHPExcel->getActiveSheet()->removeColumnByIndex(8);
+}
+
 $writer = new Xlsx($objPHPExcel);
 
 header('Content-Type: application/vnd.ms-excel');

@@ -1,5 +1,6 @@
 var path = $('body').data('path');
 var path_app = $('body').data('path-app');
+var movilexpert = $('body').data('movilexpert');
 // $('body').addClass('enlarged');
 // $('ul.collapse').removeClass('in');
 
@@ -6555,7 +6556,11 @@ function guardarProducto()
 			if (element.estado == '0') {
 				disponible = ' (No Disponible)';
 			}else{
-				disponible = ' (stock'+' '+element.stock+')'				
+				if(element.cod_tiparticulo==1){
+					disponible = ' (stock'+' '+element.stock+')'				
+				}else{
+					disponible = '';
+				}
 			}
 			return element.nombre + disponible;
 		},
@@ -7182,6 +7187,26 @@ function guardarProducto()
 		$('input[name=total]').val(round(total, 2));
 
 	}
+
+	function calcularDescuento()
+	{
+		var descuentoTotal = parseFloat($('input[name=descuento]').val());
+		$('#TableVentaProductos tbody .fila-producto').each(function () {
+			var id = $(this).data('id');
+			var prec = parseFloat($(this).find('.prec').val());
+			var desc = (prec * descuentoTotal) / 100;
+			var tdDesc = `
+				<input type="hidden" class="desc" name="desc_prod[${id}]" value="${desc}"></input>
+				${desc}
+			`;
+			$(this).find('.desc').parent().html(tdDesc);
+		})
+	}
+
+	$('input[name=descuento]').focusout(function (e) { 
+		calcularDescuento();
+		calcularTotalVenta();
+	});
 
 
 	$('.FormVenta input[name=monto]').focusout(function (event) {
@@ -11203,6 +11228,8 @@ var TableReporteDetalladoVentas = $('#TableReporteDetalladoVentas').DataTable({
 	}
 });
 
+TableReporteDetalladoVentas.column(7).visible(movilexpert=='0'?false:true);
+
 $('#FormReporteVentasDetalladasBusqueda').validate({
 	submitHandler: function () {
 		$('#TableReporteDetalladoVentas').DataTable().ajax.reload(function (json) {
@@ -11570,6 +11597,68 @@ $('#FormEmpresa').validate({
 /* ======================== */
 /*        END EMPRESA       */
 /* ======================== */
+
+
+/* ============================================ */
+/*                 MOVIL EXPERT                 */
+/* ============================================ */
+$('#movil-expert').change(function (e) { 
+	//e.preventDefault();
+	var check = $(this);
+	if(check.is(':checked')){
+		$('#movil-expert').trigger('click');
+		$('#ModalMovilExpertConfirmar').modal();
+	}else{
+		$.post(path+"empresa/regempresa/movilExpert", {'estado': 0},
+			function (data, textStatus, jqXHR) {
+			},
+			"HTML"
+		);
+		return;
+	}
+});
+
+
+$('#FormConfirmarMovilExpert').validate({
+	rules: {
+		contrasena: { required: true }
+	},
+	submitHandler: function () {
+		var contrasena = $('input[name=contrasena]').val();
+		$.post(path+"administrador/regcajaapertura/verificaContrasena", {contrasena},
+			function (data, textStatus, jqXHR) {
+				if(data['success'] == true){
+					$.post(path+"empresa/regempresa/movilExpert", {'estado': 1},
+						function (data, textStatus, jqXHR) {
+						},
+						"HTML"
+					);
+					$('#movil-expert').trigger('click');
+					Swal.fire({
+						title: "Buen trabajo",
+						text: "El módulo movil expert se activo correctamente.",
+						type: "success"
+					});
+				}else{
+					Swal.fire({
+						title: "Error",
+						text: "La contraseña es incorrecta.",
+						type: "error"
+					});
+				}
+				$('#ModalMovilExpertConfirmar').modal('hide');
+			},
+			"JSON"
+		);
+	}
+});
+
+/* ============================================ */
+/*               END MOVIL EXPERT               */
+/* ============================================ */
+
+
+
 /* ======================== */
 /*           KARDEX         */
 /* ======================== */
@@ -12344,3 +12433,5 @@ $('#ImportarPlantilla').fileupload({
 /* ============================================ */
 /*              END IMPORTAR                  */
 /* ============================================ */
+
+
