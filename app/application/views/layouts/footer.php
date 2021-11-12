@@ -68,6 +68,7 @@
 
 <script src="<?php echo base_url_app() ?>assets/plugins/chart.js/chart.min.js"></script>
 
+
 <script type="text/javascript">
 
         function buscar_campos() {
@@ -138,10 +139,7 @@
 
                             $('#txt_nombre').val(datos[4]+" "+datos[2]+ " "+datos[3]);
 
-                            $('#txt_direccion').val(datos[5]);
-
-                            $('#fnacimiento').val(datos[6]);
-                            
+                            $('#txt_direccion').val(datos[5]+" - "+datos[6]);
 
                             $('#capa_load').html("");
 
