@@ -697,101 +697,64 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-     <!--  Modal content for the above example -->
-     <div class="modal fade bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+ <!--  Modal content for the above example -->
+    <div class="modal fade bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-        <div class="card-header bg-success"><h3 class="my-0 text-white">Importar productos series desde excel<a type="button"   class="btn btn-rounded btn-pink float-right" data-dismiss="modal" aria-hidden="true">x</a></h3></div> 
-        <!-- <div class="card-header bg-success"><h3 class="my-0 text-white">Lista de productos<a class="btn btn-rounded btn-danger float-right">x</a></h3></div> -->
             <div class="modal-content">
-                         
                 <!-- <div class="modal-header">
                     <h4 class="modal-title" id="myLargeModalLabel"> <i class="fas fa-angle-double-down m-r-5"></i>Importar productos desde excel</h4>
-                    
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                 </div> -->
-                
-                    <div class="modal-body">                               
-                        <div class="card m-b-20 text-xs-center">
-                            <div class="card-body">                 
-                                    <div class="row">
-                                        <div class="col-md-2">           
-                                            <i class=" fas fa-cloud-download-alt text-info fa-4x"></i>
-                                        </div>                                           
-                                        <div class="col-md-6">
-                                            <p><b>Descarga nuestra plantilla en excel!</b><br>
-                                                Para poder importar tus productos en lote debes descargar la plantilla y enviarlo utilizando el mismo formato!<p>             
-                                        </div>
-                                        <div class="col-md-2">
-                                            <a href="<?= base_url('administrador/regproducto/descargarPlantillaProducto') ?>" class="btn btn-link  waves-effect w-md waves-light"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla productos</a>
-                                            <a href="<?= base_url('administrador/regproducto/descargarPlantillaStock') ?>" class="btn btn-link  waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla stock y serie</a>
-                                        </div>
-                                    <div>                                                                                                                                           
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="card m-b-20 text-xs-center">
-                            <div class="card-body">
-                                <blockquote class="card-bodyquote">
-                                    <div class="custom-file">
-                                        <input type="file"  name="plantilla" class="custom-file-input" id="ImportarPlantilla" lang="es">
-                                        <label class="custom-file-label label-productos" for="customFileLang">Importar productos</label>
+                <div class="card-header bg-success"><h3 class="my-0 text-white">Importar productos desde excel<i class="spinner-grow text-warning float-right"></i></h3></div>
+                <div class="modal-body">              
+                                <div class="card m-b-20 text-xs-center">
+                                    <div class="card-body">                                                                                  
+                                            <div class="row">
+                                                <div class="col-md-2">                                                   
+                                                        <i class=" fas fa-cloud-download-alt text-info fa-4x"></i>                                                      
+                                                </div>                                           
+                                                <div class="col-md-8">                                                   
+                                                        <p><b>Descarga nuestra plantilla en excel!</b><br>
+                                                            Para poder importar tus productos en lote debes descargar la plantilla y enviarlo utilizando el mismo formato!</p>                                                        
+                                                </div>
+                                                <div class="col-md-2">
+                                                   <label for=""></label>
+                                                         <button type="button" class="btn btn-info btn-rounded waves-effect w-md waves-light">Descargar</button>                                                      
+                                                </div>
+                                            </div>                                                                                                                                           
                                     </div>
-                                    
-                                    <div class="progress" style="display:none">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%"  aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    
-                                    <button type="button" id="iniciarImportacionProducto" class="btn btn-primary btn-rounded btn-bordered waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-upload-alt m-r-5"></i>Iniciar</button>
-                                </blockquote>
-                                <br><br>
-                                <blockquote class="card-bodyquote">
-                                    <div class="custom-file">
-                                        <input type="file"  name="plantillaStock" class="custom-file-input" id="ImportarPlantillaStock" lang="es">
-                                        <label class="custom-file-label label-stock" for="customFileLang">Importar stock y serie</label>
-                                    </div>
-                                    
-                                    <div class="progressStock" style="display:none">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%"  aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    
-                                    <button type="button" id="iniciarImportacionStock" class="btn btn-success btn-rounded btn-bordered waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-upload-alt m-r-5"></i>Iniciar</button> 
-                                </blockquote>
-                                
-                                <!--
-                                <div class="card m-b-2 text-white bg-info text-xs-center">
+                                </div>                            
+                           
+                                <div class="card m-b-20 text-xs-center">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <i class="fas fa-info-circle fa-4x"></i>
-                                            </div>                                           
-                                            <div class="col-md-8"> 
-                                                <p>Todos los productos que se ingresen en el excel, serán registrados en el almacén para la sucursal: AGROVET ANDAHUAYLAS (ID: 7)</p>
-                                            </div>  
-                                        </div>                                                          
+                                        <blockquote class="card-bodyquote">
+                                            <div class="custom-file">
+                                              <input type="file" class="custom-file-input" id="customFileLang" lang="es">
+                                              <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                                            </div>                                                                                                          
+                                        </blockquote>
+                                                                                         
+                                            <div class="card m-b-2 text-white bg-success text-xs-center">
+                                                 <div class="card-body">                                                           
+                                                    <div class="row">
+                                                        <div class="col-md-2">                                                   
+                                                                <i class="   fas fa-info-circle fa-4x"></i>
+                                                        </div>                                           
+                                                        <div class="col-md-8">
+                                                                   
+                                                                        <p>Todos los productos que se ingresen en el excel, serán registrados en el almacén para la sucursal: AGROVET ANDAHUAYLAS (ID: 7)
+                                                                            </p>                                                                        
+                                                        </div>  
+                                                    </div>                                                          
+                                                </div>
+                                            </div>                                            
                                     </div>
                                 </div>
-                                --> 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="alert-errres-plantilla" class="alert alert-danger" role="alert" style="display:none">
-                                            <ul id="errores-plantilla">
-                                                
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!--
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-rounded waves-effect" data-dismiss="modal">Cancelar</button>
-                            <button type="button" id="uploadBtn" class="btn btn-primary btn-rounded waves-effect waves-light">Iniciar importacion..</button>
-                        </div>
-                        -->
-                    </div>
-                
+                                 <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger btn-rounded waves-effect" data-dismiss="modal">Cancelar</button>
+                                                        <button type="button" class="btn btn-primary btn-rounded waves-effect waves-light"><i class="fas fa-sync m-r-5"></i>Iniciar importacion..</button>
+                                                    </div>            
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
