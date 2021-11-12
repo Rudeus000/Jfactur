@@ -69,9 +69,7 @@ else if($tipo_doc == "4"){
 			5 => $info['estado'],
 			6 => date("d/m/Y", strtotime($result['fecha_inscripcion'])),
 			7 => $info['direccion'],
-			8 => $info['distrito'],
-			9 => $info['provincia'],
-			10 => $info['departamento'],
+			8 => $info['emision_electronica']
 
 		);
 			echo json_encode($datos);

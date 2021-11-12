@@ -192,7 +192,76 @@
                                         </div>
         
         
-                                        
+                                        <!-- profile -->
+                                        <!-- <div id="projects" class="tab-pane">
+                                            <div class="row m-t-10">
+                                                <div class="col-md-12">
+                                                    <div class="portlet">
+                                                        <div id="portlet2" class="panel-collapse collapse show">
+                                                            <div class="portlet-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>Project Name</th>
+                                                                                <th>Start Date</th>
+                                                                                <th>Due Date</th>
+                                                                                <th>Status</th>
+                                                                                <th>Assign</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>1</td>
+                                                                                <td>Velonic Admin</td>
+                                                                                <td>01/01/2015</td>
+                                                                                <td>07/05/2015</td>
+                                                                                <td><span class="label label-info">Work in Progress</span></td>
+                                                                                <td>Coderthemes</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>2</td>
+                                                                                <td>Velonic Frontend</td>
+                                                                                <td>01/01/2015</td>
+                                                                                <td>07/05/2015</td>
+                                                                                <td><span class="label label-success">Pending</span></td>
+                                                                                <td>Coderthemes</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>3</td>
+                                                                                <td>Velonic Admin</td>
+                                                                                <td>01/01/2015</td>
+                                                                                <td>07/05/2015</td>
+                                                                                <td><span class="label label-pink">Done</span></td>
+                                                                                <td>Coderthemes</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>4</td>
+                                                                                <td>Velonic Frontend</td>
+                                                                                <td>01/01/2015</td>
+                                                                                <td>07/05/2015</td>
+                                                                                <td><span class="label label-purple">Work in Progress</span></td>
+                                                                                <td>Coderthemes</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>5</td>
+                                                                                <td>Velonic Admin</td>
+                                                                                <td>01/01/2015</td>
+                                                                                <td>07/05/2015</td>
+                                                                                <td><span class="label label-warning">Coming soon</span></td>
+                                                                                <td>Coderthemes</td>
+                                                                            </tr>
+                                                                            
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
                                     </div>
                         
                                 </div> 

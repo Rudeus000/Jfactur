@@ -7365,17 +7365,15 @@ function guardarProducto()
 			tipo: { required: true },
 			nombre: { required: true },
 			documento: { required: true,
-			// telefono: { required: true },			
-				remote:{
-					url: path+"administrador/regcliente/validaClienteUnico",
-					type: "POST",
-					data: {
-						documento: function() {
-							return $("#FormVentaAgregarCliente input[name=documento]").val();
-						},
-						id: function(){
-							return $("input[name=codigo]").val();
-						}
+			remote:{
+				url: path+"administrador/regcliente/validaClienteUnico",
+				type: "POST",
+				data: {
+					documento: function() {
+						return $("#FormVentaAgregarCliente input[name=documento]").val();
+					},
+					id: function(){
+						return $("input[name=codigo]").val();
 					}
 				}
 			}
@@ -7413,13 +7411,6 @@ function guardarProducto()
 			direccion: { required: true },
 
 		},
-		messages:{
-			documento:{
-				remote:'Este número de documento ya existe'
-				
-			}
-	
-			},		
 		submitHandler: function () {
 			enviarFormulario('#FormVentaAgregarCliente', function (json) {
 				$('#ModalAgregarCliente').modal('hide');
@@ -9023,12 +9014,12 @@ $('#TableCreditoProductos tbody').on('click', '.removerProducto', function (even
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
 			{ "orderable": false }
 		]
 	});
@@ -11574,61 +11565,7 @@ $('#FormEmpresa').validate({
 		})
 	}
 });
-$('#FormEmpresa').change('.activar', function () {
-	event.preventDefault();
-	var id = $(this).is('checked');
-	Swal.fire({
-		title: 'Activar modulo movil expert',
-		input: 'text',
-		inputAttributes: {
-		  autocapitalize: 'off'
-		},
-		showCancelButton: true,
-		confirmButtonText: 'Look up',
-		showLoaderOnConfirm: true,
-		preConfirm: (login) => {
-		  return fetch(`//api.github.com/users/${login}`)
-			.then(response => {
-			  if (!response.ok) {
-				throw new Error(response.statusText)
-			  }
-			  return response.json()
-			})
-			.catch(error => {
-			  Swal.showValidationMessage(
-				`Request failed: ${error}`
-			  )
-			})
-		},
-		allowOutsideClick: () => !Swal.isLoading()
-	  }).then((result) => {
-		if (result.isConfirmed) {
-		  Swal.fire({
-			title: `${result.value.login}'s avatar`,
-			imageUrl: result.value.avatar_url
-		  })
-		}
-	  }).then((result) => {
-		if (result.value) {
-			$.getJSON(path + 'administrador/regempresa/activarm', { id }, function (json, textStatus) {
-				if (json.success) {
-					Swal.fire({
-						title: "Buen trabajo",
-						text: "Se activo correctamente el modulo movil.",
-						type: "success"
-					});
-					$('#TableVentas').DataTable().ajax.reload();
-				} else {
-					Swal.fire({
-						title: "Error",
-						text: "Ocurrio un error, vuelva a intentarlo.",
-						type: "error"
-					});
-				}
-			});
-		}
-	});
-});
+
    
 /* ======================== */
 /*        END EMPRESA       */
@@ -11792,11 +11729,11 @@ $(".custom-file-input").on("change", function() {
 		"columns": [
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
-			{ "orderable": false },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
 			{ "orderable": false },
 
 		],
@@ -12026,7 +11963,7 @@ $('#GastosReportePdf').click(function (event) {
 		"columns": [
 			{ "orderable": true },
 			{ "orderable": true },
-			{ "orderable": false },
+			{ "orderable": true },
 			{ "orderable": false },
 
 		]

@@ -12,11 +12,11 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <!-- <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Proveedores</h4> -->
+              <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Proveedores</h4>
               <ol class="breadcrumb float-right">
 
-                <li class="breadcrumb-item"><a href="#">Gestion</a></li>
-                <li class="breadcrumb-item active">Provedores</li>
+                <li class="breadcrumb-item"><a href="#">Compras</a></li>
+                <li class="breadcrumb-item active">Listado</li>
               </ol>
             </div>
           </div>
@@ -28,19 +28,19 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
-            <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar proveedores<a class="btn btn-pink btn-rounded  w-md waves-effect float-right" data-toggle="modal" data-target="#ModalAgregarProveedor"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
               <div class="card-body">
               
                 <fieldset>
                   <legend>Filtro</legend>
                   <form id="FormProveedorBuscar" action="" method="post" autocomplete="off">
-                    <div class="row">                   
+                    <div class="row">
+                   
                       <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Tipo:</label>
-                          <select name="tipo" class="form-control select2">
+                          <select name="tipo" class="form-control">
                             <option value="">--Todos--</option>
-                            <option value="4">Ruc</option>
+                            <option value="1">Ruc</option>
                             <option value="2">DNI</option>
                           </select>
                         </div>
@@ -54,7 +54,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
-                          <select name="estado" class="form-control select2">
+                          <select name="estado" class="form-control">
                             <option value="1">Activo</option>
                             <option value="2">Anulado</option>
                           </select>
@@ -69,7 +69,7 @@
                 <br>
                 <div class="row">
                   <div class="col-md-12">
-                     <!-- <button data-toggle="modal" data-target="#ModalAgregarProveedor" type="button" class="btn btn-pink"><i class="fa fa-plus"></i>  Agregar</button> -->
+                     <button data-toggle="modal" data-target="#ModalAgregarProveedor" type="button" class="btn btn-pink"><i class="fa fa-plus"></i>  Agregar</button>
                     <a id="ProveedorReportePdf" href="#" class="btn btn-info" target="_blank">PDF</a>
                     <a id="ProveedorReporteExcel" href="#" class="btn btn-warning" target="_blank">EXCEL</a>
                   </div>
@@ -78,7 +78,7 @@
                 <div class="table-responsive">
                   <table id="TableListarProveedor" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="bg-primary text-white">
+                      <tr class="bg-info text-white">
                        
                         <th>ID</th>
                         <th>Tipo</th>
@@ -129,6 +129,7 @@
         <div id="capa_load"></div>
         <div class="modal-body">
             <div class="row">
+
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Tipo:</label>

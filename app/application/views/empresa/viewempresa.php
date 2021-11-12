@@ -5,12 +5,11 @@
 				<div class="row">
 					<div class="col-12 mb-2">
 						<div class="page-title-box">
-							<!-- <h4 class="page-title float-left"> <i class="fas fa-box-open"></i></h4> -->
+							<h4 class="page-title float-left"> <i class="fas fa-box-open"></i> Informacion de Empresa</h4>
 						</div>
 					</div>
 				</div>
         <div class="card">
-		<div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar mi empresa<a data-toggle="modal" data-target="#ModalAgregarPunto" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
           <div class="card-body">
             <form id="FormEmpresa" action="<?= base_url('empresa/Regempresa/guardarDatos') ?>"  enctype="multipart/form-data" method="POST">           	
 
@@ -19,10 +18,10 @@
 								<div class="row">
 									<div class="dropzone" id="dropzone">
 									<div class="col-md-12">
-										<!-- <div class="form-group"> -->
+										<div class="form-group">
 											<!-- <img width="150px" id="logo-archivo" src="<?= base_url_app('assets/images/logo/'.$empresa->photo) ?>" alt="Logo"> -->
 											<img width="150px" id="logo-archivo" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" alt="Logo">
-										<!-- </div> -->
+										</div>
 									
 										<label class="control-label mt-4"></label>
 										
@@ -31,14 +30,6 @@
 												<label class="custom-file-label" for="customFileLogo">Seleccionar Logo</label>
 											</div>
 											</div>									
-									</div>
-									 <div class="col-md-6">
-									 <!-- <div class="form-group"> -->
-										<!-- <div class="switchery-demo"> -->
-											<!-- <input type="checkbox" class="custom-control-input" > -->                      
-                      <input  class="activar" type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck"/>
-											<label for="servicioChecked">Modulo avanzado</label>
-										<!-- </div> -->
 									</div>
 								</div>
 

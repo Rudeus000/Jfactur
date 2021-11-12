@@ -31,10 +31,10 @@ class Regproveedor extends CI_Controller
 
     public function jsonProveedores()
 	  {
-	  $data['start'] = $this->input->get_post('start', true);
+	    $data['start'] = $this->input->get_post('start', true);
 		$data['length'] = $this->input->get_post('length', true);
-    $data['sEcho']  = $this->input->get_post('_', true);
-    $columns= ['tb_proveedor_id','tb_proveedor_tip','tb_proveedor_nom'];
+        $data['sEcho']  = $this->input->get_post('_', true);
+        $columns= ['tb_proveedor_id','tb_proveedor_tip','tb_proveedor_nom'];
 		$orderCampo = $this->input->get_post('order', true);
 		$orderCampo = $orderCampo[0]['column'];
 		$orderCampo = $columns[$orderCampo];

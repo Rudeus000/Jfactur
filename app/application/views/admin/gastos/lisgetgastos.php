@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BFacturas - Gastos</title>
+        <title>Solutions - Gastos</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <!-- <h4 class="page-title float-left"><i class="fas fa-cube"></i> Gastos administrativos</h4> -->
+                                    <h4 class="page-title float-left"><i class="fas fa-cube"></i> Gastos administrativos</h4>
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Gestion</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
                                         <li class="breadcrumb-item"><a href="#">Gastos</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -44,23 +44,26 @@
                         <div class="row">             
                             <div class="col-sm-12">
                                 <div class="card">
-                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar gastos<a class="btn btn-pink btn-rounded  w-md waves-effect float-right" data-toggle="modal" data-target="#ModalAgregarGastos"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                                     <div class="card-body"> 
                                    <fieldset>
-                                    <legend>Filtro</legend>
+                  <legend>Filtro</legend>
                                     <form id="GastosFormBusqueda" autocomplete="off">  
-                                      <div class="row">      
-                                  
-                                            <div class="col-md-4">
-                                            <div class="form-group">
-                                            <label class="control-label">Fecha</label>
-                                            <div class="input-group">
-                                                <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                                                <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                                            </div>
-                                            </div>
-                                        </div>                                         
-                                       
+                                      <div class="row">        
+                                     
+                                            
+                                                <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Fecha</label>
+                          <div class="input-group">
+                            <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                            <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                          </div>
+                        </div>
+                      </div>
+
+                                           
+                                          
+
                                              <div class="form-group col-md-6">
                                                      <div class="form-group">
                                                         <label class="control-label " >Nombre gastos:</label>
@@ -80,7 +83,7 @@
                                                   <option value="<?= $t->cod_tipgastos ?>"><?= $t->descripcion ?></option>
                                                     <?php endforeach ?>
                                                    </select>
-                                                </div>
+                                                </div> 
 
                                                  <div class="form-group col-md-3">
                                                     <label  class="col-form-label">Estado:</label>
@@ -90,35 +93,54 @@
                                                     <option value="2">Anulado</option>
                                                   </select>
                                                 </div> 
+
                                                   <div class="row">
                                           <div class="col-md-12">
-                                                <button class="btn btn-success waves-effect waves-light"   style="margin-top:34px"><i class="fa fa-search"></i> Buscar</button>                                                
+                                                <button class="btn btn-success waves-effect waves-light"   style="margin-top:34px"><i class="fa fa-search"></i> Buscar</button>
+                                                <button type="button" class="btn btn-pink waves-effect waves-light"  data-toggle="modal" data-target="#ModalAgregarGastos"   style="margin-top:34px"><i class="fa fa-plus"></i> Agregar</button>
                                                 <a type="button" id="GastosReportePdf" href="#" class="btn btn-info" target="_blank" style="margin-top:34px"><i class="fa fa-print"></i> Imprimir</a>
-                                        </div>                                        
-                                    </div>                                           
-                           
-                                    </div> 
+                                        </div>
+                                        
+                                    </div>
+
+                                            
+                            
+                                       
+                                            </div>  
                                  
+
                                     </form>
+
                                   
                                       </fieldset>
                                         <!-- End #wizard-vertical -->
+                                    </div>
+                                </div>
+                            </div>
+                  
+                        </div><!-- End row -->  
+        
+        
+                        <!-- Vertical Steps Example -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body table-responsive">
+                                   
+                                  
                                          
-                                    <br>
-                                    <div class="table-responsive ">                                  
-                                                                           
-                                                <table id="TableMantenimientoGastos" class="table table-condensed" cellspacing="0" width="100%">
+                                                <table id="TableMantenimientoGastos" class="table table-bordered table-condensed" cellspacing="0" width="100%">
                                    
                                                     <thead >
-                                                        <tr class="bg-primary text-white">
-                                                            <th style="text-align:center;">Secuencia</th>
-                                                            <th  style="text-align:center;">Tipo gastos</th>
-                                                            <th  style="text-align:center;">Descripcion</th>
-                                                            <th  style="text-align:center;">Fecha</th>
-                                                            <th  style="text-align:center;">Observacion</th>
-                                                            <th  style="text-align:center;">Monto</th>
-                                                            <th  style="text-align:center;">Estado</th>
-                                                            <th  style="text-align:center;">Acciones</th>
+                                                        <tr class="bg-info text-white">
+                                                            <th style="text-aling:center;">Secuencia</th>
+                                                            <th  style="text-aling:center;">Tipo gastos</th>
+                                                            <th  style="text-aling:center;">Descripcion</th>
+                                                            <th  style="text-aling:center;">Fecha</th>
+                                                            <th  style="text-aling:center;">Observacion</th>
+                                                             <th  style="text-aling:center;">Monto</th>
+                                                            <th  style="text-aling:center;">Estado</th>
+                                                            <th  style="text-aling:center;">Acciones</th>
                                                            
                                                         </tr>
                                                     </thead>
@@ -128,18 +150,19 @@
                                                                  <th ><b><span id="TotalPagosGastos"></span></b></th>
                                                                  <th colspan="2"></th>                                                                
                                                              </tr>
-                                                         </tfoot>                                                                                 
-                                                </table>                                       
-                                            </div>                         
-                                        </div>
-                                        </div> <!-- container -->         
-                                    </div> <!-- content -->                    
+                                                         </tfoot>
+                                                                                 
+                                                </table>
+                                        <!-- End #wizard-vertical -->
+                                    </div>
                                 </div>
-                            </div>
-                                </div>
-                            </div>
-                  
-                        </div><!-- End row -->  
+                            </div>              
+                     </div>
+                    </div> <!-- container -->         
+                </div> <!-- content -->
+           
+            </div>
+
 
             <!-- ============================================================== -->
             <!-- End Right content here -->

@@ -13,7 +13,7 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <!-- <h4 class="page-title float-left">Punto de venta</h4> -->
+              <h4 class="page-title float-left">Punto de venta</h4>
               <ol class="breadcrumb float-right">
                 <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
                 <li class="breadcrumb-item"><a href="#">P.venta</a></li>
@@ -31,7 +31,6 @@
 
           <div class="col-sm-12">
             <div class="card">
-            <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestion de punto de venta<a data-toggle="modal" data-target="#ModalAgregarPunto" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
               <div class="card-body"> 
                 <form id="PventaFormBusqueda" autocomplete="off">          
                   <div class="form-row">
@@ -76,14 +75,18 @@
               </div>  
             </form>
             <!-- End #wizard-vertical -->
-     
+          </div>
+        </div>
+      </div>
+
+    </div><!-- End row -->  
 
 
     <!-- Vertical Steps Example -->
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <div class="card-body table-responsive"> -->
+          <div class="card-body table-responsive">
 
 
 
@@ -106,7 +109,7 @@
                 </div>
                 <br>
                 <thead>
-                  <tr class="bg-primary text-white">
+                  <tr class="bg-info text-white">
                     <th></th>
                     <th  class="text-center">Nombre</th>
 

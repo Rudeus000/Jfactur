@@ -18,13 +18,48 @@ class perfil extends CI_Controller {
 		//$data['sucursales'] = $this->modelgeneral->getTableWhere('tb_puntoventa',['estad_pto'=>1]);
 		$this->load->view('layouts/header');
 		$this->load->view('layouts/aside');
-		$this->load->view('home/inicio',$data);	
+		$this->load->view('home/inicio',$data);
+		//$this->load->view('home/inicio',$data);
 		$this->load->view('layouts/footer');
 	}
 
-	
+	// 	public function setPuntoVenta($punto)
+	// {
+	// 	if($punto=='admin' AND $this->session->userdata('perfil')!='1'){
+	// 		redirect(base_url().'reportes/regdashboard');
+	// 	}
+	// 	$this->session->set_userdata('puntoventa_reportes',$punto);
+	// 	redirect(base_url().'reportes/regdashboard');
+	// }
 
-	 public function getPerfil()
+
+	public function kardex()
+	{
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('home/kardex');
+		$this->load->view('layouts/footer');
+	}
+
+	public function jsonKardex()
+	{
+		$data['start'] = $this->input->get_post('start', true);
+		$data['length'] = $this->input->get_post('length', true);
+    $data['sEcho']  = $this->input->get_post('_', true);
+    $columns= ['nomb_puntoventa','nomb_product','nomb_tiparticulo'];
+		$orderCampo = $this->input->get_post('order', true);
+		$orderCampo = $orderCampo[0]['column'];
+		$orderCampo = $columns[$orderCampo];
+		$orderDireccion = $this->input->get_post('order', true);
+		$orderDireccion = $orderDireccion[0]['dir'];
+		$data['orderCampo'] = $orderCampo;
+		$data['orderDireccion'] = $orderDireccion;
+		$datos = $this->dashboard_model->getKardex($data);
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($datos);
+	}
+
+	 function getPerfil()
   {
     $id = $this->input->get('id');
     $grupo = $this->modelgeneral->getTableWhereRow('tb_usuario', ['cod_usu' => $id]);
