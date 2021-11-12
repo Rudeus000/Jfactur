@@ -662,7 +662,7 @@
                                                 <label class="control-label">Dirección</label>
                                                 <input type="text" id="txt_direccion" name="direccion" class="form-control">
                                               </div>
-                                            </div>
+                                            </div>                                                                                 
 
                                             </div>
                                             </div>
@@ -694,11 +694,22 @@
                                             </div>
                                             </div>
                                             <div class="tab-pane" id="messages-b2">
-                                            <div class="col-md-6" id="fnacimiento">
+                                            <!-- <div class="col-md-6" id="fnacimiento">
                                               <div class="form-group">
                                                 <label class="control-label">F.nacimiento</label>
-                                                <input type="date" name="fnacimiento" class="form-control" >
+                                                <input type="date" id="fnacimiento" name="fnacimiento" class="form-control" >
+                                              </div> -->
+                                              <div class="col-md-6">                                            
+                                              <div class="form-group">
+                                                <label class="control-label">F.nacimiento</label>
+                                                <div class="input-group">
+                                                <input type="text" id="fnacimiento" name="fnacimiento" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                                                <div class="input-group-append">
+                                                                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                                    </div>
+                                                </div>
                                               </div>
+                                            </div> 
                                             </div>
                                             </div>                                            
                                         </div>
@@ -825,7 +836,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div> -->      
+      </div> --> 
+      <div class="table-responsive">     
       <div class="modal-body">
             <table id="TableStockMinimos" class="table table-hover table-striped tblstockminimo">
                 <thead>
@@ -843,6 +855,7 @@
                     
                 </tbody>
             </table>
+      </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger btn-rounded" id="posponer-stockminimo"><span class="m-r-5">Posponer</span><i class="fas fa-undo"></i></button>
