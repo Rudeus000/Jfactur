@@ -6955,7 +6955,7 @@ function guardarProducto()
             </td>
             <td>${resp.response.cod_producto}</td>
             <td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
-            <td class="${(movilexpert==0)?'d-none':''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
+            <td class="${(movilexpert==1)?'d-none':''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
 						<td>${resp.response.nomb_marca}</td>						
             <td>${resp.response.nomb_unid}</td>
             <td style="width:110px"><input min="1" type="${(seriesCheckBox)?'hidden':'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox)?cantidad:''}</td>
@@ -11239,7 +11239,7 @@ var TableReporteDetalladoVentas = $('#TableReporteDetalladoVentas').DataTable({
 	}
 });
 
-TableReporteDetalladoVentas.column(7).visible(movilexpert=='0'?false:true);
+TableReporteDetalladoVentas.column(7).visible(movilexpert=='1'?false:true);
 
 $('#FormReporteVentasDetalladasBusqueda').validate({
 	submitHandler: function () {
@@ -11603,7 +11603,61 @@ $('#FormEmpresa').validate({
 		})
 	}
 });
-
+$('#FormEmpresa').change('.activar', function () {
+	event.preventDefault();
+	var id = $(this).is('checked');
+	Swal.fire({
+		title: 'Activar modulo movil expert',
+		input: 'text',
+		inputAttributes: {
+		  autocapitalize: 'off'
+		},
+		showCancelButton: true,
+		confirmButtonText: 'Look up',
+		showLoaderOnConfirm: true,
+		preConfirm: (login) => {
+		  return fetch(`//api.github.com/users/${login}`)
+			.then(response => {
+			  if (!response.ok) {
+				throw new Error(response.statusText)
+			  }
+			  return response.json()
+			})
+			.catch(error => {
+			  Swal.showValidationMessage(
+				`Request failed: ${error}`
+			  )
+			})
+		},
+		allowOutsideClick: () => !Swal.isLoading()
+	  }).then((result) => {
+		if (result.isConfirmed) {
+		  Swal.fire({
+			title: `${result.value.login}'s avatar`,
+			imageUrl: result.value.avatar_url
+		  })
+		}
+	  }).then((result) => {
+		if (result.value) {
+			$.getJSON(path + 'administrador/regempresa/activarm', { id }, function (json, textStatus) {
+				if (json.success) {
+					Swal.fire({
+						title: "Buen trabajo",
+						text: "Se activo correctamente el modulo movil.",
+						type: "success"
+					});
+					$('#TableVentas').DataTable().ajax.reload();
+				} else {
+					Swal.fire({
+						title: "Error",
+						text: "Ocurrio un error, vuelva a intentarlo.",
+						type: "error"
+					});
+				}
+			});
+		}
+	});
+});
    
 /* ======================== */
 /*        END EMPRESA       */

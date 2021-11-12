@@ -344,7 +344,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-2" id="isdn_product" style="<?= ($this->session->userdata('movil_expert')==0?'display:none':'')?>">
+                  <div class="col-md-2" id="isdn_product" style="<?= ($this->session->userdata('movil_expert')==1?'display:none':'')?>">
                     <div class="form-group">
                       <label class="control-label">Numero ISDN</label>
                       <input type="text" name="numeroisdn" class="form-control" id="producto_isdn">

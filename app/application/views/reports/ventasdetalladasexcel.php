@@ -192,9 +192,8 @@ $objPHPExcel->getActiveSheet()
 	->applyFromArray($styleNormal);
 
 
-if($this->session->userdata('movil_expert')=='0'){
-	$objPHPExcel->getActiveSheet()->removeColumnByIndex(8);
-}
+
+$objPHPExcel->getActiveSheet()->removeColumnByIndex(8);
 
 
 
