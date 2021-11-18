@@ -131,7 +131,7 @@
                                     <h5 class="text-overflow"><small>TIENDA: <?= $this->session->userdata('puntoventa_nombre') ?></small> </h5>
                                 </div>                               
                                 <!-- item-->                               
-                                <a href="<?php echo base_url()?> perfil" class="dropdown-item notify-item">
+                                <a href="<?php echo base_url(); ?> perfil" class="dropdown-item notify-item">
                                     <i class="mdi mdi-account-circle"></i> <span>Perfil</span>
                                 </a>
 
