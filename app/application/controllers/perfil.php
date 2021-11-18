@@ -59,7 +59,7 @@ class perfil extends CI_Controller {
 		echo json_encode($datos);
 	}
 
-	 function getPerfil()
+	 public function getPerfil()
   {
     $id = $this->input->get('id');
     $grupo = $this->modelgeneral->getTableWhereRow('tb_usuario', ['cod_usu' => $id]);
