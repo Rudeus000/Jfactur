@@ -134,7 +134,7 @@
 
                         }else{
 
-                            $('#txt_documento').val(datos[0]);
+                            // $('#txt_documento').val(datos[0]);
 
                             $('#txt_nombre').val(datos[4]+" "+datos[2]+ " "+datos[3]);
 
