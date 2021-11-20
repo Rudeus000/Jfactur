@@ -13,7 +13,7 @@
 		if($tipo_doc == "2"){
 			// $data = file_get_contents("https://api.persona.bfacturas.com/consulta.php?ndni=".$documento."&source=jne");
 			//$data = file_get_contents("http://pad.minem.gob.pe/SIGEDVIRTUAL_INGRESO/Solicitud/ConsultaDNI?dni=".$documento);
-			$data = file_get_contents("http://app20.susalud.gob.pe:8080/registro-renipress-webapp/login.htm?action=buscarPersona&dat_fechaNacimiento=14/01/2021&cmb_sexo=1&cmb_tipoDocumentoIdentidad=1&txt_numeroDocumentoIdentidad=".$documento);
+			$data = file_get_contents("https://api.persona.bfacturas.com/persona/".$documento);
 			$info = json_decode($data, true);
 			$result=$info["dataJson"];
 			$resultado=$result["persona"];				
@@ -34,19 +34,20 @@
 		// }
 		//else{
 			$datos= array(				
-				0 => $resultado['nuDni'], 
-				1 => $resultado['verificacion'],
-				2 => $resultado['apPaterno'],
-				3 => $resultado['apMaterno'],
-				4 => $resultado['preNombres'],
-				5 => $resultado['deDireccion'],
-				6 => date('Y-m-d', strtotime(str_replace('/', '-',$resultado['feNac']))),
+				0 => $info['nuDni'], 
+				1 => $info['verificacion'],
+				2 => $info['apellidoPrimero'],
+				3 => $info['apellidoSegundo'],
+				4 => $info['prenombreInscrito'],
+				5 => $info['domicilio'],
+				6 => date('Y-m-d', strtotime($info['fechaNacimiento'])),
+				// 6 => date('Y-m-d', strtotime(str_replace('/', '-',$resultado['echaNacimiento']))),
 				
 	
 			);
 				echo json_encode($datos);
 	
-			//var_dump($datos);
+		//var_dump($info);
 			//}
 			
 		
