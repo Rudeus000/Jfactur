@@ -31,7 +31,7 @@
             <div class="card-header bg-success"><h3 class="my-0 text-white">Lista de facturas y boletas electronicas emetidas</h3></div>
               <div class="card-body">
                 <fieldset>
-                  <!-- <legend>Filtro</legend> -->
+                  <legend>Filtro</legend>
                   <form id="FormFacturasFiltro" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-3">

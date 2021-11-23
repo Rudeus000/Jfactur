@@ -14,9 +14,9 @@
                 <!-- end row -->
                     <div class="row">
                     <!-- <div class="col-lg-3 col-md-2"> -->
-                        
+                    
                     <div class="col-xl-3 col-md-6">
-                        <div class="widget-panel widget-style-2 bg-pink">
+                        <div class="widget-panel widget-style-2 bg-success">
                             <i class="ion-md-cash"></i>
                             <h2 class="m-0 text-white" data-plugin="counterup"><?php echo $dia; ?></h2>
                             <div>Ventas contado</div>

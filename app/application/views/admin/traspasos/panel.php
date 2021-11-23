@@ -33,7 +33,7 @@
               <div class="card-body table-responsive">
                
                 <fieldset>
-                  <!-- <legend>Filtro</legend> -->
+                  <legend>Filtro</legend>
                   <form id="FormTraspasosFiltro" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-3">

@@ -38,7 +38,7 @@
                   </div>
                 </div> -->
                 <fieldset>
-                  <!-- <legend>Filtro</legend> -->
+                  <legend>Filtro</legend>
                   <form id="FormComprasFiltro" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-3">

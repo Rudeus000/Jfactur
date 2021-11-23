@@ -31,7 +31,7 @@
             <div class="card-header bg-success"><h3 class="my-0 text-white">Cuentas por pagar</h3></div>
               <div class="card-body table-responsive">
                 <fieldset>
-                  <!-- <legend>Filtro</legend> -->
+                  <legend>Filtro</legend>
                   <form id="FormCuentasPagarFiltro" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-4">
