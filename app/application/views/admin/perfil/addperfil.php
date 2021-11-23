@@ -27,10 +27,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Agregar perfil</h4>
+                                    <!-- <h4 class="page-title float-left">Agregar perfil</h4> -->
 
                                     <ol class="breadcrumb float-right">
-                                    <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                    <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                                         <li class="breadcrumb-item"><a href="#">Perfil</a></li>
                                         <li class="breadcrumb-item active">Agregar</li>
                                     </ol>
@@ -44,6 +44,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Agregar perfil de usuario</h3></div>
                                     <div class="card-body">
                                     <ol class="breadcrumb">
                                         <li><a href="<?= base_url('administrador/regperfil') ?>"><i class="ion ion-md-arrow-round-back"></i> Regresar</a></li>
@@ -66,7 +67,7 @@
                                             </div>
                                             <div class="form-group mb-0 justify-content-end row">
                                                 <div class="col-0">
-                                                    <button type="submit" class="btn btn-info waves-effect waves-light">Guardar</button>
+                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Guardar</button>
                                                 </div>
                                             </div>
                                         </form>

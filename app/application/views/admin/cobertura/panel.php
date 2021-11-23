@@ -12,9 +12,9 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Coberturas</h4>
+              <!-- <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Coberturas</h4> -->
               <ol class="breadcrumb float-right">
-
+              <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                 <li class="breadcrumb-item"><a href="#">Coberturas</a></li>
                 <li class="breadcrumb-item active">Listado</li>
               </ol>
@@ -28,14 +28,15 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
+            <div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar cobertura cliente<a data-toggle="modal" data-target="#ModalAgregarCobertura" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
               <div class="card-body">
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
                       <button type="button" class="btn btn-pink" data-toggle="modal" data-target="#ModalAgregarCobertura"><i class="fa fa-plus"></i>  Agregar</button>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <fieldset>
                   <legend>Filtro</legend>
                   <form id="FormClienteCoberturaFiltro" action="" method="post" autocomplete="off">
@@ -47,7 +48,7 @@
                         </div>
                       </div>
                       <div class="col-md-2">
-                        <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
+                        <button class="btn btn-purple waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
                       </div>
                     </div>
                   </form>
@@ -57,7 +58,7 @@
                 <div class="table-responsive">
                   <table id="TableClienteCobertura" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="bg-info text-white">
+                      <tr class="bg-primary text-white">
                         <th>Id</th>
                         <th>Cliente</th>
                         <th>Fec. Inicio</th>
@@ -95,8 +96,8 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormCobertura" action="<?= base_url('administrador/regclientecobertura/agregar') ?>" method="post" autocomplete="off">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Cobertura</h5>
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white" id="exampleModalLabel">Agregar Cobertura</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -145,7 +146,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
       </form>
@@ -158,8 +159,8 @@
     <div class="modal-content">
       <form id="FormCoberturaEditar" action="<?= base_url('administrador/regclientecobertura/editar') ?>" method="post" autocomplete="off">
         <input type="hidden" name="id" >
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Editar Cobertura</h5>
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white" id="exampleModalLabel">Editar Cobertura</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

@@ -16,7 +16,7 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="profile-bg-picture" style="background-image:url('<?= base_url_app() ?>assets/images/portada/portadasolutions.jpeg')">
+                                <div class="profile-bg-picture" style="background-image:url('<?= base_url_app() ?>assets/images/portada/fondo.jpg')">
                                     <span class="picture-bg-overlay"></span><!-- overlay -->
                                 </div>
                                 <!-- meta -->

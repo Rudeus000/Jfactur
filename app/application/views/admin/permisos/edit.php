@@ -24,7 +24,7 @@
                          <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Editar Permisos</h4>
+                                    <!-- <h4 class="page-title float-left">Editar Permisos</h4> -->
 
                                     <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="#">Modulo</a></li>
@@ -40,6 +40,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Editar permisos</h3></div>
                                     <div class="card-body">
 
                                          <ol class="breadcrumb">

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solutions - Tipo Gastos</title>
+        <title>BFacturas - Tipo Gastos</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,10 +27,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left"><i class="ion ion-ios-cube"></i> Tipo Gastos</h4>
+                                    <!-- <h4 class="page-title float-left"><i class="ion ion-ios-cube"></i> Tipo Gastos</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
-                                        <li class="breadcrumb-item"><a href="#">Tipo Gastos</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Gestion</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Tipogastos</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
                            
@@ -43,32 +43,31 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-body"> 
-                                
-                                    
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Tipo de gastos<a data-toggle="modal" data-target="#ModalAgregarTipoGastos" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>    
+                                    <div class="card-body">                                                       
                                     <div class="col-md-8">
                                     <form id="TipoGastosFormBusqueda" autocomplete="off">
                                          <label class="control-label " >Buscar por descripción:</label>
                                             <div class="input-group">
                                                 <input type="text"  name="tb_tipo_gastos" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-purple"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
                                             </form>
                                     </div>  
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                 <div class="card">
+                                 <div class="card"> -->
                                
                                     <div class="card-body table-responsive">
                                    
@@ -94,7 +93,7 @@
                                                 
                                                     <br>
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th class="text-center">ID</th>
                                                             <th  class="text-center">Nombre</th>
                                                              <th  class="text-center">Estado</th>
@@ -135,8 +134,8 @@
                         <div class="modal-content">
                                                 <form id="FormTipoGastos" action="<?= base_url('administrador/regtipogastos/insertTipoGastos') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Tipo Gastos</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Tipo Gastos</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                              <div class="modal-body">
@@ -171,8 +170,8 @@
                                                 <div class="modal-content">
                                                 <form id="FormEditarTipoGastos" action="<?= base_url('administrador/regtipogastos/editTipoGastos') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" name="id" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Editar Informacion de Marca</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Editar Informacion de Marca</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">

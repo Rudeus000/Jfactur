@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Binvoice - BCCS</title>
+        <title>BFacturas - SMS</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -90,7 +90,7 @@
                         </li>                         -->
 
                     <li class="list-inline-item dropdown notification-list">
-                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="#" role="button"
+                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('administrador/regcotizacion/agregar') ?>" role="button"
                                aria-haspopup="false" aria-expanded="false" data-original-title="Cotizacion">
                                 <i class="ion ion-ios-list-box noti-icon text-purple waves-light waves-effect"></i>
                             </a>                                                
@@ -98,14 +98,14 @@
 
                                      
                         <li class="list-inline-item dropdown notification-list">
-                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="#" role="button"
+                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('administrador/regcompras/agregar') ?>" role="button"
                                aria-haspopup="false" aria-expanded="false" data-original-title="Compras">
                                 <i class="ion ion-md-cart noti-icon text-primary waves-light waves-effect"></i>
                             </a>                                                
                         </li>
                      
                         <li class="list-inline-item dropdown notification-list">
-                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="#" role="button"
+                            <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('reportes/regreportedetallado/Ventas') ?>" role="button"
                                aria-haspopup="false" aria-expanded="false" data-original-title="Reporte Ventas">
                                 <i class="ion ion-md-clipboard noti-icon text-danger waves-light waves-effect"></i>
                             </a>                                                
@@ -137,7 +137,7 @@
 
                                 <!-- item-->
                                 <a href="<?php echo base_url(); ?>auth/acceder" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-settings"></i> <span>Inicio</span>
+                                    <i class="mdi mdi-home"></i> <span>Inicio</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <!-- item-->

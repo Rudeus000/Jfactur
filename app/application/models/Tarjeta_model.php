@@ -43,7 +43,7 @@ class Tarjeta_model extends CI_Model
 	foreach ($query->result() as $q) {
 		if ($q->estado_tarj=='1') {
 				$estado = '<label class="label label-success">Activo</label>';
-		}elseif($q->est_tarj=='2'){
+		}elseif($q->estado_tarj=='2'){
 				$estado = '<label class="label label-danger">Inactivo</label>';
 		}
 

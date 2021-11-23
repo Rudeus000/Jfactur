@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Grupo Usuario</h4>
+                                    <!-- <h4 class="page-title float-left">Grupo Usuario</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                                         <li class="breadcrumb-item"><a href="#">Grupo</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -54,6 +54,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Agregar grupo de usuario</h3></div>
                                     <div class="card-body"> 
                                     <ol class="breadcrumb">
                                         <li><a href="<?= base_url('administrador/regrupo') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
@@ -66,30 +67,30 @@
                                             <div class="input-group">
                                                 <input type="text"  name="tb_grupo" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-primary"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
                                             </form>
                                     </div>  
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                <div class="card">
+                                <div class="card"> -->
                                     <div class="card-body table-responsive">
                                    
                                   
                                          
                                                 <table id="TableMantenimientoGrupo" class="table  table-striped" cellspacing="0" width="100%">
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th style="text-aling:center;">Secuencia</th>
                                                             <th  style="text-aling:center;">Descripcion</th>
                                                             <th  style="text-aling:center;">Estado</th>
@@ -129,8 +130,8 @@
                                                 <div class="modal-content">
                                                 <form id="FormEditarGrupo" action="<?= base_url('administrador/regrupo/editGrupo') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" name="id" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Editar grupo usuario</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Editar grupo usuario</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">

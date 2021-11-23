@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solutions - documento</title>
+        <title>BFacturas - tipo documento</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Tipo de Documento</h4>
+                                    <!-- <h4 class="page-title float-left">Tipo de Documento</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Administrar</a></li>
                                         <li class="breadcrumb-item"><a href="#">Tipo documento</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -44,6 +44,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar tipo de documentos electronicos<a data-toggle="modal" data-target="#ModalAgregarDocum" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
                                     <div class="card-body"> 
                              
                                     <div class="col-md-8">
@@ -52,23 +53,23 @@
                                             <div class="input-group">
                                                 <input type="text"  name="tb_tipodocumento" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-purple"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
                                             </form>
                                     </div>  
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                <div class="card">
+                                <div class="card"> -->
                                     <div class="card-body table-responsive">
                                    
                                   
@@ -93,7 +94,7 @@
                                                 
                                                     <br>
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th class="text-center">Secuencia</th>
                                                             <th  class="text-center">Nombre</th>
                                                              <th  class="text-center">Estado</th>
@@ -134,8 +135,8 @@
                         <div class="modal-content">
                                                 <form id="FormDocumento" action="<?= base_url('administrador/regtipodocum/agregarDocum') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Informacion de documento</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white" >Informacion de documento</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                              <div class="modal-body">
@@ -167,8 +168,8 @@
                                                 <div class="modal-content">
                                                 <form id="FormEditarDocumento" action="<?= base_url('administrador/regtipodocum/editDocumento') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" name="id" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Editar almacen</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Editar almacen</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">

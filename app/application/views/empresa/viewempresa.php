@@ -5,11 +5,12 @@
 				<div class="row">
 					<div class="col-12 mb-2">
 						<div class="page-title-box">
-							<h4 class="page-title float-left"> <i class="fas fa-box-open"></i> Informacion de Empresa</h4>
+							<!-- <h4 class="page-title float-left"> <i class="fas fa-box-open"></i> Informacion de Empresa</h4> -->
 						</div>
 					</div>
 				</div>
         <div class="card">
+		<div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar mi empresa<a data-toggle="modal" data-target="#ModalAgregarPunto" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
           <div class="card-body">
             <form id="FormEmpresa" action="<?= base_url('empresa/Regempresa/guardarDatos') ?>"  enctype="multipart/form-data" method="POST">           	
 
@@ -31,27 +32,10 @@
 											</div>
 											</div>									
 									</div>
-								</div>
+								</div>							
 
-								<div class="row">								
-								<div class="col-md-4" hidden="">
-					              <div class="form-group">
-					                <label class="control-label">Tipo:</label>
-					                <select name="tipo" id="tipo_documento" class="form-control">
-					                  <option value="4">RUC</option>
-					                  <option value="2">DNI</option>
-					                </select>
-					              </div>
-					            </div>																		
-
-																		<div class="col-md-12 mt-4">
-																			<div class="form-group">
-																				<div class="switchery-demo">
-																					<input <?= $empresa->movilexpert_emp==1?'checked':'' ?> id="movil-expert" type="checkbox"  data-plugin="switchery" data-color="#1bb99a" data-size="small"/>
-																					<label for="movil-expert">Movil Expert </label>                                       
-																				</div>
-																			</div>
-																		</div>
+								<div class="row">					
+																							
                                     <div class="col-md-6">
                                     	<div id="capa_load"></div>
                                       <label class="control-label">RUC</label>
@@ -150,21 +134,26 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="alert alert-secondary text-center" role="alert">
-											Selecciona el modo de envio de CE por defecto:
+											Configuración de opciones avanzadas:
 										</div>
 									</div>
-									<div class="col-md-12">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label class="control-label d-block">¿Envio automatico de factura a SUNAT?</label>
 											<div class="form-check form-check-inline">
 												<input class="form-check-input" type="radio" name="enviar_factura_emp" id="inlineRadio1" value="1" <?= ($empresa->enviar_factura_emp=='1')?'checked':'' ?>>
 												<label class="form-check-label" for="inlineRadio1">Enviar a SUNAT automatico</label>
-											</div>
+											</div>										
+
 											<div class="form-check form-check-inline">
 												<input class="form-check-input" type="radio" name="enviar_factura_emp" id="inlineRadio2" value="0" <?= ($empresa->enviar_factura_emp=='0')?'checked':'' ?>>
 												<label class="form-check-label" for="inlineRadio2">Solo firmar</label>
-											</div>
+											</div>											
 										</div>
+									</div>
+									<div class="col-md-6">									                     
+										<input <?= $empresa->movilexpert_emp==1?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="movil-expert"/>
+										<label for="movil-expert">Modulo telefonia</label>										
 									</div>
 								</div>
 								<div class="row">

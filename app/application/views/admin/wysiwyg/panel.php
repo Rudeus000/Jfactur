@@ -13,7 +13,7 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left">¿Qué hay de nuevo?</h4>
+              <!-- <h4 class="page-title float-left">¿Qué hay de nuevo?</h4> -->
             </div>
           </div>
         </div>
@@ -25,20 +25,21 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="card">
+					<div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar publicación<button  class="btn btn-pink waves-effect w-md waves-light float-right" id="agregarNuevoModal" ><i class="fa fa-plus m-r-5"></i>Crear</button></h3></div> 
 						<div class="card-body table-responsive">
 
-							<div class="row">
+							<!-- <div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
 										<a id="agregarNuevoModal" class="btn btn-primary"><i class="fas fa-user-plus"></i> Agregar</a>
 									</div>
 								</div>
-							</div>
-							<br>
+							</div> -->
+							<!-- <br> -->
 
 							<table id="TableNuevo" class="table  table-striped" cellspacing="0" width="100%">
 								<thead>
-									<tr class="bg-info text-white">
+									<tr class="bg-primary text-white">
 										<th>Fecha</th>
 										<th>Título</th>
 										<th></th>
@@ -81,8 +82,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 			<form id="FormAgregarNuevo" action="<?= base_url('administrador/regnuevo/agregar') ?>" autocomplete="off" method="post">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+				<div class="modal-header bg-primary">
+					<h5 class="modal-title text-white" id="exampleModalLabel">Agregar</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -105,7 +106,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-primary">Guardar</button>
 				</div>
 			</form>
@@ -121,8 +122,8 @@
     <div class="modal-content">
 			<form id="FormEditarNuevo" action="<?= base_url('administrador/regnuevo/editar') ?>" autocomplete="off" method="post">
 				<input type="hidden" name="id">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+				<div class="modal-header bg-primary">
+					<h5 class="modal-title text-white" id="exampleModalLabel">Editar</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -145,7 +146,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-primary">Guardar</button>
 				</div>
 			</form>

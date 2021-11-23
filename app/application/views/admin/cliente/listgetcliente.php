@@ -12,9 +12,9 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Clientes</h4>
+              <!-- <h4 class="page-title float-left"><i class="fas fa-user-tie" aria-hidden="true"></i> Clientes</h4> -->
               <ol class="breadcrumb float-right">
-
+              <li class="breadcrumb-item"><a href="#">  Gestion</a></li>
                 <li class="breadcrumb-item"><a href="#">Clientes</a></li>
                 <li class="breadcrumb-item active">Listado</li>
               </ol>
@@ -28,6 +28,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
+            <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestion de clientes</h3></div>
               <div class="card-body">             
                 <fieldset>
                   <legend>Filtro</legend>
@@ -37,7 +38,7 @@
                       <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Tipo:</label>
-                          <select name="tipo" class="form-control">
+                          <select name="tipo" class="form-control select2">
                             <option value="">--Todos--</option>
                             <option value="1">Ruc</option>
                             <option value="2">DNI</option>
@@ -53,7 +54,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
-                          <select name="estado" class="form-control">
+                          <select name="estado" class="form-control select2">
                             <option value="1">Activo</option>
                             <option value="2">Anulado</option>
                           </select>
@@ -69,8 +70,8 @@
                 <div class="row">
                   <div class="col-md-12">
                      <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-pink"><i class="fa fa-plus"></i>  Agregar</button>
-                    <a id="ComprasReportePdf" href="#" class="btn btn-info" target="_blank">PDF</a>
-                    <a id="ComprasReporteExcel" href="#" class="btn btn-warning" target="_blank">EXCEL</a>
+                    <a id="ComprasReportePdf" href="#" class="btn btn-info disabled" target="_blank">PDF</a>
+                    <a id="ComprasReporteExcel" href="#" class="btn btn-warning disabled" target="_blank">EXCEL</a>
                     <button data-toggle="modal" data-target="#ModalCumpleanos" type="button"  class="btn btn-purple" ><i class="fa fa-calendar"></i> Cumpleaños</button>
                   </div>
                 </div>
@@ -78,7 +79,7 @@
                 <div class="table-responsive">
                   <table id="TableListarClientes" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="bg-info text-white">
+                      <tr class="bg-primary text-white">
                        
                         <th>ID</th>
                         <th>Cliente</th>
@@ -119,8 +120,8 @@
 <div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myLargeModalLabel">Cliente - Agregar</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="myLargeModalLabel">Cliente - Agregar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target=".bs-example-modal-lg">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -132,7 +133,7 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Tipo:</label>
-                    <select name="tipo" class="form-control">
+                    <select name="tipo" class="form-control select2">
                             <option value="">SELECCIONAR</option>
                             <option value="4">RUC</option>
                             <option value="2">DNI</option>
@@ -161,7 +162,7 @@
 							<div class="col-md-12">
                 <div class="form-group">
                   <label class="control-label">Precio Venta:</label>
-                  <select name="precio_venta" class="form-control">
+                  <select name="precio_venta" class="form-control select2">
 										<option value="Normal">Precio Normal</option>
 										<option value="Mayor">Precio x Mayor</option>
 										<option value="Especial">Precio Especial</option>
@@ -209,8 +210,8 @@
 <div class="modal fade bs-example-modal-lg" id="ModalEditarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myLargeModalLabel">Proveedor - Editar</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="myLargeModalLabel">Proveedor - Editar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -223,7 +224,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Tipo:</label>
-                    <select name="tipo" class="form-control select">
+                    <select name="tipo" class="form-control select2">
                                  <option value="4" >RUC</option>
                                   <option value="2" >DNI</option>
                    </select>
@@ -251,7 +252,7 @@
 							<div class="col-md-12">
                 <div class="form-group">
                   <label class="control-label">Precio Venta:</label>
-                  <select name="precio_venta" class="form-control">
+                  <select name="precio_venta" class="form-control slect2">
 										<option value="Normal">Precio Normal</option>
 										<option value="Mayor">Precio x Mayor</option>
 										<option value="Especial">Precio Especial</option>
@@ -290,7 +291,7 @@
              <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Estado:</label>
-                    <select name="estado" class="form-control select">
+                    <select name="estado" class="form-control select2">
                                  <option value="1" >Activo</option>
                                   <option value="2">Inactivo</option>
                    </select>

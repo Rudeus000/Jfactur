@@ -12,10 +12,10 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Proveedores</h4>
+              <!-- <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Proveedores</h4> -->
               <ol class="breadcrumb float-right">
-
-                <li class="breadcrumb-item"><a href="#">Compras</a></li>
+              <li class="breadcrumb-item"><a href="#">Gestion</a></li>
+                <li class="breadcrumb-item"><a href="#">proveedor</a></li>
                 <li class="breadcrumb-item active">Listado</li>
               </ol>
             </div>
@@ -28,6 +28,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
+            <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar proveedor<a data-toggle="modal" data-target="#ModalAgregarProveedor" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
               <div class="card-body">
               
                 <fieldset>
@@ -61,7 +62,7 @@
                         </div>
                       </div>
                       <div class="col-md-2">
-                        <button  class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
+                        <button  class="btn btn-purple waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
                       </div>
                     </div>
                   </form>
@@ -78,7 +79,7 @@
                 <div class="table-responsive">
                   <table id="TableListarProveedor" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="bg-info text-white">
+                      <tr class="bg-primary text-white">
                        
                         <th>ID</th>
                         <th>Tipo</th>
@@ -119,8 +120,8 @@
 <div class="modal fade bs-example-modal-lg" id="ModalAgregarProveedor"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myLargeModalLabel">Proveedor - Agregar</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="myLargeModalLabel">Proveedor - Agregar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target=".bs-example-modal-lg">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -133,7 +134,7 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Tipo:</label>
-                    <select name="tipo" id="tipo_documento" class="form-control">                      
+                    <select name="tipo" id="tipo_documento" class="form-control select2">                      
                             <option value="">SELECCIONAR</option>
                             <option value="4">RUC</option>
                             <option value="2">DNI</option>
@@ -146,7 +147,7 @@
                 <div class="input-group">
                 <input type="text" id="txt_documento" name="documento" class="form-control" maxlength="11" minlength="8" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
                 <div class="input-group-append">
-                  <button class="btn btn-info waves-effect waves-light" type="button"  onclick="buscar();">
+                  <button class="btn btn-purple waves-effect waves-light" type="button"  onclick="buscar();">
                     <i class="fa fa-search"></i>
                   </button>                                                           
                  </div>
@@ -200,8 +201,8 @@
 <div class="modal fade bs-example-modal-lg" id="ModalEditarProveedor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myLargeModalLabel">Proveedor - Editar</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="myLargeModalLabel">Proveedor - Editar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal">
           <span aria-hidden="true">&times;</span>
         </button>

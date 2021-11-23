@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solution</title>
+        <title>BFacturas - grupo</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Agregar grupo</h4>
+                                    <!-- <h4 class="page-title float-left">Agregar grupo</h4> -->
 
                                     <ol class="breadcrumb float-right">
                                     <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
@@ -44,6 +44,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Agregar grupo</h3></div>
                                     <div class="card-body">
                                     <ol class="breadcrumb">
                                         <li><a href="<?= base_url('administrador/regrupo') ?>"><i class="ion ion-md-arrow-round-back"></i> Regresar</a></li>

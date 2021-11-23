@@ -13,9 +13,9 @@
           <div class="row">
             <div class="col-12">
               <div class="page-title-box">
-                <h4 class="page-title float-left">Usuario General</h4>
+                <!-- <h4 class="page-title float-left">Usuario General</h4> -->
                 <ol class="breadcrumb float-right">
-                  <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                  <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                   <li class="breadcrumb-item"><a href="#">Usuario</a></li>
                   <li class="breadcrumb-item active">Listado</li>
                 </ol>
@@ -30,11 +30,14 @@
           <div class="row">             
             <div class="col-sm-12">
               <div class="card">
+              <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestion de usuario<a data-toggle="modal" data-target="#ModalAgregarUsuario" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                 <div class="card-body"> 
                   <ol class="breadcrumb">
                     <li><a href="<?= base_url('administrador/regusuario') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
 
                   </ol>
+                  <fieldset>
+                  <legend>Filtro</legend>
                   <form id="UsuarioFormBusqueda" autocomplete="off">          
                     <div class="form-row">
 
@@ -79,7 +82,7 @@
                        <div class="input-group">
                         <input type="text"  name="tb_usuario" class="form-control">
                         <span class="input-group-btn">
-                          <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                          <button type="submit" class="btn btn-effect-ripple btn-primary"><i class="fa fa-search"></i></button>
                         </span>
                       </div>
                     </div>
@@ -87,22 +90,20 @@
 
                   </div>
 
-
-
-
                 </form>
+                  </fieldset>
                 <!-- End #wizard-vertical -->
-              </div>
+              <!-- </div>
             </div>
-          </div>
+          </div> -->
 
-        </div><!-- End row -->  
+        </div>
         
         
         <!-- Vertical Steps Example -->
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12">
-            <div class="card">
+            <div class="card"> -->
               <div class="card-body table-responsive">
 
 
@@ -123,7 +124,7 @@
                   </div>
                   <br>
                   <thead>
-                    <tr class="bg-info text-white">
+                    <tr class="bg-primary text-white">
                       <th style="text-aling:center;">ID</th>
                       <th  style="text-aling:center;">Apellidos</th>
                       <th  style="text-aling:center;">Usuario</th>
@@ -161,8 +162,8 @@
 <div class="modal fade" id="ModalAsignarCajaDocumento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Asignar Caja - Documento</h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="exampleModalLabel">Asignar Caja - Documento</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -234,7 +235,7 @@
           <div class="col-md-12">
             <table id="TableAsignarCajaDocumento" class="table table-bordered">
               <thead>
-                <tr>
+                <tr class="bg-primary text-white">
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Serie</th>
@@ -250,7 +251,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
     </div>
@@ -263,8 +264,8 @@
   <div class="modal-content">
     <form id="FormUsuario" action="<?= base_url('administrador/regusuario/agregarUsuario') ?>" method="post" autocomplete="off">
       <input type="hidden" > 
-      <div class="modal-header">
-        <h4 class="custom-modal">Agregar usuario</h4>
+      <div class="modal-header bg-primary">
+        <h4 class="custom-modal text-white">Agregar usuario</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -395,9 +396,9 @@
   <div class="modal-content">
     <form id="FormEditarUsuario" action="<?= base_url('administrador/regusuario/editUsuario') ?>" method="post" autocomplete="off">
       <input type="hidden" name="id" > 
-      <div class="modal-header">
-        <h4 class="custom-modal"  >Editar usuario</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <div class="modal-header bg-primary">
+        <h4 class="custom-modal text-white"  >Editar usuario</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
       </div>
       <div class="modal-body">
         <div class="row">

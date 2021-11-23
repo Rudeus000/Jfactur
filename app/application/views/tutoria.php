@@ -56,7 +56,7 @@
 		    </div>
 		    <!--Modal: Name-->
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/tutoria.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/tutoria.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal1">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 1</h2>
@@ -110,7 +110,7 @@
 		    <!--Modal: Name-->
 
 			    	    <div class="container-t">
-				  <img src="assets/images/tutoria/catalogo.png" alt="Notebook" style="width:100%;"
+				  <img src="<?= base_url_app() ?>assets/images/tutoria/catalogo.png" alt="Notebook" style="width:100%;"
 						        data-toggle="modal" data-target="#modal2">
 				  <div class="content-t">
 				    <h2 class="m-0 text-white">Tutoria - 2</h2>
@@ -164,7 +164,7 @@
 		    <!--Modal: Name-->
 
 		  	    <div class="container-t">
-				  <img src="assets/images/tutoria/almacen.png" alt="Notebook" style="width:100%;"
+				  <img src="<?= base_url_app() ?>assets/images/tutoria/almacen.png" alt="Notebook" style="width:100%;"
 						        data-toggle="modal" data-target="#modal3">
 				  <div class="content-t">
 				    <h2 class="m-0 text-white">Tutoria - 3</h2>
@@ -222,7 +222,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-  <img src="assets/images/tutoria/caja.png" alt="Notebook" style="width:100%;"
+  <img src="<?= base_url_app() ?>assets/images/tutoria/caja.png" alt="Notebook" style="width:100%;"
 		        data-toggle="modal" data-target="#modal4">
   <div class="content-t">
     <h2 class="m-0 text-white">Tutoria - 4</h2>
@@ -276,7 +276,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-  <img src="assets/images/tutoria/sucursales.png" alt="Notebook" style="width:100%;"
+  <img src="<?= base_url_app() ?>assets/images/tutoria/sucursales.png" alt="Notebook" style="width:100%;"
 		        data-toggle="modal" data-target="#modal5">
   <div class="content-t">
     <h2 class="m-0 text-white">Tutoria - 5</h2>
@@ -330,7 +330,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/usuarios.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/usuarios.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal6">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 6</h2>
@@ -388,7 +388,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/clientes.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/clientes.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal7">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 7</h2>
@@ -442,7 +442,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/compras.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/compras.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal8">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 8</h2>
@@ -496,7 +496,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/cotizacion.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/cotizacion.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal9">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 9</h2>
@@ -554,7 +554,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/venta.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/venta.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal10">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 10</h2>
@@ -608,7 +608,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/comprobantes.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/comprobantes.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal11">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 11</h2>
@@ -662,7 +662,7 @@
 		    <!--Modal: Name-->
 
 		    <div class="container-t">
-			  <img src="assets/images/tutoria/indicadores.png" alt="Notebook" style="width:100%;"
+			  <img src="<?= base_url_app() ?>assets/images/tutoria/indicadores.png" alt="Notebook" style="width:100%;"
 					        data-toggle="modal" data-target="#modal12">
 			  <div class="content-t">
 			    <h2 class="m-0 text-white">Tutoria - 12</h2>

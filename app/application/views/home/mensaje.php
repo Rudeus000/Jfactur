@@ -24,18 +24,18 @@
                         <div class="col-sm-12">
                           <div class="card">
                             <div class="card-body">
-                           <center>  <img style="width:20%;margin-top: auto;" src="<?= base_url() ?>assets/images/acceso-denegado.svg">
+                           <center>  <img style="width:20%;margin-top: auto;" src="<?= base_url_app() ?>assets/images/acceso-denegado.svg">
                             <font color="Teal" face="Comic Sans MS,arial">
 
                             </font>
                            </center> 
 
-                           <h2>Si esta viendo este mensaje es probable que tengas algunas de las siguientes restricciones: <i class="fa fa-times-circle" aria-hidden="true"></i></h2>
+                           <h2>Si esta viendo este mensaje es probable que tengas algunas de las siguientes restricciones: <i class="fa fa-times-circle text-danger" aria-hidden="true"></i></h2>
                              <ul>                               
                                <li>Estas intentando acceder a un modulo que no esta disponible en tu plan</li>
                                <li>El administrador del sistema a restringido el acceso al modulo que estas intentando acceder</li> 
                                <li>Accediste en modo demo (modo prueba)</li>                              
-                               <li>Si crees que es un error de sistema contactate con <a  href="http://www.mtsis.net" class="text-success stretched-link">admisnitrador del sistema</a></li>
+                               <li>Si crees que es un error de sistema contactate con <a  href="https://www.bfacturas.com" class="text-success stretched-link">admisnitrador del sistema</a></li>
 
                              </ul>
                          </div>

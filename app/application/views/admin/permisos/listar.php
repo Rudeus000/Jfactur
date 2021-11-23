@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-12">
               <div class="page-title-box">
-                <h4 class="page-title float-left">Permisos del Sistema</h4>
+                <!-- <h4 class="page-title float-left">Permisos del Sistema</h4> -->
                 <ol class="breadcrumb float-right">
                   <li class="breadcrumb-item"><a href="#">Modulo</a></li>
                   <li class="breadcrumb-item"><a href="#">Permisos</a></li>
@@ -30,13 +30,14 @@
           <div class="row">             
             <div class="col-sm-12">
               <div class="card">
+              <div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar permisos - usuario<a href="<?= base_url('administrador/permisos/add') ?>" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
                 <div class="card-body"> 
                   <ol class="breadcrumb">
                     <li><a href="<?= base_url('administrador/permisos') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
-                    <li><a href="<?= base_url('administrador/permisos/add') ?>"><i class="ion ion-ios-refresh"></i> Nuevo</a></li>
-
-
+                    <li><a href="<?= base_url('administrador/permisos/add') ?>"><i class="ion ion-ios-plush"></i> Nuevo</a></li>
                   </ol>
+                  <fieldset>
+                  <legend>Filtro</legend>   
                   <form id="PermisosFormBusqueda" autocomplete="off">          
                     <div class="form-row">
 
@@ -69,18 +70,19 @@
 
 
                 </form>
+                  </fieldset>
                 <!-- End #wizard-vertical -->
-              </div>
+              <!-- </div>
             </div>
-          </div>
+          </div> -->
 
         </div><!-- End row -->  
         
         
         <!-- Vertical Steps Example -->
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12">
-            <div class="card">
+            <div class="card"> -->
               <div class="card-body table-responsive">
 
 
@@ -91,7 +93,7 @@
                   </div>
                   <br>
                   <thead>
-                    <tr class="bg-danger text-white">
+                    <tr class="bg-primary text-white">
                       <th style=" text-align: center;">ID</th>
                         <th style=" text-align: center;">Modulo</th>
                         <th style="text-align: center;">Cargo</th>

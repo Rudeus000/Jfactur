@@ -29,7 +29,7 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-body table-responsive">
-                        <fieldset>
+                <fieldset>
                   <legend>Filtro</legend>
                   <form id="ReportventasFormBusqueda" action="" method="post" autocomplete="off">
                     <div class="row">

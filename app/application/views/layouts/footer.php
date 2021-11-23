@@ -1,5 +1,5 @@
-<footer class="footer text-right">
-2020 © binvoice - Software Erp
+<footer class="footer text-center">
+2022 © bfacuras - Software ERP
 </footer>
 <!-- <script src="<?= base_url_app() ?>assets/js/quill.min.js"></script> -->
 <script src="<?= base_url_app() ?>assets/js/jquery.min.js"></script>

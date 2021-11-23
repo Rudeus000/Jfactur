@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solutions - Gastos</title>
+        <title>BFacturas - Gastos</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left"><i class="fas fa-cube"></i> Gastos administrativos</h4>
+                                    <!-- <h4 class="page-title float-left"><i class="fas fa-cube"></i> Gastos administrativos</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Administrar</a></li>
                                         <li class="breadcrumb-item"><a href="#">Gastos</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -44,9 +44,10 @@
                         <div class="row">             
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar gastos<a data-toggle="modal" data-target="#ModalAgregarGastos" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
                                     <div class="card-body"> 
                                    <fieldset>
-                  <legend>Filtro</legend>
+                                    <legend>Filtro</legend>
                                     <form id="GastosFormBusqueda" autocomplete="off">  
                                       <div class="row">        
                                      
@@ -87,7 +88,7 @@
 
                                                  <div class="form-group col-md-3">
                                                     <label  class="col-form-label">Estado:</label>
-                                                   <select name="estado" class="form-control">
+                                                   <select name="estado" class="form-control select2">
                                                     <option value="">Todos</option>
                                                     <option value="1">Gastado</option>
                                                     <option value="2">Anulado</option>
@@ -114,17 +115,17 @@
                                   
                                       </fieldset>
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                   
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                <div class="card">
+                                <div class="card"> -->
                                     <div class="card-body table-responsive">
                                    
                                   
@@ -132,7 +133,7 @@
                                                 <table id="TableMantenimientoGastos" class="table table-bordered table-condensed" cellspacing="0" width="100%">
                                    
                                                     <thead >
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             <th style="text-aling:center;">Secuencia</th>
                                                             <th  style="text-aling:center;">Tipo gastos</th>
                                                             <th  style="text-aling:center;">Descripcion</th>
@@ -186,8 +187,8 @@
 
                     <form id="FormGastos" action="<?= base_url('administrador/regastos/addGastos') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" > 
-                                                    <div class="modal-header" >
-                                                        <h4>Agregar Gastos</h4>
+                                                    <div class="modal-header bg-primary" >
+                                                        <h4 class="text-white">Agregar Gastos</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                              <div class="modal-body">

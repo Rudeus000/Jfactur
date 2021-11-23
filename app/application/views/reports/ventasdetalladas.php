@@ -26,7 +26,7 @@
             <div class="card-header bg-success"><h3 class="my-0 text-white">Reporte detallado de ventas<i class="spinner-grow text-danger float-right"></i></h3></div>            
               <div class="card-body table-responsive">
                 <fieldset>
-                  <!-- <legend>Filtro</legend> -->
+                  <legend>Filtro</legend>
                   <form id="FormReporteVentasDetalladasBusqueda" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-3">
@@ -65,7 +65,8 @@
                       </div>
                     </div>
                   </form>
-                </fieldset>               
+                </fieldset>  
+                <br>             
                 <div class="table-responsive">
                   <table id="TableReporteDetalladoVentas" class="table table-borderless table-striped" cellspacing="0" width="100%">
                    

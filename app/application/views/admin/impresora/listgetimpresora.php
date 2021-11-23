@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Solutions - impresora</title>
+        <title>BFacturas - impresora</title>
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left">Impresora</h4>
+                                    <!-- <h4 class="page-title float-left">Impresora</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Configuracion</a></li>
                                         <li class="breadcrumb-item"><a href="#">Impresora</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -43,35 +43,39 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Administrar impresora<a data-toggle="modal" data-target="#ModalAgregarImpresora" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
                                     <div class="card-body"> 
                                     <ol class="breadcrumb">
                                         <li><a href="<?= base_url('administrador/regimpresora') ?>"><i class="ion ion-ios-refresh"></i> Actualizar</a></li>
                                         
-                                    </ol>
-                                    
+                                    </ol>                                   
                                     <div class="col-md-8">
+                                    <fieldset>
+                                        <legend>Filtro</legend>
                                     <form id="ImpresoraFormBusqueda" autocomplete="off">
                                          <label class="control-label " >Buscar por descripción:</label>
                                             <div class="input-group">
                                                 <input type="text"  name="tb_impresora" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-purple"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
-                                            </form>
-                                    </div>  
+                                            </form><br>
+                                            </fieldset>                                             
+                                    </div> 
+                                   
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                 <div class="card">
+                                 <div class="card"> -->
                                
                                     <div class="card-body table-responsive">
                                    
@@ -97,7 +101,7 @@
                                                 
                                                     <br>
                                                     <thead>
-                                                        <tr class="bg-info text-white">
+                                                        <tr class="bg-primary text-white">
                                                             
                                                             <th  class="text-center">Impresora</th>
                                                             <th  class="text-center">Local</th>
@@ -142,8 +146,8 @@
                         <div class="modal-content">
                                                 <form id="FormImpresora" action="<?= base_url('administrador/regimpresora/agregarImpresora') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Agregar impresora</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Agregar impresora</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                              <div class="modal-body">
@@ -205,8 +209,8 @@
                                                 <div class="modal-content">
                                                 <form id="FormEditarImpresora" action="<?= base_url('administrador/regimpresora/editimpresora') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" name="id" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Editar informacion impresora</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Editar informacion impresora</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">

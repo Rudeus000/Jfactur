@@ -15,7 +15,7 @@
         
 <?php if($this->session->userdata('perfil')==1): ?> 
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-shopping-basket"></i> <span class="badge badge-danger float-right">new</span><span> Catalogo </span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class=" fas fa-clipboard-list"></i> <span class="badge badge-danger float-right">new</span><span> Catalogo </span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
             <li><a href="<?php echo base_url();?>administrador/regcategoria"><i class="ion ion-ios-clipboard"></i>Categorias</a></li>
             <li><a href="<?php echo base_url();?>administrador/regmarca"><i class="ion ion-ios-cube"></i>Marca</a></li>
@@ -28,7 +28,7 @@
         <?php endif ?>
 <?php if($this->session->userdata('perfil')==1): ?> 
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-shipping-fast"></i> <span>Almacen</span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class="fas fa-boxes"></i> <span>Almacen</span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
 
             <li><a href="<?= base_url()?>administrador/reginventarioinicial"><i class="fas fa-dolly"></i>Inventario Inicial</a></li>  
@@ -82,7 +82,7 @@
         </li>
 <?php endif ?>
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-dollar-sign"></i><span class="badge badge-danger float-right">new</span><span> Ventas </span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class="fas fa-shopping-basket"></i><span class="badge badge-danger float-right">new</span><span> Ventas </span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
             <li><a href="<?= base_url('administrador/regcotizacion') ?>"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i>Cotización</a></li>
             <li><a href="<?= base_url('administrador/regventas') ?>"><i class="far fa-money-bill-alt" aria-hidden="true"></i>Ventas</a></li>
@@ -108,7 +108,7 @@
         <?php endif ?>
 <?php if($this->session->userdata('perfil')==1): ?> 
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-chart-pie"></i><span> Reporte Compras </span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class=" fas fa-clipboard-list"></i><span> Reporte Compras </span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">        
             <li><a href="<?= base_url('reportes/regreportpagos') ?>">Compras - Pagos</a></li>
             <li><a href="<?= base_url('reportes/regreportcomprove') ?>">Compras por proveedor</a></li>
@@ -119,7 +119,7 @@
         </li>
 <?php endif ?>
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-chart-pie"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class="fas fa-clipboard"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
            <?php if($this->session->userdata('perfil')==1): ?> 
             <li><a href="<?= base_url('reportes/regreportcotipagos') ?>">Cotizaciones - Pagos</a></li>
@@ -152,14 +152,14 @@
 
 <?php if($this->session->userdata('perfil')==1): ?> 
         <li>
-          <a href="javascript: void(0);"><i class="fas fa-database"></i> <span class="badge badge-danger float-right">new</span><span>Gestion de clientes</span> <span class="menu-arrow"></span></a>
+          <a href="javascript: void(0);"><i class="fas fa-users"></i> <span class="badge badge-danger float-right">new</span><span>Gestion de clientes</span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
            
 
             <li><a href="<?php echo base_url();?>administrador/regcliente"><i class="fas fa-user-tie"></i>Clientes</a></li>
-            <li><a href="<?php echo base_url();?>administrador/regclientecobertura"><i class="fas fa-user-tie"></i>Cobertura Cliente</a></li>
-            <li><a href="<?php echo base_url();?>administrador/regproveedor"><i class="fas fa-user-friends"></i>Proveedores</a></li>
-            <li><a href="<?php echo base_url();?>administrador/regtipogastos"><i class="fas fa-user-friends"></i>Tipo gastos</a></li>
+            <li><a href="<?php echo base_url();?>administrador/regclientecobertura"><i class="fas fa-user-tag"></i>Cobertura Cliente</a></li>
+            <li><a href="<?php echo base_url();?>administrador/regproveedor"><i class="fas fa-handshake"></i>Proveedores</a></li>
+            <li><a href="<?php echo base_url();?>administrador/regtipogastos"><i class="fas fa-hand-holding-usd"></i>Tipo gastos</a></li>
             <li><a href="<?php echo base_url();?>administrador/regastos"><i class="fas fa-user-friends"></i>Gastos</a></li>            
 
           </ul>

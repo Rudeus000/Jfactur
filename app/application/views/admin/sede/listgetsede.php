@@ -27,9 +27,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title float-left"><i class="ion ion-md-business"></i> Sede</h4>
+                                    <!-- <h4 class="page-title float-left"><i class="ion ion-md-business"></i> Sede</h4> -->
                                     <ol class="breadcrumb float-right">
-                                        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Gestion</a></li>
                                         <li class="breadcrumb-item"><a href="#">Sede</a></li>
                                         <li class="breadcrumb-item active">Listado</li>
                                     </ol>
@@ -43,32 +43,31 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-body"> 
-                                
-                                    
+                                <div class="card-header bg-primary"><h3 class="my-0 text-white">Gestionar sede<a data-toggle="modal" data-target="#ModalAgregarSede" class="btn btn-pink btn-rounded  w-md waves-effect float-right" ><i class="fa fa-plus m-r-5"></i>Nuevo</a></h3></div>
+                                    <div class="card-body">                       
                                     <div class="col-md-8">
                                     <form id="SedeFormBusqueda" autocomplete="off">
                                          <label class="control-label " >Buscar por descripción:</label>
                                             <div class="input-group">
                                                 <input type="text"  name="sede" class="form-control">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-effect-ripple btn-info"><i class="fa fa-search"></i></button>
+                                                        <button type="submit" class="btn btn-effect-ripple btn-purple"><i class="fa fa-search"></i></button>
                                                     </span>
                                             </div>
                                             </form>
                                     </div>  
   
                                         <!-- End #wizard-vertical -->
-                                    </div>
+                                    <!-- </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End row -->  
         
         
                         <!-- Vertical Steps Example -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
-                                 <div class="card">
+                                 <div class="card"> -->
                                
                                     <div class="card-body table-responsive">
                                    
@@ -94,7 +93,7 @@
                                                 
                                                     <br>
                                                     <thead>
-                                                        <tr class="bg-info text-white" >
+                                                        <tr class="bg-primary text-white" >
                                                             <th>ID</th>
                                                             <th>Sede</th>
                                                             <th>Estado</th>
@@ -135,8 +134,8 @@
                         <div class="modal-content">
                                                 <form id="FormSede" action="<?= base_url('administrador/regsede/agregarsede') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Informacion de sede</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Informacion de sede</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                              <div class="modal-body">
@@ -171,8 +170,8 @@
                                                 <div class="modal-content">
                                                 <form id="FormEditarSede" action="<?= base_url('administrador/regsede/editsede') ?>" method="post" autocomplete="off">
                                                 <input type="hidden" name="id" > 
-                                                    <div class="modal-header">
-                                                        <h4 class="custom-modal"  >Editar Información de sede</h4>
+                                                    <div class="modal-header bg-primary">
+                                                        <h4 class="custom-modal text-white"  >Editar Información de sede</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">

@@ -37,7 +37,8 @@
                     </div>
                   </div>
                 </div> -->
-                <fieldset>               
+                <fieldset> 
+                  <legend>Filtro</legend>              
                   <form id="FormVentasFiltro" action="" method="post" autocomplete="off">
                     <div class="row">
                       <div class="col-md-3">
@@ -104,7 +105,8 @@
                
                     </div>
                   </form>
-                </fieldset>                
+                </fieldset>  
+                <br>              
                 <div class="table-responsive">
                   <table id="TableVentas" class="table  mb-0 table-hover table-striped table-borderless" cellspacing="0" width="100%">
                     <thead>

@@ -60,7 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
          if($this->form_validation->run() == TRUE){
             
              $data['nomb_tarj'] = $this->input->post('nombre');            
-             $data['est_tarj']=  1;
+             $data['estado_tarj']=  1;
              $insert = $this->modelgeneral->insertRegist('tb_tarjeta',$data);
              $resp =[];
              if(!is_null($insert)){
@@ -108,7 +108,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
      function anularTarjeta()
 	  {
-        $data['est_tarj'] = 2; //ANULAR	
+        $data['estado_tarj'] = 2; //ANULAR	
         $where['cod_tarj'] = $this->input->get('id');  
 		
 		$edit = $this->modelgeneral->editRegist('tb_tarjeta',$where,$data);
