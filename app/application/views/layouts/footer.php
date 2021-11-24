@@ -183,7 +183,7 @@
 
                             // $('#txt_fecha_inscripcion').val(datos[6]);
 
-                            $('#txt_direccion').val(datos[7])+" - "+datos[8]+""+datos[9]+""+datos[10];
+                            $('#txt_direccion').val(datos[7]+" - "+datos[8]+""+datos[9]+""+datos[10]);
 
                             // $('#txt_emision_electronica').val(datos[8]);
 
