@@ -7408,7 +7408,7 @@ function guardarProducto()
 					},
 		messages:{
 		documento:{
-			remote:'Este número de documento ya existe'						
+			remote:'Este número de documento ya existe'					
 
 		}
 
@@ -7420,34 +7420,17 @@ function guardarProducto()
 				}
 				$('#ModalAgregarCliente').modal('hide');
 				$('#FormVentaAgregarCliente select[name=tipo]').select('val', '');
-				$('#FormVentaAgregarCliente input[name=documento]').val('');									
-			})
-		}
-	});
-
-
-	$('#FormVentaAgregarCliente').validate({
-		ignore: [],
-		rules: {
-			tipo: { required: true },
-			nombre: { required: true },
-			documento: { required: true },
-			// telefono: { required: true },
-			direccion: { required: true },
-
-		},
-		submitHandler: function () {
-			enviarFormulario('#FormVentaAgregarCliente', function (json) {
-				$('#ModalAgregarCliente').modal('hide');
-				$('#FormVentaAgregarCliente select[name=tipo]').select('val', '');
+				$('#FormVentaAgregarCliente input[name=documento]').val('');
 				$('input[name=cliente]').val(json.cliente.id_cliente);
 				$('#RUCAutocomplete').val(json.cliente.doc_cliente);
 				$('#ClienteVentaAutocomplete').val(json.cliente.nomb_cliente);				
 				$('#DireccionCliente').val(json.cliente.direc_cliente);
-				$('input[name=precioCliente]').val(json.cliente.precio_cliente);
+				$('input[name=precioCliente]').val(json.cliente.precio_cliente);									
 			})
 		}
 	});
+
+
 
 	$('#VentaEditarCliente').click(function (event) {
 		$('#ModalEditarCliente').modal();
