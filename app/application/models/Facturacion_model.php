@@ -61,7 +61,8 @@ class Facturacion_model extends CI_Model {
 	   left join tb_resumenboleta rb on  rbd.cod_res=rb.cod_res 
 	   WHERE fecha_vent >= ".$this->db->escape($data['desde'])."
 		AND fecha_vent <= ".$this->db->escape($data['hasta'])."
-		AND siglas_talonario = 'FC' ";
+		AND siglas_talonario = 'FC' 
+		AND estado_vent='G'";
 	   if (isset($data['orderCampo'])) {
 		   $sql.=" ORDER BY  ".$data['orderCampo']." ".$data['orderDireccion'];
 	   }

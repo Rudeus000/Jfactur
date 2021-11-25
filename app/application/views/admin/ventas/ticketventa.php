@@ -16,7 +16,7 @@
 		<div class="w70">: <?= character_limiter($ventas->nomb_cliente,30,'...') ?></div>
 
 		<div class="w30"><b>Vendedor</b></div>
-		<div class="w70">: <?= character_limiter($ventas->nomb_usu.' '.$ventas->apell_usu,30,'...') ?></div>
+		<div class="w70">: <?= character_limiter($ventas->nomb_usu.'***') ?></div>
 
 		
 		<div class="w30"><b>Fecha</b></div> <div class="w70">: <?= $ventas->fecha_vent ?></div>
@@ -123,5 +123,15 @@
 	
 
 </div>
+<br>
+<br>
+<?php if(!is_null($ventas->observacion_vent) AND $ventas->observacion_vent!=''): ?>
 
+<div class="w100" style="border:1px solid black;padding:2px">
+	<b style="font-size:13px">Observación</b><br>
+	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, <?= $ventas->observacion_vent ?>
+</div>
+<br>
+<br>
+<?php endif ?>
 

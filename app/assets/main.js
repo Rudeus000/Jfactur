@@ -4662,7 +4662,53 @@ $(function () {
 			onClickEvent: function () {
 			}
 		}
-	});
+	});	
+	// $('#FormComprarAgregarProveedor').validate({
+	// 	ignore: [],
+	// 	rules: {
+	// 		tipo: { required: true },
+	// 		nombre: { required: true },
+	// 		documento: { required: true
+	// 		// remote:{
+	// 		// 	url: path+"administrador/regcliente/validaProveedorUnico",
+	// 		// 	type: "POST",
+	// 		// 	data: {
+	// 		// 		documento: function() {
+	// 		// 			return $("#FormComprarAgregarProveedor input[name=documento]").val();
+	// 		// 		},
+	// 		// 		id: function(){
+	// 		// 			return $("input[name=codigo]").val();
+	// 		// 		}
+	// 		// 	}
+	// 		// }
+	//  },
+	// 		// telefono: { required: true },
+	// 		direccion: { required: true }
+	// 				},
+	// 	// messages:{
+	// 	// documento:{
+	// 	// 	remote:'Este número de documento ya existe'					
+
+	// 	// }
+
+	// 	// },
+	// 	submitHandler: function () {
+	// 		enviarFormulario('#FormComprarAgregarProveedor', function (json) {
+	// 			// if (json.success) {
+	// 			// 	$('#TableListarClientes').DataTable().ajax.reload();
+	// 			// }
+	// 			$('#ModalAgregarProveedor').modal('hide');
+	// 			$('#FormComprarAgregarProveedor select[name=tipo]').select('val', '');
+	// 			$('#FormComprarAgregarProveedor input[name=documento]').val('');
+	// 			$('input[name=cliente]').val(json.proveedor.tb_proveedor_id);
+	// 			$('#RUCAutocomplete').val(json.proveedor.tb_proveedor_doc);
+	// 			$('#ProveedorAutocomplete').val(json.proveedor.tb_proveedor_nom);				
+	// 			// $('#DireccionCliente').val(json.cliente.tb_proveedor_dir);
+	// 			// $('input[name=precioCliente]').val(json.cliente.precio_cliente);									
+	// 		})
+	// 	}
+	// });
+
 
 	$("#nombreProductoAutocomplete").easyAutocomplete({
 		minCharNumber: 2,
