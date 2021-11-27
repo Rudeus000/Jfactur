@@ -60,7 +60,7 @@ function getTipoProceso()
 	$datos['produccion']['tipo_proceso'] = '1';
 	$datos['produccion']['ruta_ws'] = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService';
 
-	return $datos['beta'];
+	return $datos['produccion'];
 }
 
 function getTipoTransporte($tipo)
