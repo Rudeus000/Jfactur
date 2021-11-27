@@ -186,7 +186,8 @@ class Procesarcomprobante {
 		$resp['hash_cpe'] = $resp_firma['hash_cpe'];
 		$resp['hash_cdr'] = $resp_ticket['hash_cdr'];
 		$resp['msj_sunat'] = $resp_ticket['mensaje'];
-		$resp['id_ticket'] = $resp_ticket['id_ticket'];
+		// $resp['id_ticket'] = $resp_ticket['id_ticket'];
+		$resp['id_ticket'] = $resp_envio['cod_ticket'];
 		return $resp;
 	}
 

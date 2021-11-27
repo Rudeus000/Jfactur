@@ -133,7 +133,6 @@ class Regdocumentoelectronico extends CI_Controller
     }else{
       $resp['success'] = false;
     }
-
     echo json_encode($resp);
   }
 

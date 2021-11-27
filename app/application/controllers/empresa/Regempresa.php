@@ -78,7 +78,7 @@ class Regempresa extends CI_Controller {
 
 	function uploadCertificado()
 	{
-		$config['upload_path'] = APP_TENANTPATH.'facturacion/archivos_xml_sunat/certificados/produccion';
+		$config['upload_path'] = APP_PATH.'facturacion/archivos_xml_sunat/certificados/produccion';
 		$config['allowed_types'] = '*';
 		$config['max_size'] = '40000';
 		$config['max_width'] = '40000';

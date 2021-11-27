@@ -54,7 +54,7 @@
                       </tr>
                     </thead>
 										<tbody>
-											<?php foreach($datos as $d): ?>
+                    <?php foreach($datos as $d): ?>
 											<tr>
 												<td><?= $d->fechadocumento_res ?></td>
 												<td><?= $d->codigo_res ?></td>
@@ -84,7 +84,7 @@
                               <?php
                           }
                           ?>
-                        </td>                      
+                        </td>                    
                         <!-- <td>
                           <span><a href="<?= base_url_app('facturacion/'.$d->rutaxml_res.'/'.$d->archivoxml_res.'.XML') ?>" target="_blank" class="btn btn-info btn-sm">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-code" viewBox="0 0 16 16">
