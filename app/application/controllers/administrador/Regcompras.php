@@ -190,7 +190,7 @@ class Regcompras extends CI_Controller {
 		$insert = $this->modelgeneral->insertRegist('tb_compra',$data);
 
 		$pago['cod_comp'] = $insert;
-		$pago['tipo_pago'] = 'Efectivo';
+		$pago['tipo_pago'] =$this->input->post('pago');
 		$pago['cod_caja'] = $this->input->post('caja');
 		$pago['fecha_pago'] = $this->input->post('fecha');
 		$pago['detalle_pago'] = 'PAGO COMPRA:'.$this->input->post('documento').' '.$this->input->post('numDocumento');

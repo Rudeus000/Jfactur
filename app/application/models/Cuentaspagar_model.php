@@ -65,7 +65,7 @@ class Cuentaspagar_model extends CI_Model {
 		->select('SUM(monto_pago) as abono')
 		->join('tb_compra','tb_pago.cod_comp = tb_compra.cod_comp')
 		->where('tb_proveedor_id',$proveedor)
-		->where('tipo_pago','Credito')
+		->where('tipo_pago','CRE')
 		->group_by('tb_proveedor_id')
 		->get()->row()->abono;
 	}

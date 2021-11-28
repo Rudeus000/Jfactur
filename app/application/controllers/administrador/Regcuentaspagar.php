@@ -25,8 +25,8 @@ class Regcuentaspagar extends CI_Controller {
 	{
 		$data['start'] = $this->input->get_post('start', true);
 		$data['length'] = $this->input->get_post('length', true);
-    $data['sEcho']  = $this->input->get_post('_', true);
-    $columns= ['tb_proveedor_nom'];
+		$data['sEcho']  = $this->input->get_post('_', true);
+		$columns= ['tb_proveedor_nom'];
 		$orderCampo = $this->input->get_post('order', true);
 		$orderCampo = $orderCampo[0]['column'];
 		$orderCampo = $columns[$orderCampo];
@@ -113,13 +113,13 @@ class Regcuentaspagar extends CI_Controller {
 		foreach ($query as $q) {
 			$q->abono = $this->db->from('tb_pago')
 									->select('SUM(monto_pago) as abono')
-									->where('tipo_pago','Credito')
+									->where('tipo_pago','CRE')
 									->where('cod_comp',$q->cod_comp)
 									->group_by('cod_comp')
 									->get()->row()->abono;
 			$q->pagos = $this->db->from('tb_pago')
 									->join('tb_caja','tb_pago.cod_caja = tb_caja.cod_caja')
-									->where('tipo_pago','Credito')
+									->where('tipo_pago','CRE')
 									->where('cod_comp',$q->cod_comp)
 									->get()->result();
 		}
