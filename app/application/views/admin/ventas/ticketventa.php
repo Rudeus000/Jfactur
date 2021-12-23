@@ -1,7 +1,7 @@
 <div class="w100 text-center" style="font-size:12px">
 		<div><b><?= $empresa->razon_social ?></b></div>
 		<div><b><?= $empresa->direcc_emp ?></b></div>
-		<div><?= $ventas->direccion_puntoventa ?></div>
+		<!-- <div><?= $ventas->direccion_puntoventa ?></div> -->
 		<div>Ruc:<?= $empresa->ruc_emp ?></div>
 		<div> Web: <?= WEBSITE ?> </div>
 		<div><b><?= $ventas->nom_tipdocumento ?> </b></div>
@@ -30,7 +30,7 @@
 
 
 <div class="w100">
- 	<table style="font-size:8px;width:100%" cellpadding="0" cellspacing="0">
+ 	<table style="font-size:12px;width:100%" cellpadding="0" cellspacing="0">
 		<thead>	
 			<tr>
 				<th class="text-left">Descripción</th>
@@ -61,7 +61,7 @@
 </div>
 
 
-<div style="font-size:12px">
+<div style="font-size:11px">
 	<div class="w100">
 		<div class="w1-3"><b>Subtotal:</b></div>
 		<div class="w1-3 text-right">S/</div>
@@ -105,7 +105,7 @@
 
 <br>
 
-<div class="w100 text-center" style="font-size:12px">
+<div class="w100 text-center" style="font-size:10px">
 	Autorizado a ser emisor electrónico
 	mediante R.I. SUNAT N° 018-005-
 	0002378 Representación impresa

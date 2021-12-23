@@ -100,7 +100,7 @@ class Facturacion_model extends CI_Model {
 			if (!is_null($q->cod_fac)) {
 				$label = '<label class="label label-success">Aceptada</label>';
 				$check = '
-				<a href="'.base_url_app('administrador/regventas/imprimirVenta/'.$q->archivoxml_vent).'" target="_blank" class="btn btn-sm btn-primary" title="Imprimir"><i class="far fa-file-alt"></i></a>
+				<a href="'.base_url('administrador/regventas/imprimirVenta/'.$q->archivoxml_vent).'" target="_blank" class="btn btn-sm btn-primary" title="Imprimir"><i class="far fa-file-alt"></i></a>
 				<a target="_blank" href="'.base_url_app('facturacion/'.$q->rutaxml_vent.'/'.$q->archivoxml_vent.'.XML').'" class="btn btn-sm btn-primary">XML</a><a target="_blank" href="'.base_url_app('facturacion/'.$q->rutaxml_vent.'/R-'.$q->archivoxml_vent.'.XML').'" class="btn btn-sm btn-primary">CDR</a>';
 				$limite = '<label class="label label-primary">Procesado</label>';
 			}else{

@@ -134,9 +134,11 @@
                         <div class="portlet"><!-- /primary heading -->
                             <div id="formVentasTopProductos" class="portlet-heading">
                                 <h3 class="portlet-title">
-                                    <select name="mesVentasTopProd" class="form-control select2">
+                                    <select name="mesVentasTopProd" id="mesVentasTopProd"  class="form-control select2">
                                         <?php foreach ($product as $p): ?>
-                                            <option value="<?= $p->mes ?>"><?= $p->mes ?></option>
+                                            <option value="<?php echo $p->mes;?>">
+                                                           <?php echo $p->mes;?>
+                                                </option>>
                                         <?php endforeach ?>
                                     </select>                                             
                                 </h3>
@@ -217,6 +219,7 @@
 $(document).ready(function () {
  var base_url="<?php echo base_url();?>"; 
  var year = (new Date).getFullYear();
+ var d = new Date();
  var month = new Array();
     month[0] = "Enero";
     month[1] = "Febrero";
@@ -229,8 +232,8 @@ $(document).ready(function () {
     month[8] = "Septiembre";
     month[9] = "Octubre";
     month[10] = "Noviembre";
-    month[11] = "Deciembre";
-    var d = new Date();
+    month[11] = "Diciembre";
+  
     var n = month[d.getMonth()]; 
 
  datagrafico(base_url, year);
@@ -374,7 +377,7 @@ function datagraficoVentasTopProd(base_url,mes){
 }
 
 
-function graficarVentasTopProd(data ) {
+function graficarVentasTopProd(data) {
     Highcharts.chart('container', {
     chart: {
         plotBackgroundColor: null,

@@ -144,47 +144,44 @@ class Reportgananciavent_model extends CI_Model {
 		$this->db->join('tb_producto as p','tb.cod_producto = p.cod_producto');
 		$this->db->join('tb_marca as m','p.cod_marca = m.cod_marca');
 		$this->db->join('tb_categoria ca','p.cod_categoria = ca.cod_categoria');
-		$this->db->join('tb_unidades u','p.cod_unid = u.cod_unid');
-		$this->db->group_by('tb.cod_producto');
-	//	$this->db->where('c.estado_comp',1);
+		$this->db->join('tb_unidades u','p.cod_unid = u.cod_unid');		
+		$this->db->where('v.fecha_vent >=',$data['desde']);
+		$this->db->where('v.fecha_vent <=',$data['hasta']);
 		$this->db->where('p.est_product',1);
-    	//$this->db->order_by('tb_compra.fecha_comp','desc');	
-        
-        if (isset($data['desde']) AND isset($data['hasta'])) {
-			$this->db->where('v.fecha_vent >=',$data['desde']);
-			$this->db->where('v.fecha_vent <=',$data['hasta']);
-		}
+		$this->db->where('v.estado_vent','G');
+		$this->db->group_by('tb.cod_producto');	
+	
 
-		if ($data['producto']!='') {
-        $this->db->like('p.nomb_product',$data['producto']);
-         }
+		// if ($data['producto']!='') {
+        // $this->db->like('p.nomb_product',$data['producto']);
+        //  }
 
-         if ($data['estado']=='G') {
-			$this->db->where('v.estado_vent','G');
-		}
-		if($data['estado']=='A'){
-			$this->db->where('v.estado_vent','A');
-		}
+        //  if ($data['estado']=='G') {
+		// 	$this->db->where('v.estado_vent','G');
+		// }
+		// if($data['estado']=='A'){
+		// 	$this->db->where('v.estado_vent','A');
+		// }
 
-		if ($data['punto']!='') {
-         $this->db->where('v.cod_puntoventa',$data['punto']);
-         }
+		// if ($data['punto']!='') {
+        //  $this->db->where('v.cod_puntoventa',$data['punto']);
+        //  }
 
-        if (isset($data['tb_marca'])) {
-  		$this->db->where('m.cod_marca',$data['tb_marca']);
-        }
-        if (isset($data['tb_categoria'])) {
-  		$this->db->where('ca.cod_categoria',$data['tb_categoria']);
-         }
+        // if (isset($data['tb_marca'])) {
+  		// $this->db->where('m.cod_marca',$data['tb_marca']);
+        // }
+        // if (isset($data['tb_categoria'])) {
+  		// $this->db->where('ca.cod_categoria',$data['tb_categoria']);
+        //  }
   		
 		
 
-		if ($data['length']!=-1) {
-			$this->db->limit($data['length'],$data['start']);
-		}
-		if (isset($data['orderCampo'])) {
-			$this->db->order_by($data['orderCampo'],$data['orderDireccion']);
-		}
+		// if ($data['length']!=-1) {
+		// 	$this->db->limit($data['length'],$data['start']);
+		// }
+		// if (isset($data['orderCampo'])) {
+		// 	$this->db->order_by($data['orderCampo'],$data['orderDireccion']);
+		// }
 
 		 return $this->db->get()->result();
     }

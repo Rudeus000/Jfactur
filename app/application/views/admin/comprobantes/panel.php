@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box">
-              <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Comprobantes</h4>
+              <!-- <h4 class="page-title float-left"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i> Comprobantes</h4> -->
             </div>
           </div>
         </div>
@@ -22,6 +22,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
+			<div class="card-header bg-success"><h3 class="my-0 text-white">Portal de comprobantes electronicos</h3></div>
               <div class="card-body table-responsive">
                 <fieldset>
                   <legend>Filtro</legend>
@@ -62,7 +63,7 @@
 									
                   <table id="TableComprobantes" class="table  table-striped" cellspacing="0" width="100%">
                     <thead>
-                      <tr class="btn-primary">
+                      <tr class="btn-success">
                         <th style="text-align: center;">Det</th>
                         <th style="text-align: center;">N°</th>
                         <th style="text-align: center;">Tipo Doc.</th>

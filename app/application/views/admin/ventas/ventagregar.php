@@ -331,7 +331,7 @@
 									<div class="col-md-2">
                     <div class="form-group">
                       <label class="control-label">Cantidad</label>
-                      <input type="text" name="cantidadProducto" class="form-control">
+                      <input type="text" name="cantidadProducto" class="form-control" value="1">
                     </div>
                   </div>
                   <div class="col-md-2">
@@ -392,7 +392,7 @@
                   </tr>
                   <tr>
                     <td colspan="10"></td>
-                    <th class="bg-danger text-white">Total</th>
+                    <th class="bg-danger text-white" >Total</th>
                     <td class="bg-danger text-white" id="VentaTotal">00.00</td>
                     <td></td>
                   </tr>
@@ -444,7 +444,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Monto Recibido</label>
-                          <input type="text" name="montoRecibido" class="form-control" value="0.00">
+                          <input type="text"  name="montoRecibido" class="form-control" value="0.00">
                         </div>
                       </div>                                           
                     
@@ -459,18 +459,28 @@
                         <label for="exampleFormControlTextarea1">Observación</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                       </div>
-                    </div>                     
+                    </div> 
+                    <div class="card-body d-flex justify-content-between align-items-right">
+                    <button type="submit" class="btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
+                  <button type="submit" class="btn btn-success btn-bordered waves-effect w-md">S/.20</button> 
+                  <button type="submit" class="btn btn-danger btn-bordered waves-effect w-md">S/.50</button> 
+                  <button type="submit" class="btn btn-purple btn-bordered waves-effect w-md">S/.100</button> 
+                  <button type="submit" class="btn btn-pink btn-bordered waves-effect w-md">S/.200</button>
+                  <button type="submit" class="btn btn-info btn-bordered waves-effect w-md">S/.500</button>
+                    </div>                    
                    </div>
-                  </fieldset>              
+                  </fieldset>
+                 
+                                 
             </form> 
 
             <legend class="scheduler-border"></legend>
 
             <div class="row" id="VentasContenedorGuardar">
               <div class="col-md-12">
-                <div class="form-group">                  
-                  <a href="<?= base_url('administrador/regventas') ?>" class="btn btn-pink btn-rounded"><i class="fas fa-times"></i> Cerrar</a>
-                  <button type="submit" form="FormVentaAgregar" class="btn btn-success btn-rounded" <?= ($apertura==false)?'disabled':'' ?>><i class="fa fa-save m-r-5"></i>Guardar</button>
+                <div class="form-group float-right">                  
+                  <a href="<?= base_url('administrador/regventas') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
+                  <button type="submit" form="FormVentaAgregar" class="btn btn-success " <?= ($apertura==false)?'disabled':'' ?>><i class="fa fa-save m-r-5"></i>procesar</button>
                 </div>
               </div>
             </div>

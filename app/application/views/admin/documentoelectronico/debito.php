@@ -65,8 +65,8 @@
                               <td>
                                   <?php if(!is_null($d->tiponota_nota)): ?>
                                   <a href="<?= base_url('administrador/regdocumentoelectronico/imprimirDebito/'.$d->cod_nota) ?>" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-print"></i></a>
-                                  <a href="<?= base_url('facturacion/'.$d->rutaxml_nota.'/'.$d->archivoxml_nota.'.XML') ?>" target="_blank" class="btn btn-primary btn-sm">XML</a>
-                                  <a href="<?= base_url('facturacion/'.$d->rutaxml_nota.'/R-'.$d->archivoxml_nota.'.XML') ?>" target="_blank" class="btn btn-primary btn-sm">CDR</a>
+                                  <a href="<?= base_url_app('facturacion/'.$d->rutaxml_nota.'/'.$d->archivoxml_nota.'.XML') ?>" target="_blank" class="btn btn-primary btn-sm">XML</a>
+                                  <a href="<?= base_url_app('facturacion/'.$d->rutaxml_nota.'/R-'.$d->archivoxml_nota.'.XML') ?>" target="_blank" class="btn btn-primary btn-sm">CDR</a>
                                   <?php else: ?>
                                   <button type="button" data-id="<?= $d->cod_vent ?>" class="btn btn-info btn-sm nota-debito">Débito</button>
                                   <?php endif ?>

@@ -8047,7 +8047,7 @@ function guardarProducto()
 					
 					tr += `
 									<tr id="prod-${val.cod_producto}" data-id="${val.cod_producto}">
-										<input type="hidden" name="id_prod[]" value="${val.cod_ventdet }"/>
+										<input type="hidden" name="id_prod[]" value="${val.cod_producto }"/>
 										<input type="hidden" name="id_detalle[]" value="${val.cod_ventdet}"/>
 										<td>${(val.cod_producto==null)?val.cod_servicio:val.cod_producto}</td>
 										<td>${val.producto_ventdet}</td>

@@ -19,6 +19,7 @@
 		<br>
 		<b style="font-size: 12px;">R.U.C <?= $empresa->ruc_emp ?><b><p>
 		<b  style="font-size: 12px;">NOTA DE CRÉDITO</b>
+		<b  style="font-size: 12px;">ELECTRÓNICA</b>
 		<br>		
 		<b  style="font-size: 12px;"><?= $nota->seriecomp_nota ?> -  <?= $nota->numcomp_nota ?></b>
 		
@@ -70,11 +71,11 @@
 		<tr>
 			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= $dt->coddet_notdet ?></td>
 			<td style="border:1px solid #03ABC2; padding: 6px;  "><?= $dt->descripcion_notdet?></td>
-			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center;  "><?= $dt->unidad_notdet ?></td>
+			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center;  "><?= $dt->unimed_notdet ?></td>
 			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= $dt->cant_notdet ?></td>
-			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= $dt->preciosinigv_notdet ?></td>
+			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= round($dt->preciosinigv_notdet,2) ?></td>
       		<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= $dt->igv_notdet ?></td>
-			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= round(($dt->preciosinigv_notdet * $dt->cant_notdet) + $dt->igv_notdet,2) ?></td>  
+			<td style="border:1px solid #03ABC2; padding: 6px; text-align: center; "><?= round((($dt->preciosinigv_notdet * $dt->cant_notdet)+$dt->igv_notdet),2) ?></td>  
 		</tr>
 		<?php endforeach ?>
 

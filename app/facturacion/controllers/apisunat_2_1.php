@@ -319,6 +319,7 @@ class Apisunat {
 <cbc:TaxableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_GRAVADAS"].'</cbc:TaxableAmount>
 <cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_IGV"].'</cbc:TaxAmount>
             <cac:TaxCategory>
+            <cbc:ID schemeAgencyName="United Nations Economic Commission for Europe" schemeName="Tax Category Identifier" schemeID="UN/ECE 5305">S</cbc:ID>
                 <cac:TaxScheme>
                     <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
                     <cbc:Name>IGV</cbc:Name>
@@ -354,7 +355,7 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
                     <cbc:Percent>'.$cabecera["POR_IGV"].'</cbc:Percent>
 <cbc:TaxExemptionReasonCode>'.$detalle[$i]["txtCOD_TIPO_OPERACION"].'</cbc:TaxExemptionReasonCode>
                     <cac:TaxScheme>
-                        <cbc:ID>1000</cbc:ID>
+                    <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
                         <cbc:Name>IGV</cbc:Name>
                         <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
                     </cac:TaxScheme>
@@ -371,7 +372,7 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
 			</cac:CommodityClassification>
         </cac:Item>
         <cac:Price>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_DET"].'</cbc:PriceAmount>
+<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_SIN_IGV_DET"].'</cbc:PriceAmount>
         </cac:Price>
     </cac:CreditNoteLine>';
 		
@@ -518,7 +519,7 @@ for ($i = 0; $i < count($detalle); $i++) {
 			</cac:CommodityClassification>
         </cac:Item>
 <cac:Price>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_DET"].'</cbc:PriceAmount>
+<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_SIN_IGV_DET"].'</cbc:PriceAmount>
 </cac:Price>
     </cac:DebitNoteLine>';
 }

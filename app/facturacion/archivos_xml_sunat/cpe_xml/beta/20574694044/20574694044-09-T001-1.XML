@@ -3,15 +3,15 @@
         <ext:UBLExtensions>
             <ext:UBLExtension>
                 <ext:ExtensionContent>
-                <ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>cUpLKnIoXk3alDE6Bw43ZPKJDJ8=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>bZToSc5k2TzyYzAqvnL/ii1pB44eiPyFlRjx6HTCak6HP39LM0Pslll1TL6wz5Bv81KLqZCr6dMDxkfvDw/PcfyXypjVYyBZ2T7WESXQLsVgOBhEshIhOJgGDKsvCNk+iPNaEG16J0j1tJjhIHl3zM3cqe+hh9/X5f7MJviWPrQ=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB1TCCAT6gAwIBAgIQH3DQLVoJ0JtJmalhMXOSNzANBgkqhkiG9w0BAQUFADApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwHhcNMTYxMDIwMDMyNzA5WhcNMTcxMDIwMDkyNzA5WjApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJAgo+/agotsd1ut8SWsOY7drTNIDXHjKc+45QMPSsKWvsou9wjii7ajB9pRAuELXDLNRCaVRGy2ijDzKUgpK38+mfTZXa5UQCuCNiVfaDM8/dm6bzXtCNbw5SmD5QuODFfNvpPz9Jexs22q3rNUkweENI4uFwvXeaT873tVwr7LAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAHWxYvvKmA1aRBEIkjFyj+vTn+k9+ALFAO4hSs6f7AOiqdaDcvvIl4UCeZ3LQTKbFQn1Z+vDlJK1tIJiTN/5BkCrgb7Wasmv4EpEaQ+lZQDpK8OBAuMoDHfCwprIufsOULge36HI1FfIBQj8p8UNXYifPYNEzd6XBwMI5miZNBYM=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
+                <ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>3boScxy5G3kFGbw6dmdfbp9Tso0=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>cs1x5BGNZ8NWnFotyW64vq4TdLfnJldjKia2iGBAatWpAwjAg/tqIhbm78HJZIbdGq/rOvjdBZySHwYDSHQRv1b+ozYK3WJqrrQn+7acZx+fu0vZst2leh6qzYHR2p+hvKI3N4swR7OK3q2ZWX4slF2OFx3G0yTCud8Nm5MH+m8=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB1TCCAT6gAwIBAgIQH3DQLVoJ0JtJmalhMXOSNzANBgkqhkiG9w0BAQUFADApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwHhcNMTYxMDIwMDMyNzA5WhcNMTcxMDIwMDkyNzA5WjApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJAgo+/agotsd1ut8SWsOY7drTNIDXHjKc+45QMPSsKWvsou9wjii7ajB9pRAuELXDLNRCaVRGy2ijDzKUgpK38+mfTZXa5UQCuCNiVfaDM8/dm6bzXtCNbw5SmD5QuODFfNvpPz9Jexs22q3rNUkweENI4uFwvXeaT873tVwr7LAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAHWxYvvKmA1aRBEIkjFyj+vTn+k9+ALFAO4hSs6f7AOiqdaDcvvIl4UCeZ3LQTKbFQn1Z+vDlJK1tIJiTN/5BkCrgb7Wasmv4EpEaQ+lZQDpK8OBAuMoDHfCwprIufsOULge36HI1FfIBQj8p8UNXYifPYNEzd6XBwMI5miZNBYM=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
             </ext:UBLExtension>
         </ext:UBLExtensions>
         <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
         <cbc:CustomizationID>1.0</cbc:CustomizationID>
     <cbc:ID>T001-1</cbc:ID>
-    <cbc:IssueDate>2021-09-30</cbc:IssueDate>
+    <cbc:IssueDate>2021-12-10</cbc:IssueDate>
     <cbc:DespatchAdviceTypeCode>09</cbc:DespatchAdviceTypeCode>
-    <cbc:Note>TRASLADO </cbc:Note>
+    <cbc:Note>MERCADERIA ENVIADA</cbc:Note>
     
     <cac:DespatchSupplierParty>
             <cbc:CustomerAssignedAccountID schemeID="6">20574694044</cbc:CustomerAssignedAccountID>
@@ -23,10 +23,10 @@
         </cac:DespatchSupplierParty>
     
     <cac:DeliveryCustomerParty>
-    <cbc:CustomerAssignedAccountID schemeID="2">61694037</cbc:CustomerAssignedAccountID>
+    <cbc:CustomerAssignedAccountID schemeID="4">10461802350</cbc:CustomerAssignedAccountID>
             <cac:Party>
                 <cac:PartyLegalEntity>
-    <cbc:RegistrationName><![CDATA[ROSMERI CCENTE FERNADEZ]]></cbc:RegistrationName>
+    <cbc:RegistrationName><![CDATA[WASHINGTON CALDERON SOSA ]]></cbc:RegistrationName>
                 </cac:PartyLegalEntity>
             </cac:Party>
         </cac:DeliveryCustomerParty>
@@ -35,34 +35,34 @@
             <cbc:ID>1</cbc:ID>
             <cbc:HandlingCode>01</cbc:HandlingCode>
             <cbc:Information>VENTA</cbc:Information>
-            <cbc:GrossWeightMeasure unitCode="KGM">1</cbc:GrossWeightMeasure>
+            <cbc:GrossWeightMeasure unitCode="KGM">5</cbc:GrossWeightMeasure>
     <cbc:TotalTransportHandlingUnitQuantity>1</cbc:TotalTransportHandlingUnitQuantity>
     
             <cac:ShipmentStage>
-                <cbc:TransportModeCode>02</cbc:TransportModeCode>
+                <cbc:TransportModeCode>01</cbc:TransportModeCode>
                 <cac:TransitPeriod>
-                    <cbc:StartDate>2021-09-30</cbc:StartDate>
+                    <cbc:StartDate>2021-12-10</cbc:StartDate>
                 </cac:TransitPeriod>
                 <cac:CarrierParty>
                     <cac:PartyIdentification>
-    <cbc:ID schemeID="1">61694037</cbc:ID>
+    <cbc:ID schemeID="6">20574694044</cbc:ID>
                     </cac:PartyIdentification>
                     <cac:PartyName>
-                        <cbc:Name><![CDATA[rosmeri]]></cbc:Name>
+                        <cbc:Name><![CDATA[MTS]]></cbc:Name>
                     </cac:PartyName>
                 </cac:CarrierParty>
             </cac:ShipmentStage>
             
     <cac:Delivery>
                 <cac:DeliveryAddress>
-                    <cbc:ID>Amazonas - Chachapoyas - Chachapoyas</cbc:ID>
-                    <cbc:StreetName>AV.  28 DE JULIO</cbc:StreetName>
+                    <cbc:ID>Lima - Lima - Lima</cbc:ID>
+                    <cbc:StreetName>LOS OLIVOS</cbc:StreetName>
                 </cac:DeliveryAddress>
             </cac:Delivery>
             
     <cac:OriginAddress>
-                <cbc:ID>Amazonas - Chachapoyas - Chachapoyas</cbc:ID>
-                <cbc:StreetName>AV. LOS INCAS</cbc:StreetName>
+                <cbc:ID>Ayacucho - Huamanga - Ayacucho</cbc:ID>
+                <cbc:StreetName>JR. MOORE 210</cbc:StreetName>
     </cac:OriginAddress>
         </cac:Shipment>
         
@@ -74,7 +74,20 @@
     </cac:OrderLineReference>
     
     <cac:Item>
-                <cbc:Name><![CDATA[PAGOS ISDN ]]></cbc:Name>
+                <cbc:Name><![CDATA[PRODUCTO NUEVO]]></cbc:Name>
+                <cac:SellersItemIdentification>
+                    <cbc:ID>PIUU8</cbc:ID>
+                </cac:SellersItemIdentification>
+            </cac:Item>
+        </cac:DespatchLine><cac:DespatchLine>
+            <cbc:ID>2</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="NIU">0.00</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+    <cbc:LineID>2</cbc:LineID>
+    </cac:OrderLineReference>
+    
+    <cac:Item>
+                <cbc:Name><![CDATA[RECARGA]]></cbc:Name>
                 <cac:SellersItemIdentification>
                     <cbc:ID>PIUU8</cbc:ID>
                 </cac:SellersItemIdentification>

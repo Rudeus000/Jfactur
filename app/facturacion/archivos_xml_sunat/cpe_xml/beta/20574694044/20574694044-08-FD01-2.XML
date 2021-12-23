@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<DebitNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ext:UBLExtensions>
         <ext:UBLExtension>
             <ext:ExtensionContent>
-            <ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>EwzwTWPahCJcslzPAzpCXxakKfs=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>XaMsaKXCSwXYhGbYr016KZxIC1p6/x9oDXGvmpoqrB8Ok6flf1ss1WPQd0VXVhvFdr+PJpwIboW5BEhMuFJ1fyMcEPeSGrmA+6DlYe9ePCiy9SmR3B9i0J76bJYzY5eGQ+Xtf8ePzadiO0cJSCl5/9zjPNkaJiKr69tiuiDzPTc=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB1TCCAT6gAwIBAgIQH3DQLVoJ0JtJmalhMXOSNzANBgkqhkiG9w0BAQUFADApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwHhcNMTYxMDIwMDMyNzA5WhcNMTcxMDIwMDkyNzA5WjApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJAgo+/agotsd1ut8SWsOY7drTNIDXHjKc+45QMPSsKWvsou9wjii7ajB9pRAuELXDLNRCaVRGy2ijDzKUgpK38+mfTZXa5UQCuCNiVfaDM8/dm6bzXtCNbw5SmD5QuODFfNvpPz9Jexs22q3rNUkweENI4uFwvXeaT873tVwr7LAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAHWxYvvKmA1aRBEIkjFyj+vTn+k9+ALFAO4hSs6f7AOiqdaDcvvIl4UCeZ3LQTKbFQn1Z+vDlJK1tIJiTN/5BkCrgb7Wasmv4EpEaQ+lZQDpK8OBAuMoDHfCwprIufsOULge36HI1FfIBQj8p8UNXYifPYNEzd6XBwMI5miZNBYM=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
+            <ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>1mkJ4cmyy5/fdcTjAFVqlItTy4Y=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>SSTu3GPx64PK4QQDTel8aHywMkO4kQ8BT4agVP/+gjKxHWjeCi4//jPx6AIo+OJorEAJCp94tvlB2ttpSdDIDfp8nV804ZCqwn5XA/0aJvxYXDZZJBQS9vQGtfDHjOkWQnQqEXN+8fr4yCJeKhKnQV5vB0FGiYxEc1hVpG7C7io=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB1TCCAT6gAwIBAgIQH3DQLVoJ0JtJmalhMXOSNzANBgkqhkiG9w0BAQUFADApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwHhcNMTYxMDIwMDMyNzA5WhcNMTcxMDIwMDkyNzA5WjApMScwJQYDVQQDHh4AZABlAHMAYQByAHIAbwBsAGwAbwBcAGoAbwBzAGUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJAgo+/agotsd1ut8SWsOY7drTNIDXHjKc+45QMPSsKWvsou9wjii7ajB9pRAuELXDLNRCaVRGy2ijDzKUgpK38+mfTZXa5UQCuCNiVfaDM8/dm6bzXtCNbw5SmD5QuODFfNvpPz9Jexs22q3rNUkweENI4uFwvXeaT873tVwr7LAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAHWxYvvKmA1aRBEIkjFyj+vTn+k9+ALFAO4hSs6f7AOiqdaDcvvIl4UCeZ3LQTKbFQn1Z+vDlJK1tIJiTN/5BkCrgb7Wasmv4EpEaQ+lZQDpK8OBAuMoDHfCwprIufsOULge36HI1FfIBQj8p8UNXYifPYNEzd6XBwMI5miZNBYM=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
         </ext:UBLExtension>
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <cbc:CustomizationID>2.0</cbc:CustomizationID>
-    <cbc:ID>FC01-1</cbc:ID>
+    <cbc:ID>FD01-2</cbc:ID>
     <cbc:IssueDate>2021-12-18</cbc:IssueDate>
     <cbc:IssueTime>00:00:00</cbc:IssueTime>
     <cbc:DocumentCurrencyCode>PEN</cbc:DocumentCurrencyCode>
     <cac:DiscrepancyResponse>
         <cbc:ReferenceID>F001-4</cbc:ReferenceID>
         <cbc:ResponseCode>01</cbc:ResponseCode>
-        <cbc:Description><![CDATA[ANULACION DE LA OPERACION]]></cbc:Description>
+        <cbc:Description><![CDATA[INTERES POR MORA2]]></cbc:Description>
     </cac:DiscrepancyResponse>
     <cac:BillingReference>
         <cac:InvoiceDocumentReference>
@@ -48,7 +48,7 @@
                 <cbc:Name><![CDATA[MTS]]></cbc:Name>
             </cac:PartyName>
             <cac:PartyLegalEntity>
-<cbc:RegistrationName><![CDATA[MOBILE TECHNOLOGY SOLUTIONS S.A.C.]]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[MOBILE TECHNOLOGY SOLUTIONS S.A.C.]]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
                     <cbc:AddressTypeCode>0001</cbc:AddressTypeCode>
                 </cac:RegistrationAddress>
@@ -65,13 +65,12 @@
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingCustomerParty>
-  <cac:TaxTotal>
+    <cac:TaxTotal>
         <cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
         <cac:TaxSubtotal>
 <cbc:TaxableAmount currencyID="PEN">169.49</cbc:TaxableAmount>
-<cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
+            <cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
             <cac:TaxCategory>
-            <cbc:ID schemeAgencyName="United Nations Economic Commission for Europe" schemeName="Tax Category Identifier" schemeID="UN/ECE 5305">S</cbc:ID>
                 <cac:TaxScheme>
                     <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
                     <cbc:Name>IGV</cbc:Name>
@@ -80,35 +79,37 @@
             </cac:TaxCategory>
         </cac:TaxSubtotal>
     </cac:TaxTotal>
-    <cac:LegalMonetaryTotal>
-        <cbc:PayableAmount currencyID="PEN">200</cbc:PayableAmount>
-    </cac:LegalMonetaryTotal><cac:CreditNoteLine>
+    <cac:RequestedMonetaryTotal>
+<cbc:PayableAmount currencyID="PEN">200</cbc:PayableAmount>
+    </cac:RequestedMonetaryTotal>
+    <cac:DebitNoteLine>
         <cbc:ID>1</cbc:ID>
-<cbc:CreditedQuantity unitCode="NIU">20</cbc:CreditedQuantity>
+<cbc:DebitedQuantity unitCode="NIU">20</cbc:DebitedQuantity>
 <cbc:LineExtensionAmount currencyID="PEN">169.49</cbc:LineExtensionAmount>
         <cac:PricingReference>
             <cac:AlternativeConditionPrice>
 <cbc:PriceAmount currencyID="PEN">10</cbc:PriceAmount>
-                <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
+<cbc:PriceTypeCode>01</cbc:PriceTypeCode>
             </cac:AlternativeConditionPrice>
         </cac:PricingReference>
-        <cac:TaxTotal>
+        <cac:TaxTotal>		
 <cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
             <cac:TaxSubtotal>
-<cbc:TaxableAmount currencyID="PEN">169.49</cbc:TaxableAmount>
-<cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="PEN">169.49</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="PEN">30.51</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cbc:Percent>18.00</cbc:Percent>
 <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
                     <cac:TaxScheme>
-                    <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
+                        <cbc:ID>1000</cbc:ID>
                         <cbc:Name>IGV</cbc:Name>
                         <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
                     </cac:TaxScheme>
                 </cac:TaxCategory>
             </cac:TaxSubtotal>
         </cac:TaxTotal>
-        <cac:Item>
+		
+<cac:Item>
 <cbc:Description><![CDATA[SERVICIO]]></cbc:Description>
             <cac:SellersItemIdentification>
                 <cbc:ID><![CDATA[4]]></cbc:ID>
@@ -117,7 +118,7 @@
 				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">23251602</cbc:ItemClassificationCode>
 			</cac:CommodityClassification>
         </cac:Item>
-        <cac:Price>
+<cac:Price>
 <cbc:PriceAmount currencyID="PEN">8.47458</cbc:PriceAmount>
-        </cac:Price>
-    </cac:CreditNoteLine></CreditNote>
+</cac:Price>
+    </cac:DebitNoteLine></DebitNote>

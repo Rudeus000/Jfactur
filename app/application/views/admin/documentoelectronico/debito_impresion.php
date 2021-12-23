@@ -1,7 +1,7 @@
 
 <div class="w120">
 	<div class="w30">
-		<img style="max-width: 100px" src="<?= base_url('assets/uploads/logo/'.$empresa->photo) ?>" > 
+		<img style="max-width: 100px" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" > 
 	</div>
 	<div class="w40 text-center">
 		<p style="font-size: 13px; padding-left: -70px;"><b><?= $empresa->razon_social ?></b></p>
@@ -19,6 +19,7 @@
 		<br>
 		<b style="font-size: 12px;">R.U.C <?= $empresa->ruc_emp ?><b><p>
 		<b  style="font-size: 12px;">NOTA DE DÉBITO</b>
+		<b  style="font-size: 12px;">ELECTRÓNICA</b>
 		<br>
 		<b  style="font-size: 12px;"><?= $nota->seriecomp_nota ?> -  <?= $nota->numcomp_nota ?></b>
 		
@@ -73,7 +74,7 @@
 			 <td style="border:1px solid #070707; padding: 6px;  "><?= $dt->descripcion_notdet?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center;  "><?= $dt->unidad_notdet ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cant_notdet ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->preciosinigv_notdet ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= round($dt->preciosinigv_notdet,2) ?></td>
       <td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->igv_notdet ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= round(($dt->preciosinigv_notdet * $dt->cant_notdet) + $dt->igv_notdet,2) ?></td>  
 		</tr>

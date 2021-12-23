@@ -20,6 +20,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(11)->setAutoSize(true);
 
 
+
 $styleNormal = [
 	'font' => [
 			'bold' => false,
@@ -115,7 +116,13 @@ $objPHPExcel->getActiveSheet()
 ->setCellValueByColumnAndRow(11,$row,'UTILIDAD BRUTA')
 ->getStyleByColumnAndRow(11,$row)
 ->applyFromArray($styleBold);
+
 $total = 0;
+$cantidad = 0;
+$compra = 0;
+$costocomp = 0;
+$preciov = 0;
+$utilidad = 0;
 $row++;
 foreach ($datos as $d) {
 	$objPHPExcel->getActiveSheet()
@@ -164,40 +171,41 @@ foreach ($datos as $d) {
 	->applyFromArray($styleNormal);
 	
 	
-	$scantidad += $d->cantidad;
-	$scompra += $d->compra;
-	$scostocomp += $d->costocomp;
-	$spreciov += $d->precio;
-	$stotal += $d->total;
-	$sutilidad += $d->utilidad;
+	$cantidad += $d->cantidad;
+	$compra += $d->compra;
+	$costocomp += $d->costocomp;
+	$preciov += $d->precio;
+	$total += $d->total;
+	$utilidad += $d->utilidad;
 	$row++;
 }
+
 $objPHPExcel->getActiveSheet()
 	->setCellValueByColumnAndRow(5,$row,'TOTAL')
 	->getStyleByColumnAndRow(5,$row)
 	->applyFromArray($styleBold);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(6,$row,$scantidad)
+	->setCellValueByColumnAndRow(6,$row,$cantidad)
 	->getStyleByColumnAndRow(6,$row)
 	->applyFromArray($styleNormal);	
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(7,$row,$scompra)
+	->setCellValueByColumnAndRow(7,$row,$compra)
 	->getStyleByColumnAndRow(7,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(8,$row,$scostocomp)
+	->setCellValueByColumnAndRow(8,$row,$costocomp)
 	->getStyleByColumnAndRow(8,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(9,$row,$spreciov)
+	->setCellValueByColumnAndRow(9,$row,$preciov)
 	->getStyleByColumnAndRow(9,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(10,$row,$stotal)
+	->setCellValueByColumnAndRow(10,$row,$total)
 	->getStyleByColumnAndRow(10,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(11,$row,$sutilidad)
+	->setCellValueByColumnAndRow(11,$row,$utilidad)
 	->getStyleByColumnAndRow(11,$row)
 	->applyFromArray($styleNormal);
 

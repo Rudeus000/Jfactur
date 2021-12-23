@@ -1,4 +1,7 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 // Don't forget include/define REST_Controller path
 
@@ -626,7 +629,7 @@ class Regdocumentoelectronico extends CI_Controller
       }
 
       $precioConIGV = $_POST['prec_prod'][$key];
-      $precioSinIGV = round($precioConIGV - ($precioConIGV / 1.18) * 0.18,2);
+      $precioSinIGV = round($precioConIGV - ($precioConIGV / 1.18) * 0.18,5);
       
       $cantidad = $_POST['cant_prod'][$key];
 			$det = [];
@@ -635,13 +638,13 @@ class Regdocumentoelectronico extends CI_Controller
 			$det['txtUNIDAD_MEDIDA_DET'] = 'NIU'; //NIU = BIENES, ZZ = SERVICIOS
 			$det['txtCANTIDAD_DET'] = (string)$cantidad;
 			$det['txtPRECIO_DET'] = (string)$precioConIGV; //PRECIO UNITARIO CON IGV
-			$det['txtSUB_TOTAL_DET'] = (string)($precioSinIGV * $cantidad); //SUBTOTAL SIN IGV
+			$det['txtSUB_TOTAL_DET'] = (string)round(($precioSinIGV * $cantidad),2); //SUBTOTAL SIN IGV
 			$det['txtPRECIO_TIPO_CODIGO'] = '01';
 			
       $igv = round((($precioConIGV * $cantidad) / 1.18) * 0.18,2); //IGV TOTAL
 			$det['txtIGV'] = (string)$igv;
 			$det['txtISC'] = '0';
-			$det['txtIMPORTE_DET'] = (string)($precioSinIGV * $cantidad); //SUBTOTAL SIN IGV
+			$det['txtIMPORTE_DET'] = (string)round(($precioSinIGV * $cantidad),2); //SUBTOTAL SIN IGV
 			$det['txtCOD_TIPO_OPERACION'] = '10';
 			$det['txtCODIGO_DET'] = (string)$producto->cod_producto;
 			$det['txtDESCRIPCION_DET'] = (string)$nombre;
@@ -661,6 +664,8 @@ class Regdocumentoelectronico extends CI_Controller
     $data['total_gravadas'] = (string)$precioSinIGVTotal;
     $data['total_igv'] = (string)$IGVtotal;
     $data['total'] = (string)$total;
+    // var_dump($data);
+    // exit();
 
     //Invocamos el servicio
     $token = ''; //en caso quieras utilizar algún token generado desde tu sistema
@@ -686,7 +691,7 @@ class Regdocumentoelectronico extends CI_Controller
     curl_close($ch);
 
     $response = json_decode($respuesta, true);
-
+    // var_dump($response);
     
     if ($response['respuesta']=='ok') {
       $dataInsert['tiponota_nota'] = 'Débito';
@@ -785,7 +790,7 @@ class Regdocumentoelectronico extends CI_Controller
 			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
       "porcentaje_igv"                => "18.00",      
       "serie_comprobante"             => ($res->codsunat_tipdocu=="01")?"FC01":"BC01",
-      "numero_comprobante"            => (string)$this->modelgeneral->getSecuencia('tb_nota','numcomp_nota','tiponota_nota','Débito'),
+      "numero_comprobante"            => (string)$this->modelgeneral->getSecuencia('tb_nota','numcomp_nota','tiponota_nota','Crédito'),
       "fecha_comprobante"             => date('Y-m-d'),
       "cod_tipo_documento"            => "07",
       "cod_moneda"                    => (string)$res->codmoneda_vent,
@@ -820,7 +825,7 @@ class Regdocumentoelectronico extends CI_Controller
       }
 
       $precioConIGV = $_POST['prec_prod'][$key];
-      $precioSinIGV = round($precioConIGV - ($precioConIGV / 1.18) * 0.18,2);
+      $precioSinIGV = round($precioConIGV - ($precioConIGV / 1.18) * 0.18,5);
       
       $cantidad = $_POST['cant_prod'][$key];
       $det = [];
@@ -828,13 +833,13 @@ class Regdocumentoelectronico extends CI_Controller
 			$det['txtUNIDAD_MEDIDA_DET'] = 'NIU'; //NIU = BIENES, ZZ = SERVICIOS
 			$det['txtCANTIDAD_DET'] = (string)$cantidad;
 			$det['txtPRECIO_DET'] = (string)$precioConIGV; //PRECIO UNITARIO CON IGV
-			$det['txtSUB_TOTAL_DET'] = (string)($precioSinIGV * $cantidad); //SUBTOTAL SIN IGV
+			$det['txtSUB_TOTAL_DET'] = (string)round(($precioSinIGV * $cantidad),2); //SUBTOTAL SIN IGV
 			$det['txtPRECIO_TIPO_CODIGO'] = '01';
 			
       $igv = round((($precioConIGV * $cantidad) / 1.18) * 0.18,2); //IGV TOTAL
 			$det['txtIGV'] = (string)$igv;
 			$det['txtISC'] = '0';
-			$det['txtIMPORTE_DET'] = (string)($precioSinIGV * $cantidad); //SUBTOTAL SIN IGV
+			$det['txtIMPORTE_DET'] = (string)round(($precioSinIGV * $cantidad),2); //SUBTOTAL SIN IGV
 			$det['txtCOD_TIPO_OPERACION'] = '10';
 			$det['txtCODIGO_DET'] = (string)$producto->cod_producto;			
 			$det['txtDESCRIPCION_DET'] = (string)$nombre;
@@ -853,6 +858,9 @@ class Regdocumentoelectronico extends CI_Controller
     $data['total_gravadas'] = (string)$precioSinIGVTotal;
     $data['total_igv'] = (string)$IGVtotal;
     $data['total'] = (string)$total;
+
+    // var_dump($data);
+    // exit();
 
     //Invocamos el servicio
     $token = ''; //en caso quieras utilizar algún token generado desde tu sistema
@@ -878,6 +886,8 @@ class Regdocumentoelectronico extends CI_Controller
     curl_close($ch);
 
     $response = json_decode($respuesta, true);
+    // var_dump($response);
+    // exit();
     
     if ($response['respuesta']=='ok') {
       $dataInsert['tiponota_nota'] = 'Crédito';
@@ -924,6 +934,7 @@ class Regdocumentoelectronico extends CI_Controller
     }
 
     echo json_encode($resp);
+    //var_dump($resp);
 
   }
 

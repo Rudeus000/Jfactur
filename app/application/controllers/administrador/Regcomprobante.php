@@ -27,8 +27,8 @@ class Regcomprobante extends CI_Controller {
 		$this->load->helper('string');
 		$vals = array(
 				'word' => $this->stringRandom(),
-				'img_path' => './assets/images/captcha/',
-				'img_url' => base_url().'assets/images/captcha/',
+				'img_path' => APP_PATH.'./assets/images/captcha/',
+				'img_url' => base_url_app().'assets/images/captcha/',
 				'font_path' => FCPATH.'/assets/fonts/big_noodle_titling.ttf',
 				'img_width' => 180,
 				'img_height' => 50,
@@ -123,7 +123,7 @@ class Regcomprobante extends CI_Controller {
 		$data['empresa'] = $this->empresa_model->getEmpresa();
 		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
 		$html = $this->load->view('admin/ventas/impventa',$data,TRUE);
-		$css = $css = file_get_contents('assets/styles_pdf.css');
+		$css = $css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
 		$this->mpdf->SetTitle('Ventas');
 		$this->mpdf->writeHTML($css,1);
 		$this->mpdf->writeHTML($html,2);
@@ -166,7 +166,7 @@ class Regcomprobante extends CI_Controller {
 		$data['empresa'] = $this->empresa_model->getEmpresa();
 		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
 		$html = $this->load->view('admin/ventas/impventa',$data,TRUE);
-		$css = $css = file_get_contents('assets/styles_pdf.css');
+		$css = $css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
 		$archivo_pdf = 'assets/temporal/comprobantes/'.$data['ventas']->archivoxml_vent.'.pdf';
 		$this->mpdf->SetTitle('Ventas');
 		$this->mpdf->writeHTML($css,1);
@@ -180,13 +180,13 @@ class Regcomprobante extends CI_Controller {
 		$this->load->library('zip');
 		// File path
 		$pdf = $archivo_pdf;
-		$xml = 'facturacion/'.$data['ventas']->rutaxml_vent.'/'.$archivoxml.'.XML';
+		$xml = APP_PATH.'facturacion/'.$data['ventas']->rutaxml_vent.'/'.$archivoxml.'.XML';
 		
 		// Add file
 		$this->zip->read_file($pdf);
 		$this->zip->read_file($xml);
 		if($facturacion->num_rows()>0){
-			$cdr = 'facturacion/'.$data['ventas']->rutaxml_vent.'/R-'.$archivoxml.'.XML';
+			$cdr = APP_PATH.'facturacion/'.$data['ventas']->rutaxml_vent.'/R-'.$archivoxml.'.XML';
 			$this->zip->read_file($cdr);
 		}
 

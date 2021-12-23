@@ -34,7 +34,17 @@
 									</div>
 								</div>							
 
-								<div class="row">					
+								<div class="row">
+								<!-- <div class="row">								 -->
+								<div class="col-md-4" hidden="">
+					              <div class="form-group">
+					                <label class="control-label">Tipo:</label>
+					                <select name="tipo" id="tipo_documento" class="form-control">
+					                  <option value="4">RUC</option>
+					                  <option value="2">DNI</option>
+					                </select>
+					              </div>
+					            </div>								
 																							
                                     <div class="col-md-6">
                                     	<div id="capa_load"></div>

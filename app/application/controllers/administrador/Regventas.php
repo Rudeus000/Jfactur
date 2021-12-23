@@ -309,7 +309,7 @@ class Regventas extends CI_Controller {
 			$querySeries = $this->db->from('tb_producto_serie')
 			->select('serie_descripcion as id, serie_descripcion as text')
 			// ->where('cod_producto',$producto)
-			->where($ResultypeAssignmentProduct)
+			//->where($ResultypeAssignmentProduct)
 			->where('cod_almacen',$almacen)
 			->where('serie_estado','D')
 			->get()->result();
@@ -896,7 +896,7 @@ class Regventas extends CI_Controller {
 			'mode' => 'utf-8', //MODE
 			'format' => [75,$alturaTicket], //FORMAT
 			'margin_left' => 2,
-			'margin_right' => 4,
+			'margin_right' => 2,
 			'margin_top' => 2,
 			'margin_bottom' => 2,
 			'margin_header' => 0,
