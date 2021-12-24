@@ -2901,7 +2901,65 @@ $(function () {
 			$('#FormEditarPventa input[name=direccion]').val(json.direccion_puntoventa);
 			$('#FormEditarPventa input[name=email]').val(json.email_puntoventa);
 			$('#FormEditarPventa input[name=codigo]').val(json.codigosunat_puntoventa);
+
+			$.get(path + "administrador/regpventa/getTalonarioPorDefecto",{id},
+				function (data) {
+					let option = '<option>Seleccione</option>';
+					$.each(data, function (index, value) {
+						let selected = '';
+						if(value.cod_talonario==json.talonario_defecto){
+							selected = 'selected';
+						}
+						option += `
+							<option ${selected} value="${value.cod_talonario}">${value.nom_tipdocumento+' | '+value.serie}</option>
+						`;
+					});
+					$('select[name=comp_elect_defecto]').html(option);
+
+
+					$.get(path + "administrador/regpventa/getClientePorDefecto",{'id':json.talonario_defecto},
+						function (data) {
+							let option = '<option>Seleccione</option>';
+							$.each(data, function (index, value) {
+								let selected = '';
+								if(value.id_cliente==json.cliente_defecto){
+									selected = 'selected';
+								}
+								option += `
+									<option ${selected} value="${value.id_cliente}">${value.nomb_cliente}</option>
+								`;
+							});
+							$('#FormEditarPventa select[name=cliente_defecto]').html(option);
+						},
+						"JSON"
+					);
+				},
+				"JSON"
+			);
 		});
+
+		
+
+		
+	});
+
+
+	$('select[name=comp_elect_defecto]').change(function (e) { 
+		e.preventDefault();
+		$('select[name=cliente_defecto]').html('');
+		let id = $(this).val();
+		$.get(path + "administrador/regpventa/getClientePorDefecto",{id},
+			function (data) {
+				let option = '<option>Seleccione</option>';
+				$.each(data, function (index, value) { 
+					option += `
+						<option value="${value.id_cliente}">${value.nomb_cliente}</option>
+					`;
+				});
+				$('#FormEditarPventa select[name=cliente_defecto]').html(option);
+			},
+			"JSON"
+		);
 	});
 
 	$('#FormEditarPventa').validate({
@@ -6613,6 +6671,7 @@ function guardarProducto()
 		list: {
 			onKeyEnterEvent: function () {
 				obtenerValoresArticulos()
+				$('#FormVentaAgregarProducto').submit();
 			},
 			onClickEvent: function(){
 				obtenerValoresArticulos()
@@ -6644,14 +6703,13 @@ function guardarProducto()
 
 		}
 	});
+	
 	// check observacion 
 	$('#observacionCheck').change(function() {
 		if(this.checked) {
 			$('#observacion-a').prop('disabled',false).show();
-			
 		}else{
 			$('#observacion-a').prop('disabled',true).hide();				
-
 		}
 	});
 
@@ -6661,7 +6719,7 @@ function guardarProducto()
 			$('input[name=cantidadProducto]').prop('disabled',true);
 		}else{
 			$('#select2-series').prop('disabled',true);
-			$('input[name=cantidadProducto]').prop('disabled',false);
+			$('input[name=cantidadProducto]').prop('disabled',false).val(1);
 		}
 	});
 
@@ -6672,7 +6730,7 @@ function guardarProducto()
 		if(idTypeAssignmentProduct!==""){
 			producto=$('input[name=idTypeAssignmentProduct]').val();
 		}else {
-		producto = $('input[name=producto]').val();
+			producto = $('input[name=producto]').val();
 		}
 		var almacen = $('select[name=almacen]').val();
 		$.get(path+"administrador/regventas/getSeriesProducto", {producto,almacen},
@@ -6683,16 +6741,16 @@ function guardarProducto()
 					});
 					// $('#select2-series').prop('disabled',false);
 
-					if(res.length == 0){
+				if(res.length == 0){
 					$('input[name=serieCheckProducto]').prop('checked', false);
 					$('input[name=serieCheckProducto]').prop('disabled', true);
 					$('input[name=cantidadProducto]').prop('disabled', false);
 					$('#select2-series').prop('disabled', true);
 				}else{
-					$('input[name=serieCheckProducto]').prop('checked', true);
+					//$('input[name=serieCheckProducto]').prop('checked', true);
 					$('input[name=serieCheckProducto]').prop('disabled', false);
 					$('input[name=cantidadProducto]').prop('disabled', true);
-					$('#select2-series').prop('disabled', false);
+					//$('#select2-series').prop('disabled', false);
 				}
 				},
 				"JSON"
@@ -6709,10 +6767,12 @@ function guardarProducto()
 		$('input[name=precioProducto]').val(parseFloat(selectedItemValue.venta).toFixed(4));
 		if (selectedItemValue.estado == '0') {
 			$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', true);
+			return;
 		} else {
 			$('#serieChek').prop('disabled', false);
 			$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', false);
 		}
+		
 		obtenerSeriesProducto();
 	}
 
@@ -6741,10 +6801,18 @@ function guardarProducto()
 	});
 
 	$('#FormVentaAgregar select[name=tipoPedido]').change(function (event) {
-		var id = $(this).val();
-		var dni = $(this).find('option:selected').data('dni');
-		var ruc = $(this).find('option:selected').data('ruc');
-		// console.log(dni,ruc);
+		getVentasNumeracion();
+	});
+
+	getVentasNumeracion();
+
+	function getVentasNumeracion()
+	{
+		var tipoPedido = $('#FormVentaAgregar select[name=tipoPedido]');
+		var id = $(tipoPedido).val();
+		var dni = $(tipoPedido).find('option:selected').data('dni');
+		var ruc = $(tipoPedido).find('option:selected').data('ruc');
+		
 		if(dni==1){			
 			$('#fnacimiento').prop('disabled',false).show();
 			$('#telefono').prop('disabled',false).show();
@@ -6760,7 +6828,7 @@ function guardarProducto()
 			$('#FormVentaEditarCliente #telefono').prop('disabled',false).show();
 		}
 		if(ruc==1){	
-		    $('#fnacimiento').prop('disabled',true).hide();
+		  $('#fnacimiento').prop('disabled',true).hide();
 			$('#telefono').prop('disabled',true).hide();				
 			$('#idtelefono').prop('disabled',false).show();			
 			$("#FormVentaAgregarCliente  select[name=tipo] option[value='4']").attr('disabled', false);
@@ -6774,15 +6842,16 @@ function guardarProducto()
 			$('#FormVentaEditarCliente #idtelefono').prop('disabled',false).show();					
 		}
 
-		$('#RUCAutocomplete').prop('disabled',true).val('');
-		$('#ClienteVentaAutocomplete').prop('disabled',true).val('');
+		$('#RUCAutocomplete').prop('disabled',true);
+		$('#ClienteVentaAutocomplete').prop('disabled',true);
+
 		$.getJSON(path + 'administrador/regventas/numeracion', { id }, function (json, textStatus) {
 			$('input[name=correlativo]').val(json.correlativo_actual);
 			$('input[name=serie]').val(json.serie);
 			$('#RUCAutocomplete').prop('disabled',false);
 			$('#ClienteVentaAutocomplete').prop('disabled',false);
 		});
-	});
+	}
 
 	function verificarCoberturaCliente(callback) {
 		var total = parseFloat($('#VentaTotal').html());
@@ -7231,6 +7300,7 @@ function guardarProducto()
 		$('#VentaTotal').html(round(total, 2));
 		$('input[name=monto]').val(round(total, 2));
 		$('input[name=total]').val(round(total, 2));
+		$('input[name=montoRecibido]').val(round(total, 2));
 
 	}
 
@@ -7582,6 +7652,14 @@ function guardarProducto()
 			});
 			$('#TableDeudaCliente tbody').html(tr);
 		});
+	});
+
+
+
+	$('.monto-recibido').click(function (e) { 
+		e.preventDefault();
+		let monto = $(this).data('monto');
+		$('#FormVentaAgregarProducto input[name=montoRecibido]').val(monto);
 	});
 
 	/*=====  End of VENTAS  ======*/

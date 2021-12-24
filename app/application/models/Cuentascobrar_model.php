@@ -61,13 +61,19 @@ class Cuentascobrar_model extends CI_Model {
 
 	function getAbonos($cliente)
 	{
-		return $this->db->from('tb_cobro')
+		$query = $this->db->from('tb_cobro')
 		->select('SUM(monto_cobro) as abono')
 		->join('tb_venta','tb_cobro.cod_vent = tb_venta.cod_vent')
 		->where('id_cliente',$cliente)
 		->where('tipo_cobro','Credito')
 		->group_by('id_cliente')
-		->get()->row()->abono;
+		->get()->row();
+
+		if(!is_null($query)){
+			return $query->abono;
+		}else{
+			return 0;
+		}
 	}
 
 

@@ -29,7 +29,7 @@
          <div class="card-header bg-success"><h3 class="my-0 text-white">Realizar ventas</h3></div>
            <div class="card-body">
             <form id="FormVentaAgregar" class="FormVenta" action="<?= base_url('administrador/regventas/agregarVenta') ?>" autocomplete="off">
-              <input type="hidden" name="cliente">
+              <input type="hidden" name="cliente" value="<?= !is_null($cliente)?$cliente->id:'' ?>">
               <input type="hidden" name="total">
               
               <?php if ($apertura==FALSE): ?>
@@ -64,7 +64,7 @@
                                   <select name="tipoPedido" class="form-control select2 select2-hidden-accessible input-sm">
                                     <option value="">Seleccion</option>
                                     <?php foreach ($tipos as $t): ?>
-                                      <option value="<?= $t->cod_talonario?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>"><?= $t->nom_tipdocumento.' - '.$t->serie ?></option>
+                                      <option value="<?= $t->cod_talonario?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" <?= $punto->talonario_defecto==$t->cod_talonario?'selected':'' ?> ><?= $t->nom_tipdocumento.' - '.$t->serie ?></option>
                                     <?php endforeach ?>
                                   </select>
                                 </div>
@@ -113,25 +113,25 @@
                               <div class="col-md-2">
                                 <div class="form-group">
                                   <label class="control-label">RUC/DNI</label>
-                                  <input type="text" id="RUCAutocomplete" name="rucdni" class="form-control" readonly disabled>
+                                  <input type="text" id="RUCAutocomplete" name="rucdni" class="form-control" readonly disabled value="<?= !is_null($cliente)?$cliente->ruc:'' ?>">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="control-label">Cliente</label>
-                                  <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled>
+                                  <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente)?$cliente->nombre:'' ?>">
                                 </div>
                               </div>                              
                               <div class="col-md-2">
                                 <div class="form-group">
                                   <label class="control-label">Precio</label>
-                                  <input type="text" id="precioCliente" name="precioCliente" class="form-control" readonly>
+                                  <input type="text" id="precioCliente" name="precioCliente" class="form-control" readonly value="<?= !is_null($cliente)?$cliente->precio_cliente:'' ?>">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="control-label">Dirección</label>
-                                  <input type="text" id="DireccionCliente" class="form-control" readonly>
+                                  <input type="text" id="DireccionCliente" class="form-control" readonly value="<?= !is_null($cliente)?$cliente->direccion:'' ?>">
                                 </div>
                               </div>
                             </div>
@@ -435,7 +435,7 @@
 
                        <div class="col-md-2">
                         <div class="form-group">
-                          <label class="control-label">Descuento</label>
+                          <label class="control-label">Descuento (%)</label>
                           <input type="number" min="0" max="99" name="descuento" class="form-control" value="0">
                         </div>
                       </div>                      
@@ -461,12 +461,12 @@
                       </div>
                     </div> 
                     <div class="card-body d-flex justify-content-between align-items-right">
-                    <button type="submit" class="btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
-                  <button type="submit" class="btn btn-success btn-bordered waves-effect w-md">S/.20</button> 
-                  <button type="submit" class="btn btn-danger btn-bordered waves-effect w-md">S/.50</button> 
-                  <button type="submit" class="btn btn-purple btn-bordered waves-effect w-md">S/.100</button> 
-                  <button type="submit" class="btn btn-pink btn-bordered waves-effect w-md">S/.200</button>
-                  <button type="submit" class="btn btn-info btn-bordered waves-effect w-md">S/.500</button>
+                    <button type="button"  data-monto="10" class="monto-recibido btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
+                  <button type="button"  data-monto="20" class="monto-recibido btn btn-success btn-bordered waves-effect w-md">S/.20</button> 
+                  <button type="button"  data-monto="50" class="monto-recibido btn btn-danger btn-bordered waves-effect w-md">S/.50</button> 
+                  <button type="button"  data-monto="100" class="monto-recibido btn btn-purple btn-bordered waves-effect w-md">S/.100</button> 
+                  <button type="button"  data-monto="200" class="monto-recibido btn btn-pink btn-bordered waves-effect w-md">S/.200</button>
+                  <button type="button"  data-monto="500" class="monto-recibido btn btn-info btn-bordered waves-effect w-md">S/.500</button>
                     </div>                    
                    </div>
                   </fieldset>

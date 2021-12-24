@@ -955,7 +955,8 @@ class Regdocumentoelectronico extends CI_Controller
 		/***** FACTURA: DATOS OBLIGATORIOS PARA EL CÓDIGO QR *****/
 		/*RUC | TIPO DE DOCUMENTO | SERIE | NUMERO | MTO TOTAL IGV | MTO TOTAL DEL COMPROBANTE | FECHA DE EMISION |TIPO DE DOCUMENTO ADQUIRENTE | NUMERO DE DOCUMENTO ADQUIRENTE |*/
 		
-		$ruc = getEmisor()['ruc'];
+		$empresa = getDatosEmpresa();
+		$ruc = $empresa['empresa']->ruc_emp;
 		$tipo_documento = $tipo;
 		$serie = $data->seriecomp_nota;
 		$numero = $data->numcomp_nota;

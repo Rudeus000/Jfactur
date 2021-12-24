@@ -135,7 +135,8 @@ class Regcomprobante extends CI_Controller {
 		/***** FACTURA: DATOS OBLIGATORIOS PARA EL CÓDIGO QR *****/
 		/*RUC | TIPO DE DOCUMENTO | SERIE | NUMERO | MTO TOTAL IGV | MTO TOTAL DEL COMPROBANTE | FECHA DE EMISION |TIPO DE DOCUMENTO ADQUIRENTE | NUMERO DE DOCUMENTO ADQUIRENTE |*/
 		$venta = $this->ventas_model->getVenta($id);
-		$ruc = getEmisor()['ruc'];
+		$empresa = getDatosEmpresa();
+		$ruc = $empresa['empresa']->ruc_emp;
 		$tipo_documento = $venta->codsunat_tipdocu;
 		$serie = $venta->serie;
 		$numero = $venta->numero_vent;

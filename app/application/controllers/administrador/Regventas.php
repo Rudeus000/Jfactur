@@ -103,6 +103,9 @@ class Regventas extends CI_Controller {
 		$data['almacenes'] = $this->ventas_model->getAlmacenesDisponibles();
 		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
 		$data['tipos'] = $this->ventas_model->getTiposVentas();
+		$data['cliente'] = $this->ventas_model->getClientePorDefecto();
+		//var_dump($data['cliente']);
+		//exit();
 		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
 		$data['apertura'] = $this->ventas_model->getCajaApertura();
 		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();
@@ -871,7 +874,8 @@ class Regventas extends CI_Controller {
 		/***** FACTURA: DATOS OBLIGATORIOS PARA EL CÓDIGO QR *****/
 		/*RUC | TIPO DE DOCUMENTO | SERIE | NUMERO | MTO TOTAL IGV | MTO TOTAL DEL COMPROBANTE | FECHA DE EMISION |TIPO DE DOCUMENTO ADQUIRENTE | NUMERO DE DOCUMENTO ADQUIRENTE |*/
 		$venta = $this->ventas_model->getVenta($id);
-		$ruc = getEmisor()['ruc'];
+		$empresa = getDatosEmpresa();
+		$ruc = $empresa['empresa']->ruc_emp;
 		$tipo_documento = $venta->codsunat_tipdocu;
 		$serie = $venta->serie;
 		$numero = $venta->numero_vent;

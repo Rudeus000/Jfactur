@@ -250,11 +250,30 @@ class Ventas_model extends CI_Model {
 
       }
 
-function getDocumentosCliente()
-  {
-    return $this->db->from('tb_tipodocumentocliente')
-    ->where_in('codsunat_tipdocucli',['1','6'])
-    ->get()
-    ->result();
-  }
+      function getDocumentosCliente()
+      {
+        return $this->db->from('tb_tipodocumentocliente')
+        ->where_in('codsunat_tipdocucli',['1','6'])
+        ->get()
+        ->result();
+      }
+
+      function getClientePorDefecto()
+      {
+        $punto = $this->db->from('tb_puntoventa')
+        ->where('cod_puntoventa',$this->session->userdata('puntoventa'))
+        ->get()->row();
+        
+        if(($punto->talonario_defecto=='' OR $punto->talonario_defecto==null) AND ($punto->cliente_defecto=='' OR $punto->cliente_defecto==null)){
+          return null;
+        }
+
+        $this->db->from('tb_cliente');
+        $this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as ruc, direc_cliente as direccion, precio_cliente');
+        $this->db->join('tb_tipodocumentocliente','tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli');
+        $this->db->where('id_cliente',$punto->cliente_defecto);
+        $result = $this->db->get()->row();
+        return $result;
+        
+      }
 }

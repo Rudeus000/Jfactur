@@ -132,6 +132,8 @@ function editPventa()
    $data['direccion_puntoventa']=  $this->input->post('direccion');
    $data['email_puntoventa']=  $this->input->post('email');
    $data['codigosunat_puntoventa']=  $this->input->post('codigo');
+   $data['talonario_defecto']=  $this->input->post('comp_elect_defecto');
+   $data['cliente_defecto']=  $this->input->post('cliente_defecto');
    $where['cod_puntoventa'] = $this->input->post('id');
    $edit = $this->modelgeneral->editRegist('tb_puntoventa',$where,$data);
    $resp =[];
@@ -318,6 +320,44 @@ function editPventa()
     ->join('ubigeo_provincias','ubigeo_provincias.id = ubigeo_distritos.provincia_id')
     ->join('ubigeo_departamentos','ubigeo_departamentos.id = ubigeo_distritos.departamento_id')
     ->get()->result();
+  }
+
+  public function getTalonarioPorDefecto()
+  {
+    $id = $this->input->get('id');
+    $talonario = $this->db->from('tb_talonario')
+    ->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+    ->where('cod_puntoventa',$id)
+    ->get()->result();
+    header('content-type: application/json; charset=utf-8');
+    echo json_encode($talonario);
+  }
+
+  public function getClientePorDefecto()
+  {
+    $id = $this->input->get('id');
+    $talonario = $this->db->from('tb_talonario')
+    ->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
+    ->where('cod_talonario',$id)
+    ->get()->row();
+
+    $array = [];
+    if($talonario->docclidni_talonario==1){
+      $array[] = 4;
+    }
+    if($talonario->doccliruc_talonario==1){
+      $array[] = 6;
+    }
+    $clientes = $this->db->from('tb_cliente')
+    ->join('tb_tipodocumentocliente','tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli')
+    ->where_in('codsunat_tipdocucli',$array)
+    ->order_by('nomb_cliente','asc')
+    ->get()->result();
+
+    header('content-type: application/json; charset=utf-8');
+    echo json_encode($clientes);
+
+
   }
 
 

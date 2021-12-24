@@ -510,7 +510,18 @@
         <input type="text" name="codigo" class="form-control">
       </div>
     </div>
-
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">Comp. Elect. por defecto</label>
+        <select name="comp_elect_defecto" class="form-control"></select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label">Cliente por defecto</label>
+        <select name="cliente_defecto" class="form-control"></select>
+      </div>
+    </div>
 </div> 
 </div>
 <div class="modal-footer">
