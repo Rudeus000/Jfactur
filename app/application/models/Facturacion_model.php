@@ -111,14 +111,40 @@ class Facturacion_model extends CI_Model {
 				}
 			}
 
+			$nota_credito = $this->getNotaCreditoDebito($q->cod_vent,'Crédito');
+			$nota_debito = $this->getNotaCreditoDebito($q->cod_vent,'Débito');
 
 
-      $row[] = [$q->cod_vent,$q->nomb_cliente,$q->fecha_vent,$q->subtotal_vent,$q->igv_vent,$q->total_vent,$q->nom_tipdocumento.' '.$q->serie.'-'.$q->numero_vent,$limite,$label,$check];
+
+      $row[] = [$q->cod_vent,$q->nomb_cliente,$q->fecha_vent,$q->subtotal_vent,$q->igv_vent,$q->total_vent,$q->nom_tipdocumento.' '.$q->serie.'-'.$q->numero_vent,$limite,$label,$check,$nota_credito,$nota_debito];
     }
 
     $result['aaData'] = $row;
     return $result;
   }
+
+	public function getNotaCreditoDebito($venta,$tipo)
+	{
+		
+		$query = $this->db->from('tb_nota')
+		->where('tiponota_nota',$tipo)
+		->where('cod_vent',$venta)
+		->get();
+
+		if($query->num_rows() > 0){
+			$row = $query->row();
+			$botones = '
+				<a href='.base_url('administrador/regdocumentoelectronico/imprimirCredito/'.$row->cod_nota).' target="_blank" class="btn btn-info btn-sm"><i class="fa fa-print"></i></a>
+				<a href="'.base_url_app('facturacion/'.$row->rutaxml_nota.'/'.$row->archivoxml_nota.'.XML').'" target="_blank" class="btn btn-info btn-sm">XML</a>
+				<a href="'.base_url_app('facturacion/'.$row->rutaxml_nota.'/R-'.$row->archivoxml_nota.'.XML').'" target="_blank" class="btn btn-info btn-sm">CDR</a>
+			';
+			return $botones;
+		}else{
+			return '';
+		}
+	}
+
+	
 
   	function getCeprocesadosExcel($data)
 	{

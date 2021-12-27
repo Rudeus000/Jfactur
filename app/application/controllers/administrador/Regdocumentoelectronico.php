@@ -924,6 +924,8 @@ class Regdocumentoelectronico extends CI_Controller
         $dataDetalleInsert['preciosinigv_notdet'] = $value['txtPRECIO_SIN_IGV_DET'];
         $dataDetalleInsert['codprodsunat_notdet'] = $value['txtCODIGO_PROD_SUNAT'];
         $this->modelgeneral->insertRegist('tb_notadetalle',$dataDetalleInsert);
+
+        $this->devolverStock($id,$data);
       }
 
       $resp['success'] = true;
@@ -936,6 +938,49 @@ class Regdocumentoelectronico extends CI_Controller
     echo json_encode($resp);
     //var_dump($resp);
 
+  }
+
+  private function devolverStock($id_venta,$data)
+  {
+    $venta = $this->modelgeneral->getTableWhereRow('tb_venta',['cod_vent' => $id_venta]);
+    
+    //$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle',['cod_vent' => $id_venta]);
+    foreach ($data['detalle'] as $key => $value){
+
+      $cod_producto = $value['txtCODIGO_DET'];
+      $cantidad = $value['txtCANTIDAD_DET'];
+      
+      $producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto' => $cod_producto]);
+      if($producto->typeAssignmentProduct=='H'){
+        $producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto' => $producto->idTypeAssignmentProduct]);
+      }
+
+      $stock = $this->db->from('tb_producto_stock')
+      ->where('cod_producto',$producto->cod_producto)
+      ->where('cod_almacen',$venta->cod_almacen)
+      ->get()->row();
+
+
+      $this->db->where('cod_producto',$producto->cod_producto)
+      ->where('cod_almacen',$venta->cod_almacen)
+      ->set('stock',$stock->stock + (int)$cantidad)
+      ->update('tb_producto_stock');
+
+      foreach (range(1, (int)$cantidad) as $key => $value) {
+        $resultado = $this->db->from('tb_producto_serie')
+        ->where('cod_vent', $id_venta)
+        ->where('cod_almacen', $venta->cod_almacen)
+        ->get();
+        if($resultado->num_rows() > 0){
+          $this->db->where('cod_vent', $id_venta)
+          ->where('cod_almacen', $venta->cod_almacen)
+          ->where('serie_descripcion',$resultado->row()->serie_descripcion)
+          ->set('cod_vent',null)
+          ->set('serie_estado','D')
+          ->update('tb_producto_serie');
+        }
+      }
+    }
   }
 
   public function getProductoBusqueda()

@@ -6674,7 +6674,8 @@ function guardarProducto()
 				$('#FormVentaAgregarProducto').submit();
 			},
 			onClickEvent: function(){
-				obtenerValoresArticulos()
+				obtenerValoresArticulos();
+				//$('#FormVentaAgregarProducto').submit();
 			}
 		}
 	});
@@ -6717,6 +6718,7 @@ function guardarProducto()
 		if(this.checked) {
 			obtenerSeriesProducto();
 			$('input[name=cantidadProducto]').prop('disabled',true);
+			$('#select2-series').prop('disabled',false);
 		}else{
 			$('#select2-series').prop('disabled',true);
 			$('input[name=cantidadProducto]').prop('disabled',false).val(1);
@@ -6749,7 +6751,7 @@ function guardarProducto()
 				}else{
 					//$('input[name=serieCheckProducto]').prop('checked', true);
 					$('input[name=serieCheckProducto]').prop('disabled', false);
-					$('input[name=cantidadProducto]').prop('disabled', true);
+					//$('input[name=cantidadProducto]').prop('disabled', true);
 					//$('#select2-series').prop('disabled', false);
 				}
 				},
@@ -6804,7 +6806,9 @@ function guardarProducto()
 		getVentasNumeracion();
 	});
 
-	getVentasNumeracion();
+	if($('#FormVentaAgregar').length){
+		getVentasNumeracion();
+	}
 
 	function getVentasNumeracion()
 	{
@@ -6890,7 +6894,12 @@ function guardarProducto()
 	});
 
 	$('#FormVentaAgregarProducto input[name=montoRecibido]').focusout(function (event) {
-		let montoRecibido = parseFloat($(this).val());
+		calcularVueltoProductoVenta();
+	});
+
+	function calcularVueltoProductoVenta()
+	{
+		let montoRecibido = parseFloat($('#FormVentaAgregarProducto input[name=montoRecibido]').val());
 		let monto = parseFloat($('#FormVentaAgregar input[name=monto]').val());
 		if (!isNaN(monto)) {
 			if (montoRecibido > 0) {
@@ -6898,7 +6907,7 @@ function guardarProducto()
 				$('input[name=vuelto]').val(round(vuelto, 2));
 			}
 		}
-	});
+	}
 
 
 	$('#FormVentaAgregar').validate({
@@ -7660,6 +7669,7 @@ function guardarProducto()
 		e.preventDefault();
 		let monto = $(this).data('monto');
 		$('#FormVentaAgregarProducto input[name=montoRecibido]').val(monto);
+		calcularVueltoProductoVenta();
 	});
 
 	/*=====  End of VENTAS  ======*/
@@ -7688,6 +7698,8 @@ function guardarProducto()
 			}
 		},
 		"columns": [
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },

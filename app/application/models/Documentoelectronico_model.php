@@ -82,6 +82,7 @@ class Documentoelectronico_model extends CI_Model {
     $this->db->join('tb_nota','tb_venta.cod_vent = tb_nota.cod_vent AND tb_nota.tiponota_nota = "'.$tipo.'"','left');
     $this->db->where('tb_venta.estado_vent','G');
     $this->db->where('tb_tipodocumento.cod_tipdocu',1);
+    $this->db->order_by('tb_venta.cod_vent','desc');
     return $this->db->get()->result();
   }
 

@@ -93,7 +93,9 @@
 												<th>Tipo</th>
                         <th>Fecha Limite</th>
                         <th>Estado</th>
-												<th>Seleccione</th>
+												<th>Facturación</th>
+                        <th>Not. Cré.</th>
+                        <th>Not. Deb.</th>
                       </tr>
                     </thead>
 

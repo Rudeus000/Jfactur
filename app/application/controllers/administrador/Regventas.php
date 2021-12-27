@@ -104,8 +104,6 @@ class Regventas extends CI_Controller {
 		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
 		$data['tipos'] = $this->ventas_model->getTiposVentas();
 		$data['cliente'] = $this->ventas_model->getClientePorDefecto();
-		//var_dump($data['cliente']);
-		//exit();
 		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
 		$data['apertura'] = $this->ventas_model->getCajaApertura();
 		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();

@@ -343,7 +343,7 @@ function editPventa()
 
     $array = [];
     if($talonario->docclidni_talonario==1){
-      $array[] = 4;
+      $array[] = 1;
     }
     if($talonario->doccliruc_talonario==1){
       $array[] = 6;
