@@ -53,7 +53,7 @@ class Facturacion_model extends CI_Model {
 					$imprimir = base_url('administrador/regventas/imprimirVenta/'.$q->archivo_xml);
 				}
 				if(in_array($q->tipo_documento,['NOTA DE CRÉDITO','NOTA DE DÉBITO'])){
-					$imprimir = base_url('administrador/regdocumentoelectronico/imprimirCredito/'.$q->cod_vent);
+					$imprimir = base_url('administrador/regdocumentoelectronico/imprimirCredito/'.$q->id_impresion);
 				}
 
 				$check = '
