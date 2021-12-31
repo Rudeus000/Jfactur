@@ -262,8 +262,13 @@ class Ventas_model extends CI_Model {
       {
         $punto = $this->db->from('tb_puntoventa')
         ->where('cod_puntoventa',$this->session->userdata('puntoventa'))
-        ->get()->row();
+        ->get();
         
+        if($punto->num_rows() == 0){
+          return null;
+        }
+        
+        $punto = $punto->row();
         if(($punto->talonario_defecto=='' OR $punto->talonario_defecto==null) AND ($punto->cliente_defecto=='' OR $punto->cliente_defecto==null)){
           return null;
         }

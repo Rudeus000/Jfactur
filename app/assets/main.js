@@ -6803,6 +6803,7 @@ function guardarProducto()
 	});
 
 	$('#FormVentaAgregar select[name=tipoPedido]').change(function (event) {
+		setCliente();
 		getVentasNumeracion();
 	});
 
@@ -6810,10 +6811,9 @@ function guardarProducto()
 		getVentasNumeracion();
 	}
 
-	function getVentasNumeracion()
+	function setCliente()
 	{
 		var tipoPedido = $('#FormVentaAgregar select[name=tipoPedido]');
-		var id = $(tipoPedido).val();
 		var dni = $(tipoPedido).find('option:selected').data('dni');
 		var ruc = $(tipoPedido).find('option:selected').data('ruc');
 		
@@ -6846,6 +6846,16 @@ function guardarProducto()
 			$('#FormVentaEditarCliente #idtelefono').prop('disabled',false).show();					
 		}
 
+		$('#ClienteVentaAutocomplete').val('');
+		$("#RUCAutocomplete").val('');
+		$("#DireccionCliente").val('');
+		$('input[name=cliente]').val('');
+		$('input[name=precioCliente]').val('');
+	}
+
+	function getVentasNumeracion()
+	{
+		var id = $('#FormVentaAgregar select[name=tipoPedido]').val();
 		$('#RUCAutocomplete').prop('disabled',true);
 		$('#ClienteVentaAutocomplete').prop('disabled',true);
 
@@ -7698,8 +7708,6 @@ function guardarProducto()
 			}
 		},
 		"columns": [
-			{ "orderable": false },
-			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
