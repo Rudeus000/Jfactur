@@ -173,7 +173,7 @@ $objPHPExcel->getActiveSheet()
 $row++;
 foreach ($datos as $d) {
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(1,$row,$d->fecha_vent)
+	->setCellValueByColumnAndRow(1,$row,$d->fecha)
 	->getStyleByColumnAndRow(1,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
@@ -185,19 +185,19 @@ foreach ($datos as $d) {
 	->getStyleByColumnAndRow(3,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(4,$row,$d->subtotal_vent)
+	->setCellValueByColumnAndRow(4,$row,$d->subtotal)
 	->getStyleByColumnAndRow(4,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(5,$row,$d->igv_vent)
+	->setCellValueByColumnAndRow(5,$row,$d->igv)
 	->getStyleByColumnAndRow(5,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(6,$row,$d->total_vent)
+	->setCellValueByColumnAndRow(6,$row,$d->total)
 	->getStyleByColumnAndRow(6,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(7,$row,$d->nom_tipdocumento.'-'.$d->serie.'-'.$d->numero_vent)
+	->setCellValueByColumnAndRow(7,$row,$d->tipo_documento.'-'.$d->serie.'-'.$d->numero)
 	->getStyleByColumnAndRow(7,$row)
 	->applyFromArray($styleNormal);	
 	$objPHPExcel->getActiveSheet()

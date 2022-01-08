@@ -15,8 +15,8 @@ class Regcomprobante extends CI_Controller {
 	public function index()
 	{
 		$data['empresa'] = $this->empresa_model->getEmpresa();
-		$this->load->view('layouts/header');
-		$this->load->view('layouts/aside');
+		$this->load->view('layouts/comprobante');
+		// $this->load->view('layouts/aside');
 		$this->load->view('admin/comprobantes/panel',$data);    
 		$this->load->view('layouts/footer');
 	}
@@ -27,9 +27,9 @@ class Regcomprobante extends CI_Controller {
 		$this->load->helper('string');
 		$vals = array(
 				'word' => $this->stringRandom(),
-				'img_path' => APP_PATH.'./assets/images/captcha/',
+				'img_path' => APP_PATH.'/assets/images/captcha/',
 				'img_url' => base_url_app().'assets/images/captcha/',
-				'font_path' => FCPATH.'/assets/fonts/big_noodle_titling.ttf',
+				'font_path' => APP_PATH.'/assets/fonts/big_noodle_titling.ttf',
 				'img_width' => 180,
 				'img_height' => 50,
 				'expiration' => (60 * 30),

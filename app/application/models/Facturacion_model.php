@@ -44,9 +44,13 @@ class Facturacion_model extends CI_Model {
 			}
 
 			$check = '';
-			$label = '';
+			$label = '';		
+			
 			if (!is_null($q->cod_doc) OR in_array($q->tipo_documento,['NOTA DE CRÉDITO','NOTA DE DÉBITO']) ) {
 				$label = '<label class="label label-success">Aceptada</label>';
+				if($q->estado_vent=='A'){
+					$label = '<label class="label label-danger">Anulado</label>';
+				}
 				
 				$imprimir = '';
 				if(in_array($q->tipo_documento,['FACTURA ELECTRONICA','BOLETA ELECTRONICA'])){
@@ -61,6 +65,7 @@ class Facturacion_model extends CI_Model {
 				<a target="_blank" href="'.base_url_app('facturacion/'.$q->ruta_xml.'/'.$q->archivo_xml.'.XML').'" class="btn btn-sm btn-primary">XML</a><a target="_blank" href="'.base_url_app('facturacion/'.$q->ruta_xml.'/R-'.$q->archivo_xml.'.XML').'" class="btn btn-sm btn-primary">CDR</a>';
 				$limite = '<label class="label label-primary">Procesado</label>';
 			}else{
+			
 				if($dias >= 0 AND $dias <= 7){
 
 					$label = '<label class="label label-info">Pendiente</label>';
@@ -105,22 +110,37 @@ class Facturacion_model extends CI_Model {
 
   	function getCeprocesadosExcel($data)
 	{
-		$this->db->from('tb_venta');
-		$this->db->select('tb_venta.cod_vent,tb_facturacion.cod_fac,estado_fac,doc_cliente,nomb_cliente,serie,numero_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,nom_tipdocumento,rutaxml_vent,archivoxml_vent,estado_vent');
-		$this->db->join('tb_facturacion','tb_venta.cod_vent = tb_facturacion.cod_vent','left') ;
-	   	$this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
-	   	$this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
-	    $this->db->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu');
-	    $this->db->where('fecha_vent >= ',$data['desde']);
-		$this->db->where('fecha_vent <=',$data['hasta']);
-		$this->db->where('siglas_talonario','FC');
+	// 	$this->db->from('v_documentos_electronicos');
+	// 	$this->db->where('fecha >= ',$data['desde']);
+	// 	$this->db->where('fecha <=',$data['hasta']);
+	//   if ($data['length']!=-1) {
+	//     $this->db->limit($data['length'],$data['start']);
+	//   }
+	//   if (isset($data['orderCampo'])) {
+	//     $this->db->order_by($data['orderCampo'],$data['orderDireccion']);
+	//   }
 
-		  // if ($data['length']!=-1) {
-		  //   $this->db->limit($data['length'],$data['start']);
-		  // }
-		  // if (isset($data['orderCampo'])) {
-		  //   $this->db->order_by($data['orderCampo'],$data['orderDireccion']);
-		  // }
+		// $query = $this->db->get();
+   		// $queryLike = $this->db->get();
+		$this->db->from('v_documentos_electronicos');
+		$this->db->select('id,doc_cliente,cod_vent,estado_doc,nomb_cliente,serie,numero,fecha,subtotal,igv,total,tipo_documento,ruta_xml,archivo_xml,cod_doc,estado_vent');
+		// $this->db->join('tb_facturacion','tb_venta.cod_vent = tb_facturacion.cod_vent','left') ;
+	   	// $this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
+	   	// $this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
+	    // $this->db->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu');
+	    // $this->db->where('fecha_vent >= ',$data['desde']);
+		// $this->db->where('fecha_vent <=',$data['hasta']);
+		// $this->db->where('siglas_talonario','FC');
+
+		$this->db->where('fecha >= ',$data['desde']);
+		$this->db->where('fecha <=',$data['hasta']);
+	//   if ($data['length']!=-1) {
+	//     $this->db->limit($data['length'],$data['start']);
+	//   }
+	//   if (isset($data['orderCampo'])) {
+	//     $this->db->order_by($data['orderCampo'],$data['orderDireccion']);
+	//   }
+
 		  
 	   return $this->db->get()->result();
 		

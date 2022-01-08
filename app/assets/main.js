@@ -11648,11 +11648,10 @@ if($('#TableComprobantes')){
 						<tr>
 							<td>${num}</td>
 							<td>${(value.cod_producto != null)?value.cod_producto:value.cod_servicio}</td>
-							<td>${value.producto_ventdet}</td>
-							<td>${value.producto_isdn}</td>
+							<td>${value.producto_ventdet}</td>						
 							<td>${value.abreviatura_unid}</td>
 							<td>${value.cant_ventdet}</td>
-							<td class="text-right">${round(value.precunit_ventdet - value.igv_ventdet,2)}</td>
+							<td class="text-right">${value.precunit_ventdet}</td>
 							<td class="text-right">${value.precunit_ventdet}</td>
 							<td class="text-right">${value.igv_ventdet}</td>
 							<td class="text-right">${value.descuento_ventdet}</td>
