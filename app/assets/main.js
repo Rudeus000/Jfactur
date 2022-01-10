@@ -6741,7 +6741,7 @@ function guardarProducto()
 					$('#select2-series').select2({
 						data:res	
 					});
-					// $('#select2-series').prop('disabled',false);
+					$('#select2-series').prop('disabled',false);
 
 				if(res.length == 0){
 					$('input[name=serieCheckProducto]').prop('checked', false);
@@ -6749,10 +6749,10 @@ function guardarProducto()
 					$('input[name=cantidadProducto]').prop('disabled', false);
 					$('#select2-series').prop('disabled', true);
 				}else{
-					//$('input[name=serieCheckProducto]').prop('checked', true);
+					$('input[name=serieCheckProducto]').prop('checked', true);
 					$('input[name=serieCheckProducto]').prop('disabled', false);
-					//$('input[name=cantidadProducto]').prop('disabled', true);
-					//$('#select2-series').prop('disabled', false);
+					$('input[name=cantidadProducto]').prop('disabled', true);
+					$('#select2-series').prop('disabled', false);
 				}
 				},
 				"JSON"

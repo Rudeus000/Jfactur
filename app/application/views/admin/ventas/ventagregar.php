@@ -304,7 +304,7 @@
                       <input type="text" name="pesoProducto" class="form-control">
                     </div>
                   </div>
-                  <div class="col-md-1">
+                  <div class="col-md-2">
                     <div class="form-group">
                       <label class="control-label" id="precio_u">Precio Unit.</label>
                       <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
