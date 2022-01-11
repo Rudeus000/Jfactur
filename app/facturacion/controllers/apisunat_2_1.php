@@ -298,7 +298,7 @@ class Apisunat {
             <cac:PartyLegalEntity>
 <cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
-                    <cbc:AddressTypeCode>0001</cbc:AddressTypeCode>
+                    <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                 </cac:RegistrationAddress>
             </cac:PartyLegalEntity>
         </cac:Party>
@@ -447,7 +447,7 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
-                    <cbc:AddressTypeCode>0001</cbc:AddressTypeCode>
+                    <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                 </cac:RegistrationAddress>
             </cac:PartyLegalEntity>
         </cac:Party>
