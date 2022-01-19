@@ -1,4 +1,6 @@
 app/system/cache/
+app/vendor/
+app/composer.lock
 
 app/facturacion/archivos_xml_sunat/cpe_xml/beta/20574694044/*
 !app/facturacion/archivos_xml_sunat/cpe_xml/beta/20574694044/*.txt
