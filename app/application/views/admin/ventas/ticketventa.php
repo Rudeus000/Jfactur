@@ -41,7 +41,20 @@
 			</tr>
 		</thead>
 		<tbody>
+			<?php
+				$gravada = 0;
+				$exonerada = 0;
+				$descuentos = 0;
+			?>
 			<?php foreach ($ventas->detalle as $dt): ?>
+			<?php
+				if($dt->igv_ventdet > 0){
+					$gravada += $dt->prec_ventdet;
+				}else{
+					$exonerada += $dt->prec_ventdet;
+				}
+				$descuentos += $dt->descuento_ventdet * $dt->cant_ventdet;
+			?>
 			<tr>
 				<td><?= character_limiter($dt->producto_ventdet,38,'...')?> <?= $dt->producto_isdn ?></td>				
 				<td class="text-center"><?= $dt->cant_ventdet ?></td>
@@ -63,20 +76,32 @@
 
 <div style="font-size:11px">
 	<div class="w100">
-		<div class="w1-3"><b>Subtotal:</b></div>
+		<div class="w1-3"><b>Gravada:</b></div>
 		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right" ><?= $ventas->subtotal_vent ?></div>
+		<div class="w1-3 text-right"><?= $gravada ?></div>
+	</div>
+	<div class="w100">
+		<div class="w1-3"><b>Exonerada:</b></div>
+		<div class="w1-3 text-right">S/</div>
+		<div class="w1-3 text-right" ><?= number_format($exonerada,2) ?></div>
+	</div>
+	<div class="w100">
+		<div class="w1-3"><b>Descuentos(-):</b></div>
+		<div class="w1-3 text-right">S/</div>
+		<div class="w1-3 text-right" ><?= number_format($descuentos,2) ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>IGV:</b></div>
 		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right"><?= $ventas->igv_vent ?></div>
+		<div class="w1-3 text-right" ><?= $ventas->igv_vent ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>Total:</b></div>
 		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right"><?= $ventas->total_vent ?></div>
+		<div class="w1-3 text-right" ><?= $ventas->total_vent ?></div>
 	</div>
+
+
 	<div class="w100">
 		<div class="w1-3"><b>Tipo de venta:</b></div>
 		<div class="w2-3 text-right"><?= ($ventas->tipopago=='CREDITO')?'Crédito':'Contado' ?></div>

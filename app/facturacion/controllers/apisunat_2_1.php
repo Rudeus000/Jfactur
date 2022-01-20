@@ -152,13 +152,7 @@ class Apisunat {
 		</cac:Party>
 	</cac:AccountingCustomerParty>
 	'.$formaPago.'
-	<cac:AllowanceCharge>
-		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
-		<cbc:AllowanceChargeReasonCode listName="Cargo/descuento" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">02</cbc:AllowanceChargeReasonCode>
-		<cbc:MultiplierFactorNumeric>0.00</cbc:MultiplierFactorNumeric>
-		<cbc:Amount currencyID="' . $cabecera["COD_MONEDA"] . '">0.00</cbc:Amount>
-		<cbc:BaseAmount currencyID="' . $cabecera["COD_MONEDA"] . '">0.00</cbc:BaseAmount>
-	</cac:AllowanceCharge> 
+	
 	<cac:TaxTotal>
 		<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
 		<cac:TaxSubtotal>
@@ -169,6 +163,18 @@ class Apisunat {
 				<cac:TaxScheme>
 					<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
 					<cbc:Name>IGV</cbc:Name>
+					<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+        <cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">'.$cabecera["TOTAL_EXONERADAS"].'</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">0.00</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
+				<cac:TaxScheme>
+					<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">9997</cbc:ID>
+					<cbc:Name>EXO</cbc:Name>
 					<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
 				</cac:TaxScheme>
 			</cac:TaxCategory>
@@ -203,11 +209,11 @@ class Apisunat {
 				<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIGV"] . '</cbc:TaxAmount>
 				<cac:TaxCategory>
 					<cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">S</cbc:ID>
-					<cbc:Percent>' . $cabecera["POR_IGV"] . '</cbc:Percent>
+					<cbc:Percent>' . $detalle[$i]["MONTO_IGV"] . '</cbc:Percent>
 					<cbc:TaxExemptionReasonCode listName="Afectacion del IGV" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07">' . $detalle[$i]["txtCOD_TIPO_OPERACION"] . '</cbc:TaxExemptionReasonCode>
 					<cac:TaxScheme>
-						<cbc:ID schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05" schemeName="Codigo de tributos" schemeAgencyName="PE:SUNAT">1000</cbc:ID>
-						<cbc:Name>IGV</cbc:Name>
+						<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">'.$detalle[$i]['TIPO_IGV'].'</cbc:ID>
+						<cbc:Name>'.$detalle[$i]['IGV_EXO'].'</cbc:Name>
 						<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
 					</cac:TaxScheme>
 				</cac:TaxCategory>

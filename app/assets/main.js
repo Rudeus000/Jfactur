@@ -6940,7 +6940,7 @@ function guardarProducto()
 
 			var monto = parseFloat($('input[name=monto]').val());
 			var saldo = parseFloat($('input[name=saldo]').val());
-			var total = parseFloat($('#VentaTotal').text());
+			var total = parseFloat($('#venta-total').text());
 			var montoRecibido = parseFloat($('input[name=montoRecibido]').val());
 			if ((monto + saldo) != total) {
 				Swal.fire({
@@ -7084,6 +7084,7 @@ function guardarProducto()
 						<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
 						<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
 						<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+						<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
             <td class="details-control">
               ${(seriesCheckBox)?'<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>':''}
             </td>
@@ -7279,9 +7280,21 @@ function guardarProducto()
 	function calcularTotalVenta() {
 		var total = 0;
 		var igv = 18;
-		var igv_porcentaje = (igv / 100);
+		var igv_porc = (igv / 100);
+		var igv_porcentaje = 0;
+
+		var gravadas = 0;
+		var exoneradas = 0;
+		var igv_acumulado = 0;
+		var descuento_acumulado = 0;
 		if ($('#TableVentaProductos tbody .fila-producto').length > 0){
 			$('#TableVentaProductos tbody .fila-producto').each(function () {
+				let tipo_igv = $(this).find('.tipo_igv').val();
+				if(tipo_igv=='4'){
+					igv_porcentaje = 0;
+				}else{
+					igv_porcentaje = igv_porc;
+				}
 				var cant = parseFloat($(this).find('.cant').val());
 				var tipo = $(this).find('.tipo').val();
 				if (isNaN(cant)) {
@@ -7294,12 +7307,20 @@ function guardarProducto()
 					descuento = 0;
 				}
 
-					if(tipo=='V'){
+				if(tipo=='V'){
 					prec -= descuento;
+					descuento_acumulado += descuento * cant;
 					var subTotalProd = round((cant * prec), 2);
+					
 					var igvProd = subTotalProd / (igv_porcentaje + 1);
 					igvProd = round(igvProd * igv_porcentaje, 2);
+					igv_acumulado += parseFloat(igvProd);
 					let valorVentaProd = round(subTotalProd - igvProd, 2);
+					if(tipo_igv=='4'){
+						exoneradas += parseFloat(valorVentaProd);
+					}else{
+						gravadas += parseFloat(valorVentaProd);
+					}
 					$(this).find('td').eq(9).html(igvProd);
 					$(this).find('td').eq(10).html(valorVentaProd);
 	
@@ -7309,14 +7330,13 @@ function guardarProducto()
 			});
 		}
 
-		var IGV = total / (igv_porcentaje + 1);
-		IGV = round(IGV * igv_porcentaje, 2);
 
-		let valorVenta = round(total - IGV, 2);
-
-		$('#VentaValorVenta').html(valorVenta);
-		$('#VentaIGV').html(IGV);
-		$('#VentaTotal').html(round(total, 2));
+		$('#venta-gravadas').html(round(gravadas,2));
+		$('#venta-exoneradas').html(round(exoneradas,2));
+		$('#venta-descuentos').html(round(descuento_acumulado,2));
+		$('#venta-igv').html(igv_acumulado);
+		$('#venta-total').html(round(total, 2));
+		
 		$('input[name=monto]').val(round(total, 2));
 		$('input[name=total]').val(round(total, 2));
 		$('input[name=montoRecibido]').val(round(total, 2));

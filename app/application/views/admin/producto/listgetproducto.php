@@ -420,7 +420,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Tipo IGV:<span class="text-danger"> *</label>
-                                <select class="form-control select2 select2-hidden-accessible input-sm" name="parametros">
+                                <select class="form-control input-sm" name="parametros">
                                     <option value="">--Selecciona--</option>
                                     <?php foreach ($parametros as $pr) : ?>
                                         <option value="<?= $pr->cod_parametros ?>"><?= $pr->nom_paramt ?></option>
@@ -655,7 +655,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Tipo IGV:<span class="text-danger"> *</label>
-                                <select class="form-control select2 select2-hidden-accessible input-sm" name="parametros">
+                                <select class="form-control input-sm" name="parametros">
 
                                     <?php foreach ($parametros as $pr) : ?>
                                         <option value="<?= $pr->cod_parametros ?>"><?= $pr->nom_paramt ?></option>

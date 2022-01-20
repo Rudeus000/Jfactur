@@ -75,7 +75,11 @@
  	<tbody>
 		<?php 
 		$item = 1;
-		$sumDescuento = 0;
+		
+		$gravada = 0;
+		$exonerada = 0;
+		$descuentos = 0;
+
 		?>
 		<?php foreach ($ventas->detalle as $dt): ?>
 		<tr>
@@ -89,7 +93,14 @@
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V')?$dt->subtotal_ventdet:'' ?></td>  
 		</tr>
 		<?php 
-			$sumDescuento += $dt->descuento_ventdet * $dt->cant_ventdet;
+
+			if($dt->igv_ventdet > 0){
+				$gravada += $dt->prec_ventdet;
+			}else{
+				$exonerada += $dt->prec_ventdet;
+			}
+			$descuentos += $dt->descuento_ventdet * $dt->cant_ventdet;
+			
 			$item++;
 		?>
 		<?php endforeach ?>
@@ -99,24 +110,27 @@
 </div>
 
 <div class="w100">
-
 	<div class="w30" style="float: right; padding: 5px;border:2px solid #070707;">
 		<div class="w100">
-			<div class="w50"><b>Valor Venta</b></div>
-			<div class="w50" style="text-align:right"><?= $ventas->subtotal_vent ?></div>
+			<div class="w50"><b>Gravada</b></div>
+			<div class="w50" style="text-align:right"><?= number_format($gravada,2) ?></div>
 		</div>
 		<div class="w100">
-			<div class="w50"><b>IGV (18%)</b></div>
+			<div class="w50"><b>Exonerada</b></div>
+			<div class="w50" style="text-align:right"><?= number_format($exonerada,2) ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>Descuentos (-)</b></div>
+			<div class="w50" style="text-align:right"><?= number_format($descuentos,2) ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>IGV</b></div>
 			<div class="w50" style="text-align:right"><?= $ventas->igv_vent ?></div>
-		</div>
-		<div class="w100">
-			<div class="w50"><b>Descuento</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($sumDescuento, 2, '.', '') ?></div>
 		</div>
 		<div class="w100" style="border-bottom:1px solid black;margin:5px 0">
 		</div>
 		<div class="w100">
-			<div class="w50"><b>Importe Total</b></div>
+			<div class="w50"><b>TOTAL</b></div>
 			<div class="w50" style="text-align:right"><?= $ventas->total_vent ?></div>
 		</div>
 	</div>

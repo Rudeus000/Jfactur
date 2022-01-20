@@ -380,20 +380,32 @@
                 <tfoot>
                   <tr>
                     <td colspan="10"></td>
-                    <th class="bg-danger text-white">Valor Venta</th>
-                    <td class="bg-danger text-white" id="VentaValorVenta">00.00</td>
+                    <th class="bg-danger text-white" >Gravada</th>
+                    <td class="bg-danger text-white" id="venta-gravadas">00.00</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="10"></td>
+                    <th class="bg-danger text-white">Exonerada</th>
+                    <td class="bg-danger text-white" id="venta-exoneradas">00.00</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="10"></td>
+                    <th class="bg-danger text-white">Descuentos</th>
+                    <td class="bg-danger text-white" id="venta-descuentos">00.00</td>
                     <td></td>
                   </tr>
                   <tr>
                     <td colspan="10"></td>
                     <th class="bg-danger text-white">IGV</th>
-                    <td class="bg-danger text-white" id="VentaIGV">00.00</td>
+                    <td class="bg-danger text-white" id="venta-igv">00.00</td>
                     <td></td>
                   </tr>
                   <tr>
                     <td colspan="10"></td>
-                    <th class="bg-danger text-white" >Total</th>
-                    <td class="bg-danger text-white" id="VentaTotal">00.00</td>
+                    <th class="bg-danger text-white">Total</th>
+                    <td class="bg-danger text-white" id="venta-total">00.00</td>
                     <td></td>
                   </tr>
                 </tfoot>
@@ -480,7 +492,7 @@
               <div class="col-md-12">
                 <div class="form-group float-right">                  
                   <a href="<?= base_url('administrador/regventas') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
-                  <button type="submit" form="FormVentaAgregar" class="btn btn-success " <?= ($apertura==false)?'disabled':'' ?>><i class="fa fa-save m-r-5"></i>procesar</button>
+                  <button type="submit" form="FormVentaAgregar" class="btn btn-success " <?= ($apertura==false)?'disabled':'' ?>><i class="fa fa-save m-r-5"></i>Procesar</button>
                 </div>
               </div>
             </div>

@@ -222,6 +222,7 @@ class Regventas extends CI_Controller {
 		->get()->result_array();
 
 		$merge = array_merge($resultProducto,$resultServicio);
+		header('content-type: application/json; charset=utf-8');
 		echo json_encode($merge);
 	}
 
@@ -375,6 +376,12 @@ class Regventas extends CI_Controller {
 		echo json_encode($cuotas);
 	}
 
+	public function prueba()
+	{
+		$data['hola'] = 'como estas';
+		var_dump($data);
+	}
+
 	public function agregarVenta()
 	{
 		$apertura = $this->ventas_model->getCajaApertura();
@@ -398,8 +405,8 @@ class Regventas extends CI_Controller {
 		$data['cambio_vent'] = $this->input->post('tipoCambio');
 		$data['monto_vent'] = $this->input->post('monto');
 		$data['pago_vent'] = $this->input->post('pago');
-		$data['igv_vent'] = ($this->input->post('total') / 1.18) * 0.18;
-		$data['subtotal_vent'] = $this->input->post('total') - $data['igv_vent'];
+		$data['igv_vent'] = null;
+		$data['subtotal_vent'] = null;
 		$data['total_vent'] = $this->input->post('total');
 		$data['montorecibido_vent'] = $this->input->post('montoRecibido');
 		$data['vuelto_vent'] = $this->input->post('vuelto');
@@ -450,7 +457,9 @@ class Regventas extends CI_Controller {
 			$this->guardarCuotas($insert);
 
 			$this->aumentarNumeracion($data['cod_talonario'],$data['numero_vent']);
-		foreach ($_POST['id_prod'] as $key => $value) {
+			
+			$igv_acumula = 0;
+			foreach ($_POST['id_prod'] as $key => $value) {
 				$pos = strpos($value, 'ser-');
 				if ($pos !== false) {
 					$precio_unitario = $_POST['prec_prod'][$value];
@@ -484,7 +493,12 @@ class Regventas extends CI_Controller {
 					$descuento = $_POST['desc_prod'][$key];
 				}
 				$detalle['subtotal_ventdet'] = (($detalle['precunit_ventdet'] - $descuento) * $detalle['cant_ventdet']);
-				$detalle['igv_ventdet'] = (($detalle['subtotal_ventdet'])  / 1.18) * 0.18;
+				if($_POST['tipo_igv'][$key]=='4'){
+					$detalle['igv_ventdet'] = 0;
+				}else{
+					$detalle['igv_ventdet'] = (($detalle['subtotal_ventdet'])  / 1.18) * 0.18;
+					$igv_acumula += $detalle['igv_ventdet'];
+				}
 				$detalle['prec_ventdet'] = $detalle['subtotal_ventdet'] - $detalle['igv_ventdet'];
 				$detalle['descuento_ventdet'] = $descuento;
 				$detalle['estado_ventdet'] = 'S';
@@ -536,8 +550,11 @@ class Regventas extends CI_Controller {
 					}
 				}
 			}
-			//var_dump ($_POST);
-			//exit();
+
+			$this->modelgeneral->editRegist('tb_venta',['cod_vent'=> $insert],[
+				'igv_vent' => $igv_acumula,
+				'subtotal_vent' => $this->input->post('total') - $igv_acumula
+			]);
 			$resp['success'] = true;
 			$resp['id'] = $insert;
 			$resp['printType'] = $printType[0]->type_formt;
@@ -917,7 +934,7 @@ class Regventas extends CI_Controller {
 
 	}
 
-	private function xmlHash($id)
+	public function xmlHash($id)
 	{
 		$res = $this->ventas_model->getVenta($id);
 		
@@ -931,9 +948,9 @@ class Regventas extends CI_Controller {
 			//Cabecera del documento
 			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
 			"tipo_operacion"				=> "0101", //Venta interna pag 28
-			"total_gravadas"               	=> strval($res->subtotal_vent),
+			//"total_gravadas"               	=> strval($res->subtotal_vent),
 			"total_inafecta"                => "0",
-			"total_exoneradas"				=> "0",
+			//"total_exoneradas"				=> "0",
 			"total_gratuitas"			    => "0",
 			"total_exportacion"		    	=> "0",
 			"total_descuento"	    		=> "0",
@@ -975,6 +992,9 @@ class Regventas extends CI_Controller {
 
 		$detalle = [];
 		$n = 1;
+
+		$total_gravadas = 0;
+		$total_exoneradas = 0;
 		foreach ($res->detalle as $d) {
 				if($d->tipo_ventdet=='V'){
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
@@ -988,18 +1008,30 @@ class Regventas extends CI_Controller {
 				$det['txtIGV'] = $d->igv_ventdet;
 				$det['txtISC'] = '0';
 				$det['txtIMPORTE_DET'] = (string)$d->prec_ventdet;
-				$det['txtCOD_TIPO_OPERACION'] = '10';
+				$det['txtCOD_TIPO_OPERACION'] = ($d->igv_ventdet > 0)?'10':'20';
 				$det['txtCODIGO_DET'] = (string)(!is_null($d->cod_producto))?$d->cod_producto:$d->cod_servicio;
 				$det['txtDESCRIPCION_DET'] = (string)$d->producto_ventdet;
 				$precioSinIGV = $precio - ($precio / 1.18) * 0.18;
-				$det['txtPRECIO_SIN_IGV_DET'] = (string)round($precioSinIGV,4);
+				$det['txtPRECIO_SIN_IGV_DET'] = (string)($d->igv_ventdet > 0)?round($precioSinIGV,4):$precio;
 				$det['txtCODIGO_PROD_SUNAT'] = '23251602';
+
+				$det['TIPO_IGV'] = ($d->igv_ventdet > 0)?'1000':'9997';
+				$det['MONTO_IGV'] = ($d->igv_ventdet > 0)?'18.00':'0';
+				$det['IGV_EXO'] = ($d->igv_ventdet > 0)?'IGV':'EXO';
 				$detalle[] = $det;
+
+				if($d->igv_ventdet > 0){
+					$total_gravadas = +$d->prec_ventdet;
+				}else{
+					$total_exoneradas += $d->prec_ventdet;
+				}
 				$n++;
 			}
 		}
 
 		$data['detalle'] = $detalle;
+		$data['total_gravadas'] = $total_gravadas;
+		$data['total_exoneradas'] = $total_exoneradas;
 
 
 		//Invocamos el servicio
@@ -1024,8 +1056,10 @@ class Regventas extends CI_Controller {
 		$respuesta  = curl_exec($ch);
 
 		curl_close($ch);
+
 		$response = json_decode($respuesta,true);
 		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		
 		
 		if($response['respuesta']=='ok'){
 			$this->db->where('cod_vent',$id)
