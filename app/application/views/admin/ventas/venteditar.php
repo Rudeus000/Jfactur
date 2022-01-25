@@ -262,7 +262,7 @@
                   <tr>
                     <td colspan="9"></td>
                     <th>Total</th>
-                    <td id="VentaTotal"><?= $venta->total_vent ?></td>
+                    <td id="venta-total"><?= $venta->total_vent ?></td>
                   </tr>
                 </tfoot>
               </table>

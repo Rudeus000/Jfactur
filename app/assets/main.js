@@ -5719,7 +5719,7 @@ function guardarProducto()
 	});
 
 	$('#FormProcesarCotizacion select[name=pago]').change(function (event) {
-		var total = parseFloat($('#VentaTotal').html());
+		var total = parseFloat($('#venta-total').html());
 		if ($(this).val() == 'CRE') {
 			$('input[name=dias]').prop('disabled', false).parent().parent().show();
 			$('input[name=fecVenc]').parent().parent().show();
@@ -5772,7 +5772,7 @@ function guardarProducto()
 
 		$('#VentaValorVenta').html(valorVenta);
 		$('#VentaIGV').html(IGV);
-		$('#VentaTotal').html(round(total, 2));
+		$('#venta-total').html(round(total, 2));
 		$('input[name=monto]').val(round(total, 2));
 		$('input[name=total]').val(round(total, 2));
 
@@ -5791,7 +5791,7 @@ function guardarProducto()
 	});
 
 	$('#FormProcesarCotizacion input[name=monto]').focusout(function (event) {
-		var total = parseFloat($('#VentaTotal').text());
+		var total = parseFloat($('#venta-total').text());
 		var monto = parseFloat($('input[name=monto]').val());
 		if (monto > total) {
 			$(this).val(total);
@@ -5854,7 +5854,7 @@ function guardarProducto()
 
 			var monto = parseFloat($('input[name=monto]').val());
 			var saldo = parseFloat($('input[name=saldo]').val());
-			var total = parseFloat($('#VentaTotal').text());
+			var total = parseFloat($('#venta-total').text());
 			var montoRecibido = parseFloat($('input[name=montoRecibido]').val());
 			if ((monto + saldo) != total) {
 				Swal.fire({
@@ -5895,7 +5895,7 @@ function guardarProducto()
 						$('#TableProcesarCotizacionProductos tbody').remove();
 						$('#VentaValorVenta').html('00.00');
 						$('#VentaIGV').html('00.00');
-						$('#VentaTotal').html('00.00');
+						$('#venta-total').html('00.00');
 
 						$('#CotizacionProcesarContenedorGuardar').find('button:submit').prop('disabled', false).html('Guardar');
 						$('#VentaImprimirA4').attr('href', path + 'administrador/regventas/imprimirVenta/' + resp.xml.archivo);
@@ -6797,7 +6797,7 @@ function guardarProducto()
 		$('#TableVentaProductos tbody').empty();
 		$('#VentaValorVenta').html('00.00');
 		$('#VentaIGV').html('00.00');
-		$('#VentaTotal').html('00.00');
+		$('#venta-total').html('00.00');
 		$('input[name=monto]').val(0);
 		$('input[name=saldo]').val(0);
 	});
@@ -6868,7 +6868,7 @@ function guardarProducto()
 	}
 
 	function verificarCoberturaCliente(callback) {
-		var total = parseFloat($('#VentaTotal').html());
+		var total = parseFloat($('#venta-total').html());
 		var monto = $('#FormVentaAgregar input[name=monto]').val();
 		var cliente = $('#FormVentaAgregar input[name=cliente]').val();
 		if (cliente == '') {
@@ -6890,7 +6890,7 @@ function guardarProducto()
 						text: resp.mensaje,
 						type: "error"
 					});
-					var total = parseFloat($('#VentaTotal').html());
+					var total = parseFloat($('#venta-total').html());
 					$('select[name=pago]').val('CO');
 					$('input[name=dias]').prop('disabled', true).parent().parent().hide();
 					$('input[name=fecVenc]').parent().parent().hide();
@@ -6981,7 +6981,7 @@ function guardarProducto()
 						$('#TableVentaProductos tbody').remove();
 						$('#VentaValorVenta').html('00.00');
 						$('#VentaIGV').html('00.00');
-						$('#VentaTotal').html('00.00');
+						$('#venta-total').html('00.00');
 
 						$('#VentasContenedorGuardar').find('button:submit').prop('disabled', false).html('Guardar');
 						$('#VentaImprimirA4').attr('href', path + 'administrador/regventas/imprimirVenta/' + resp.xml.archivo);						
@@ -7365,7 +7365,7 @@ function guardarProducto()
 
 
 	$('.FormVenta input[name=monto]').focusout(function (event) {
-		var total = parseFloat($('#VentaTotal').text());
+		var total = parseFloat($('#venta-total').text());
 		var monto = parseFloat($('input[name=monto]').val());
 		if (monto > total) {
 			$(this).val(total);
@@ -7389,7 +7389,7 @@ function guardarProducto()
 	});
 
 	$('.FormVenta select[name=pago]').change(function (event) {
-		var total = parseFloat($('#VentaTotal').html());
+		var total = parseFloat($('#venta-total').html());
 		if ($(this).val() == 'CRE') {
 			$('#pagocredito').show();
 			$('.pagocredito-dias').show();
@@ -7421,7 +7421,7 @@ function guardarProducto()
 	});
 
 	$('#calcular-cuotas').click(function(){
-		let total = parseFloat($('#VentaTotal').html());
+		let total = parseFloat($('#venta-total').html());
 		if(total==0){
 			Swal.fire({
 				title: "Error",
@@ -7472,7 +7472,7 @@ function guardarProducto()
 		$('button[form="FormVentaAgregar"]').prop('disabled',false);
 
 		var suma = 0;
-		var total = parseFloat($('#VentaTotal').html());
+		var total = parseFloat($('#venta-total').html());
 		$.each($('.cuota-monto'), function(index, val) {
 			suma += parseFloat($(this).val());
 		});

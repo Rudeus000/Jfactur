@@ -432,7 +432,7 @@
 								<tr>
 									<td colspan="9"></td>
 									<th>Total</th>
-									<td id="VentaTotal">00.00</td>
+									<td id="venta-total">00.00</td>
 									<td></td>
 								</tr>
 							</tfoot>
