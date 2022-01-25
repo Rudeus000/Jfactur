@@ -313,7 +313,7 @@
 <div id="ModalCumpleanos" class="modal fade" id="exampleModalCenter" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form id="FormCumpleanos" action="<?= base_url('mantenimiento/paciente/cumpleanos') ?>" method="post" autocomplete="off">
+      <form id="FormCumpleanos" action="<?= base_url('administrador/regcliente/cumpleanos') ?>" method="post" autocomplete="off">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title"><i class="fa fa-calendar"></i> Cumpleaños</h4>

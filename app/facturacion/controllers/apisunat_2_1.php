@@ -304,8 +304,16 @@ class Apisunat {
             <cac:PartyLegalEntity>
 <cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
-                    <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
+                <cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">' . $cabecera["CODIGO_UBIGEO_EMPRESA"] . '</cbc:ID>
+                <cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">' .$cabecera['CODIGO_SUNAT']. '</cbc:AddressTypeCode>
+                <cac:AddressLine>
+                    <cbc:Line><![CDATA[' . $cabecera["DIRECCION_EMPRESA"] . ']]></cbc:Line>
+                </cac:AddressLine>
+                <cac:Country>
+                    <cbc:IdentificationCode listID="ISO 3166-1" listAgencyName="United Nations Economic Commission for Europe" listName="Country">' . $cabecera["CODIGO_PAIS_EMPRESA"] . '</cbc:IdentificationCode>
+                </cac:Country>                  
                 </cac:RegistrationAddress>
+               
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
