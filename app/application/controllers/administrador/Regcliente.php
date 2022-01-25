@@ -212,7 +212,7 @@ class Regcliente extends CI_Controller
     return $this->db->get()->result();
   }
 
-  public function cumpleanos()
+/*   public function cumpleanos()
 	{
 		if($this->input->post('tipo')=='mes'){
 			$query = $this->db->from('tb_cliente')
@@ -228,6 +228,41 @@ class Regcliente extends CI_Controller
 		$data['success'] = true;
 		$data['query'] = $query;
 		echo json_encode($data);
+	 }*/
+
+
+   public function cumpleanos()
+	{
+		if($this->input->post('tipo')=='mes'){
+			$query = $this->db->from('tb_cliente')
+			->select('id_cliente,nomb_cliente,fena_pac,telf_cliente')
+			->where("Month(fena_pac)",$this->input->post('mes'))
+			->get()->result();
+		}else{
+			$query = $this->db->query("SELECT id_cliente,nomb_cliente,fena_pac,telf_cliente FROM tb_cliente WHERE MONTH(fena_pac) = ".date('m')." AND DAY(fena_pac) = ".date('d'))
+			->result();
+		}
+
+		//$query = $this->botonWhatsapp($query);
+
+
+		header('content-type: application/json; charset=utf-8');
+		$data['success'] = true;
+		$data['query'] = $query;
+		echo json_encode($data);
+	}
+
+	public function botonWhatsapp($query)
+	{
+		foreach ($query as $q) {
+			if($q->telf_cliente!=''){
+				$q->whatsapp = '<button type="button" data-celular="'.$q->telf_cliente.'" class="btn btn-success btn-whatsapp"><i class="fa fa-whatsapp"></i></button>';
+			}else{
+				$q->whatsapp = '';
+			}
+		}
+
+		return $query;
 	}
 
 }

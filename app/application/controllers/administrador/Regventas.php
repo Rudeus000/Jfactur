@@ -376,11 +376,11 @@ class Regventas extends CI_Controller {
 		echo json_encode($cuotas);
 	}
 
-	public function prueba()
-	{
-		$data['hola'] = 'como estas';
-		var_dump($data);
-	}
+	// public function prueba()
+	// {
+	// 	$data['hola'] = 'como estas';
+	// 	var_dump($data);
+	// }
 
 	public function agregarVenta()
 	{

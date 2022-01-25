@@ -12404,48 +12404,99 @@ $('.radio-cumple').click(function(event) {
 $('#FormCumpleanos').validate({
 	debug: false,
 	submitHandler:function() {
+		$("#TableCumpleanos").dataTable().fnDestroy();
 		$.post(path+"administrador/regcliente/cumpleanos", $('#FormCumpleanos').serializeObject(),
 			function (data, textStatus, jqXHR) {
 				var tr = '';
 				if(data.query.length==0){
 					Swal.fire({
 						title: "Ninguno",
-						text: "No se encontro ningun paciente que cumpla años.",
+						text: "No se encontro ningun cliente que cumpla años.",
 						type: "info"
 					});
 					return;
 				}
-				$.each(data.query, function (index, value) { 
+				$.each(data.query, function (index, value) {
+					const whatsapp = `<button type="button" data-edad="${calcularEdad(value.fena_pac)}" data-paciente="${value.nomb_cliente}" data-celular="${value.telf_cliente}" class="btn btn-success btn-whatsapp"><i class="fa fa-whatsapp"></i></button>`;
+
 					 tr += `
 					 	<tr>
 							<td>${value.nomb_cliente}</td>
 							<td>${value.fena_pac}</td>
 							<td>${calcularEdad(value.fena_pac)} años</td>
-							
+							<td>${ (value.telf_cliente!='')?whatsapp:'' }</td>
 						</tr>
 					 `;
 				});
-				console.log(tr);
+				
 				$('#TableCumpleanos tbody').html(tr);
+				tableCumpleanosDataTable();
 			},
 			"JSON"
 		);
 	}
 });
 
+if($('#TableCumpleanos').length){
+	tableCumpleanosDataTable();
+	
 
-function calcularEdad(fecha) {
-	var hoy = new Date();
-	var cumpleanos = new Date(fecha);
-	var edad = hoy.getFullYear() - cumpleanos.getFullYear();
-	var m = hoy.getMonth() - cumpleanos.getMonth();
+	new EmojiPicker({
+		trigger: [
+				{	selector: '.button-emojis',
+					insertInto: '.textarea-emojis'
+				}
+		],
+		closeButton: true
+	});
 
-	if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
-			edad--;
-	}
-
-	return edad;
+	$('#TableCumpleanos tbody').on('click','.btn-whatsapp', function () {
+		let celular = $(this).data('celular');
+		let paciente = $(this).data('paciente');
+		let edad = $(this).data('edad');
+		let mensaje = $('.textarea-emojis').val();
+		mensaje = mensaje.replace('%paciente%',paciente);
+		mensaje = mensaje.replace('%edad%',edad);
+		mensaje = mensaje.replace('%empresa%',$('#FormCumpleanos input[name=empresa]').val());
+		const href = `https://web.whatsapp.com/send?phone=51${celular}&text=${mensaje}`;
+		$('#enviar-whatsapp').attr('href',href);
+		$('#enviar-whatsapp')[0].click();
+	});
 }
+
+function tableCumpleanosDataTable()
+{
+	$('#TableCumpleanos').DataTable({
+			"language": {
+				"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+			},
+			"iDisplayLength": 10,
+			"aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+			"aaSorting": [[1, 'asc']],
+			"columns": [
+				{ "orderable": false },
+				{ "orderable": false },
+				{ "orderable": false },
+				{ "orderable": false }
+			],
+	});
+
+}
+
+
+
+	function calcularEdad(fecha) {
+		var hoy = new Date();
+		var cumpleanos = new Date(fecha);
+		var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+		var m = hoy.getMonth() - cumpleanos.getMonth();
+
+		if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+				edad--;
+		}
+
+		return edad;
+	}
 
 
 /* ============================================ */
