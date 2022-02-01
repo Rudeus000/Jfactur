@@ -49,7 +49,7 @@ class Regempresa extends CI_Controller {
 		$data['restriccion_precio_minimo_emp'] = $this->input->post('restriccion_precio_minimo');
 		$data['usuario_sol_emp'] = $this->input->post('usuario_sol');
 		$data['contrasena_sol_emp'] = $this->input->post('contrasena_sol');
-		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');
+		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');	
 		$certificado = $this->uploadCertificado();
 		if($certificado['success']==true){
 			$data['certificado_emp'] = $certificado['name'];
@@ -135,6 +135,42 @@ class Regempresa extends CI_Controller {
 			['movilexpert_emp' => $estado]
 		);
 		$this->session->set_userdata('movil_expert',$estado);
+	}
+
+	function anuncio(){		
+		// $data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
+		$data['anuncio'] = $this->input->post('anuncio');		
+		$where['cod_empresa '] = 1;
+		$edit = $this->modelgeneral->editRegist('tb_empresa',$where,$data);
+		$resp =[];
+		if(!is_null($edit)){
+				$resp['success'] = true;
+				$resp['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		}else{
+				$resp['success'] = false;
+		}
+
+		
+		
+		echo json_encode($resp);
+	}
+
+	function cumpleano(){		
+		$data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
+		// $data['anuncio'] = $this->input->post('anuncio');		
+		$where['cod_empresa '] = 1;
+		$edit = $this->modelgeneral->editRegist('tb_empresa',$where,$data);
+		$resp =[];
+		if(!is_null($edit)){
+				$resp['success'] = true;
+				$resp['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		}else{
+				$resp['success'] = false;
+		}
+
+		
+		
+		echo json_encode($resp);
 	}
 
 }

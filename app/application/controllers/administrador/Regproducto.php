@@ -348,7 +348,7 @@ class Regproducto extends CI_Controller
 		$spreadsheet = $reader->load($ruta);	
 		$sheet = $spreadsheet->getSheetByName('PRODUCTOS');//HOJA A PROCESAR
 		
-		foreach ($sheet->getRowIterator(2,100) as $index => $row) {
+		foreach ($sheet->getRowIterator(2,1000) as $index => $row) {
 			$data[$index]['almacen'] = $sheet->getCellByColumnAndRow(2,$row->getRowIndex())->getCalculatedValue();
 			$data[$index]['marca'] = $sheet->getCellByColumnAndRow(4,$row->getRowIndex())->getCalculatedValue();
 			$data[$index]['unidad'] = $sheet->getCellByColumnAndRow(6,$row->getRowIndex())->getCalculatedValue();

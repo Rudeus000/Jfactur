@@ -22,6 +22,7 @@ class Regcliente extends CI_Controller
      {
         $data['permisos'] =$this->permisos;
         $data['cliente'] = $this->modelgeneral->getTable('tb_cliente');
+        $data['tb_empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa' => 1]);
         $this->load->view('layouts/header');
         $this->load->view('layouts/aside');
         $this->load->view('admin/cliente/listgetcliente',$data);    
@@ -243,26 +244,23 @@ class Regcliente extends CI_Controller
 			->result();
 		}
 
-		//$query = $this->botonWhatsapp($query);
-
-
 		header('content-type: application/json; charset=utf-8');
 		$data['success'] = true;
 		$data['query'] = $query;
 		echo json_encode($data);
 	}
 
-	public function botonWhatsapp($query)
-	{
-		foreach ($query as $q) {
-			if($q->telf_cliente!=''){
-				$q->whatsapp = '<button type="button" data-celular="'.$q->telf_cliente.'" class="btn btn-success btn-whatsapp"><i class="fa fa-whatsapp"></i></button>';
-			}else{
-				$q->whatsapp = '';
-			}
-		}
+  public function botonWhatsapp($query)
+  {
+    foreach ($query as $q) {
+      if($q->telf_cliente!=''){
+        $q->whatsapp = '<button type="button" data-celular="'.$q->telf_cliente.'" class="btn btn-success btn-whatsapp"><i class="fa fa-whatsapp"></i></button>';
+      }else{
+        $q->whatsapp = '';
+      }
+    }
 
-		return $query;
-	}
+    return $query;
+  }
 
 }
