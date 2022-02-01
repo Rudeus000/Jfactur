@@ -341,6 +341,7 @@
                         <option value="V">Venta</option>
                         <option value="B">Bonificacion</option>
                         <option value="O">Obsequio</option>
+                        <option value="E">Exonerada</option>
                       </select>
                     </div>
                   </div>

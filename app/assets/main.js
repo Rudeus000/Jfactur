@@ -7163,8 +7163,12 @@ function guardarProducto()
           calcularTotalVenta();
         });
       }else{
-		  //debugger;
-				var random = Math.floor(Math.random() * (9000 - 1000) + 1000);
+		var tipigv = 1;
+
+		if($('#FormVentaAgregarProducto select[name=tipo]').val()=='E'){
+			tipigv = 4;
+		}
+		var random = Math.floor(Math.random() * (9000 - 1000) + 1000);
 				producto = 'ser-'+$('#nombre-servicio').val().trim().replace(' ','').substr(0,3)+random;
         var tr = `
         <tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
@@ -7172,7 +7176,8 @@ function guardarProducto()
 					<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
 					<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
 					<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
-					<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>					
+					<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+					<input type="hidden" name="tipo_igv[${producto}]" value="${tipigv}" class="tipo_igv"/>
           <td class="details-control"></td>
           <td>${producto}</td>
           <td><input name="nombre_prod[${producto}]" class="form-control" value="${$('#nombre-servicio').val()}"></td>
@@ -7210,7 +7215,8 @@ function guardarProducto()
 				$('#FormVentaAgregarProducto input[name=cantidadProducto]').val('');
 				$('#FormVentaAgregarProducto input[name=precioProducto]').val('');					
 				$("#nombre-servicio").val("");
-				$('#servicioCheck').prop('checked',false);									
+				//$('#servicioCheck').prop('checked',false);									
+				$('#servicioCheck').trigger('click');
 				$('input[name=producto]').val('');
 				$('#select2-series').empty().trigger("change");
 				$('#FormVentaAgregarProducto button[type=submit]').prop('disabled',false);
@@ -7307,7 +7313,7 @@ function guardarProducto()
 					descuento = 0;
 				}
 
-				if(tipo=='V'){
+				if(tipo=='V' || tipo=='E'){
 					prec -= descuento;
 					descuento_acumulado += descuento * cant;
 					var subTotalProd = round((cant * prec), 2);
