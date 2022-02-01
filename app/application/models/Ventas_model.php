@@ -233,9 +233,10 @@ class Ventas_model extends CI_Model {
         ->get()->row();
 
         $tb_venta->detalle =  $this->db->from('tb_venta_detalle')
-        ->select('tb_venta_detalle.*,tb_producto.cod_producto, tb_producto.nomb_product, tb_unidades.abreviatura_unid')
-        ->join('tb_producto','tb_venta_detalle.cod_producto = tb_producto.cod_producto','left')
-        ->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid','left')
+        ->select('tb_venta_detalle.*,tb_producto.cod_producto, tb_producto.nomb_product, tb_unidades.abreviatura_unid,serie_ventdetserie')
+        ->join('tb_venta_detalle_serie','tb_venta_detalle.cod_ventdet=tb_venta_detalle_serie.cod_ventdet','left')             
+        ->join('tb_producto','tb_venta_detalle.cod_producto = tb_producto.cod_producto','left')                    
+        ->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid','left')        
         ->where('tb_venta_detalle.cod_vent',$tb_venta->cod_vent)
         ->get()->result();
 

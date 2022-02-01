@@ -11739,6 +11739,30 @@ $('#FormEmpresa').validate({
 	}
 });
 
+$('#FormEmpresanun').validate({
+	ignore: [],
+	rules: {
+		anuncio: { required: true },		
+	},
+	submitHandler: function () {
+		enviarFormulario('#FormEmpresanun', function (json) {
+		
+		})
+	}
+});
+
+$('#FormEmpresacum').validate({
+	ignore: [],
+	rules: {
+		cumpleano_clin: { required: true },		
+	},
+	submitHandler: function () {
+		enviarFormulario('#FormEmpresacum', function (json) {
+		
+		})
+	}
+});
+
    
 /* ======================== */
 /*        END EMPRESA       */
@@ -12387,7 +12411,6 @@ $('#posponer-stockminimo').click(function(){
 /*=========================================
 =         END VERIFICAR STOCK MINIMO      =
 ===========================================*/
-
 /* ============================================ */
 /*                  CUMPLEAÑOS                  */
 /* ============================================ */
@@ -12411,17 +12434,17 @@ $('#FormCumpleanos').validate({
 				if(data.query.length==0){
 					Swal.fire({
 						title: "Ninguno",
-						text: "No se encontro ningun cliente que cumpla años.",
+						text: "No se encontro ningun paciente que cumpla años.",
 						type: "info"
 					});
 					return;
 				}
 				$.each(data.query, function (index, value) {
-					const whatsapp = `<button type="button" data-edad="${calcularEdad(value.fena_pac)}" data-paciente="${value.nomb_cliente}" data-celular="${value.telf_cliente}" class="btn btn-success btn-whatsapp"><i class="fa fa-whatsapp"></i></button>`;
+					const whatsapp = `<button type="button" data-edad="${calcularEdad(value.fena_pac)}" data-paciente="${value.nomb_cliente }" data-celular="${value.telf_cliente}" class="btn btn-primary btn-whatsapp"><i class="fab fa-whatsapp"></i></button>`;
 
 					 tr += `
 					 	<tr>
-							<td>${value.nomb_cliente}</td>
+							<td>${value.nomb_cliente }</td>
 							<td>${value.fena_pac}</td>
 							<td>${calcularEdad(value.fena_pac)} años</td>
 							<td>${ (value.telf_cliente!='')?whatsapp:'' }</td>
@@ -12504,7 +12527,7 @@ function tableCumpleanosDataTable()
 /* ============================================ */
 
 /* ============================================ */
-/*              IMPORTAR PRODUCTOS                  */
+/*              IMPORTAR PRODUCTOS              */
 /* ============================================ */
 
 $('#ImportarPlantilla').fileupload({

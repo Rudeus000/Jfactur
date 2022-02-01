@@ -310,17 +310,18 @@
 </div>
 
 
-<div id="ModalCumpleanos" class="modal fade" id="exampleModalCenter" role="dialog">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+<div id="ModalCumpleanos" class="modal fade-lg" id="exampleModalCenter" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <form id="FormCumpleanos" action="<?= base_url('administrador/regcliente/cumpleanos') ?>" method="post" autocomplete="off">
+      <input type="hidden" name="empresa" value="<?= $tb_empresa->nombre_comercial ?>">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title"><i class="fa fa-calendar"></i> Cumpleaños</h4>
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-4 form-group">
+            <div class="col-md-3 form-group">
               <label class="control-label">Buscar por:</label>
               <div>
               <label class="radio-inline">
@@ -348,29 +349,44 @@
                 <option value="12">Diciembre</option>
               </select>
             </div>
+            <div class="col-md-2">            
+              <button style="margin-top:30px" type="submit" class="btn btn-info"><i class="fa  fa-search"></i> Buscar</button>
+            </div>
           </div>
+          <br>
           
+          <div class="row">
+            <div class="col-md-12 form-group">
+              <a style="display:none" target="_blank" id="enviar-whatsapp">Enviar</a>
+              <button type="button" class="btn btn-sm btn-warning button-emojis"><i class="fa fa-fw fa-smile-o"></i>emojis</button>
+              <br>
+                             <textarea name="mensaje" class="form-control textarea-emojis" rows="3"><?= $tb_empresa->cumpleano_clin?></textarea>
+                          <!--  <textarea name="mensaje" class="form-control textarea-emojis" rows="3">Escriba un mensaje</textarea> -->
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-md-12">
               <table id="TableCumpleanos" class="table table-bordered table-striped table-sm">
                 <thead>
                   <tr class="btn-primary btn-xs">
-                    <th style="text-align: center;">Cliente</th>
+                    <th style="text-align: center;">Paciente</th>
                     <th style="background-color: #3c8dbc; color: white; text-align: center;">Fecha</th>
                     <th style="background-color: #3c8dbc; color: white; text-align: center;">Cumple</th>
+                    <th>Enviar</th>
                      <!-- <th style="background-color: #3c8dbc; color: white; text-align: center;">#</th> -->
                   </tr>
                 </thead>
                 <tbody></tbody>
+                
               </table>
             </div>
           </div>
           
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Cancelar</button>
-          <button type="submit" class="btn btn-info"><i class="fa  fa-search"></i> Buscar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Cancelar</button>
+
         </div>
       </form>
     </div><!-- /.modal-content -->

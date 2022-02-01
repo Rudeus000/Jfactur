@@ -1,5 +1,6 @@
 <div class="w100 text-center" style="font-size:12px">
-		<div><b><?= $empresa->razon_social ?></b></div>
+		<div><img style="max-width: 120px" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" ></div>
+		<div><b><?= $empresa->nombre_comercial ?></b></div>
 		<div><b><?= $empresa->direcc_emp ?></b></div>
 		<!-- <div><?= $ventas->direccion_puntoventa ?></div> -->
 		<div>Ruc:<?= $empresa->ruc_emp ?></div>
@@ -56,7 +57,7 @@
 				$descuentos += $dt->descuento_ventdet * $dt->cant_ventdet;
 			?>
 			<tr>
-				<td><?= character_limiter($dt->producto_ventdet,38,'...')?> <?= $dt->producto_isdn ?></td>				
+				<td><?= character_limiter($dt->producto_ventdet,38,'...')?> <?= $dt->producto_isdn ?><br><?= $dt->serie_ventdetserie ?></td>				
 				<td class="text-center"><?= $dt->cant_ventdet ?></td>
 				<td class="text-right"><?= $dt->precunit_ventdet ?></td>
 				<td class="text-right"><?= ($dt->tipo_ventdet=='V')?$dt->descuento_ventdet:'' ?></td> 
@@ -152,9 +153,18 @@
 <br>
 <?php if(!is_null($ventas->observacion_vent) AND $ventas->observacion_vent!=''): ?>
 
-<div class="w100" style="border:1px solid black;padding:2px">
+<div class="w100" style="border:1px dotted black;padding:2px">
 	<b style="font-size:13px">Observación</b><br>
 	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, <?= $ventas->observacion_vent ?>
+</div>
+<br>
+<br>
+<?php endif ?>
+<?php if(!is_null($empresa->anuncio) AND $empresa->anuncio!=''): ?>
+
+<div class="w100 text-center" style="border:1px dotted black;padding:2px">
+	<!-- <b style="font-size:13px">Observación</b><br> -->
+	<b style="font-size:14px"><?= $empresa->anuncio ?></b>
 </div>
 <br>
 <br>
