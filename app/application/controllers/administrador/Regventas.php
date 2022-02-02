@@ -459,6 +459,7 @@ class Regventas extends CI_Controller {
 			$this->aumentarNumeracion($data['cod_talonario'],$data['numero_vent']);
 			
 			$igv_acumula = 0;
+			$gravada_acumula = 0;
 			foreach ($_POST['id_prod'] as $key => $value) {
 				$pos = strpos($value, 'ser-');
 				if ($pos !== false) {
@@ -496,8 +497,9 @@ class Regventas extends CI_Controller {
 				if($_POST['tipo_igv'][$key]=='4'){
 					$detalle['igv_ventdet'] = 0;
 				}else{
-					$detalle['igv_ventdet'] = (($detalle['subtotal_ventdet'])  / 1.18) * 0.18;
+					$detalle['igv_ventdet'] = round((($detalle['subtotal_ventdet'])  / 1.18) * 0.18,2);
 					$igv_acumula += $detalle['igv_ventdet'];
+					$gravada_acumula += $detalle['subtotal_ventdet'];
 				}
 				$detalle['prec_ventdet'] = $detalle['subtotal_ventdet'] - $detalle['igv_ventdet'];
 				$detalle['descuento_ventdet'] = $descuento;
@@ -550,11 +552,16 @@ class Regventas extends CI_Controller {
 					}
 				}
 			}
+		
 
 			$this->modelgeneral->editRegist('tb_venta',['cod_vent'=> $insert],[
-				'igv_vent' => $igv_acumula,
-				'subtotal_vent' => $this->input->post('total') - $igv_acumula
+				'igv_vent' => round((($gravada_acumula)  / 1.18) * 0.18,2),
+				'subtotal_vent' => $this->input->post('total') - round((($gravada_acumula)  / 1.18) * 0.18,2)
 			]);
+
+			$this->calcularGravadaExoneradaDeVenta($insert);
+
+			
 			$resp['success'] = true;
 			$resp['id'] = $insert;
 			$resp['printType'] = $printType[0]->type_formt;
@@ -569,6 +576,38 @@ class Regventas extends CI_Controller {
 
 		header('content-type: application/json; charset=utf-8');
 		echo json_encode($resp);
+	}
+
+	public function calcularGravadaExoneradaDeVenta($id)
+	{
+		$venta = $this->db->from('tb_venta')
+		->where('cod_vent',$id)
+		->get()->row();
+
+
+		$venta->detalle = $this->db->from('tb_venta_detalle')
+		->where('cod_vent',$id)
+		->get()
+		->result();
+		
+
+		$acumula_gravada = 0;
+		$acumula_exonerada = 0;
+
+		foreach ($venta->detalle as $detalle) {
+			if($detalle->igv_ventdet > 0){
+				$acumula_gravada += $detalle->subtotal_ventdet;
+			}else{
+				$acumula_exonerada += $detalle->subtotal_ventdet;
+			}
+		}
+
+		$acumula_gravada -= $venta->igv_vent;
+		$this->db->set('exonerada_vent',$acumula_exonerada)
+		->set('gravada_vent',$acumula_gravada)
+		->where('cod_vent',$venta->cod_vent)
+		->update('tb_venta');
+
 	}
 
 	private function guardarCuotas($cod_venta)
@@ -1407,6 +1446,39 @@ class Regventas extends CI_Controller {
 			$resp["codrpta"]=0;
 		}
 		echo json_encode($response);			
+	}
+
+
+	public function calcularGravadaExonerada()
+	{
+		$ventas = $this->db->from('tb_venta')->get()->result();
+
+		foreach ($ventas as $v) {
+			$v->detalle = $this->db->from('tb_venta_detalle')
+			->where('cod_vent',$v->cod_vent)
+			->get()
+			->result();
+		}
+
+		foreach ($ventas as $venta) {
+			$acumula_gravada = 0;
+			$acumula_exonerada = 0;
+
+			foreach ($venta->detalle as $detalle) {
+				if($detalle->igv_ventdet > 0){
+					$acumula_gravada += $detalle->subtotal_ventdet;
+				}else{
+					$acumula_exonerada += $detalle->subtotal_ventdet;
+				}
+			}
+
+			$acumula_gravada -= $venta->igv_vent;
+			$this->db->set('exonerada_vent',$acumula_exonerada)
+			->set('gravada_vent',$acumula_gravada)
+			->where('cod_vent',$venta->cod_vent)
+			->update('tb_venta');
+		}
+
 	}
 
 }

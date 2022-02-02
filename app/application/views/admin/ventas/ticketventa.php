@@ -60,8 +60,8 @@
 				<td><?= character_limiter($dt->producto_ventdet,38,'...')?> <?= $dt->producto_isdn ?><br><?= $dt->serie_ventdetserie ?></td>				
 				<td class="text-center"><?= $dt->cant_ventdet ?></td>
 				<td class="text-right"><?= $dt->precunit_ventdet ?></td>
-				<td class="text-right"><?= ($dt->tipo_ventdet=='V')?$dt->descuento_ventdet:'' ?></td> 
-				<td class="text-right"><?= ($dt->tipo_ventdet=='V')?$dt->subtotal_ventdet:'' ?></td>  
+				<td class="text-right"><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
+				<td class="text-right"><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal_ventdet:'' ?></td>  
 			</tr>
 			<?php endforeach ?>	
 			
@@ -79,12 +79,12 @@
 	<div class="w100">
 		<div class="w1-3"><b>Gravada:</b></div>
 		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right"><?= $gravada ?></div>
+		<div class="w1-3 text-right"><?= number_format($ventas->gravada_vent,2) ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>Exonerada:</b></div>
 		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right" ><?= number_format($exonerada,2) ?></div>
+		<div class="w1-3 text-right" ><?= number_format($ventas->exonerada_vent,2) ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>Descuentos(-):</b></div>

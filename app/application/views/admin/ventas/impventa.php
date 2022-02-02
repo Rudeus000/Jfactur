@@ -89,8 +89,8 @@
 			<td style="border:1px solid #070707; padding: 6px; text-align: center;  "><?= $dt->unidad_ventdet ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cant_ventdet ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->precunit_ventdet ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V')?$dt->descuento_ventdet:'' ?></td> 
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V')?$dt->subtotal_ventdet:'' ?></td>  
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal_ventdet:'' ?></td>  
 		</tr>
 		<?php 
 
@@ -113,11 +113,11 @@
 	<div class="w30" style="float: right; padding: 5px;border:2px solid #070707;">
 		<div class="w100">
 			<div class="w50"><b>Gravada</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($gravada,2) ?></div>
+			<div class="w50" style="text-align:right"><?= number_format($ventas->gravada_vent,2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Exonerada</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($exonerada,2) ?></div>
+			<div class="w50" style="text-align:right"><?= number_format($ventas->exonerada_vent,2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Descuentos (-)</b></div>
