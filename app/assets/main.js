@@ -4800,9 +4800,10 @@ $(function () {
 			nombreProveedor: { required: true },
 			efectivo: { required: true, number: true }
 		},
-		submitHandler: function () {
+	
+		submitHandler: function () {						
 			if ($('#TableComprasProductos tbody tr').length == 0) {
-				$('#FormComprasAgregarProducto').valid();
+				$('#FormComprasAgregarProducto').valid();				
 				return;
 			}
 
@@ -4828,11 +4829,27 @@ $(function () {
 				dataType: 'JSON',
 				data: compras
 			})
-				.done(function (resp) {
-					if (resp.success) {
-						window.location.href = path + 'administrador/regcompras';
-					}
-				});
+			.done(function (resp) {
+			
+				if (resp.success) {
+					Swal.fire({
+						title: "Buen trabajo",
+						text: "Se resgistro la compra con éxito.",
+						type: "success"
+					});
+					window.location.href = path + 'administrador/regcompras';
+				} else {
+					Swal.fire({
+						title: "Error",
+						text: "Ocurrio un error, vuelva a intentarlo.",
+						type: "error"
+					});
+				}			
+				
+			
+			});
+			
+			
 		}
 	});
 
