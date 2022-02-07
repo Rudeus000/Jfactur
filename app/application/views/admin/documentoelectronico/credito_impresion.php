@@ -114,7 +114,7 @@
 </div>
 
 <div class="w100" style="font-size:12px;">
-	<?= strtoupper(convertir($nota->total_nota)) ?> Y 00/100 SOLES
+	<?= strtoupper(convertir($nota->total_nota)) ?>
 </div>
 
 

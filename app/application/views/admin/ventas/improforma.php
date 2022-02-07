@@ -117,7 +117,7 @@
 </div>
 
 <div class="w100" style="font-size:12px;">
-	<?= strtoupper(convertir($ventas->total_vent)) ?> Y 00/100 SOLES
+	<?= strtoupper(convertir($ventas->total_vent)) ?>
 </div>
 <br>
 <div class="w100" style="border:1px solid black;padding:2px">

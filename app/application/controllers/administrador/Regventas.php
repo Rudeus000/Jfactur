@@ -1,8 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require(APP_TENANTPATH.'config.php');
+
 class Regventas extends CI_Controller {
+
 	private $permisos;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,7 +13,7 @@ class Regventas extends CI_Controller {
 		$this->load->model('empresa_model');
 		$this->load->model('modelgeneral');
 		$this->load->helper('general');
-    $this->permisos = $this->backend_lib->control();
+    	$this->permisos = $this->backend_lib->control();
 	}
 
 	public function index()
@@ -375,12 +378,6 @@ class Regventas extends CI_Controller {
 		header('content-type: application/json; charset=utf-8');
 		echo json_encode($cuotas);
 	}
-
-	// public function prueba()
-	// {
-	// 	$data['hola'] = 'como estas';
-	// 	var_dump($data);
-	// }
 
 	public function agregarVenta()
 	{
@@ -1447,7 +1444,6 @@ class Regventas extends CI_Controller {
 		}
 		echo json_encode($response);			
 	}
-
 
 	public function calcularGravadaExonerada()
 	{
