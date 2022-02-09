@@ -48,9 +48,6 @@ class Facturacion_model extends CI_Model {
 			
 			if (!is_null($q->cod_doc) OR in_array($q->tipo_documento,['NOTA DE CRÉDITO','NOTA DE DÉBITO']) ) {
 				$label = '<label class="label label-success">Aceptada</label>';
-				if($q->estado_vent=='A'){
-					$label = '<label class="label label-danger">Anulado</label>';
-				}
 				
 				$imprimir = '';
 				if(in_array($q->tipo_documento,['FACTURA ELECTRONICA','BOLETA ELECTRONICA'])){
