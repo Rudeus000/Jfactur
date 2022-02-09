@@ -1057,7 +1057,7 @@ class Regventas extends CI_Controller {
 				$detalle[] = $det;
 
 				if($d->igv_ventdet > 0){
-					$total_gravadas += +$d->prec_ventdet;
+					$total_gravadas += $d->prec_ventdet;
 				}else{
 					$total_exoneradas += $d->prec_ventdet;
 				}
