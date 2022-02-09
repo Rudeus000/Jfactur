@@ -1032,7 +1032,7 @@ class Regventas extends CI_Controller {
 		$total_gravadas = 0;
 		$total_exoneradas = 0;
 		foreach ($res->detalle as $d) {
-				if($d->tipo_ventdet=='V'){
+			if($d->tipo_ventdet=='V' OR $d->tipo_ventdet=='E'){
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = (!is_null($d->cod_producto))?'NIU':'ZZ'; //NIU = BIENES, ZZ = SERVICIOS
@@ -1068,7 +1068,6 @@ class Regventas extends CI_Controller {
 		$data['detalle'] = $detalle;
 		$data['total_gravadas'] = $total_gravadas;
 		$data['total_exoneradas'] = $total_exoneradas;
-
 
 		//Invocamos el servicio
 		$token = ''; //en caso quieras utilizar algún token generado desde tu sistema
