@@ -17,6 +17,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true)
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(16)->setAutoSize(true);
 
 $styleNormal = [
 	'font' => [
@@ -111,6 +112,10 @@ $objPHPExcel->getActiveSheet()
 ->setCellValueByColumnAndRow(15,$row,'ESTADO')
 ->getStyleByColumnAndRow(15,$row)
 ->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(16,$row,'OBSERVACION')
+->getStyleByColumnAndRow(16,$row)
+->applyFromArray($styleBold);
 
 $total = 0;
 $row++;
@@ -175,6 +180,10 @@ foreach ($datos as $d) {
 	$objPHPExcel->getActiveSheet()
 	->setCellValueByColumnAndRow(15,$row,$d->estado_vent=='G'?'Generado':'Anulado')
 	->getStyleByColumnAndRow(15,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(16,$row,$d->observacion_vent)
+	->getStyleByColumnAndRow(16,$row)
 	->applyFromArray($styleNormal);
 	
 	$total += $d->subtotal;
