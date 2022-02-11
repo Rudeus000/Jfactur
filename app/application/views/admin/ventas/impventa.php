@@ -87,10 +87,10 @@
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= (!is_null($dt->cod_producto)?$dt->cod_producto:$dt->cod_servicio) ?></td>
 			 <td style="border:1px solid #070707; padding: 6px;  "><?= $dt->producto_ventdet?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center;  "><?= $dt->unidad_ventdet ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cant_ventdet ?></td>
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cantidad ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->precunit_ventdet ?></td>
 			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal_ventdet:'' ?></td>  
+			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal:'' ?></td>  
 		</tr>
 		<?php 
 

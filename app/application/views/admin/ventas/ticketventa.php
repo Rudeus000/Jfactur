@@ -58,10 +58,10 @@
 			?>
 			<tr>
 				<td><?= character_limiter($dt->producto_ventdet,38,'...')?> <?= $dt->producto_isdn ?><br><?= $dt->serie_ventdetserie ?></td>				
-				<td class="text-center"><?= $dt->cant_ventdet ?></td>
+				<td class="text-center"><?= $dt->cantidad ?></td>
 				<td class="text-right"><?= $dt->precunit_ventdet ?></td>
 				<td class="text-right"><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
-				<td class="text-right"><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal_ventdet:'' ?></td>  
+				<td class="text-right"><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal:'' ?></td>  
 			</tr>
 			<?php endforeach ?>	
 			

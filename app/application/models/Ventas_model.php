@@ -233,7 +233,16 @@ class Ventas_model extends CI_Model {
         ->get()->row();
 
         $tb_venta->detalle =  $this->db->from('tb_venta_detalle')
-        ->select('tb_venta_detalle.*,tb_producto.cod_producto, tb_producto.nomb_product, tb_unidades.abreviatura_unid,serie_ventdetserie')
+        ->select("tb_venta_detalle.*,tb_producto.cod_producto, tb_producto.nomb_product, tb_unidades.abreviatura_unid,serie_ventdetserie,
+        CASE 
+          WHEN serie_ventdetserie IS NULL THEN cant_ventdet
+          WHEN serie_ventdetserie IS NOT NULL THEN '1'
+        END as cantidad,
+        CASE 
+          WHEN serie_ventdetserie IS NULL THEN subtotal_ventdet
+          WHEN serie_ventdetserie IS NOT NULL THEN (precunit_ventdet - descuento_ventdet) 
+        END as subtotal
+        ")
         ->join('tb_venta_detalle_serie','tb_venta_detalle.cod_ventdet=tb_venta_detalle_serie.cod_ventdet','left')             
         ->join('tb_producto','tb_venta_detalle.cod_producto = tb_producto.cod_producto','left')                    
         ->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid','left')        

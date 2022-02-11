@@ -5708,7 +5708,7 @@ function guardarProducto()
 		var td = `
 		<input type="hidden" class="cant" name="cant_prod[${producto}]" value="${cantidad}" />${cantidad}
 		`;
-		$('#prod-'+producto+' td').eq(5).html(td);
+		$('#prod-'+producto+' td').eq(6).html(td);
 		calcularTotalVentaCotizacion();
 	});
 
@@ -7252,7 +7252,7 @@ function guardarProducto()
 		var td = `
 		<input type="hidden" class="cant" name="cant_prod[${producto}]" value="${cantidad}" />${cantidad}
 		`;
-		$('#prod-'+producto+' td').eq(5).html(td);
+		$('#prod-'+producto+' td').eq(6).html(td);
 		calcularTotalVenta();
 	});
 	
