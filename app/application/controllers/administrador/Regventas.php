@@ -1036,7 +1036,7 @@ class Regventas extends CI_Controller {
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = (!is_null($d->cod_producto))?'NIU':'ZZ'; //NIU = BIENES, ZZ = SERVICIOS
-				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
+				$det['txtCANTIDAD_DET'] = (string)number_format($d->cant_ventdet,10);
 				$det['txtPRECIO_DET'] = (string)$precio;
 				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
 				$det['txtPRECIO_TIPO_CODIGO'] = '01';
@@ -1048,7 +1048,7 @@ class Regventas extends CI_Controller {
 				$det['txtCODIGO_DET'] = (string)(!is_null($d->cod_producto))?$d->cod_producto:$d->cod_servicio;
 				$det['txtDESCRIPCION_DET'] = (string)$d->producto_ventdet;
 				$precioSinIGV = $precio - ($precio / 1.18) * 0.18;
-				$det['txtPRECIO_SIN_IGV_DET'] = (string)($d->igv_ventdet > 0)?round($precioSinIGV,4):$precio;
+				$det['txtPRECIO_SIN_IGV_DET'] = (string)($d->igv_ventdet > 0)?round($precioSinIGV,10):$precio;
 				$det['txtCODIGO_PROD_SUNAT'] = '23251602';
 
 				$det['TIPO_IGV'] = ($d->igv_ventdet > 0)?'1000':'9997';
