@@ -298,11 +298,27 @@
                       <input type="text" name="unidadProducto" class="form-control">
                     </div>
 									</div>
-                  
+                  <div class="col-md-3" id="unidad_medida" style="display:none">
+                    <div class="form-group"  >
+                      <label class="control-label">Unidad Med.</label>
+                      <select name="unidad_medida" class="form-control">
+                        <?php foreach($unidades as $u): ?>
+                        <option value="<?= $u->abreviatura_unid ?>"><?= $u->nomb_unid ?></option>
+                        <?php endforeach ?>
+                      </select>
+                    </div>
+									</div>
 									<div class="col-md-1"  id="peso_p">
                     <div class="form-group">
                       <label class="control-label">Peso</label>
                       <input type="text" name="pesoProducto" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label class="control-label" id="precio_u">Precio Unit.</label>
+                      <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
+                      <input type="text" name="precioProducto" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-1">

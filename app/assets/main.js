@@ -6708,6 +6708,8 @@ function guardarProducto()
 			$('#precio_u').prop('disabled',true).hide();
 			$('#monto_s').prop('disabled',false).show();			
 			$('#isdn_product').prop('disabled',true).hide();
+			$('#unidad_medida').show();
+			$('select[name=unidad_medida]').val('ZZ');
 		}else{
 			$('#nombre-servicio').prop('disabled',true).hide();
 			$('#VentaProductoAutocomplete').prop('disabled',false).show();
@@ -6717,7 +6719,8 @@ function guardarProducto()
 			$('#serie_c').prop('disabled',false).show();
 			$('#monto_s').prop('disabled',false).hide();
 			$('#precio_u').prop('disabled',false).show();			
-			$('#isdn_product').prop('disabled',false).show();			
+			$('#isdn_product').prop('disabled',false).show();
+			$('#unidad_medida').hide();		
 
 		}
 	});
@@ -7097,11 +7100,12 @@ function guardarProducto()
           <tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
             <input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
             <input type="hidden" name="idTypeAssignmentProduct[${producto}]" value="${resp.response.idTypeAssignmentProduct}"/>
-						<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
-						<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
-						<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
-						<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
-						<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
+			<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
+			<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
+			<input type="hidden" name="unidad_abreviatura_prod[${producto}]" value="${resp.response.abreviatura_unid}" />
+			<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
+			<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+			<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
             <td class="details-control">
               ${(seriesCheckBox)?'<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>':''}
             </td>
@@ -7187,14 +7191,17 @@ function guardarProducto()
 		}
 		var random = Math.floor(Math.random() * (9000 - 1000) + 1000);
 				producto = 'ser-'+$('#nombre-servicio').val().trim().replace(' ','').substr(0,3)+random;
+		const unid_med = $('select[name=unidad_medida] option:selected').text();
+		const unid_abrev = $('select[name=unidad_medida]').val();
         var tr = `
         <tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
-          <input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
-					<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
-					<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
-					<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
-					<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
-					<input type="hidden" name="tipo_igv[${producto}]" value="${tipigv}" class="tipo_igv"/>
+          	<input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
+			<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
+			<input type="hidden" name="unidad_prod[${producto}]" value="${unid_med}"/>
+			<input type="hidden" name="unidad_abreviatura_prod[${producto}]" value="${unid_abrev}"/>
+			<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
+			<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+			<input type="hidden" name="tipo_igv[${producto}]" value="${tipigv}" class="tipo_igv"/>
           <td class="details-control"></td>
           <td>${producto}</td>
           <td><input name="nombre_prod[${producto}]" class="form-control" value="${$('#nombre-servicio').val()}"></td>
