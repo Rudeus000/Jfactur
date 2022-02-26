@@ -541,7 +541,14 @@ class Regdocumentoelectronico extends CI_Controller
 
   public function debito()
   {
-    $data['datos'] = $this->documentoelectronico_model->getNotas('Débito');
+    if(isset($_GET['desde']) AND isset($_GET['hasta'])){
+      $fecha['desde'] = $this->input->get('desde');
+      $fecha['hasta'] = $this->input->get('hasta');
+    }else{
+      $fecha['desde'] = date('Y-m-d');
+      $fecha['hasta'] = date('Y-m-d');
+    }
+    $data['datos'] = $this->documentoelectronico_model->getNotas('Débito',$fecha);
     $data['cambio'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt' => 'Dolar']);
     $this->load->view('layouts/header');
 	  $this->load->view('layouts/aside');
@@ -599,7 +606,7 @@ class Regdocumentoelectronico extends CI_Controller
       "cod_tipo_documento"            => "08",
       "cod_moneda"                    => (string)$res->codmoneda_vent,
 
-      "tipo_comprobante_modifica" 	=> "01",
+      "tipo_comprobante_modifica" 	=> $res->codsunat_tipdocu,
       "nro_documento_modifica" 		=> (string)$res->serie.'-'.$res->numero_vent,
       "cod_tipo_motivo" 				=> (string)$this->input->post('motivo'),
       "descripcion_motivo" 			=> (string)getMotivoNotaDebito($this->input->post('motivo')),
@@ -664,8 +671,7 @@ class Regdocumentoelectronico extends CI_Controller
     $data['total_gravadas'] = (string)$precioSinIGVTotal;
     $data['total_igv'] = (string)$IGVtotal;
     $data['total'] = (string)$total;
-    // var_dump($data);
-    // exit();
+
 
     //Invocamos el servicio
     $token = ''; //en caso quieras utilizar algún token generado desde tu sistema
@@ -691,7 +697,7 @@ class Regdocumentoelectronico extends CI_Controller
     curl_close($ch);
 
     $response = json_decode($respuesta, true);
-    // var_dump($response);
+  
     
     if ($response['respuesta']=='ok') {
       $dataInsert['tiponota_nota'] = 'Débito';
@@ -744,7 +750,14 @@ class Regdocumentoelectronico extends CI_Controller
 
   public function credito()
   {
-    $data['datos'] = $this->documentoelectronico_model->getNotas('Crédito');
+    if(isset($_GET['desde']) AND isset($_GET['hasta'])){
+      $fecha['desde'] = $this->input->get('desde');
+      $fecha['hasta'] = $this->input->get('hasta');
+    }else{
+      $fecha['desde'] = date('Y-m-d');
+      $fecha['hasta'] = date('Y-m-d');
+    }
+    $data['datos'] = $this->documentoelectronico_model->getNotas('Crédito',$fecha);
     $data['cambio'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt' => 'Dolar']);
     $this->load->view('layouts/header');
 	  $this->load->view('layouts/aside');
@@ -795,7 +808,7 @@ class Regdocumentoelectronico extends CI_Controller
       "cod_tipo_documento"            => "07",
       "cod_moneda"                    => (string)$res->codmoneda_vent,
 
-      "tipo_comprobante_modifica" 	=> "01",
+      "tipo_comprobante_modifica" 	=> $res->codsunat_tipdocu,
       "nro_documento_modifica" 		=> (string)$res->serie.'-'.$res->numero_vent,
       "cod_tipo_motivo" 				=> (string)$this->input->post('motivo'),
       "descripcion_motivo" 			=> (string)getMotivoNotaCredito($this->input->post('motivo')),

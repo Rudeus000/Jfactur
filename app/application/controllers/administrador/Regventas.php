@@ -110,9 +110,10 @@ class Regventas extends CI_Controller {
 		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
 		$data['apertura'] = $this->ventas_model->getCajaApertura();
 		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();
+		$data['unidades'] = $this->modelgeneral->getTableWhere('tb_unidades',['est_unidad' => 1]);
 		$this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('admin/ventas/ventagregar',$data);    
+		$this->load->view('layouts/aside');
+		$this->load->view('admin/ventas/ventagregar',$data);    
 		$this->load->view('layouts/footer');
 	}
 
@@ -503,6 +504,7 @@ class Regventas extends CI_Controller {
 				$detalle['estado_ventdet'] = 'S';
 
 				$detalle['unidad_ventdet'] = $_POST['unidad_prod'][$key];
+				$detalle['unidad_abreviatura_ventdet'] = $_POST['unidad_abreviatura_prod'][$key];
 				$detalle['peso_ventdet'] = $_POST['peso_prod'][$key];
 
 				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
@@ -1035,7 +1037,7 @@ class Regventas extends CI_Controller {
 			if($d->tipo_ventdet=='V' OR $d->tipo_ventdet=='E'){
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
-				$det['txtUNIDAD_MEDIDA_DET'] = (!is_null($d->cod_producto))?'NIU':'ZZ'; //NIU = BIENES, ZZ = SERVICIOS
+				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS
 				$det['txtCANTIDAD_DET'] = (string)number_format($d->cant_ventdet,10);
 				$det['txtPRECIO_DET'] = (string)$precio;
 				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;

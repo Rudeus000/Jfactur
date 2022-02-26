@@ -34,19 +34,31 @@
             <div class="card-header bg-info"><h3 class="my-0 text-white">Nota de Crédito</h3></div>
               <div class="card-body">
                 <div class="table-responsive">
+                <form action="<?= base_url('administrador/regdocumentoelectronico/credito') ?>">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Fecha</label>
+                          <div class="input-group">
+                            <input type="text" name="desde" class="form-control datepicker" value="<?= isset($_GET['desde'])?$_GET['desde']:date('Y-m-d') ?>">
+                            <input type="text" name="hasta" class="form-control datepicker" value="<?= isset($_GET['hasta'])?$_GET['hasta']:date('Y-m-d') ?>">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <button style="margin-top:28px" type="submit" class="btn btn-primary"> Filtrar</button>
+                      </div>
+                    </div>
+                  </form>
                   <table id="TableResumen" class="table mb-0 table-striped table-borderless" cellspacing="0" width="100%">
                     <thead>
                       <tr class="bg-info text-white">
                         <th>Tipo de Doc.</th>
-                        <th>Serie</th>
-                        <th>Num</th>
                         <th>Fecha</th>                      
                         <th>Cliente</th>
-                        <th>IGV</th>
-                        <th>Subtotal</th>
+                        <th>Nota Débito</th>
 						            <th>Total</th>
                         <th>Motivo</th>
-                        <th>Sec.</th>
                         <th>Fecha Nota</th>
                         <th></th>
                       </tr>
@@ -54,16 +66,12 @@
                       <tbody>
                           <?php foreach($datos as $d): ?>
                           <tr>
-                              <td><?= $d->nom_tipdocumento ?></td>
-                              <td><?= (is_null($d->seriecomp_nota))?$d->serie:$d->seriecomp_nota ?></td>
-                              <td><?= $d->numero_vent ?></td>
+                              <td><?= $d->nom_tipdocumento.'<br>'.$d->serie.'-'.$d->numero_vent ?></td>
                               <td><?= $d->fecha_vent ?></td>
                               <td><?= $d->nomb_cliente ?></td>
-                              <td><?= $d->totaligv_nota ?></td>
-                              <td><?= $d->totalgravadas_nota ?></td>
+                              <td><?= $d->seriecomp_nota.'-'.$d->numcomp_nota ?></td>
                               <td><?= $d->total_nota ?></td>
                               <td><?= $d->motivo_nota ?></td>
-                              <td><?= $d->numcomp_nota ?></td>
                               <td><?= $d->fecha_nota ?></td>
                               <td>
                                   <?php if(!is_null($d->tiponota_nota)): ?>

@@ -71,32 +71,25 @@ class Documentoelectronico_model extends CI_Model {
     return $this->db->get()->result();
   }
 
-  function getNotas($tipo)
+  function getNotas($tipo,$fecha)
   {
-    $this->db->from('tb_venta');
-    $this->db->select('tb_venta.cod_vent,nom_tipdocumento,serie,numero_vent,fecha_vent,nomb_cliente,cod_nota,tb_nota.tiponota_nota,tb_nota.totalgravadas_nota,tb_nota.totaligv_nota,tb_nota.total_nota,tb_nota.motivo_nota,numcomp_nota,fecha_nota,rutaxml_nota,archivoxml_nota,hash_nota,seriecomp_nota');
-   	$this->db->join('tb_facturacion','tb_venta.cod_vent = tb_facturacion.cod_vent');
-    $this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
-   	$this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
-    $this->db->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu');
-    $this->db->join('tb_nota','tb_venta.cod_vent = tb_nota.cod_vent AND tb_nota.tiponota_nota = "'.$tipo.'"','left');
-    $this->db->where('tb_venta.estado_vent','G');
-    $this->db->where('tb_tipodocumento.cod_tipdocu',1);
-    $this->db->order_by('tb_venta.cod_vent','desc');
+    if($tipo=='Débito'){
+      $this->db->from('v_notas_debito');
+    }else{
+      $this->db->from('v_notas_credito');
+    }
+    $this->db->where('fecha_vent >=',$fecha['desde']);
+    $this->db->where('fecha_vent <=',$fecha['hasta']);
     return $this->db->get()->result();
   }
 
   function getNota($id,$tipo)
   {
-    $this->db->from('tb_venta');
-    $this->db->select('tb_venta.cod_vent,nom_tipdocumento,serie,numero_vent,fecha_vent,nomb_cliente,cod_nota,tb_nota.tiponota_nota,direc_cliente,seriecomp_nota,numcomp_nota,codsunat_tipdocucli,doc_cliente,tb_nota.totalgravadas_nota,tb_nota.totaligv_nota,tb_nota.total_nota,codmotivo_nota,tb_nota.motivo_nota,numcomp_nota,fecha_nota,rutaxml_nota,archivoxml_nota,hash_nota,codsunat_tipdocu');
-   	$this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
-   	$this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
-    $this->db->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu');
-    $this->db->join('tb_nota','tb_venta.cod_vent = tb_nota.cod_vent');
-    $this->db->join('tb_tipodocumentocliente','tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli');
-    $this->db->where('tb_nota.tiponota_nota',$tipo);
-    $this->db->where('tb_tipodocumento.cod_tipdocu',1);
+    if($tipo=='Débito'){
+      $this->db->from('v_notas_debito');
+    }else{
+      $this->db->from('v_notas_credito');
+    }
     $this->db->where('cod_nota',$id);
     $query =  $this->db->get()->row();
     
