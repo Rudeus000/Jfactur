@@ -141,7 +141,7 @@
 <br>
 <?php if(!is_null($ventas->observacion_vent) AND $ventas->observacion_vent!=''): ?>
 
-<div class="w100" style="border:1px solid black;padding:2px">
+<div class="w100" style="border:1px solid black;padding:2px; border-radius: 10px">
 	<b style="font-size:13px">Observación</b><br>
 	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, <?= $ventas->observacion_vent ?>
 </div>
