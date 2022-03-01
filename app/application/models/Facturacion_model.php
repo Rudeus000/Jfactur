@@ -37,8 +37,8 @@ class Facturacion_model extends CI_Model {
 			$dias = $diff->days;
 
 			$limite = '';
-			if($dias >= 0 AND $dias <= 7){
-				$limite = '<label class="label label-info">'.(7 - $dias).' dias</label>';
+			if($dias >= 0 AND $dias <= 5){
+				$limite = '<label class="label label-info">'.(5 - $dias).' dias</label>';
 			}else{
 				$limite = '<label class="label label-danger">Caducó</label>';
 			}
@@ -48,10 +48,12 @@ class Facturacion_model extends CI_Model {
 			
 			if (!is_null($q->cod_doc) OR in_array($q->tipo_documento,['NOTA DE CRÉDITO','NOTA DE DÉBITO']) ) {
 				$label = '<label class="label label-success">Aceptada</label>';
-				
+				if($q->estado_vent=='A'){
+					$label = '<label class="label label-danger">Anulado</label>';
+				}
 				$imprimir = '';
 				if(in_array($q->tipo_documento,['FACTURA ELECTRONICA','BOLETA ELECTRONICA'])){
-					$imprimir = base_url('administrador/regventas/imprimirVenta/'.$q->archivo_xml);
+					$imprimir = base_url('administrador/regventas/imprimirVenta/'.$q->archivoxml_boleta);
 				}
 				if(in_array($q->tipo_documento,['NOTA DE CRÉDITO','NOTA DE DÉBITO'])){
 					$imprimir = base_url('administrador/regdocumentoelectronico/imprimirCredito/'.$q->id_impresion);
@@ -63,7 +65,7 @@ class Facturacion_model extends CI_Model {
 				$limite = '<label class="label label-primary">Procesado</label>';
 			}else{
 			
-				if($dias >= 0 AND $dias <= 7){
+				if($dias >= 0 AND $dias <= 5){
 
 					$label = '<label class="label label-info">Pendiente</label>';
 					$check = $check = '<input type="checkbox" name="factura" class="seleccion" data-id="'.$q->cod_vent.'" value="'.$q->cod_vent.'" />';

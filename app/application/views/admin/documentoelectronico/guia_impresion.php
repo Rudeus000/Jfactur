@@ -1,23 +1,29 @@
-<div style="padding:20px 30px;font-size:12px" >
-
+<div class="120" >
+<div class="w30">
+		<img style="max-width: 170px" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" > 
+	</div>
 <div class="w100">
-  <div class="w50 text-center">
-    <h3 style="text-aling:center"><b><?= $empresa->razon_social ?></b></h3>
+  <div class="w40 text-center">
+    <p style="font-size: 18px; padding-left: -70px;"><b><?= $empresa->razon_social ?></b></p>
+    <p style="font-size: 14px; padding-left: -70px; padding-top: -11px;"><b> <?= $empresa->direcc_emp ?></b> </p>
+   
+		
   </div>
-  <div class="w50 text-center">
-    <div style="padding:0px 40px">
-      <div style="border:1.5px solid black">
-        <h5><b>GUIA DE REMISIÓN</b></h5>
+  <div class="Comp-Marco">
+    
         <h5><b>RUC: <?= $empresa->ruc_emp ?></b></h5>
+        <h5 class="Com-Datos"><b>GUIA DE REMISIÓN ELECTRÓNICA</b></h5>        
         <h5><b><?= $guia->serie_guia.'-'.$guia->secuencia_guia ?></b></h5>
-      </div>
-    </div>
+  
+   
   </div>
 </div>
+<br>
 
+<div class="centrado">
 
-<div class="w100">
-  <h5><b>DATOS DE PUNTO DE PARTIDA Y PUNTO DE DESTINO</b></h5>
+  <h5 class="Com-Datos"><b>DATOS DEL INICIO DEL TRASLADO</b></h5>
+
 </div>
 <div class="w100">
   <div class="w50"><b>Fecha:</b></div>
@@ -52,8 +58,8 @@
   <div class="w50"><?= $guia->numdoctransp_guia ?></div>
 </div>
 
-<div class="w100">
-  <h5><b>DATOS DEL DESTINATARIO</b></h5>
+<div class="linea-marco centrado">
+  <h5 class="Com-Datos"><b>DATOS DEL DESTINATARIO</b></h5>
 </div>
 <div class="w100">
   <div class="w50"><b>Nombres y Apellidos:</b></div>
@@ -68,8 +74,8 @@
   <div class="w50"><?= $guia->doc_cliente ?></div>
 </div>
 
-<div class="w100">
-  <h5><b>DATOS DE PUNTO DE PARTIDA Y PUNTO DE DESTINO</b></h5>
+<div class="linea-marco centrado">
+  <h5 class="Com-Datos"><b>DATOS DE PUNTO DE PARTIDA Y PUNTO DE DESTINO</b></h5>
 </div>
 <div class="w100">
   <div class="w50"><b>Ubigeo Partida:</b></div>
@@ -93,12 +99,12 @@
 </div>
 
 
-<div class="w100">
-  <h5><b>DATOS DE LOS BIENES:</b></h5>
+<div class="linea-marco centrado">
+  <h5 class="Com-Datos"><b>DATOS DE LOS BIENES:</b></h5>
 </div>
 <table class="table table-bordered">
   <thead>
-    <tr class="bg-info text-white">
+    <tr>
       <th>#</th>
       <th>Producto</th>
       <th>Marca</th>

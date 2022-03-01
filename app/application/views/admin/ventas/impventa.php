@@ -16,10 +16,10 @@
 		
 	</div>
 
-	<div class="w25 text-center" style="float: right; border: 1.5px solid #070707">
+	<div class="w25 text-center" style="float: right; border: 1.5px solid #03A6BF;border-radius: 10px;">
 		<br>
 		<b style="font-size: 15px;">R.U.C <?= $empresa->ruc_emp ?><b><p>
-		<div class="bg-primary" ><b  style="font-size: 15px;"><?= $ventas->nom_tipdocumento ?></b></div>
+		<div class="Com-Datos" style="font-size: 15px; background: #03A6BF"><b><?= $ventas->nom_tipdocumento ?></b></div>
 		<br>
 		<b  style="font-size: 15px;"><?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>
 		
@@ -27,16 +27,16 @@
 </div>
 <br><br>
 
-<div class="Com-Datos" style="background: #0280B7;color:white">
-	DATOS CLIENTE
+<div class="Com-Datos" style=" background: #03A6BF">
+	<b>DATOS CLIENTE</b>
 </div>
 
 
 <br>
 <div class="w100">
 	<div class="w60">
-		<p><b style="font-size: 11px;">Nombre/ Razon Social:</b> &nbsp;&nbsp;<?= $ventas->nomb_cliente ?></p>
-		<p><b style="font-size: 11px;">R.U.C:</b>&nbsp;&nbsp; <?= $ventas->doc_cliente ?></p>
+		<p><b style="font-size: 11px;"><?= ($ventas->codsunat_tipdocucli=='6')?'Razon Social:':'Nombres:' ?></b> &nbsp;&nbsp;<?= $ventas->nomb_cliente ?></p>
+		<p><b style="font-size: 11px;"><?= ($ventas->codsunat_tipdocucli=='6')?'RUC:':'DNI:' ?></b>&nbsp;&nbsp; <?= $ventas->doc_cliente ?></p>
 		<p><b style="font-size: 11px;">Dirección:</b>&nbsp;&nbsp; <?= $ventas->direc_cliente ?></p>
 		<p><b>Condición de pago:</b>&nbsp;&nbsp;<?= ($ventas->tipopago=='CREDITO')?'Crédito':'Contado' ?></p>		
 
@@ -52,23 +52,22 @@
 		<?php endif ?>		
 	</div>
 </div>
+<div class="w100" style="border-bottom:1px solid #03A6BF;margin:5px 0">
+		</div>
 
+<div class="w100">	
 
-<div class="w100">
-	   
-
-
- 		  <table class="table table-bordered">
+ 	<table class="table table-hover">
 	<thead>	
-		<tr>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 5px;" height="5">Item</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 5px;" height="5">Codigo</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 5px; text-align: center; width: 240px;">Nombre o Descripcion</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 50px;">Und.</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 60px">Cantidad</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 70px">P.Unitario</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 70px">Descuento</th>
-			<th style="font-size: 10px; border:1px solid #070707; padding: 0px; text-align: center; width: 20px">Importe</th>
+		<tr >
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 5px; text-align: center; width: 5px;" height="5">Item</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 5px; text-align: center; width: 5px;" height="5">Codigo</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 5px; text-align: center; width: 240px;">Nombre o Descripcion</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 0px; text-align: center; width: 50px;">Und.</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 0px; text-align: center; width: 60px">Cantidad</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 0px; text-align: center; width: 70px">P.Unitario</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 0px; text-align: center; width: 70px">Descuento</th>
+			<th style="font-size: 10px; border:1px solid #03A6BF; padding: 0px; text-align: center; width: 20px">Importe</th>
 
 		</tr>
 	</thead>
@@ -83,14 +82,14 @@
 		?>
 		<?php foreach ($ventas->detalle as $dt): ?>
 		<tr>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $item ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= (!is_null($dt->cod_producto)?$dt->cod_producto:$dt->cod_servicio) ?></td>
-			 <td style="border:1px solid #070707; padding: 6px;  "><?= $dt->producto_ventdet?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center;  "><?= $dt->unidad_ventdet ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->cantidad ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= $dt->precunit_ventdet ?></td>
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
-			<td style="border:1px solid #070707; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal:'' ?></td>  
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= $item ?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= (!is_null($dt->cod_producto)?$dt->cod_producto:$dt->cod_servicio) ?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px;  "><?= $dt->producto_ventdet?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center;  "><?= $dt->unidad_ventdet ?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= $dt->cantidad ?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= $dt->precunit_ventdet ?></td>
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->descuento_ventdet:'' ?></td> 
+			<td style="border:1px solid #03A6BF; padding: 6px; text-align: center; "><?= ($dt->tipo_ventdet=='V' OR $dt->tipo_ventdet=='E')?$dt->subtotal:'' ?></td>  
 		</tr>
 		<?php 
 
@@ -110,7 +109,7 @@
 </div>
 
 <div class="w100">
-	<div class="w30" style="float: right; padding: 5px;border:2px solid #070707;">
+	<div class="w30" style="float: right; padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
 		<div class="w100">
 			<div class="w50"><b>Gravada</b></div>
 			<div class="w50" style="text-align:right"><?= number_format($ventas->gravada_vent,2) ?></div>
@@ -127,7 +126,7 @@
 			<div class="w50"><b>IGV</b></div>
 			<div class="w50" style="text-align:right"><?= $ventas->igv_vent ?></div>
 		</div>
-		<div class="w100" style="border-bottom:1px solid black;margin:5px 0">
+		<div class="w100" style="border-bottom:1px solid #03A6BF;margin:5px 0">
 		</div>
 		<div class="w100">
 			<div class="w50"><b>TOTAL</b></div>
@@ -158,7 +157,7 @@
 	</div>
 	<br>
 <?php endif ?>
-<div class="w100" style="border:1px solid black;padding:2px">
+<div class="w100" style="border:1px solid #03A6BF; padding:2px; border-radius: 10px;">
 	<b style="font-size:13px">Observaciones SUNAT</b><br>
 	<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"> <?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>, ha sido aceptada.
 </div>

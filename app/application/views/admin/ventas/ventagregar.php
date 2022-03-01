@@ -271,7 +271,7 @@
 										<!-- <div class="switchery-demo"> -->
 											<!-- <input type="checkbox" class="custom-control-input" > -->                      
                       <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="servicioCheck" name="servicioCheck"/>
-											<label for="servicioCheck">Servicio</label>
+											<label for="servicioCheck">Servicio/producto</label>
 										<!-- </div> -->
 									</div>
                   <div class="col-md-6">
@@ -286,7 +286,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
 											<label class="control-label">Nombre</label>
-											<textarea name="nombreProducto" id="nombre-servicio" class="form-control" placeholder="Ingrese descripcion del servicio" rows="5" disabled style="display:none"></textarea>
+											<textarea name="nombreProducto" id="nombre-servicio" class="form-control" placeholder="Ingrese descripcion del producto o servicio" rows="5" disabled style="display:none"></textarea>
                       <input type="text" id="VentaProductoAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
                     </div>
 									</div>

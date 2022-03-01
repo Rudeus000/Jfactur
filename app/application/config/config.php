@@ -47,7 +47,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = $_SSS['app']['base_dir'].'app/vendor/autoload.php';
+$config['composer_autoload'] = $_SSS['app']['base_dir'].'/app/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------

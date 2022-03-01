@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DespatchAdvice xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
+        <ext:UBLExtensions>
+            <ext:UBLExtension>
+                <ext:ExtensionContent>
+                </ext:ExtensionContent>
+            </ext:UBLExtension>
+        </ext:UBLExtensions>
+        <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+        <cbc:CustomizationID>1.0</cbc:CustomizationID>
+    <cbc:ID>-</cbc:ID>
+    <cbc:IssueDate/>
+    <cbc:DespatchAdviceTypeCode/>
+    <cbc:Note/>
+    <cac:AdditionalDocumentReference>
+<cbc:ID>F001-732</cbc:ID>
+<cbc:DocumentTypeCode>06</cbc:DocumentTypeCode>
+</cac:AdditionalDocumentReference>
+    <cac:DespatchSupplierParty>
+            <cbc:CustomerAssignedAccountID schemeID="6"/>
+            <cac:Party>
+                <cac:PartyLegalEntity>
+    <cbc:RegistrationName><![CDATA[]]></cbc:RegistrationName>
+                </cac:PartyLegalEntity>
+            </cac:Party>
+        </cac:DespatchSupplierParty>
+    
+    <cac:DeliveryCustomerParty>
+    <cbc:CustomerAssignedAccountID schemeID=""/>
+            <cac:Party>
+                <cac:PartyLegalEntity>
+    <cbc:RegistrationName><![CDATA[]]></cbc:RegistrationName>
+                </cac:PartyLegalEntity>
+            </cac:Party>
+        </cac:DeliveryCustomerParty>
+    
+    <cac:Shipment>
+            <cbc:ID>1</cbc:ID>
+            <cbc:HandlingCode/>
+            <cbc:Information/>
+            <cbc:GrossWeightMeasure unitCode="KGM"/>
+    <cbc:TotalTransportHandlingUnitQuantity/>
+    
+            <cac:ShipmentStage>
+                <cbc:TransportModeCode/>
+                <cac:TransitPeriod>
+                    <cbc:StartDate/>
+                </cac:TransitPeriod>
+                <cac:CarrierParty>
+                    <cac:PartyIdentification>
+    <cbc:ID schemeID=""/>
+                    </cac:PartyIdentification>
+                    <cac:PartyName>
+                        <cbc:Name><![CDATA[]]></cbc:Name>
+                    </cac:PartyName>
+                </cac:CarrierParty>
+            </cac:ShipmentStage>
+            
+    <cac:Delivery>
+                <cac:DeliveryAddress>
+                    <cbc:ID/>
+                    <cbc:StreetName/>
+                </cac:DeliveryAddress>
+            </cac:Delivery>
+    <cac:OriginAddress>
+                <cbc:ID/>
+                <cbc:StreetName/>
+    </cac:OriginAddress>
+        </cac:Shipment>
+        
+        </DespatchAdvice>

@@ -3,7 +3,7 @@
 /* CORE APP config */
 $_SSS['app']['base_dir'] = $_SERVER['DOCUMENT_ROOT'];
 
-$_SSS['app']['tenant_folder'] = 'empresa1'; //folder name
+$_SSS['app']['tenant_folder'] = 'empresa2'; //folder name
 $_SSS['app']['app_folder'] = 'app'; //folder name
 $_SSS['app']['asset_folder'] = 'assets'; //folder name with a trailing slash only if there is an asset folder else leave blank
 
@@ -23,10 +23,10 @@ if(! defined('APP_TENANTPATH')){
     define('APP_BASEURL', $_SSS['app']['base_url'].'/');//this will be required to access tenant specific assets}
 }
 /* DB config */
-$_SSS['app']['db_host'] = 'localhost';
+$_SSS['app']['db_host'] = 'local';
 $_SSS['app']['db_user'] = 'root';
 $_SSS['app']['db_pass'] = 'Washington8277!!';
-$_SSS['app']['db_name'] = 'santalucia';
+$_SSS['app']['db_name'] = 'bfacturas';
 $_SSS['app']['db_driver'] = 'mysql';
 
 
