@@ -16,7 +16,7 @@ class Reginventarioinicial extends CI_Controller {
 	public function index()
 	{
 		$data['permisos'] =$this->permisos;
-		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$data['almacenes'] = $this->modelgeneral->getTableWhere('tb_almacen',['est_almacen'=>1]);
 		$data['categorias'] = $this->modelgeneral->getTable('tb_categoria');
 		$data['marcas'] = $this->modelgeneral->getTable('tb_marca');
 		$this->load->view('layouts/header');

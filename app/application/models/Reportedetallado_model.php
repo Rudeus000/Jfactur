@@ -211,7 +211,7 @@ class Reportedetallado_model extends CI_Model {
 	function getVentas($data)
 	{
 		$this->db->from('tb_venta_detalle');
-		$this->db->select("fecha_vent,nomb_almacen,nomb_puntoventa,nomb_cliente,nom_tipdocucli,doc_cliente,nom_tipdocumento,serie,numero_vent,CONCAT(apell_usu, ' ', nomb_usu) as nombre_apellido,producto_ventdet,precunit_ventdet,descuento_ventdet,(precunit_ventdet - descuento_ventdet) as precunit_con_descuento,cant_ventdet,subtotal_ventdet,serie_ventdetserie,
+		$this->db->select("fecha_vent,nomb_almacen,nomb_puntoventa,doc_cliente,nomb_cliente,nom_tipdocucli,doc_cliente,nom_tipdocumento,serie,numero_vent,CONCAT(apell_usu, ' ', nomb_usu) as nombre_apellido,producto_ventdet,precunit_ventdet,descuento_ventdet,(precunit_ventdet - descuento_ventdet) as precunit_con_descuento,cant_ventdet,subtotal_ventdet,serie_ventdetserie,
 		CASE 
 			WHEN serie_ventdetserie IS NULL THEN cant_ventdet
 			WHEN serie_ventdetserie IS NOT NULL THEN '1'
@@ -308,7 +308,7 @@ class Reportedetallado_model extends CI_Model {
 		
 		$row = [];
     foreach ($query->result() as $q) {
-			$row[] = [$q->fecha_vent,$q->nomb_almacen,$q->nomb_puntoventa,$q->nomb_cliente,$q->nom_tipdocumento.'-'.$q->serie.'-'.$q->numero_vent,$q->nombre_apellido,$q->producto_ventdet,$q->producto_isdn,$q->serie_ventdetserie,$q->precunit_ventdet,$q->descuento_ventdet,$q->precunit_con_descuento,$q->cantidad,$q->subtotal];
+			$row[] = [$q->fecha_vent,$q->nomb_almacen,$q->nomb_puntoventa,$q->doc_cliente,$q->nomb_cliente,$q->nom_tipdocumento.'-'.$q->serie.'-'.$q->numero_vent,$q->nombre_apellido,$q->producto_ventdet,$q->producto_isdn,$q->serie_ventdetserie,$q->precunit_ventdet,$q->descuento_ventdet,$q->precunit_con_descuento,$q->cantidad,$q->subtotal];
 		}
 
 		$result['aaData'] = $row;

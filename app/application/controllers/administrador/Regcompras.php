@@ -77,8 +77,10 @@ class Regcompras extends CI_Controller {
 		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad')
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where('est_product',1)
+		
 		->where_in('typeAssignmentProduct',array('P','N'))
-		->like('nomb_product',$producto)
+		->where('(nomb_product LIKE "%' . $producto
+				. '%" OR barra_product LIKE "%' . $producto . '%")', NULL)
 		->get()->result();
 		echo json_encode($result);
 	}

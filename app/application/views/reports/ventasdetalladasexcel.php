@@ -17,8 +17,13 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true)
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(11)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(12)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(13)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(14)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(15)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(16)->setAutoSize(true);
-
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(17)->setAutoSize(true);
 $styleNormal = [
 	'font' => [
 			'bold' => false,
@@ -65,56 +70,60 @@ $objPHPExcel->getActiveSheet()
 ->getStyleByColumnAndRow(3,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(4,$row,'CLIENTE')
+->setCellValueByColumnAndRow(4,$row,'DNI-RUC')
 ->getStyleByColumnAndRow(4,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(5,$row,'DOCUMENTO')
+->setCellValueByColumnAndRow(5,$row,'CLIENTE')
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,'VENDEDOR')
+->setCellValueByColumnAndRow(6,$row,'DOCUMENTO')
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,'PRODUCTO')
+->setCellValueByColumnAndRow(7,$row,'VENDEDOR')
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,'ISDN')
+->setCellValueByColumnAndRow(8,$row,'PRODUCTO')
 ->getStyleByColumnAndRow(8,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(9,$row,'SERIE')
+->setCellValueByColumnAndRow(9,$row,'ISDN')
 ->getStyleByColumnAndRow(9,$row)
 ->applyFromArray($styleBold);
-$objPHPExcel->getActiveSheet()	
-->setCellValueByColumnAndRow(10,$row,'PREC. UNID.')
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(10,$row,'SERIE')
 ->getStyleByColumnAndRow(10,$row)
 ->applyFromArray($styleBold);
-$objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(11,$row,'DSCUENTO')
+$objPHPExcel->getActiveSheet()	
+->setCellValueByColumnAndRow(11,$row,'PREC. UNID.')
 ->getStyleByColumnAndRow(11,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(12,$row,'PREC. CON DESC.')
+->setCellValueByColumnAndRow(12,$row,'DSCUENTO')
 ->getStyleByColumnAndRow(12,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(13,$row,'CANTIDAD')
+->setCellValueByColumnAndRow(13,$row,'PREC. CON DESC.')
 ->getStyleByColumnAndRow(13,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(14,$row,'SUBTOTAL')
+->setCellValueByColumnAndRow(14,$row,'CANTIDAD')
 ->getStyleByColumnAndRow(14,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(15,$row,'ESTADO')
+->setCellValueByColumnAndRow(15,$row,'SUBTOTAL')
 ->getStyleByColumnAndRow(15,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(16,$row,'OBSERVACION')
+->setCellValueByColumnAndRow(16,$row,'ESTADO')
 ->getStyleByColumnAndRow(16,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(17,$row,'OBSERVACION')
+->getStyleByColumnAndRow(17,$row)
 ->applyFromArray($styleBold);
 
 $total = 0;
@@ -133,24 +142,28 @@ foreach ($datos as $d) {
 	->getStyleByColumnAndRow(3,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(4,$row,$d->nomb_cliente)
+	->setCellValueByColumnAndRow(4,$row,$d->doc_cliente)
 	->getStyleByColumnAndRow(4,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(5,$row,$d->nom_tipdocumento.'-'.$d->serie.'-'.$d->numero_vent)
+	->setCellValueByColumnAndRow(5,$row,$d->nomb_cliente)
 	->getStyleByColumnAndRow(5,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(6,$row,$d->nombre_apellido)
+	->setCellValueByColumnAndRow(6,$row,$d->nom_tipdocumento.'-'.$d->serie.'-'.$d->numero_vent)
 	->getStyleByColumnAndRow(6,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(7,$row,$d->producto_ventdet)
+	->setCellValueByColumnAndRow(7,$row,$d->nombre_apellido)
 	->getStyleByColumnAndRow(7,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(8,$row,$d->producto_isdn)
+	->setCellValueByColumnAndRow(8,$row,$d->producto_ventdet)
 	->getStyleByColumnAndRow(8,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(9,$row,$d->producto_isdn)
+	->getStyleByColumnAndRow(9,$row)
 	->applyFromArray($styleNormal);	
 	$objPHPExcel->getActiveSheet()->getCell('I'.$row)
 	->setValueExplicit(
@@ -158,32 +171,32 @@ foreach ($datos as $d) {
 			\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
 	);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(10,$row,$d->precunit_ventdet)
-	->getStyleByColumnAndRow(10,$row)
-	->applyFromArray($styleNormal);
-	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(11,$row,$d->descuento_ventdet)
+	->setCellValueByColumnAndRow(11,$row,$d->precunit_ventdet)
 	->getStyleByColumnAndRow(11,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(12,$row,$d->precunit_con_descuento)
+	->setCellValueByColumnAndRow(12,$row,$d->descuento_ventdet)
 	->getStyleByColumnAndRow(12,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(13,$row,$d->cantidad)
+	->setCellValueByColumnAndRow(13,$row,$d->precunit_con_descuento)
 	->getStyleByColumnAndRow(13,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(14,$row,$d->subtotal)
+	->setCellValueByColumnAndRow(14,$row,$d->cantidad)
 	->getStyleByColumnAndRow(14,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(15,$row,$d->estado_vent=='G'?'Generado':'Anulado')
+	->setCellValueByColumnAndRow(15,$row,$d->subtotal)
 	->getStyleByColumnAndRow(15,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(16,$row,$d->observacion_vent)
+	->setCellValueByColumnAndRow(16,$row,$d->estado_vent=='G'?'Generado':'Anulado')
 	->getStyleByColumnAndRow(16,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(17,$row,$d->observacion_vent)
+	->getStyleByColumnAndRow(17,$row)
 	->applyFromArray($styleNormal);
 	
 	$total += $d->subtotal;
@@ -191,17 +204,17 @@ foreach ($datos as $d) {
 }
 
 $objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(13,$row,'TOTAL')
-	->getStyleByColumnAndRow(13,$row)
+	->setCellValueByColumnAndRow(14,$row,'TOTAL')
+	->getStyleByColumnAndRow(14,$row)
 	->applyFromArray($styleBold);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(14,$row,$total)
-	->getStyleByColumnAndRow(14,$row)
+	->setCellValueByColumnAndRow(15,$row,$total)
+	->getStyleByColumnAndRow(15,$row)
 	->applyFromArray($styleNormal);
 
 
 if($this->session->userdata('movil_expert')=='0'){
-	$objPHPExcel->getActiveSheet()->removeColumnByIndex(8);
+	$objPHPExcel->getActiveSheet()->removeColumnByIndex(9);
 }
 
 $writer = new Xlsx($objPHPExcel);

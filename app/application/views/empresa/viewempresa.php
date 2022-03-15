@@ -139,8 +139,12 @@
 																<div class="form-group">
 																	<label class="control-label">Regimen</label>
 																	<select name="regimen" class="form-control">
-																		<option value="Si" <?= $empresa->regimen_emp=='Si'?'selected':'' ?> >Si</option>
-																		<option value="No" <?= $empresa->regimen_emp=='No'?'selected':'' ?>>No</option>
+																		<!-- <option value="Si" <?= $empresa->regimen_emp=='Si'?'selected':'' ?> >Si</option>
+																		<option value="No" <?= $empresa->regimen_emp=='No'?'selected':'' ?>>No</option> -->
+																		<?php foreach ($regimen as $regimen_emp) : ?>
+																			<option value="<?= $regimen_emp->idregimen ?>"><?= $regimen_emp->nombre ?></option>
+																		<?php endforeach ?>
+												
 																	</select>
 																</div>
 															</div>

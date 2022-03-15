@@ -24,6 +24,7 @@ class Regempresa extends CI_Controller {
 		$this->load->view('layouts/aside');
 		$data['ubigeos'] = $this->ubigeo();
 		$data['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		$data['regimen'] = $this->modelgeneral->getTable('sunat_tiporegimen');
 		$this->load->view('empresa/viewempresa',$data);
 		$this->load->view('layouts/footer');
 	}

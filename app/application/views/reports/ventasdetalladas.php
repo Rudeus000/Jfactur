@@ -75,6 +75,7 @@
                         <th style="text-align: center; width: 50px">Fecha</th>
                         <th style="text-align: center;">Almacen</th>
 												<th style="text-align: center;">Punto de Venta</th>
+                        <th style="text-align: center;">DNI-RUC</th>
 												<th style="text-align: center;">Cliente</th>
 												<th style="text-align: center;">Documento</th>
 												<th style="text-align: center;">Vendedor</th>
@@ -90,7 +91,7 @@
                     </thead>
 											<tfoot>
 												<tr>
-													<th colspan="13" style="text-align:right">Total:</th>
+													<th colspan="14" style="text-align:right">Total:</th>
 													<th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
 												</tr>
 											</tfoot>

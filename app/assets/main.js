@@ -11398,6 +11398,7 @@ var TableReporteDetalladoVentas = $('#TableReporteDetalladoVentas').DataTable({
 		{ "orderable": false },
 		{ "orderable": false },
 		{ "orderable": false },
+		{ "orderable": false },
 		{ "orderable": false }
 	],
 	"initComplete": function (settings, json) {
@@ -11405,7 +11406,7 @@ var TableReporteDetalladoVentas = $('#TableReporteDetalladoVentas').DataTable({
 	}
 });
 
-TableReporteDetalladoVentas.column(7).visible(movilexpert=='0'?false:true);
+TableReporteDetalladoVentas.column(8).visible(movilexpert=='0'?false:true);
 
 $('#FormReporteVentasDetalladasBusqueda').validate({
 	submitHandler: function () {
