@@ -165,7 +165,7 @@ foreach ($datos as $d) {
 	->setCellValueByColumnAndRow(9,$row,$d->producto_isdn)
 	->getStyleByColumnAndRow(9,$row)
 	->applyFromArray($styleNormal);	
-	$objPHPExcel->getActiveSheet()->getCell('I'.$row)
+	$objPHPExcel->getActiveSheet()->getCell('J'.$row)
 	->setValueExplicit(
 		$d->serie_ventdetserie,
 			\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
