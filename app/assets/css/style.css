@@ -1,3 +1,23 @@
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+ 
  .password-icon {
         float: right;
         position: relative;
@@ -7,36 +27,44 @@
 .tblventas td:nth-child(8) {
     background: #3bc0c3;
 }
-.tblcierre td:nth-child(10) {
-    background: #d03f3f;
-     text-align: center;
-    color: #fff;
+.tblcierre td:nth-child(7) {
+  background: #d03f3f;
+   text-align: center;
+  color: #fff;
 
 }
-.tblcierree td:nth-child(6) {
+.tblcierree td:nth-child(8) {
     background: #3bc0c3;
      text-align: center;
     color: #fff;
 
 }
-.tblcierret td:nth-child(7) {
+.tblcierret td:nth-child(9) {
     background: #ffc107;
      text-align: center;
     color: #fff;
 
 }
-.tblcierret td:nth-child(9) {
+.tblcierrea td:nth-child(10) {
+  background: #33b0e0;
+   text-align: center;
+  color: #fff;
+
+}
+.tblcierret td:nth-child(11) {
     background: #4489e4;
      text-align: center;
     color: #fff;
 
 }
-.tblcierrea td:nth-child(8) {
-    background: #33b0e0;
-     text-align: center;
-    color: #fff;
+
+.tblcierre td:nth-child(12) {
+  background: #d03f3f;
+   text-align: center;
+  color: #fff;
 
 }
+
 .tblstockminimo td:nth-child(7) {
     background: #d03f3f;
      text-align: center;

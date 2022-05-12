@@ -74,6 +74,7 @@ class perfil extends CI_Controller {
     if ($this->form_validation->run() == TRUE) {
 
       $data['email_usu'] = $this->input->post('email');
+	  $data['acerca_usu'] = $this->input->post('about');
       $data['login_usu'] = $this->input->post('login');
       if (isset($_POST['passwoord'])) {
         $data['passwoord_usu'] = sha1($this->input->post('passwoord'));

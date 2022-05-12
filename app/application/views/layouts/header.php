@@ -11,7 +11,7 @@
         <!-- App favicon -->
         <!-- <link rel="shortcut icon" href="assets/images/favicon.ico"> -->
                   <!--Morris Chart CSS -->          
-                  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
                   <!-- Custom box css -->
         <link href="<?= base_url_app() ?>assets/plugins/custombox/css/custombox.min.css" rel="stylesheet">
       <!-- Dropzone css -->
@@ -156,12 +156,12 @@
                                 <i class="mdi mdi-menu"></i>
                             </button>
                         </li>
-                       <!--  <li class="hide-phone app-search">
+                        <li class="hide-phone app-search">
                             <form role="search" class="">
-                                <input type="text" placeholder="Search..." class="form-control">
+                                <input type="text" placeholder="Buscar..." class="form-control" >
                                 <a href=""><i class="fa fa-search"></i></a>
                             </form>
-                        </li> -->
+                        </li>
                     </ul>
 
                 </nav>

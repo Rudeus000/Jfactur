@@ -97,14 +97,15 @@
                             </div>
                         </div>
                             <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <h3 class="register-heading">Descargar mis facturas</h3>
+                                <h3 class="register-heading">Acceder al portal</h3>
                                 <div class="row register-form">
                                
                                     <div class="col-md-6">
-                                    	<label>Para descargar tu factura dale click aqui </label>
+                                    	<label>Para acceder al portal de comprobantes haz click en el siguiente boton</label>
                                         
                                         <div class="form-group">
-                                        <input type="submit" class="btnRegister" value="Descargar">
+                                        <!-- <input type="submit" class="btnRegister" value="Descargar"> -->
+                                        <a href="<?= base_url('administrador/regcomprobante') ?>" class="btn btn-success btn-rounded w-md waves-effect waves-light btnRegister" role="button">Ingresar al portal</a>                                      
                                     </div>
                                     </div>
                                 </div>

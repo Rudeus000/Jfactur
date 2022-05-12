@@ -9,7 +9,7 @@ class Gastos_model extends CI_Model {
         $queryTotal = $this->db->get();
         $this->db->from('tb_gastos');
         $this->db->join('tb_tipo_gastos','tb_gastos.cod_tipgastos = tb_tipo_gastos.cod_tipgastos');
-        $this->db->join('tb_banco','tb_gastos.cod_ban = tb_banco.cod_ban');    
+        $this->db->join('tb_banco','tb_gastos.cod_ban = tb_banco.cod_ban');
         $this->db->select('tb_gastos.* , cod_gastos,descripcion as TipoGastos, nomb_gastos as NombreGastos, 
         , fecha_registro as fechagastos ,total_gastos as total,observacion_gastos');
 

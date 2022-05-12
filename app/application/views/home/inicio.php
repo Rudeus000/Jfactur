@@ -27,7 +27,7 @@
                                             <div class="">
                                                 <h4 class="mt-5 m-b-5 font-18 ellipsis"><?= $this->session->userdata('nomb_usu').' '.$this->session->userdata('apell_usu') ?></h4>
                                                 <p class="font-13"><?= $perfil->nomb_perfil ?></p>
-                                                <p class="text-muted m-b-0"><small>Ayacucho, Peru</small></p>
+                                                <!-- <p class="text-muted m-b-0"><small>Ayacucho, Peru</small></p> -->
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -63,9 +63,9 @@
                                                 <h4 class="text-uppercase font-weight-bold"><?= $this->session->userdata('nomb_usu').' '.$this->session->userdata('apell_usu') ?></h4>
                                                 <div class="designation mb-4"><?= $perfil->nomb_perfil ?></div>
                                                 <p class="text-muted">
-                                                    Soy ingeniero de sistema tengo 31 años y 3 años de experiencia laboral como analista programador, Gerente comerical de servico de telfonia movil, soporte IT bitel y coaching.
+                                                <?=$usuarios->acerca_usu ?>
                                                 </p>
-                                                <a class="btn btn-primary m-t-20" href="#"> <i class="fa fa-check"></i> Following</a>
+                                                <a class="btn btn-primary m-t-20" href="#"> <i class="fa fa-check"></i> Compartir</a>
                                                 
                                                 <table class="table table-condensed table-hover">
                                                     <thead>
@@ -184,7 +184,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="AboutMe">Acerca de mi</label>
-                                                        <textarea style="height: 125px;" id="AboutMe" class="form-control" placeholder="Escribe una breve descripcion acerca de ti "></textarea>
+                                                        <textarea style="height: 125px;" name="about" id="AboutMe" class="form-control" placeholder="Escribe una breve descripcion acerca de ti "></textarea>
                                                     </div>
                                                     <button class="btn btn-primary" type="submit">Guardar</button>
                                                 </form>

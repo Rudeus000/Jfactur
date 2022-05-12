@@ -28,9 +28,11 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
-            <div class="card-header bg-success"><h3 class="my-0 text-white">REPORTE DE UTILIDAD DE VENTAS POR PRODUCTO</h3></div>
+              <div class="card-header bg-success">
+                <h3 class="my-0 text-white">REPORTE DE UTILIDAD DE VENTAS POR PRODUCTO</h3>
+              </div>
               <div class="card-body table-responsive">
-                        <fieldset>
+                <fieldset>
                   <legend>Filtro</legend>
                   <form id="ReportgananproductosFormBusqueda" action="" method="post" autocomplete="off">
                     <div class="row">
@@ -43,7 +45,7 @@
                           </div>
                         </div>
                       </div>
-                
+
                       <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Producto</label>
@@ -57,46 +59,46 @@
                           <select name="estado" class="form-control">
                             <option value="G">Generado</option>
                             <option value="A">Anulado</option>
-                            <option value="">Todos</option>                           
+                            <option value="">Todos</option>
                           </select>
                         </div>
                       </div>
 
-                       <div class="col-md-3">
-                                      <div class="form-group">
-                                        <label class="control-label">Punto de venta</label>
-                                        <select name="punto" class="form-control select2">
-                                           <option value="">--Todos--</option>
-                                                  <?php foreach ($punto as $p): ?>
-                                                  <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa  ?></option>
-                                                    <?php endforeach ?>
-                                        </select>
-                                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Punto de venta</label>
+                          <select name="punto" class="form-control select2">
+                            <option value="">--Todos--</option>
+                            <?php foreach ($punto as $p) : ?>
+                              <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa  ?></option>
+                            <?php endforeach ?>
+                          </select>
                         </div>
-                       
-                           <div class="col-md-3">
-                            <div class="form-group">
-                              <label  class="col-form-label">Marca:</label>
-                                                    <select class="form-control  select2 select2-hidden-accessible" name="tb_marca" >
-                                                    <option value="">--Todos--</option>
-                                                  <?php foreach ($marca as $m): ?>
-                                                  <option value="<?= $m->cod_marca ?>"><?= $m->nomb_marca ?></option>
-                                                    <?php endforeach ?>
-                                                   </select>
-                            </div>
-                                                    
-                          </div>
+                      </div>
 
-                           <div class="form-group col-md-3">
-                                                    <label  class="col-form-label">Categoria:</label>
-                                                    <select class="form-control  select2 select2-hidden-accessible" name="tb_categoria" >
-                                                    <option value="">--Todos--</option>
-                                                  <?php foreach ($categoria as $c): ?>
-                                                  <option value="<?= $c->cod_categoria ?>"><?= $c->nomb_categoria ?></option>
-                                                    <?php endforeach ?>
-                                                   </select>
-                                                </div>    
-                   <!--  
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="col-form-label">Marca:</label>
+                          <select class="form-control  select2 select2-hidden-accessible" name="tb_marca">
+                            <option value="">--Todos--</option>
+                            <?php foreach ($marca as $m) : ?>
+                              <option value="<?= $m->cod_marca ?>"><?= $m->nomb_marca ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="col-form-label">Categoria:</label>
+                        <select class="form-control  select2 select2-hidden-accessible" name="tb_categoria">
+                          <option value="">--Todos--</option>
+                          <?php foreach ($categoria as $c) : ?>
+                            <option value="<?= $c->cod_categoria ?>"><?= $c->nomb_categoria ?></option>
+                          <?php endforeach ?>
+                        </select>
+                      </div>
+                      <!--  
                       <div class="col-md-2">
                         <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
                       </div> -->
@@ -116,31 +118,31 @@
                     <thead>
                       <tr class="bg-success text-white">
                         <th style="text-align: center; width: 50px">Codigo</th>
-                         <th style="text-align: center;">Productos</th>
-                         <th style="text-align: center;">Marca</th>
-                         <th style="text-align: center;">Categoria</th>
-                         <th style="text-align: center;">Unidad </th>
-                         <th style="text-align: center; width: 60px">Cantidad</th>
-                         <th style="text-align: center; width: 90px">Precio compra.</th> 
-                         <th style="text-align: center; width: 90px">Costo compra</th>
-                          <th style="text-align: center; width: 90px">Precio vent.</th> 
-                          <th style="text-align: center; width: 90px">Total venta</th> 
-                          <th style="text-align: center; width: 90px">Ganancia</th>
+                        <th style="text-align: center;">Productos</th>
+                        <th style="text-align: center;">Marca</th>
+                        <th style="text-align: center;">Categoria</th>
+                        <th style="text-align: center;">Unidad </th>
+                        <th style="text-align: center; width: 60px">Cantidad</th>
+                        <th style="text-align: center; width: 90px">Precio compra.</th>
+                        <th style="text-align: center; width: 90px">Costo compra</th>
+                        <th style="text-align: center; width: 90px">Precio vent.</th>
+                        <th style="text-align: center; width: 90px">Total venta</th>
+                        <th style="text-align: center; width: 90px">Ganancia</th>
 
-                   
+
                       </tr>
                     </thead>
-                       <tfoot>
-                         <tr>
-                             <th colspan="5" style="text-align:right">Total:</th>
-                             <th><strong><span id="TotalPagosProductos"></span></strong></th>
-                              <th><strong><span id="TotalPagosPrecompras"></span></strong></th>
-                               <th><strong><span id="TotalPagosCompras"></span></strong></th>
-                             <th><strong><span id="TotalPagosPrecios"></span></strong></th>
-                              <th><strong><span id="TotalPagosTotales"></span></strong></th>
-                              <th><strong><span id="TotalPagosGanancias"></span></strong></th>
-                         </tr>
-                     </tfoot>
+                    <tfoot>
+                      <tr>
+                        <th colspan="5" style="text-align:right">Total:</th>
+                        <th><strong><span id="TotalPagosProductos"></span></strong></th>
+                        <th><strong><span id="TotalPagosPrecompras"></span></strong></th>
+                        <th><strong><span id="TotalPagosCompras"></span></strong></th>
+                        <th><strong><span id="TotalPagosPrecios"></span></strong></th>
+                        <th><strong><span id="TotalPagosTotales"></span></strong></th>
+                        <th><strong><span id="TotalPagosGanancias"></span></strong></th>
+                      </tr>
+                    </tfoot>
 
                   </table>
 
@@ -148,9 +150,9 @@
                 <!-- End #wizard-vertical -->
               </div>
             </div>
-          </div>              
+          </div>
         </div>
-      </div> <!-- container -->         
+      </div> <!-- container -->
     </div> <!-- content -->
 
   </div>
@@ -163,5 +165,3 @@
 
 </div>
 <!-- END wrapper -->
-
-

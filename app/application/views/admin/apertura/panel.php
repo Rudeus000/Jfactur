@@ -47,12 +47,22 @@
                           <input type="text" name="caja" class="form-control">
                         </div>
                       </div>
+                      <?php if($this->session->userdata('perfil')==1): ?> 
                       <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Usuario:</label>
-                          <input type="text" name="usuario" class="form-control">
-                        </div>
+                          <input type="text"  name="usuario" class="form-control">                      
+                        </div>                      
                       </div>
+                      <?php endif ?>
+                      <?php if($this->session->userdata('perfil')!=1): ?>
+                      <div class="col-md-4" hidden="">
+                        <div class="form-group">
+                          <label class="control-label">Usuario:</label>                      
+                          <input type="text" readonly value="<?=$this->session->userdata('nomb_usu')?>" name="usuario" class="form-control">                          
+                        </div>                      
+                      </div>
+                      <?php endif ?>
                       <div class="col-md-2">
                         <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
                       </div>

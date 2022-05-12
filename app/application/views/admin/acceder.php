@@ -155,10 +155,15 @@
                                                                                
                                                                             </tr>
                                                                         </thead>
-                                                                        <tbody>
+                                                                        <tbody> 
+                                                                        <?php
+                                                                                $item = 1;
+                                                                               
+                                                                                ?>                                                                      
                                                                         	<?php foreach($sucursales as $s): ?>
-                                                                            <tr>
-                                                                                <td>1</td>
+                                                                            <tr>                                                                              
+
+                                                                                <td><span class="badge badge-primary"><?=  $item++;?></span></td>
                                                                                 <td><a href="<?= base_url('auth/setPuntoVenta/'.$s->cod_puntoventa) ?>" class="btn btn-info btn-sm">Acceder</a></td>
                                                                                 <td>
                                                                                 <?php if($s->cod_puntoventa==$this->session->userdata('puntoventa_reportes')): ?> 
@@ -170,7 +175,7 @@
                                                                             <?php endforeach ?>
 																			<?php if($perfil->cod_perfil==1): ?> 
                                                                             <tr>
-                                                                                <td>2</td>
+                                                                            <td> <span class="badge badge-danger"><?= $item ?></span></td>
                                                                                 <td><a href="<?= base_url('auth/setPuntoVenta/admin') ?>" class="btn btn-primary btn-sm">Acceder</a></td>
                                                                                  <td>                                                                               
                                                                                 	<?php if($this->session->userdata('puntoventa_reportes')=='admin'): ?> 

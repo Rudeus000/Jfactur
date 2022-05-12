@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require(APP_TENANTPATH.'config.php');
 
 class Regcotizacion extends CI_Controller {
 	private $permisos;
@@ -735,10 +736,4 @@ class Regcotizacion extends CI_Controller {
 		$this->mpdf->Output('assets/cotizacion.pdf','I');
 
 	}
-
-
-
 }
-
-/* End of file Regcotizacion.php */
-/* Location: ./application/controllers/administrador/Regcotizacion.php */
