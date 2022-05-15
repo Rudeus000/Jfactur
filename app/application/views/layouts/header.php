@@ -158,7 +158,7 @@
                         </li>
                         <li class="hide-phone app-search">
                             <form role="search" class="">
-                                <input type="text" placeholder="Buscar..." class="form-control" >
+                                <input id="input-general" type="text" placeholder="Buscar..." class="form-control" >
                                 <a href=""><i class="fa fa-search"></i></a>
                             </form>
                         </li>
@@ -172,3 +172,47 @@
 
 </body>
 </html>
+
+
+<div id="ModalBusquedaGeneral" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="max-width:800px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="FormBusquedaGeneral" action="">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
+                </div>
+            </div>
+        </form>
+
+        <form action="">
+            <table id="table-busqueda-general" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Almacen</th>
+                        <th>Producto</th>
+                        <th>Marca</th>
+                        <th>Categoría</th>
+                        <th>Unidad</th>
+                        <th>P. Venta</th>
+                        <th>Stock Actual</th>
+                        <th>Cantidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

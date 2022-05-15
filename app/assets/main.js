@@ -12784,3 +12784,167 @@ $('#ImportarPlantillaStock').fileupload({
 /* ============================================ */
 
 
+
+
+/* ============================================ */
+/*               BUSQUEDA GENERAL               */
+/* ============================================ */
+$('#input-general').click(function(){
+	$('#ModalBusquedaGeneral').modal();
+});
+
+
+$('#FormBusquedaGeneral').validate({
+	submitHandler: function () {
+		console.log('holaa');
+	}
+});
+
+
+$("#BusquedaGeneralAutocomplete").easyAutocomplete({
+	minCharNumber: 2,
+	url: function (query) {
+		return path + "administrador/regBusquedaGeneral/getProductoBusqueda?producto=" + query;
+	},
+	requestDelay: 500,
+	getValue: function (element) {
+		var disponible = '';
+		if (element.estado == '0') {
+			disponible = ' (No Disponible)';
+		} else {
+			if (element.cod_tiparticulo == 1) {
+				disponible = ' (stock' + ' ' + element.stock + ')'
+			} else {
+				disponible = '';
+			}
+		}
+		return element.nombre + ' - ' + element.nomb_almacen + ' ' +disponible;
+	},
+	list: {
+		onKeyEnterEvent: function () {
+			obtenerValoresArticulosBusquedaGeneral();
+			$('#FormBusquedaGeneral').submit();
+		},
+		onClickEvent: function () {
+			obtenerValoresArticulosBusquedaGeneral();
+			$('#FormBusquedaGeneral').submit();
+		}
+	}
+});
+
+
+function obtenerValoresArticulosBusquedaGeneral() {
+	let select = $("#VentaProductoAutocomplete").getSelectedItemData();
+
+	$('input[name=idTypeAssignmentProduct]').val(select.idTypeAssignmentProduct);
+	$('input[name=producto]').val(select.id);
+	$('input[name=pesoProducto]').val(select.peso_product);
+	$('input[name=unidadProducto]').val(select.unidad);
+	$('input[name=precioProducto]').val(parseFloat(select.venta).toFixed(4));
+	if (select.estado == '0') {
+		$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', true);
+		return;
+	}else{
+		//$('#serieChek').prop('disabled', false);
+		//$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', false);
+	}
+}
+
+function obtenerProductoBusquedaGeneral(){
+
+	
+		var producto = $('input[name=producto]').val();
+		if (producto == ''){
+			return;
+		}
+		
+		var cantidad = $('input[name=cantidadProducto]').val();
+
+		//var unidad = $('input[name=unidadProducto]').val();
+		//var peso = $('input[name=pesoProducto]').val();
+
+		//$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', true);
+
+		$.getJSON(path + 'administrador/regventas/getProducto', { producto }, function (resp) {
+			var producto = resp.response.cod_producto;
+			if (resp.tipo == 1 && !resp.estado) {
+				Swal.fire({
+					title: "Error",
+					text: "El stock máximo disponible es " + resp.response.stock_disponible,
+					type: "error",
+				});
+				return;
+			}
+			/*
+			if ($('#TableVentaProductos tbody tr.fila-producto').length > 0) {
+				$('#TableVentaProductos tr.fila-producto').each(function () {
+					var data_id = parseInt($(this).data('id'));
+					id_array.push(data_id);
+				});
+				if (id_array.includes(parseInt(resp.response.cod_producto))) {
+					if ($('#prod-' + resp.response.cod_producto).next('.fila-detalle')[0] != undefined) {
+						$('#prod-' + resp.response.cod_producto).next().remove();
+					}
+					$('#prod-' + resp.response.cod_producto).remove();
+				}
+			}
+			*/
+
+			var tr = `
+				<tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
+					<input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
+					<input type="hidden" name="idTypeAssignmentProduct[${producto}]" value="${resp.response.idTypeAssignmentProduct}"/>
+					<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
+					<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
+					<input type="hidden" name="unidad_abreviatura_prod[${producto}]" value="${resp.response.abreviatura_unid}" />
+					<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
+					<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+					<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
+					<td class="details-control">
+					${(seriesCheckBox) ? '<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>' : ''}
+					</td>
+					<td>${resp.response.cod_producto}</td>
+					<td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
+					<td class="${(movilexpert == '0') ? 'd-none' : ''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
+								<td>${resp.response.nomb_marca}</td>						
+					<td>${resp.response.nomb_unid}</td>
+					<td style="width:110px"><input min="1" type="${(seriesCheckBox) ? 'hidden' : 'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox) ? cantidad : ''}</td>
+					<td style="width:140px"><input type="text" class="prec form-control" name="prec_prod[${producto}]" value="${($('input[name=precioProducto]').val())}"></td>
+					<td>
+					<input type="hidden" class="desc" name="desc_prod[${producto}]" value="${$('input[name=descuentoProducto]').val()}" />
+					${round($('input[name=descuentoProducto]').val(), 2)}
+					</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+					<div class="btn-group btn-group-justified m-b-10">
+						<button data-id="${resp.response.cod_producto}" class="removerProducto btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
+					</div>
+					</td>
+				</tr>
+				`;
+
+			if ($('#TableVentaProductos tbody>tr.fila-producto')[0] == undefined) {
+				$('#TableVentaProductos tbody').append(tr);
+			} else {
+				if ($('#TableVentaProductos tbody .fila-producto').last().next()[0] != undefined) {
+					$($('#TableVentaProductos tbody .fila-producto').last().next()).after(tr);
+				} else {
+					$($('#TableVentaProductos tbody .fila-producto').last()).after(tr);
+				}
+			}
+			
+
+
+			$('#FormVentaAgregarProducto')[0].reset();
+			$('input[name=producto]').val('');
+			$('#VentaProductoAutocomplete').prop('disabled', false).show();
+			$('#FormVentaAgregarProducto input[name=producto]').val('');
+			$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', false);
+			//calcularTotalVenta();
+		});
+}
+/* ============================================ */
+/*             BUSQUEDA GENERAL END             */
+/* ============================================ */
