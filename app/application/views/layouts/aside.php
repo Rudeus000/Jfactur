@@ -26,7 +26,7 @@
         </li>
 
         <?php endif ?>
-<?php if($this->session->userdata('perfil')==1): ?> 
+<?php if($this->session->userdata('perfil')==1 or 6): ?> 
         <li>
           <a href="javascript: void(0);"><i class="fas fa-boxes"></i> <span>Almacen</span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">

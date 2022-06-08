@@ -488,13 +488,15 @@
                                <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                              </div>
                            </div>
-                           <div class="card-body d-flex justify-content-between align-items-right">
+                           <div class="col-md-12">
+                           <div class="button-list">
                              <button type="button" data-monto="10" class="monto-recibido btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
                              <button type="button" data-monto="20" class="monto-recibido btn btn-success btn-bordered waves-effect w-md">S/.20</button>
                              <button type="button" data-monto="50" class="monto-recibido btn btn-danger btn-bordered waves-effect w-md">S/.50</button>
                              <button type="button" data-monto="100" class="monto-recibido btn btn-purple btn-bordered waves-effect w-md">S/.100</button>
                              <button type="button" data-monto="200" class="monto-recibido btn btn-pink btn-bordered waves-effect w-md">S/.200</button>
                              <button type="button" data-monto="500" class="monto-recibido btn btn-info btn-bordered waves-effect w-md">S/.500</button>
+                           </div>
                            </div>
                          </div>
                        </fieldset>
