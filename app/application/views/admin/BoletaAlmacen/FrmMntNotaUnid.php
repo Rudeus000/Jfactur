@@ -32,7 +32,7 @@ var pathController="<?php echo base_url();?>administrador";
                                 <div class="card">
                                 <div class="card-header bg-success"><h3 class="my-0 text-white">Boleta almacen <a class="btn btn-rounded btn-pink float-right" id="btnnuevo" tabindex="0" aria-controls="datatable-buttons"><i class="fas fa-plus m-r-5"></i><span>Agregar</span></a> </h3></div>
                                     <div class="card-body table-responsive">
-					 <form id="FormComprasFiltro" action="" method="post" autocomplete="off">				
+					 <!--<form id="FormComprasFiltro" action="" method="post" autocomplete="off">				-->
 					<input type="hidden" id="t_codigo" value="<?php echo ($update==1?$id:'')?>" /> 			
                   <div class="row">
 					<div class="col-md-3">
@@ -149,33 +149,29 @@ var pathController="<?php echo base_url();?>administrador";
 						</div>
 					</div>
 				</div>				
+					
+					<form id="form1" method="post" name="form1" >
 					<fieldset><legend>Detalle</legend>
 				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="ccod_art">Codigo Art.</label>
-							<input class="form-control" type="hidden" id="t_ccod_art" value=""  />
-							<input class="form-control" type="text" id="t_cdsc_art" value=""  />
-							<input class="form-control" type="hidden" id="t_ccod_undmed" value=""  />
+							<input class="form-control" type="hidden" id="t_ccod_art" name="t_ccod_art" value=""  />
+							<input class="form-control" type="text" id="t_cdsc_art" name="t_cdsc_art" value=""  />
+							<input class="form-control" type="hidden" id="t_ccod_undmed" name="t_ccod_undmed" value=""  />
 						</div>
 					</div>
 					<div class="col-md-2">
 						<div class="form-group">
 							<label for="nund">Cantidad</label>
-							<input class="form-control" type="text" id="t_nund" value=""  />
+							<input class="form-control" type="text" id="t_nund" name="t_nund" value=""  />
 						</div>
 					</div>
-					<!--<div class="col-md-4">
-						<div class="form-group">
-							<label for="bind_lote">Es Lote?</label>
-							<!--<input class="form-control" type="text" id="t_bind_lote" value=""  />
-							
-						</div>
-					</div>-->
+					
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="cnro_lote">Nro. Lote<input type="checkbox" onclick="javascript:FrmMntNotaUnid.CheckLote(this)" id="t_bind_lote" name="t_bind_lote" value=""  /></label>
-							<input class="form-control" readonly type="text" id="t_cnro_lote" value=""  />
+							<input class="form-control" readonly type="text" id="t_cnro_lote" name="t_cnro_lote" value=""  />
 						</div>
 					</div>
 					<div class="col-md-2">
@@ -185,58 +181,6 @@ var pathController="<?php echo base_url();?>administrador";
 					</div>
 					<input type="button" class="btn btn-primary" id="btnadddet_ALM_Kardex" value="Agregar item" />
 				</div>
-				
-				<!--<div class="row">
-					<div class="col-md-8">
-						<div class="form-group">
-							<label for="ccod_mon">ccod_mon</label>
-<input class="form-control" type="text" id="t_ccod_mon" value=""  />
-						</div>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-				<div class="row">
-					<div class="col-md-8">
-						<div class="form-group">
-							<label for="nt_cambio">nt_cambio</label>
-<input class="form-control" type="text" id="t_nt_cambio" value=""  />
-						</div>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-				<div class="row">
-					<div class="col-md-8">
-						<div class="form-group">
-							<label for="ncos_ua_mof">ncos_ua_mof</label>
-<input class="form-control" type="text" id="t_ncos_ua_mof" value=""  />
-						</div>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-				<div class="row">
-					<div class="col-md-8">
-						<div class="form-group">
-							<label for="ncos_t_mof">ncos_t_mof</label>
-<input class="form-control" type="text" id="t_ncos_t_mof" value=""  />
-						</div>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-				
-				<div class="row">
-					<div class="col-md-2">
-						<div class="form-group">
-							<label for="bind_lote">Es Lote?</label>
-							<input class="form-control" type="text" id="t_bind_lote" value=""  />
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="form-group">
-							<label for="cnro_lote">Nro. Lote</label>
-							<input class="form-control" type="text" id="t_cnro_lote" value=""  />
-						</div>
-					</div>
-				</div>		-->		
 						
 				<div class="row">
 					<div class="col-md-12">
@@ -245,6 +189,14 @@ var pathController="<?php echo base_url();?>administrador";
 				</div>
 				<div id="listado_det_ALM_Kardex"></div><!--listado del detalle--> 
 					</fieldset>
+					
+					
+
+					
+					
+					
+					
+					</form>
 					<div class="row">
 					<div class="col-md-12">
 						&nbsp;
@@ -252,7 +204,7 @@ var pathController="<?php echo base_url();?>administrador";
 				</div>
                 <input type="button" class="btn btn-primary" id="btnsave" value="Guardar" />&nbsp;&nbsp;
 				<input type="button" class="btn btn-primary" id="btncancel" value="Cancelar" />
-				</form>
+				<!--</form>-->
                         
              
            
@@ -289,3 +241,29 @@ FrmMntNotaUnid.listar_cbo_tip_doc_ref('');
 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex('');
 <?php }
  ?></script>
+<div class="modal fade" id="ModalSeries" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form id="form2" method="post" name="form2" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Series</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>      
+        <div class="modal-body">
+          <div class="row inputSeries" id="inputSeries">
+            
+          </div>
+		  <div  id="divmsg">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="javascript:FrmMntNotaUnid.AddDet_ALM_KardexSerie();"><i class="fa fa-save"></i> Guardar</button>
+        </div>      
+    </div>
+  </div>
+  </form>
+</div>
