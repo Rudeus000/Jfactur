@@ -52,7 +52,7 @@
         <link href="<?= base_url_app() ?>assets/jquery-toast/src/jquery.toast.css" rel="stylesheet" type="text/css" />  
 
        <!--  <link href="https://file.myfontastic.com/TvcWTqoUED5DW24kLXpmZ9/icons.css" rel="stylesheet"> -->
-
+<script src="<?php echo base_url_app();?>assets/js/helpers.js"></script>
       
 
     </head>

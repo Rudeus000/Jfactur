@@ -30,6 +30,11 @@ class Regempresa extends CI_Controller {
 	
 	function guardarDatos()
 	{
+		$MovAlmAutomatico='N';
+		if(!empty($this->input->post('mov-almacen'))){
+			$MovAlmAutomatico='S';	
+		}
+		//echo $MovAlmAutomatico;exit(0);
 		$logo = $this->uploadLogo();
 		
 		if($logo['success']==true){
@@ -45,6 +50,7 @@ class Regempresa extends CI_Controller {
 		$data['direcc_emp'] = $this->input->post('direccion');
 		$data['regimen_emp'] = $this->input->post('regimen');
 		$data['restriccion_stock_emp'] = $this->input->post('restriccion_stock');
+		$data['MovAlmacenAutomatico'] = $MovAlmAutomatico;
 		$data['multialmacen_stock_emp'] = $this->input->post('multialmacen');
 		$data['restriccion_precio_minimo_emp'] = $this->input->post('restriccion_precio_minimo');
 		$data['usuario_sol_emp'] = $this->input->post('usuario_sol');

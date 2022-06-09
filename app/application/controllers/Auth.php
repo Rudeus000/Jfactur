@@ -58,11 +58,12 @@ class Auth extends CI_Controller
 				'almacen' => $almacen->cod_almacen,
 				'login' => TRUE,
 				'stock_minimo' => TRUE,
-				'movil_expert' => $empresa->movilexpert_emp
+				'movil_expert' => $empresa->movilexpert_emp,
+				'empresa'=>$empresa
 			);
 			$this->session->set_userdata($data);
 			redirect(base_url('perfil'));
-
+			
 		}
 	}
 
