@@ -196,9 +196,13 @@
 																	</div>											
 																</div>
 															</div>
-															<div class="col-md-6">									                     
+															<div class="col-md-3">									                     
 																<input <?= $empresa->movilexpert_emp==1?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="movil-expert"/>
 																<label for="movil-expert">Modulo telefonia</label>										
+															</div>
+															<div class="col-md-3">									                     
+																<input <?= $empresa->MovAlmacenAutomatico=='S'?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="mov-almacen"/>
+																<label for="mov-almacen">Movi. Almacén Automatico</label>										
 															</div>
 														</div>
 														<div class="row">
