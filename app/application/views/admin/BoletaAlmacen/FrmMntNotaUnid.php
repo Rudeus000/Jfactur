@@ -135,7 +135,7 @@ var pathController="<?php echo base_url();?>administrador";
 						</div>
 					</div>
 					<div class="col-md-1">												
-							<button type="button" class="btn btn-effect-ripple btn-success" style="margin-top: 29px" onclick="javascript:FrmMntNotaUnid.FindByDocRefNum();">
+							<button type="button" class="btn btn-effect-ripple btn-success" onclick="javascript:FrmMntNotaUnid.FindByDocRefNum();">
 								<i class=" ion ion-md-search">
 							</i></button>
 						
@@ -174,26 +174,16 @@ var pathController="<?php echo base_url();?>administrador";
 					</div>-->
 					<div class="col-md-4">
 						<div class="form-group">
-						<div>							
-							<input type="checkbox"  onclick="javascript:FrmMntNotaUnid.CheckLote(this)" id="t_bind_lote" name="t_bind_lote" value=""  />
-							<label for="cnro_lote">Nro. Lote</label>
+							<label for="cnro_lote">Nro. Lote<input type="checkbox" onclick="javascript:FrmMntNotaUnid.CheckLote(this)" id="t_bind_lote" name="t_bind_lote" value=""  /></label>
+							<input class="form-control" readonly type="text" id="t_cnro_lote" value=""  />
 						</div>
-
-							<!-- <div class="custom-control custom-checkbox">
-                                 <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto" readonly>
-                                 <label class="custom-control-label" for="serieChek">Series</label> -->
-                              
-							    
-							   <input class="form-control" readonly type="text" id="t_cnro_lote" value=""  />
-						</div>
-						
 					</div>
 					<div class="col-md-2">
 						<div class="form-group">
-						<input type="button" class="btn btn-primary" style="margin-top: 29px" id="btnadddet_ALM_Kardex" value="Agregar item" />
+							
 						</div>
 					</div>
-					
+					<input type="button" class="btn btn-primary" id="btnadddet_ALM_Kardex" value="Agregar item" />
 				</div>
 				
 				<!--<div class="row">
@@ -261,7 +251,7 @@ var pathController="<?php echo base_url();?>administrador";
 					</div>
 				</div>
                 <input type="button" class="btn btn-primary" id="btnsave" value="Guardar" />&nbsp;&nbsp;
-				<input type="button" class="btn btn-danger" id="btncancel" value="Cancelar" />
+				<input type="button" class="btn btn-primary" id="btncancel" value="Cancelar" />
 				</form>
                         
              
