@@ -171,7 +171,10 @@ var pathController="<?php echo base_url();?>administrador";
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="cnro_lote">Nro. Lote<input type="checkbox" onclick="javascript:FrmMntNotaUnid.CheckLote(this)" id="t_bind_lote" name="t_bind_lote" value=""  /></label>
-							<input class="form-control" readonly type="text" id="t_cnro_lote" name="t_cnro_lote" value=""  />
+							<select class="form-control selct2" multiple="multiple"  id="t_cnro_lote" name="t_cnro_lote[]">
+							</select>
+							<!--<select id="select2-series" class="form-control selct2"  name="seriesProducto[]" multiple="multiple" disabled>
+							</select>-->
 						</div>
 					</div>
 					<div class="col-md-2">

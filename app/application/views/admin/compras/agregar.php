@@ -192,12 +192,12 @@
                                         <input type="text" name="cantidadProducto" class="form-control">
                                       </div>
                                     </div>
-																		<div class="col-md-1">
-																			<div class="custom-control custom-checkbox">
-																				<input type="checkbox" name="seriesProducto" class="custom-control-input" id="serieCheckComprar">
-																				<label class="custom-control-label" for="serieCheckComprar" style="margin-top:28px">Series</label>
-																			</div>
-																		</div>
+									<div class="col-md-1">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="seriesProducto" class="custom-control-input" id="serieCheckComprar">
+											<label class="custom-control-label" for="serieCheckComprar" style="margin-top:28px">Series</label>
+										</div>
+									</div>
                                     <div class="col-md-1">
                                       <button type="submit" style="margin-top: 32px" class="btn btn-sm btn-success"><i class="fa fa-plus"></i></button>
                                     </div>

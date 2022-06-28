@@ -61,8 +61,8 @@ class Kardex_model extends CI_Model{
 							$arr_kardex[$nom_almacen][$clave][$indice]['operacion']=$val['des_motivo'];
 							if($val['Tipo_Nota']=="I"){
 								$saldo_actual=$saldo_actual+$val['nund'];
-								$arr_kardex[$nom_almacen][$clave]['ingreso']=number_format($val['nund'],3,".",",");
-								$arr_kardex[$nom_almacen][$clave]['salida']='0.000';
+								$arr_kardex[$nom_almacen][$clave][$indice]['ingreso']=number_format($val['nund'],3,".",",");
+								$arr_kardex[$nom_almacen][$clave][$indice]['salida']='0.000';
 							}
 							else{
 								$saldo_actual=$saldo_actual-$val['nund'];
@@ -134,7 +134,7 @@ class Kardex_model extends CI_Model{
 		
 		public function ListProducts($params){
 			$result = $this->db->from('tb_producto')
-			->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,tb_producto.cod_unid as codund')
+			->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,tb_producto.cod_unid as codund,typeAssignmentProduct')
 			->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 			->where('est_product',1)
 			->where_in('typeAssignmentProduct',array('P','N'))

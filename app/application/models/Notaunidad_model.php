@@ -108,7 +108,54 @@ class Notaunidad_model extends CI_Model{
 		 return $query->result_array();
 	 } 
 	 public function FindDocRefNum($params=NULL){
-		 if($params['MotivoRecepcion']=="19"){
+		$motivo=$params['MotivoRecepcion'];
+		switch ($motivo) {
+			case 1:
+			case 19:
+			case 6:
+			case 7:
+				$numdoc=''; 
+				if(trim($params['seriedoc'])!=""){
+					$numdoc=$params['seriedoc'].'-'.$params['numdoc'];
+				}			
+				else{
+					$numdoc=$params['numdoc'];
+				}
+				$result = $this->db->from('tb_compra')
+				->select('tb_producto.idTypeAssignmentProduct as padre,tb_compra_detalle.cod_comp as cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,cant_compdet as cantidad,tb_proveedor.tb_proveedor_doc as codigo_entidad,tb_proveedor.tb_proveedor_nom as des_entidad,tb_compra.cod_almacen,DATE_FORMAT(tb_compra.fecha_comp, \'%Y-%m-%d\') as fecha_emision')
+				->join('tb_compra_detalle','tb_compra.cod_comp=tb_compra_detalle.cod_comp')
+				->join('tb_producto','tb_compra_detalle.cod_producto=tb_producto.cod_producto')
+				->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
+				->join('tb_proveedor','tb_compra.tb_proveedor_id=tb_proveedor.tb_proveedor_id')	
+				->where('tb_compra.numdocumento_comp',$numdoc)
+				->where('tb_proveedor.tb_proveedor_doc',$params['numruc'])
+				->get()->result_array();
+				return $result;
+				break;
+			case 2:
+			case 4:
+			case 5:
+			case 8:
+			case 10:
+			case 12:
+			case 21:
+				$result = $this->db->from('tb_venta')
+				->select('tb_producto.idTypeAssignmentProduct as padre,tb_venta_detalle.cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,tb_venta_detalle.cant_ventdet as cantidad, tb_cliente.doc_cliente as codigo_entidad,tb_cliente.nomb_cliente as des_entidad,tb_talonario.serie,tb_venta.numero_vent,tb_talonario.cod_tipdocu,tb_venta.cod_almacen,DATE_FORMAT(tb_venta.fecha_vent, \'%Y-%m-%d\') as fecha_emision')
+				->join('tb_talonario','tb_venta.cod_talonario=tb_talonario.cod_talonario and tb_venta.cod_puntoventa=tb_talonario.cod_puntoventa')
+				->join('tb_cliente','tb_venta.id_cliente=tb_cliente.id_cliente')
+				->join('tb_venta_detalle','tb_venta.cod_vent=tb_venta_detalle.cod_vent')	
+				->join('tb_producto','tb_venta_detalle.cod_producto=tb_producto.cod_producto')	
+				->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
+				->where('tb_talonario.serie',$params['seriedoc'])
+				->where('tb_venta.numero_vent',$params['numdoc'])
+				->where('tb_talonario.cod_tipdocu',$params['TipoDocRef'])
+				->where('tb_cliente.doc_cliente',$params['numruc'])			
+				->get()->result_array();
+				return $result;
+				break;
+		}
+		//var_export($params);
+		 /*if($params['MotivoRecepcion']=="19" || $params['MotivoRecepcion']=="6"){
 			$numdoc=''; 
 			if(trim($params['seriedoc'])!=""){
 				$numdoc=$params['seriedoc'].'-'.$params['numdoc'];
@@ -117,7 +164,7 @@ class Notaunidad_model extends CI_Model{
 				$numdoc=$params['numdoc'];
 			}
 			$result = $this->db->from('tb_compra')
-			->select('tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,cant_compdet as cantidad,tb_proveedor.tb_proveedor_doc as codigo_entidad,tb_proveedor.tb_proveedor_nom as des_entidad,tb_compra.cod_almacen,DATE_FORMAT(tb_compra.fecha_comp, \'%Y-%m-%d\') as fecha_emision')
+			->select('tb_producto.idTypeAssignmentProduct as padre,tb_compra_detalle.cod_comp as cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,cant_compdet as cantidad,tb_proveedor.tb_proveedor_doc as codigo_entidad,tb_proveedor.tb_proveedor_nom as des_entidad,tb_compra.cod_almacen,DATE_FORMAT(tb_compra.fecha_comp, \'%Y-%m-%d\') as fecha_emision')
 			->join('tb_compra_detalle','tb_compra.cod_comp=tb_compra_detalle.cod_comp')
 			->join('tb_producto','tb_compra_detalle.cod_producto=tb_producto.cod_producto')
 			->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
@@ -130,7 +177,7 @@ class Notaunidad_model extends CI_Model{
 		 }
 		 else if($params['MotivoRecepcion']=="4"){
 			$result = $this->db->from('tb_venta')
-			->select('tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,tb_venta_detalle.cant_ventdet as cantidad, tb_cliente.doc_cliente as codigo_entidad,tb_cliente.nomb_cliente as des_entidad,tb_talonario.serie,tb_venta.numero_vent,tb_talonario.cod_tipdocu,tb_venta.cod_almacen,DATE_FORMAT(tb_venta.fecha_vent, \'%Y-%m-%d\') as fecha_emision')
+			->select('tb_producto.idTypeAssignmentProduct as padre,tb_venta_detalle.cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,tb_venta_detalle.cant_ventdet as cantidad, tb_cliente.doc_cliente as codigo_entidad,tb_cliente.nomb_cliente as des_entidad,tb_talonario.serie,tb_venta.numero_vent,tb_talonario.cod_tipdocu,tb_venta.cod_almacen,DATE_FORMAT(tb_venta.fecha_vent, \'%Y-%m-%d\') as fecha_emision')
 			->join('tb_talonario','tb_venta.cod_talonario=tb_talonario.cod_talonario and tb_venta.cod_puntoventa=tb_talonario.cod_puntoventa')
 			->join('tb_cliente','tb_venta.id_cliente=tb_cliente.id_cliente')
 			->join('tb_venta_detalle','tb_venta.cod_vent=tb_venta_detalle.cod_vent')	
@@ -143,8 +190,69 @@ class Notaunidad_model extends CI_Model{
 			->get()->result_array();
 			//echo $this->db->last_query();exit(0);
 			return $result; 
-		 }
+		 }else{
+			$result = $this->db->from('tb_venta')
+			->select('tb_producto.idTypeAssignmentProduct as padre,tb_venta_detalle.cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,tb_venta_detalle.cant_ventdet as cantidad, tb_cliente.doc_cliente as codigo_entidad,tb_cliente.nomb_cliente as des_entidad,tb_talonario.serie,tb_venta.numero_vent,tb_talonario.cod_tipdocu,tb_venta.cod_almacen,DATE_FORMAT(tb_venta.fecha_vent, \'%Y-%m-%d\') as fecha_emision')
+			->join('tb_talonario','tb_venta.cod_talonario=tb_talonario.cod_talonario and tb_venta.cod_puntoventa=tb_talonario.cod_puntoventa')
+			->join('tb_cliente','tb_venta.id_cliente=tb_cliente.id_cliente')
+			->join('tb_venta_detalle','tb_venta.cod_vent=tb_venta_detalle.cod_vent')	
+			->join('tb_producto','tb_venta_detalle.cod_producto=tb_producto.cod_producto')	
+			->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
+			->where('tb_talonario.serie',$params['seriedoc'])
+			->where('tb_venta.numero_vent',$params['numdoc'])
+			->where('tb_talonario.cod_tipdocu',$params['TipoDocRef'])
+			->where('tb_cliente.doc_cliente',$params['numruc'])			
+			->get()->result_array();
+			//echo $this->db->last_query();exit(0);
+			return $result; 
+		 }*/
 	 } 
+	 public function FindDocRefNumSeries($params=NULL){
+				$motivo=$params['cod_motivo'];
+				switch ($motivo) {
+					case 1:
+					case 19:
+					case 6:
+					case 7:
+					$result = $this->db->from('tb_producto_serie')
+					->select('serie_descripcion')
+					->where('tb_producto_serie.cod_producto',$params['cod_producto'])
+					->where('tb_producto_serie.cod_comp',$params['cod_vent'])
+					->get()->result_array();
+					break;
+					case 2:
+					case 4:
+					case 5:
+					case 8:
+					case 10:
+					case 12:
+					case 21:
+						$result = $this->db->from('tb_producto_serie')
+						->select('serie_descripcion')
+						->where('tb_producto_serie.cod_producto',$params['cod_producto'])
+						->where('tb_producto_serie.cod_vent',$params['cod_vent'])
+						->get()->result_array();
+					break;
+				}
+				return $result;
+/*			if($params["cod_motivo"]=="19" || $params["cod_motivo"]=="6"){
+				$result = $this->db->from('tb_producto_serie')
+			->select('serie_descripcion')
+			->where('tb_producto_serie.cod_producto',$params['cod_producto'])
+				->where('tb_producto_serie.cod_comp',$params['cod_vent'])
+				->get()->result_array();
+			}
+			else{
+				
+				$result = $this->db->from('tb_producto_serie')
+			->select('serie_descripcion')
+			->where('tb_producto_serie.cod_producto',$params['cod_producto'])
+				->where('tb_producto_serie.cod_vent',$params['cod_vent'])
+				->get()->result_array();
+			}
+			return $result;	*/	
+	 } 
+	 
 	public function Insnotaunidad($params=NULL,$FlgActualizarStock="S"){
 		$this->db->trans_begin();
 		$this->db->insert('alm_nota', $params);
@@ -189,34 +297,75 @@ class Notaunidad_model extends CI_Model{
 					}
 					if($FlgActualizarStock=="S"){
 						//actualizamos el stock actual
-						$query = $this->db->get_where('alm_stkund_actual', array('ccod_art' =>$val['ccod_art'],'cod_alm'=>$params['Cod_Almacen'],'und_medida'=>$val['ccod_undmed']));
+						$query = $this->db->get_where('tb_producto_stock', array('cod_producto' =>$val['ccod_art'],'cod_almacen'=>$params['Cod_Almacen']));
 						$arr_data_prod=$query->result_array();					
-						$arr_stk_actual['cod_alm']=$params['Cod_Almacen'];
-						$arr_stk_actual['ccod_art']=$val['ccod_art'];
-						$arr_stk_actual['und_medida']=$val['ccod_undmed'];					
+						$arr_stk_actual['cod_almacen']=$params['Cod_Almacen'];
+						$arr_stk_actual['cod_producto']=$val['ccod_art'];
+						//$arr_stk_actual['und_medida']=$val['ccod_undmed'];
+						$stock_serie=0;
 						if(!empty($arr_data_prod)){
 							if(sizeof($arr_data_prod)>0){
-								//var_export($val);exit(0);
+								$stock_serie=$arr_data_prod[0]["stock"];
 								if($params['Tipo_Nota']=="S"){
-									$arr_stk_actual['nund_tot']=$arr_data_prod[0]["nund_tot"]-($val['nund']);
+									$arr_stk_actual['stock']=$arr_data_prod[0]["stock"]-($val['nund']);
 								}	
 								else{
-									$arr_stk_actual['nund_tot']=$arr_data_prod[0]["nund_tot"]+($val['nund']);
+									$arr_stk_actual['stock']=$arr_data_prod[0]["stock"]+($val['nund']);
 								}	
-								//var_export($arr_stk_actual);exit(0);							
-								$this->db->update('alm_stkund_actual', $arr_stk_actual,array('ccod_art' =>$val['ccod_art'],'cod_alm'=>$params['Cod_Almacen'],'und_medida'=>$val['ccod_undmed']));							
+								$this->db->update('tb_producto_stock', $arr_stk_actual,array('cod_producto' =>$val['ccod_art'],'cod_almacen'=>$params['Cod_Almacen']));							
 							}
 						}
 						else{
 							if($params['Tipo_Nota']=="S"){
-								$arr_stk_actual['nund_tot']=$val['nund']*-1;
+								$arr_stk_actual['stock']=$val['nund']*-1;
 							}	
 							else{
-								$arr_stk_actual['nund_tot']=$val['nund'];
+								$arr_stk_actual['stock']=$val['nund'];
 							}							
-							$arr_stk_actual['cusu_crea']='';
-							$arr_stk_actual['dfch_crea']='';
-							$this->db->insert('alm_stkund_actual', $arr_stk_actual);
+							//$arr_stk_actual['cusu_crea']='';
+							//$arr_stk_actual['dfch_crea']='';
+							$this->db->insert('tb_producto_stock', $arr_stk_actual);
+						}
+						//vemos si tiene series
+						if(is_array($val['series'])){
+							if(sizeof($val['series'])>0){
+								$sumStock = 1;
+								foreach($val['series'] as $ind_serie=>$val_serie){
+									if($params['Tipo_Nota']=="S"){
+										$whereSeries['cod_almacen'] = $params['Cod_Almacen'];
+										$whereSeries['cod_producto'] = $val['ccod_art'];
+										$whereSeries['serie_descripcion'] = $val_serie;
+										$dataSeries['cod_vent'] = $codigo_generado;
+										$dataSeries['serie_estado'] = 'N';
+										$dataSerie['FlgNota'] = "S";
+										$this->modelgeneral->editRegist('tb_producto_serie',$whereSeries,$dataSeries);
+									}
+									else{						
+										$query_ing = $this->db->get_where('tb_producto_serie', array('cod_producto' =>$val['ccod_art'],'cod_almacen'=>$params['Cod_Almacen'],'serie_descripcion'=>$val_serie));
+										$arr_data_ing=$query->result_array();					
+										if(sizeof($arr_data_ing)>0){
+											$whereSeries['cod_almacen'] = $params['Cod_Almacen'];
+											$whereSeries['cod_producto'] = $val['ccod_art'];
+											$whereSeries['serie_descripcion'] = $val_serie;
+											$dataSeries['cod_vent'] = 0;
+											$dataSeries['serie_estado'] = 'D';
+											$dataSerie['FlgNota'] = "S";
+											$this->modelgeneral->editRegist('tb_producto_serie',$whereSeries,$dataSeries);
+										}	
+										else{
+											$dataSerie['cod_producto'] = $val['ccod_art'];
+											$dataSerie['cod_almacen'] = $params['Cod_Almacen'];
+											$dataSerie['serie_descripcion '] = $val_serie;
+											$dataSerie['cod_comp'] = $codigo_generado;
+											$dataSerie['histcompstock_serie'] = $stock_serie+ $sumStock;
+											$dataSerie['FlgNota'] = "S";										
+											$this->modelgeneral->insertRegist('tb_producto_serie',$dataSerie);
+											$sumStock = 1;
+										}
+										
+									}
+								}
+							}
 						}
 					}
 				} 

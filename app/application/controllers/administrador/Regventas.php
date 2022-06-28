@@ -462,6 +462,7 @@ class Regventas extends CI_Controller {
 			
 			$igv_acumula = 0;
 			$gravada_acumula = 0;
+			$cod_art_almacen="";
 			$datos_empresa=$this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
 			foreach ($_POST['id_prod'] as $key => $value) {
 				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
@@ -479,9 +480,11 @@ class Regventas extends CI_Controller {
 				if(isset($_POST['idTypeAssignmentProduct'][$key])){
 					$idTypeAssignmentProduct = $_POST['idTypeAssignmentProduct'][$key];
 				if ($_POST['idTypeAssignmentProduct'][$key] !== "null") {
+					$cod_art_almacen=$_POST['idTypeAssignmentProduct'][$key];
 						$detalle['cod_father_product'] = $_POST['idTypeAssignmentProduct'][$key];
 					} else {
 						$detalle['cod_father_product'] = $codigo_producto;
+						$cod_art_almacen=$codigo_producto;
 					}
 				}
 				$detalle['cod_producto'] = $codigo_producto;
@@ -520,7 +523,7 @@ class Regventas extends CI_Controller {
 					$undmed_prod = $this->modelgeneral->getTableWhereRow('tb_unidades',['cod_unid'=>$producto->cod_unid]);
 					$arr_det[$value]['nund']=$_POST['cant_prod'][$key]; 
 					$arr_det[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; 
-					$arr_det[$value]['ccod_art']=$value; 
+					$arr_det[$value]['ccod_art']=$cod_art_almacen;//$value; 
 					$arr_det[$value]['cdsc_art']=$producto->nomb_product; 				
 					$arr_det[$value]['bind_lote']='N'; 
 					$arr_det[$value]['cnro_lote']='';
@@ -528,7 +531,7 @@ class Regventas extends CI_Controller {
 					/*Poblamos el detalle para la nota de ingreso */
 					$arr_detval[$value]['nund']=$_POST['cant_prod'][$key]; 
 					$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; ; 
-					$arr_detval[$value]['ccod_art']=$value; 
+					$arr_detval[$value]['ccod_art']=$cod_art_almacen;//$value; 
 					$arr_detval[$value]['cdsc_art']=$producto->nomb_product; 
 					//sacamos el costo actual del producto
 					$costo_actual_prod = $this->modelgeneral->getTableWhereRow('alm_stkval_actual',['ccod_art'=>$value]);
@@ -609,6 +612,12 @@ class Regventas extends CI_Controller {
 					$arrboleta['Motivo_Recep']='4';
 					$arrboleta['obs_Nota']='salida desde modulo de ventas';
 					$arrboleta['Cod_Almacen']=$this->input->post('almacen');
+					//sacamos el tipo de documento del talonario
+					$codtalonario=$this->input->post('tipoPedido');
+					//echo 'talonario '.$this->input->post('documento');
+					$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario',['cod_talonario'=>$codtalonario]);
+					//var_export($objTalonario);
+					/*
 					if (($this->input->post('documento') =="15")) {
 						$arrboleta['tip_doc_ref']="01";
 					}
@@ -617,7 +626,8 @@ class Regventas extends CI_Controller {
 					}
 					else{
 						$arrboleta['tip_doc_ref']="00";
-					}			
+					}*/
+					$arrboleta['tip_doc_ref']=$objTalonario->cod_tipdocu;								
 					$arrboleta['serie_doc_ref']=$this->input->post('serie');
 					$arrboleta['num_doc_ref']=$this->input->post('correlativo');
 					$arrboleta['Estado']='R';
@@ -654,6 +664,9 @@ class Regventas extends CI_Controller {
 					$arrnota['Fecha_Nota']=date('Y-m-d');
 					$arrnota['CodMotivo']='4';
 					$arrnota['obs_Nota']='salida desde modulo de ventas';
+					$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario',['cod_talonario'=>$this->input->post('tipoPedido')]);
+					$arrnota['tip_doc_ref']=$objTalonario->cod_tipdocu;	
+					/*
 					if ($this->input->post('documento') =="15") {
 						$arrnota['tip_doc_ref']="01";
 					}
@@ -662,7 +675,7 @@ class Regventas extends CI_Controller {
 					}
 					else{
 						$arrnota['tip_doc_ref']="00";
-					}
+					}*/
 					$arrnota['serie_doc_ref']=$this->input->post('serie');
 					$arrnota['num_doc_ref']=$this->input->post('correlativo');
 					$arrnota['ccod_mon']='S';
