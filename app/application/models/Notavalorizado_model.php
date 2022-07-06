@@ -63,7 +63,53 @@ class Notavalorizado_model extends CI_Model{
 		 return $query->result_array();
 	 } 
 	 public function FindDocRefNum($params=NULL){
-		 if($params['MotivoRecepcion']=="19"){
+		$motivo=$params['MotivoRecepcion'];
+		switch ($motivo) {
+			case 1:
+			case 19:
+			case 6:
+			case 7:
+				$numdoc=''; 
+				if(trim($params['seriedoc'])!=""){
+					$numdoc=$params['seriedoc'].'-'.$params['numdoc'];
+				}			
+				else{
+					$numdoc=$params['numdoc'];
+				}
+				$result = $this->db->from('tb_compra')
+				->select('tb_producto.idTypeAssignmentProduct as padre,tb_compra_detalle.cod_comp as cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,cant_compdet as cantidad,tb_proveedor.tb_proveedor_doc as codigo_entidad,tb_proveedor.tb_proveedor_nom as des_entidad,tb_compra.cod_almacen,DATE_FORMAT(tb_compra.fecha_comp, \'%Y-%m-%d\') as fecha_emision')
+				->join('tb_compra_detalle','tb_compra.cod_comp=tb_compra_detalle.cod_comp')
+				->join('tb_producto','tb_compra_detalle.cod_producto=tb_producto.cod_producto')
+				->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
+				->join('tb_proveedor','tb_compra.tb_proveedor_id=tb_proveedor.tb_proveedor_id')	
+				->where('tb_compra.numdocumento_comp',$numdoc)
+				->where('tb_proveedor.tb_proveedor_doc',$params['numruc'])
+				->get()->result_array();
+				return $result;
+				break;
+			case 2:
+			case 4:
+			case 5:
+			case 8:
+			case 10:
+			case 12:
+			case 21:
+				$result = $this->db->from('tb_venta')
+				->select('tb_producto.idTypeAssignmentProduct as padre,tb_venta_detalle.cod_vent,tb_tipounidad.nomb_tipunidad,tb_producto.cod_producto,tb_producto.nomb_product,tb_venta_detalle.cant_ventdet as cantidad, tb_cliente.doc_cliente as codigo_entidad,tb_cliente.nomb_cliente as des_entidad,tb_talonario.serie,tb_venta.numero_vent,tb_talonario.cod_tipdocu,tb_venta.cod_almacen,DATE_FORMAT(tb_venta.fecha_vent, \'%Y-%m-%d\') as fecha_emision')
+				->join('tb_talonario','tb_venta.cod_talonario=tb_talonario.cod_talonario and tb_venta.cod_puntoventa=tb_talonario.cod_puntoventa')
+				->join('tb_cliente','tb_venta.id_cliente=tb_cliente.id_cliente')
+				->join('tb_venta_detalle','tb_venta.cod_vent=tb_venta_detalle.cod_vent')	
+				->join('tb_producto','tb_venta_detalle.cod_producto=tb_producto.cod_producto')	
+				->join('tb_tipounidad','tb_producto.cod_unid=tb_tipounidad.cod_tipunidad')	
+				->where('tb_talonario.serie',$params['seriedoc'])
+				->where('tb_venta.numero_vent',$params['numdoc'])
+				->where('tb_talonario.cod_tipdocu',$params['TipoDocRef'])
+				->where('tb_cliente.doc_cliente',$params['numruc'])			
+				->get()->result_array();
+				return $result;
+				break;
+		}
+		 /*if($params['MotivoRecepcion']=="19"){
 			$numdoc=''; 
 			if(trim($params['seriedoc'])!=""){
 				$numdoc=$params['seriedoc'].'-'.$params['numdoc'];
@@ -98,8 +144,8 @@ class Notavalorizado_model extends CI_Model{
 			->get()->result_array();
 			//echo $this->db->last_query();exit(0);
 			return $result; 
-		 }
-	 } 
+		 }*/
+	 }
 	public function Insnotaunidad($params=NULL){
 		$this->db->trans_begin();
 		$this->db->insert('alm_notaval', $params);

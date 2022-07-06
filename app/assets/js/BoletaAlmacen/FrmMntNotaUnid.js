@@ -15,7 +15,10 @@ $(document).ready(function(){
 			onSelectItemEvent: function () {
 				var selectedItemValue = $("#t_cdsc_art").getSelectedItemData();				
 				$('#t_ccod_art').val(selectedItemValue.id);				
-				$('#t_ccod_undmed').val(selectedItemValue.codund);				
+				$('#t_ccod_undmed').val(selectedItemValue.codund);	
+				if($('#t_tipo_nota').val()=="S"){
+					FrmMntNotaUnid.obtenerSeriesProducto(selectedItemValue.id);				
+				}				
 			},			
 		}
 	});
@@ -38,6 +41,35 @@ $(document).ready(function(){
 	});
 });
 FrmMntNotaUnid={
+	obtenerSeriesProducto:function(producto)	
+	{		
+		var almacen = $('#cbo_cod_almacen').val();
+		$.get(path+"administrador/regventas/getSeriesProducto", {producto,almacen},
+			function (res, textStatus, jqXHR) {
+					$('#t_cnro_lote').empty().trigger("change");
+					$('#t_cnro_lote').select2({
+						data:res	
+					});
+					$('#t_cnro_lote').prop('disabled',false);
+
+				if(res.length == 0){
+					/*$('input[name=serieCheckProducto]').prop('checked', false);
+					$('input[name=serieCheckProducto]').prop('disabled', true);
+					$('input[name=cantidadProducto]').prop('disabled', false);*/
+					$('#t_cnro_lote').prop('disabled', true);
+					$('#t_nund').prop('disabled', false);
+				}else{
+					/*$('input[name=serieCheckProducto]').prop('checked', true);
+					$('input[name=serieCheckProducto]').prop('disabled', false);
+					$('input[name=cantidadProducto]').prop('disabled', true);*/
+					$('#t_cnro_lote').prop('disabled', false);
+					$('#t_nund').prop('disabled', true);
+					document.getElementsByName("t_bind_lote")[0].checked=true;
+				}
+				},
+				"JSON"
+			);
+	},
 	TipoMovimiento:function(){
 		x=$('#cbo_motivo_recep').val();
 		if(x==1 || x==2 || x==3 || x==8 || x==11 || x==12 || x==13 || x==19 || x==20 || x==21 || x==22) {
@@ -135,6 +167,7 @@ FrmMntNotaUnid={
 		}
 	},
 	CargaDet_ALM_Kardex:function(){ 
+
 			 $.ajax({
 				 url:pathController+'/notaunidad/Cargadet_ALM_Kardex',
 				 type:'post',
@@ -178,44 +211,42 @@ FrmMntNotaUnid={
 				 MessageBox('Ingrese el codigo de articulo');
 							return;
 			 }
-			 if($.trim($('#t_nund').val())==""){
-				 MessageBox('Ingrese la cantidad');
-				return;
-			 }
+			 
 			 eslote="N";
 			 if(document.getElementsByName("t_bind_lote")[0].checked){
 				eslote="S"; 
-			 }
+			 }		
+			if(eslote=="S" && $.trim($('#t_tipo_nota').val())=="S"){
+				
+			}
+			else{
+				if($.trim($('#t_nund').val())==""){
+					MessageBox('Ingrese la cantidad');
+					return;
+				}
+			} 
+			if(eslote=="S" && $.trim($('#t_tipo_nota').val())=="I"){
+				var cantidad = parseInt($('#t_nund').val());
+				$('#inputSeries').empty();
+				for (i = 1; i <= cantidad; i++) {
+					var serie = '<div class="col-md-6"><div class="form-group"><label class="control-label">Serie '+i+'</label><input type="text" name="serie[]"  class="form-control" validate></div></div>';
+					$('#inputSeries').append(serie);
+				}
+				$('#ModalSeries').modal();	
+			}	
+			else{	
 			 $.ajax({
 				 url:pathController+'/notaunidad/Adddet_ALM_Kardex',
 				 type:'post',
 				 dataType:'json',
 				 data:{ 
-					/*vp_ccod_eje:$('#t_ccod_eje').val(),
-					vp_ccod_per:$('#t_ccod_per').val(),
-					vp_ccod_alm:$('#t_ccod_alm').val(),
-					vp_ctipo_mov:$('#t_ctipo_mov').val(),
-					vp_ccod_oper_log:$('#t_ccod_oper_log').val(),
-					vp_cdoc_serie:$('#t_cdoc_serie').val(),
-					vp_cdoc_nro:$('#t_cdoc_nro').val(),
-					vp_ddoc_fch:$('#t_ddoc_fch').val(),*/
 					vp_nund:$('#t_nund').val(),
 					vp_ccod_undmed:$('#t_ccod_undmed').val(),
 					vp_ccod_art:$('#t_ccod_art').val(),
 					vp_cdsc_art:$('#t_cdsc_art').val(),
-					//vp_ccod_mon:$('#t_ccod_mon').val(),
-					/*vp_nt_cambio:$('#t_nt_cambio').val(),
-					vp_ncos_ua_mof:$('#t_ncos_ua_mof').val(),
-					vp_ncos_t_mof:$('#t_ncos_t_mof').val(),
-					vp_cref_doc:$('#t_cref_doc').val(),
-					vp_cref_ser:$('#t_cref_ser').val(),
-					vp_cref_nro:$('#t_cref_nro').val(),*/
 					vp_bind_lote:eslote,
-					vp_cnro_lote:$('#t_cnro_lote').val()
-					/*vp_cref_doc2:$('#t_cref_doc2').val(),
-					vp_cref_ser2:$('#t_cref_ser2').val(),
-					vp_cref_nro2:$('#t_cref_nro2').val(),
-					vp_cod_nota:$('#t_cod_nota').val()*/
+					vp_cnro_lote:$('#t_cnro_lote').val(),
+					vp_serie:''
 				 },
 				 beforeSend:function(){
 				 },
@@ -239,6 +270,8 @@ FrmMntNotaUnid={
 				 success:function(result){
 					 if(result.status==1){
 						 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data); 
+						 $('#t_ccod_art').val('');
+						 $('#t_cnro_lote').val('');
 					 }
 					 else if(result.status==2){
 						 MessageBox(result.msg);
@@ -248,7 +281,56 @@ FrmMntNotaUnid={
 					 }
 				 }
 			 });
-		 
+			}
+	},//fin save
+	AddDet_ALM_KardexSerie:function(){ 
+			 //alert($("#form1").serialize());
+			 $.ajax({
+				 url:pathController+'/notaunidad/Adddet_ALM_Kardex',
+				 type:'post',
+				 dataType:'json',
+				 data:{ 
+					vp_nund:$('#t_nund').val(),
+					vp_ccod_undmed:$('#t_ccod_undmed').val(),
+					vp_ccod_art:$('#t_ccod_art').val(),
+					vp_cdsc_art:$('#t_cdsc_art').val(),
+					vp_bind_lote:eslote,
+					vp_cnro_lote:$('#t_cnro_lote').val(),
+					vp_serie:$("#form2 input").serialize()//$('#serie').val()
+				 },
+				 beforeSend:function(){
+				 },
+				 error: function(jqXHR, exception) { 
+					 if (jqXHR.status === 0) { 
+						 MessageBox('No se pudo conectar a la direccion destino.'); 
+					 } else if (jqXHR.status == 404) { 
+						 MessageBox('Pagina no existe'); 
+					 } else if (jqXHR.status == 500) { 
+						 MessageBox('Error interno en el servidor '); 
+					 } else if (exception === 'parsererror') { 
+						 MessageBox('Requested JSON parse failed.'); 
+					 } else if (exception === 'timeout') { 
+						 MessageBox('Fuera de tiempo de espera.'); 
+					 } else if (exception === 'abort') { 
+						 MessageBox('Consulta abortada.'); 
+					 } else { 
+						 MessageBox('Error desconocido: ' + jqXHR.responseText); 
+					 } 
+				 }, 
+				 success:function(result){
+					 if(result.status==1){
+						 $('#ModalSeries').modal('hide');
+						 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data); 
+					 }
+					 else if(result.status==2){
+						 MessageBox(result.msg);
+					 }
+					 else{
+						 MessageBox('NO SE PUDO REGISTRAR');
+					 }
+				 }
+			 });
+			
 	},//fin save
 	FindByDocRefNum:function(){ 
 			 if($.trim($('#cbo_tip_doc_ref').val())=="00"){
@@ -298,31 +380,13 @@ FrmMntNotaUnid={
 					 if(result.status==1){
 						 $('#cbo_cod_almacen').val(result.cod_almacen);
 						 $('#t_fecha_nota').val(result.fecha_emision);
-						 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data); 
-						 //indicamos si es ingreso o salida
-						 switch ($('#cbo_motivo_recep').val()) {
-						  case 1:
-						  case 2:
-						  case 3:
-						  case 8:
-						  case 11:
-						  case 12:
-						  case 13:
-						  case 19:
-						  case 20:
-						  case 21:
-						  case 22:
-							$('#t_tipo_nota').val('I');
-							break;
-						  default:
-							$('#t_tipo_nota').val('S');
-						}
+						 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data); 						 
 					 }
 					 else if(result.status==2){
 						 MessageBox(result.msg);
 					 }
 					 else{
-						 MessageBox('NO SE PUDO REGISTRAR');
+						 MessageBox('No se encontro el documento');
 					 }
 				 }
 			 });
@@ -382,9 +446,13 @@ FrmMntNotaUnid={
 				 //newHtml+='<td>'+fila.ccod_undmed+'</td>';
 				 newHtml+='<td>'+fila.nund+'</td>';
 				 newHtml+='<td>'+fila.bind_lote+'</td>';
-				 newHtml+='<td>'+fila.cnro_lote+'</td>';
-				 
-				 
+				 newHtml+='<td>';
+					 newHtml+='<table>';
+					 $.each(fila.series,function(key_serie,fila_serie){
+						 newHtml+='<tr><td>'+fila_serie+'&nbsp;&nbsp;</td><td><button onclick="javascript:FrmMntNotaUnid.RmvDet_ALM_KardexSerie(\''+key+'\',\''+fila_serie+'\')" type="button" class="btn btn-danger btn-sm delete-serie"><i class="fa fa-trash"></i></button></td></tr>';
+					 });
+					 newHtml+='</table>';
+				 newHtml+='</td>';
 				 /*newHtml+='<td>'+fila.ccod_mon+'</td>';
 				 newHtml+='<td>'+fila.nt_cambio+'</td>';
 				 newHtml+='<td>'+fila.ncos_ua_mof+'</td>';
@@ -434,6 +502,47 @@ FrmMntNotaUnid={
 				 success:function(result){
 				 if(result.status==1){ 
 					 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data) 
+				 }
+				 else if(result.status==2){
+					 MessageBox(result.msg);
+				 }
+				 else{
+					 MessageBox('PROBLEMAS AL EJECUTAR LA TRANSACCION');
+				 }
+				 }
+			 });
+	},//fin RmvDet
+	RmvDet_ALM_KardexSerie:function(id,serie){ 
+			 $.ajax({
+				 url:pathController+'/notaunidad/Rmvdet_ALM_KardexSerie',
+				 type:'post',
+				 dataType:'json',
+				 data:{ 
+					vp_id:id,
+					vp_serie:serie 					
+				 },
+				 beforeSend:function(){
+				 },
+				 error: function(jqXHR, exception) { 
+					 if (jqXHR.status === 0) { 
+						 MessageBox('No se pudo conectar a la direccion destino.'); 
+					 } else if (jqXHR.status == 404) { 
+						 MessageBox('Pagina no existe'); 
+					 } else if (jqXHR.status == 500) { 
+						 MessageBox('Error interno en el servidor '); 
+					 } else if (exception === 'parsererror') { 
+						 MessageBox('Requested JSON parse failed.'); 
+					 } else if (exception === 'timeout') { 
+						 MessageBox('Fuera de tiempo de espera.'); 
+					 } else if (exception === 'abort') { 
+						 MessageBox('Consulta abortada.'); 
+					 } else { 
+						 MessageBox('Error desconocido: ' + jqXHR.responseText); 
+					 } 
+				 }, 
+				 success:function(result){
+				 if(result.status==1){ 
+					FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data) 					
 				 }
 				 else if(result.status==2){
 					 MessageBox(result.msg);
@@ -502,7 +611,7 @@ FrmMntNotaUnid={
 				 success:function(result){
 				 if(result.status==1){ 
 					 MessageBox('SE GRABO  SATISFACTORIAMENTE','','success'); 
-					 location.href=pathController+"/administrador/notaunidad"; 
+					 location.href=pathController+"/notaunidad"; 
 				 }
 				 else if(result.status==2){
 					 //MessageBox(result.msg);

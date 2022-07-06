@@ -325,7 +325,7 @@ class Regcompras extends CI_Controller {
 				$arrboleta['Estado']='R';
 				$arrboleta['usu_reg']=$this->session->cod_usu;
 				$arrboleta['Fec_Reg']=date('Y-m-d');
-				$dins=$this->notaunidad_model->Insnotaunidad($arrboleta); 
+				$dins=$this->notaunidad_model->Insnotaunidad($arrboleta,"N"); 
 				 if(sizeof($dins)>0){ 
 					 if($dins['status']!="1"){
 						$resp['success'] = false;	
@@ -368,7 +368,7 @@ class Regcompras extends CI_Controller {
 				$arrnota['Estado']='R';
 				$arrnota['usu_reg']=$this->session->cod_usu;								
 				$arrnota['Fec_Reg']=date('Y-m-d');
-				$dins=$this->notavalorizado_model->Insnotaunidad($arrnota); 
+				$dins=$this->notavalorizado_model->Insnotaunidad($arrnota,"N"); 
 				 if(sizeof($dins)>0){ 
 					 if($dins['status']!="1"){
 						$resp['success'] = false;	

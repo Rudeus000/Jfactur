@@ -286,7 +286,7 @@ FrmMntNotaUnid={
 						 $('#t_fecha_nota').val(result.fecha_emision);
 						 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex(result.data); 
 						 //indicamos si es ingreso o salida
-						 switch ($('#cbo_motivo_recep').val()) {
+						 /*switch ($('#cbo_motivo_recep').val()) {
 						  case 1:
 						  case 2:
 						  case 3:
@@ -302,7 +302,7 @@ FrmMntNotaUnid={
 							break;
 						  default:
 							$('#t_tipo_nota').val('S');
-						}
+						}*/
 					 }
 					 else if(result.status==2){
 						 MessageBox(result.msg);

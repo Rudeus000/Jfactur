@@ -1,6 +1,7 @@
 <?php 
 require APP_PATH.'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $objPHPExcel = new Spreadsheet();
 
@@ -25,6 +26,18 @@ $styleBold = ['font' => ['bold' => true,],
 	],
 ];
 
+$styleArray = array(
+	'borders' => array(
+		'allBorders' => array(
+			'borderStyle' => Border::BORDER_THIN,
+			'color' => array('argb' => '000000'),
+		),
+	),
+);
+ 
+$objPHPExcel ->getActiveSheet()->getStyle('A1:N1')->applyFromArray($styleArray);
+$objPHPExcel ->getActiveSheet()->getStyle('A5:N5')->applyFromArray($styleArray);
+$objPHPExcel ->getActiveSheet()->getStyle('A7:N7')->applyFromArray($styleArray);
 $objPHPExcel->getActiveSheet()
 						->mergeCells('A1:N1');
 $objPHPExcel->getActiveSheet()

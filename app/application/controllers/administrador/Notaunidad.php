@@ -115,10 +115,26 @@ class Notaunidad extends CI_Controller {
 				$key=$val['nomb_tipunidad']."_".$val['cod_producto']."_";
 				$arr[$key]['nund']=trim($val['cantidad']);
 				$arr[$key]['ccod_undmed']=trim($val['nomb_tipunidad']);
-				$arr[$key]['ccod_art']=trim($val['cod_producto']);
+				if(trim($val['padre'])!=""){
+					$arr[$key]['ccod_art']=trim($val['padre']);
+				}
+				else{
+					$arr[$key]['ccod_art']=trim($val['cod_producto']);
+					$val['padre']=trim($val['cod_producto']);
+				}
+				
 				$arr[$key]['cdsc_art']=trim($val['nomb_product']);
 				$arr[$key]['bind_lote']="N";
 				$arr[$key]['cnro_lote']="";
+				$dfill_series=$this->notaunidad_model->FindDocRefNumSeries(array('cod_producto'=>$val['padre'],'cod_vent'=>$val['cod_vent'],'cod_motivo'=>$MotivoRecepcion)); 			 
+				//var_export($dfill_series);
+				$arr_series=array();
+				if(sizeof($dfill_series)>0){
+					foreach($dfill_series as $ind_det=>$val_det){
+						$arr_series[$val_det["serie_descripcion"]]=$val_det["serie_descripcion"];
+					}
+				}
+				$arr[$key]['series']=$arr_series;
 			}
 			$result['status']=1;
 			$_SESSION['ALM_Kardex_det']=$arr;
@@ -144,6 +160,20 @@ class Notaunidad extends CI_Controller {
 			 } 
 			 echo json_encode($result); 
 		 } 
+		public function getSeriesProducto()
+		{
+			$producto = $this->input->get('producto');
+			$almacen = $this->input->get('almacen');
+			$query = $this->db->from('tb_producto_serie')
+			->select('serie_descripcion as id, serie_descripcion as text')
+			->where('cod_producto',$producto)
+			->where('cod_almacen',$almacen)
+			->where('serie_estado','D')
+			->get()->result();
+
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($query);
+		}
 		 public function fillallnotaunidad(){
 			 $result['status']=0;
 			 /*if(!$this->datosuser_model->ValidaSession()){
@@ -266,43 +296,46 @@ class Notaunidad extends CI_Controller {
 			 echo json_encode($result); 
 		 }
 		 public function Adddet_ALM_Kardex(){
-			 $result=NULL; 
-			 $result['status']=0; 
-			 /*if(!$this->datosuser_model->ValidaSession()){
-			 $result['status']=2; 
-			 $result['msg']='SESSION EXPIRADA, VUELVA A INICIAR!'; 
-			 echo json_encode($result); 
-				 exit(0); 
-			 }*/
-			 $key=trim($this->input->post('vp_ccod_undmed'))."_".trim($this->input->post('vp_ccod_art'))."_".trim($this->input->post('vp_cnro_lote'));
+			$result=NULL; 
+			$result['status']=0; 
+			$seriesd=$this->input->post('vp_serie');
+			$series_arr=array();
+			$cant=trim($this->input->post('vp_nund'));
+				
+			if($seriesd!=""){
+				 $dataseries=explode("&",$seriesd);
+				 foreach ($dataseries as $x) {
+					$series=explode("=",$x);
+					$series_arr[$series[1]]=$series[1];
+				}
+			}
+			$total_series=0;
+			if(trim($this->input->post('vp_bind_lote'))=="S"){
+				$seriesarr=$this->input->post('vp_cnro_lote');
+				if(is_array($seriesarr)){
+					foreach ($seriesarr as $x) {
+						$series_arr[$x]=$x;
+						$total_series=$total_series+1;
+					}
+				}
+				else{
+					$series_arr[$this->input->post('vp_cnro_lote')]=$this->input->post('vp_cnro_lote');
+					$total_series=$total_series+1;
+				}
+				
+				$cant=$total_series;
+			}
+			 $key=trim($this->input->post('vp_ccod_undmed'))."_".trim($this->input->post('vp_ccod_art'));//."_".trim($this->input->post('vp_cnro_lote'));
 			 if(!empty($_SESSION['ALM_Kardex_det'])){
 				 $arr=$_SESSION['ALM_Kardex_det'];
 			 }
-			 /*$arr[$key]['ccod_eje']=trim($this->input->post('vp_ccod_eje'));
-			 $arr[$key]['ccod_per']=trim($this->input->post('vp_ccod_per'));
-			 $arr[$key]['ccod_alm']=trim($this->input->post('vp_ccod_alm'));
-			 $arr[$key]['ctipo_mov']=trim($this->input->post('vp_ctipo_mov'));
-			 $arr[$key]['ccod_oper_log']=trim($this->input->post('vp_ccod_oper_log'));
-			 $arr[$key]['cdoc_serie']=trim($this->input->post('vp_cdoc_serie'));
-			 $arr[$key]['cdoc_nro']=trim($this->input->post('vp_cdoc_nro'));
-			 $arr[$key]['ddoc_fch']=trim($this->input->post('vp_ddoc_fch'));*/
-			 $arr[$key]['nund']=trim($this->input->post('vp_nund'));
+			 $arr[$key]['nund']=$cant;
 			 $arr[$key]['ccod_undmed']=trim($this->input->post('vp_ccod_undmed'));
 			 $arr[$key]['ccod_art']=trim($this->input->post('vp_ccod_art'));
 			 $arr[$key]['cdsc_art']=trim($this->input->post('vp_cdsc_art'));
-			 /*$arr[$key]['ccod_mon']=trim($this->input->post('vp_ccod_mon'));
-			 $arr[$key]['nt_cambio']=trim($this->input->post('vp_nt_cambio'));
-			 $arr[$key]['ncos_ua_mof']=trim($this->input->post('vp_ncos_ua_mof'));
-			 $arr[$key]['ncos_t_mof']=trim($this->input->post('vp_ncos_t_mof'));
-			 $arr[$key]['cref_doc']=trim($this->input->post('vp_cref_doc'));
-			 $arr[$key]['cref_ser']=trim($this->input->post('vp_cref_ser'));
-			 $arr[$key]['cref_nro']=trim($this->input->post('vp_cref_nro'));*/
 			 $arr[$key]['bind_lote']=trim($this->input->post('vp_bind_lote'));
-			 $arr[$key]['cnro_lote']=trim($this->input->post('vp_cnro_lote'));
-			 /*$arr[$key]['cref_doc2']=trim($this->input->post('vp_cref_doc2'));
-			 $arr[$key]['cref_ser2']=trim($this->input->post('vp_cref_ser2'));
-			 $arr[$key]['cref_nro2']=trim($this->input->post('vp_cref_nro2'));
-			 $arr[$key]['cod_nota']=trim($this->input->post('vp_cod_nota'));*/
+			 $arr[$key]['cnro_lote']='';
+			 $arr[$key]['series']=$series_arr;
 			 $result['status']=1; 
 			 $_SESSION['ALM_Kardex_det']=$arr; 
 			 $result['data']=$arr; 
@@ -339,6 +372,22 @@ class Notaunidad extends CI_Controller {
 			 if(sizeof($arr)>0){ 
 				 if(array_key_exists($key,$arr)){ 
 					 unset($arr[$key]); 
+				 } 
+			 } 
+				 $result['status']=1; 
+				 $_SESSION['ALM_Kardex_det']=$arr; 
+				 $result['data']=$arr; 
+			 echo json_encode($result); 
+		 }
+		 public function RmvDet_ALM_KardexSerie(){
+			 $result=NULL; 
+			 $result['status']=0; 
+			 $key=trim($this->input->post('vp_id'));
+			 $serie=trim($this->input->post('vp_serie'));
+			 $arr=$_SESSION['ALM_Kardex_det'];
+			 if(sizeof($arr)>0){ 
+				 if(array_key_exists($key,$arr)){ 
+					 unset($arr[$key]['series'][$serie]); 
 				 } 
 			 } 
 				 $result['status']=1; 
