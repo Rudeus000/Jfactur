@@ -12087,10 +12087,13 @@ $(function () {
 		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 	});
 
-});
+
+
+
+
 /*===========================================
-	=            GASTOS - LISTADO            =
-	===========================================*/
+=            GASTOS - LISTADO            =
+===========================================*/
 var TableMantenimientoGastos = $('#TableMantenimientoGastos').DataTable({
 	"language": {
 		"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
@@ -12796,7 +12799,7 @@ $('#input-general').click(function(){
 
 $('#FormBusquedaGeneral').validate({
 	submitHandler: function () {
-		console.log('holaa');
+		obtenerProductoBusquedaGeneral();
 	}
 });
 
@@ -12818,33 +12821,36 @@ $("#BusquedaGeneralAutocomplete").easyAutocomplete({
 				disponible = '';
 			}
 		}
+
+		if(element.cod_almacen != $('input[name=almacen_usuario]').val()){
+			disponible = ' (No seleccionable)';
+		}
 		return element.nombre + ' - ' + element.nomb_almacen + ' ' +disponible;
 	},
 	list: {
 		onKeyEnterEvent: function () {
 			obtenerValoresArticulosBusquedaGeneral();
-			$('#FormBusquedaGeneral').submit();
 		},
 		onClickEvent: function () {
 			obtenerValoresArticulosBusquedaGeneral();
-			$('#FormBusquedaGeneral').submit();
 		}
 	}
 });
 
 
 function obtenerValoresArticulosBusquedaGeneral() {
-	let select = $("#VentaProductoAutocomplete").getSelectedItemData();
+	let select = $("#BusquedaGeneralAutocomplete").getSelectedItemData();
 
-	$('input[name=idTypeAssignmentProduct]').val(select.idTypeAssignmentProduct);
-	$('input[name=producto]').val(select.id);
-	$('input[name=pesoProducto]').val(select.peso_product);
-	$('input[name=unidadProducto]').val(select.unidad);
-	$('input[name=precioProducto]').val(parseFloat(select.venta).toFixed(4));
-	if (select.estado == '0') {
-		$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', true);
+	$('#FormBusquedaGeneral input[name=producto]').val(select.id);
+	$('#FormBusquedaGeneral input[name=almacen]').val(select.cod_almacen);
+	//$('input[name=idTypeAssignmentProduct]').val(select.idTypeAssignmentProduct);
+	//$('input[name=pesoProducto]').val(select.peso_product);
+	//$('input[name=unidadProducto]').val(select.unidad);
+	//$('input[name=precioProducto]').val(parseFloat(select.venta).toFixed(4));
+	if (select.estado == '0' || select.cod_almacen != $('input[name=almacen_usuario]').val()) {
 		return;
 	}else{
+		$('#FormBusquedaGeneral').submit();
 		//$('#serieChek').prop('disabled', false);
 		//$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', false);
 	}
@@ -12852,29 +12858,17 @@ function obtenerValoresArticulosBusquedaGeneral() {
 
 function obtenerProductoBusquedaGeneral(){
 
-	
-		var producto = $('input[name=producto]').val();
-		if (producto == ''){
+		let prod = $('#FormBusquedaGeneral input[name=producto]').val();
+		let almacen = $('#FormBusquedaGeneral input[name=almacen]').val();
+		if (prod == ''){
 			return;
 		}
 		
-		var cantidad = $('input[name=cantidadProducto]').val();
-
-		//var unidad = $('input[name=unidadProducto]').val();
-		//var peso = $('input[name=pesoProducto]').val();
-
 		//$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', true);
-
-		$.getJSON(path + 'administrador/regventas/getProducto', { producto }, function (resp) {
+		
+		$.getJSON(path + 'administrador/regBusquedaGeneral/getProducto', { 'producto':prod, almacen }, function (resp) {
 			var producto = resp.response.cod_producto;
-			if (resp.tipo == 1 && !resp.estado) {
-				Swal.fire({
-					title: "Error",
-					text: "El stock máximo disponible es " + resp.response.stock_disponible,
-					type: "error",
-				});
-				return;
-			}
+			
 			/*
 			if ($('#TableVentaProductos tbody tr.fila-producto').length > 0) {
 				$('#TableVentaProductos tr.fila-producto').each(function () {
@@ -12889,62 +12883,262 @@ function obtenerProductoBusquedaGeneral(){
 				}
 			}
 			*/
-
+			
 			var tr = `
 				<tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
 					<input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
 					<input type="hidden" name="idTypeAssignmentProduct[${producto}]" value="${resp.response.idTypeAssignmentProduct}"/>
-					<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
-					<input type="hidden" name="unidad_prod[${producto}]" value="${unidad}" />
+					<input type="hidden" name="id_almacen[${almacen}]" value="${resp.response.cod_almacen}"/>
+					<input type="hidden" name="unidad_prod[${producto}]" value="${resp.response.nomb_unid}" />
 					<input type="hidden" name="unidad_abreviatura_prod[${producto}]" value="${resp.response.abreviatura_unid}" />
-					<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
-					<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+					<input type="hidden" name="peso_prod[${producto}]" value="${resp.response.peso_product}" />
+					<input type="hidden" name="tipo[${producto}]" value="V" class="tipo"/>
 					<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
-					<td class="details-control">
-					${(seriesCheckBox) ? '<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>' : ''}
+					<input type="hidden" name="precio[${producto}]" class="prec" value="${ round(resp.response.venta,2)}" />
+					<td>${ resp.response.nomb_almacen }</td>
+					<td>${ html_escape(resp.response.nomb_product) }</td>
+					<td>${ resp.response.nomb_marca }</td>						
+					<td>${ resp.response.nomb_categoria  }</td>
+					<td>${ resp.response.nomb_unid }</td>
+					<td>${ round(resp.response.venta,2) }</td>
+					<td>${ resp.response.stock_disponible }</td>
+					<td style="width:110px"><input min="1" type="number" class="cant form-control" name="cant_prod[${producto}]" value="1" /></td>
 					</td>
-					<td>${resp.response.cod_producto}</td>
-					<td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
-					<td class="${(movilexpert == '0') ? 'd-none' : ''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
-								<td>${resp.response.nomb_marca}</td>						
-					<td>${resp.response.nomb_unid}</td>
-					<td style="width:110px"><input min="1" type="${(seriesCheckBox) ? 'hidden' : 'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox) ? cantidad : ''}</td>
-					<td style="width:140px"><input type="text" class="prec form-control" name="prec_prod[${producto}]" value="${($('input[name=precioProducto]').val())}"></td>
+					<td class="subtotal">
+					</td>
+					</td>
 					<td>
-					<input type="hidden" class="desc" name="desc_prod[${producto}]" value="${$('input[name=descuentoProducto]').val()}" />
-					${round($('input[name=descuentoProducto]').val(), 2)}
+						<div class="btn-group btn-group-justified m-b-10">
+							<button data-id="${resp.response.cod_producto}" class="remover btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
+						</div>
 					</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td>
-					<div class="btn-group btn-group-justified m-b-10">
-						<button data-id="${resp.response.cod_producto}" class="removerProducto btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
-					</div>
-					</td>
+					
 				</tr>
 				`;
 
-			if ($('#TableVentaProductos tbody>tr.fila-producto')[0] == undefined) {
-				$('#TableVentaProductos tbody').append(tr);
+			if ($('#table-busqueda-general tbody>tr.fila-producto')[0] == undefined) {
+				$('#table-busqueda-general tbody').append(tr);
 			} else {
-				if ($('#TableVentaProductos tbody .fila-producto').last().next()[0] != undefined) {
-					$($('#TableVentaProductos tbody .fila-producto').last().next()).after(tr);
+				if ($('#table-busqueda-general tbody .fila-producto').last().next()[0] != undefined) {
+					$($('#table-busqueda-general tbody .fila-producto').last().next()).after(tr);
 				} else {
-					$($('#TableVentaProductos tbody .fila-producto').last()).after(tr);
+					$($('#table-busqueda-general tbody .fila-producto').last()).after(tr);
 				}
 			}
 			
+			
 
 
-			$('#FormVentaAgregarProducto')[0].reset();
-			$('input[name=producto]').val('');
-			$('#VentaProductoAutocomplete').prop('disabled', false).show();
-			$('#FormVentaAgregarProducto input[name=producto]').val('');
-			$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', false);
-			//calcularTotalVenta();
+			$('#FormBusquedaGeneral')[0].reset();
+			$('#FormBusquedaGeneral input[name=producto]').val('');
+			$('#BusquedaGeneralAutocomplete').prop('disabled', false).show();
+			calcularTotalVentaBusquedGeneral();
 		});
 }
+
+function calcularTotalVentaBusquedGeneral() {
+	var total = 0;
+	var igv = 18;
+	var igv_porc = (igv / 100);
+	var igv_porcentaje = 0;
+
+	var gravadas = 0;
+	var exoneradas = 0;
+	var igv_acumulado = 0;
+	var descuento_acumulado = 0;
+	if ($('#table-busqueda-general tbody .fila-producto').length > 0) {
+		$('#table-busqueda-general tbody .fila-producto').each(function () {
+			let tipo_igv = $(this).find('.cant').val();
+			let cant = parseFloat($(this).find('.cant').val());
+			let prec = parseFloat($(this).find('.prec').val());
+			if (tipo_igv == '4') {
+				igv_porcentaje = 0;
+			} else {
+				igv_porcentaje = igv_porc;
+			}
+
+			var subTotalProd = round((cant * prec), 2);
+			
+
+			var igvProd = subTotalProd / (igv_porcentaje + 1);
+			igvProd = round(igvProd * igv_porcentaje, 2);
+			igv_acumulado += parseFloat(igvProd);
+			let valorVentaProd = round(subTotalProd - igvProd, 2);
+			if (tipo_igv == '4') {
+				exoneradas += parseFloat(valorVentaProd);
+			} else {
+				gravadas += parseFloat(valorVentaProd);
+			}
+		
+
+			$(this).find('.subtotal').html(round(subTotalProd, 2));
+			total += parseFloat(subTotalProd);
+			
+		});
+	}
+
+	$('#total-texto').html(round(total,2));
+
+	$('#venta-gravadas').html(round(gravadas, 2));
+	$('#venta-exoneradas').html(round(exoneradas, 2));
+	$('#venta-descuentos').html(round(descuento_acumulado, 2));
+	$('#venta-igv').html(igv_acumulado);
+	$('#venta-total').html(round(total, 2));
+
+	$('input[name=monto]').val(round(total, 2));
+	$('input[name=total]').val(round(total, 2));
+	$('input[name=montoRecibido]').val(round(total, 2));
+
+}
+
+$('#table-busqueda-general tbody').on('change','.cant', function () {
+	calcularTotalVentaBusquedGeneral();
+});
+
+$('#table-busqueda-general tbody').on('click', '.remover', function (event) {
+	event.preventDefault();
+	if ($('#prod-' + $(this).data('id')).next('.fila-detalle')[0] != undefined) {
+		$('#prod-' + $(this).data('id')).next().remove();
+	}
+	$('#prod-' + $(this).data('id')).remove();
+	calcularTotalVentaBusquedGeneral();
+});
+
+$('#FormBusquedaGeneralTabla').validate({
+	submitHandler: function (form) {
+		if($('.fila-producto').length == 0){
+			alert('No ha seleccionado ningún producto');
+			return;
+		}
+		form.submit();
+	}
+});
+
+
+
+
+function agregarProductoDeBusquedaGeneral(producto,cantidad) {
+
+	var tipo = $('select[name=tipo]').val();
+	var almacen = $('select[name=almacen]').val();
+
+	var cambio = $('input[name=tipoCambio]').val();
+	var seriesSelect = [];
+	$('#select2-series').find(':selected').map(function (index, elem) {
+		seriesSelect.push($(elem).val());
+	});
+
+
+	$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', true);
+
+	$.getJSON(path + 'administrador/regventas/getProducto', { series: seriesSelect, producto, cantidad, cambio, almacen }, function (resp) {
+		console.log(resp.response);
+		var producto = resp.response.cod_producto;
+		if (resp.tipo == 1 && !resp.estado) {
+			Swal.fire({
+				title: "Error",
+				text: "El stock máximo disponible es " + resp.response.stock_disponible,
+				type: "error",
+			});
+			return;
+		}
+		if ($('#TableVentaProductos tbody tr.fila-producto').length > 0) {
+			$('#TableVentaProductos tr.fila-producto').each(function () {
+				var data_id = parseInt($(this).data('id'));
+				id_array.push(data_id);
+			});
+			if (id_array.includes(parseInt(resp.response.cod_producto))) {
+				if ($('#prod-' + resp.response.cod_producto).next('.fila-detalle')[0] != undefined) {
+					$('#prod-' + resp.response.cod_producto).next().remove();
+				}
+				$('#prod-' + resp.response.cod_producto).remove();
+			}
+		}
+
+		var almacen = $('select[name=almacen]').val();
+		
+		var tr = `
+		<tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
+			<input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
+			<input type="hidden" name="idTypeAssignmentProduct[${producto}]" value="${resp.response.idTypeAssignmentProduct}"/>
+			<input type="hidden" name="id_almacen[${almacen}]" value="${almacen}"/>
+			<input type="hidden" name="unidad_prod[${producto}]" value="${resp.response.nomb_unid}" />
+			<input type="hidden" name="unidad_abreviatura_prod[${producto}]" value="${resp.response.abreviatura_unid}" />
+			<input type="hidden" name="peso_prod[${producto}]" value="${resp.response.peso_produc}" />
+			<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
+			<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
+			<td class="details-control"></td>
+			<td>${resp.response.cod_producto}</td>
+			<td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
+			<td class="${(movilexpert == '0') ? 'd-none' : ''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
+			<td>${resp.response.nomb_marca}</td>						
+			<td>${resp.response.nomb_unid}</td>
+			<td style="width:110px"><input min="1" type="number" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" /></td>
+			<td style="width:140px"><input type="text" class="prec form-control" name="prec_prod[${producto}]" value="${resp.response.venta}"></td>
+			<td>
+				<input type="hidden" class="desc" name="desc_prod[${producto}]" value="${$('input[name=descuentoProducto]').val()}" />
+				${round($('input[name=descuentoProducto]').val(), 2)}
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<div class="btn-group btn-group-justified m-b-10">
+					<button data-id="${resp.response.cod_producto}" class="removerProducto btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
+				</div>
+			</td>
+		</tr>
+		`;
+
+
+		if ($('#TableVentaProductos tbody>tr.fila-producto')[0] == undefined) {
+			$('#TableVentaProductos tbody').append(tr);
+		} else {
+			if ($('#TableVentaProductos tbody .fila-producto').last().next()[0] != undefined) {
+				$($('#TableVentaProductos tbody .fila-producto').last().next()).after(tr);
+			} else {
+				$($('#TableVentaProductos tbody .fila-producto').last()).after(tr);
+			}
+		}
+
+
+		$('#FormVentaAgregarProducto')[0].reset();
+		$('input[name=producto]').val('');
+		$('#select2-series').empty().trigger("change");
+		$('#nombre-servicio').prop('disabled', true).hide();
+		$('#VentaProductoAutocomplete').prop('disabled', false).show();
+		$('#FormVentaAgregarProducto input[name=producto]').val('');
+		$('#FormVentaAgregarProducto button[type=submit]').prop('disabled', false);
+		calcularTotalVenta();
+	});
+}
+
+function agregarProductosBusquedaGeneral(){
+
+	var datos = JSON.parse(decodeURIComponent($('input[name=busqueda_general]').val()));
+	
+	$.each(datos.id_prod, function (index, value) { 
+		agregarProductoDeBusquedaGeneral(value,datos.cant_prod[value]);
+	});
+}
+if($('input[name=busqueda_general]').length){
+	agregarProductosBusquedaGeneral();
+}
+
+
+
 /* ============================================ */
 /*             BUSQUEDA GENERAL END             */
 /* ============================================ */
+
+
+
+
+
+
+
+
+
+
+
+});

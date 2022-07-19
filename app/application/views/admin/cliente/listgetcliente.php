@@ -416,4 +416,19 @@
 
 </script>
 
+<script type="text/javascript">
+  $(function(){
+    new EmojiPicker({
+              trigger: [
+                      {	selector: '.button-emojis',
+                          insertInto: '.textarea-emojis'
+                      }
+              ],
+              closeButton: true
+          });
+  }) 
+            
+
+		</script>
+
 

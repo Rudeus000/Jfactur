@@ -72,17 +72,7 @@
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
 		<script src="<?= base_url_app() ?>assets/plugins/emojis/vanillaEmojiPicker.js"></script>
-		<script type="text/javascript">
-			new EmojiPicker({
-		trigger: [
-				{	selector: '.button-emojis',
-					insertInto: '.textarea-emojis'
-				}
-		],
-		closeButton: true
-	});
-
-		</script>
+		
 <script type="text/javascript">
 
         function buscar_campos() {

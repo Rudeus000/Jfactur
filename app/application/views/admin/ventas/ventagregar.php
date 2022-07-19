@@ -3,6 +3,7 @@
     cursor: not-allowed;
 }
 </style>
+    <input type="hidden" name="busqueda_general" value="<?= $busqueda_general ?>">
      <div id="wrapper" data-stockminimos="1">
        <div class="content-page">
          <div class="content">

@@ -175,7 +175,7 @@
 
 
 <div id="ModalBusquedaGeneral" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document" style="max-width:800px">
+  <div class="modal-dialog" role="document" style="max-width:1000px">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5>
@@ -185,14 +185,21 @@
       </div>
       <div class="modal-body">
         <form id="FormBusquedaGeneral" action="">
+            <input type="hidden" name="almacen_usuario" value="<?= $this->session->userdata('almacen') ?>">
+            <input type="hidden" name="producto">
+            <input type="hidden" name="almacen">
+            <input type="hidden" name="idTypeAssignmentProduct">
             <div class="row">
                 <div class="col-md-8">
                     <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
                 </div>
             </div>
         </form>
+        <br>
 
-        <form action="">
+            
+        <form id="FormBusquedaGeneralTabla" action="<?= base_url('administrador/regventas/agregar') ?>" method="get">
+            <input type="hidden" name="busqueda_general_venta" value="1">
             <table id="table-busqueda-general" class="table table-bordered">
                 <thead>
                     <tr>
@@ -204,13 +211,23 @@
                         <th>P. Venta</th>
                         <th>Stock Actual</th>
                         <th>Cantidad</th>
+                        <th>Subtotal</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8"></td>
+                        <td id="total-texto">Total</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
+
+            <button class="btn btn-primary" type="submit">Siguiente</button>
         </form>
       </div>
     </div>

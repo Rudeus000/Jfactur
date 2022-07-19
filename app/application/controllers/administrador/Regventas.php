@@ -100,6 +100,7 @@ class Regventas extends CI_Controller {
 
 	public function agregar()
 	{
+		$data['busqueda_general'] = urlencode(json_encode($_GET));
 		$data['tipos_pagos'] = $this->modelgeneral->getTableWhere('tb_tipo_pago',['estado_tipopago'=>1]);
 		$data['tipos_tarjetas'] = $this->modelgeneral->getTableWhere('tb_tarjeta',['estado_tarj'=>1]);
 		$data['punto'] = $this->modelgeneral->getTableWhereRow('tb_puntoventa',['cod_puntoventa'=>$this->session->userdata('puntoventa')]);
