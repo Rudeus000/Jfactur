@@ -13,8 +13,9 @@
 			<b><?= ($ventas->codsunat_tipdocucli=='6')?'RUC':'DNI' ?></b>
 		</div> <div class="w70">: <?= $ventas->doc_cliente?></div>
 		<div class="w30">
-		<b><?= ($ventas->codsunat_tipdocuc<?= character_limiter($ventas->nomb_cliente,30,'...') ?>li=='6')?'Razon Social':'Nombres' ?></b></div>
-		<div class="w70">: </div>
+			
+		<b><?= ($ventas->codsunat_tipdocucli=='6')?'Razon Social':'Nombres' ?></b></div>
+		<div class="w70">: <?= character_limiter($ventas->nomb_cliente,30,'...') ?></div>
 
 		<div class="w30"><b>Vendedor</b></div>
 		<div class="w70">: <?= character_limiter($ventas->nomb_usu.'***') ?></div>

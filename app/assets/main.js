@@ -12509,9 +12509,9 @@ if ($('#wrapper[data-stockminimos]').length) {
 						<tr>
 							<td>${value.nomb_almacen}</td>
 							<td>${value.nomb_product}</td>
-							<td>${value.nomb_categoria}</td>
+							
 							<td>${value.nomb_unid}</td>
-							<td>${value.prec_costo}</td>
+							
 							<td>${value.stock}</td>
 							<td>${value.stockmin_product}</td>
 						</tr>

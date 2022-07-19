@@ -30,11 +30,11 @@
         <li>
           <a href="javascript: void(0);"><i class="fas fa-boxes"></i> <span>Almacén unidades</span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
-			<li><a href="<?= base_url()?>administrador/motivorecepcion"><i class="fas fa-dolly"></i>Motivos Recepcion</a></li>  
-            <li><a href="<?= base_url()?>administrador/reginventarioinicial"><i class="fas fa-dolly"></i>Inventario Inicial</a></li>  
+			<!-- <li><a href="<?= base_url()?>administrador/motivorecepcion"><i class="fas fa-dolly"></i>Motivos Recepcion</a></li>   -->
+            <li><a href="<?= base_url()?>administrador/reginventarioinicial"><i class="fas fa-clipboard-list"></i>Inventario Inicial</a></li>  
             <li><a href="<?= base_url() ?>administrador/regtraspasos"><i class="fas fa-exchange-alt"></i> Traspasos</a></li>                                 
             <li><a href="<?php echo base_url();?>administrador/regtipalmacen"><i class="fas fa-hdd"></i>Tipo almacen</a></li>
-            <li><a href="<?php echo base_url();?>administrador/regalmacen"><i class="fas fa-dolly-flatbed"></i>Almacenes</a></li>
+            <li><a href="<?php echo base_url();?>administrador/regalmacen"><i class="fas fa-warehouse"></i>Almacenes</a></li>
             <li><a href="<?php echo base_url();?>reportes/kardex/kardexFisico"><i class="fas fa-dolly-flatbed"></i>Kardex Fisico</a></li>
 			<li><a href="<?= base_url()?>administrador/Notaunidad"><i class="fas fa-dolly"></i>Boleta almacen</a></li>
 			<li><a href="<?= base_url()?>reportes/kardex/CierrekardexFisico"><i class="fas fa-dolly"></i>Cierre mensual</a></li>
@@ -43,8 +43,8 @@
         <li>
           <a href="javascript: void(0);"><i class="fas fa-boxes"></i> <span>Almacén valorizado</span> <span class="menu-arrow"></span></a>
           <ul class="nav-second-level" aria-expanded="false">
-			<li><a href="<?= base_url()?>administrador/motivorecepcion"><i class="fas fa-dolly"></i>Motivos Recepcion</a></li>  
-            <li><a href="<?= base_url()?>administrador/reginventarioinicial"><i class="fas fa-dolly"></i>Inventario Inicial</a></li>  
+			<!-- <li><a href="<?= base_url()?>administrador/motivorecepcion"><i class="fas fa-dolly"></i>Motivos Recepcion</a></li>   -->
+            <!-- <li><a href="<?= base_url()?>administrador/reginventarioinicial"><i class="fas fa-dolly"></i>Inventario Inicial</a></li>   -->
 			<li><a href="<?php echo base_url();?>reportes/kardex/kardexValorado"><i class="fas fa-dolly-flatbed"></i>Kardex Valorado</a></li>
 			<li><a href="<?= base_url()?>administrador/Notavalorizado"><i class="fas fa-dolly"></i>Nota almacén</a></li> 
 			<li><a href="<?= base_url()?>reportes/kardex/CierrekardexValorizado"><i class="fas fa-dolly"></i>Cierre mensual</a></li>

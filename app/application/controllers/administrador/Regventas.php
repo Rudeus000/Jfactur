@@ -1179,7 +1179,7 @@ class Regventas extends CI_Controller {
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS
-				$det['txtCANTIDAD_DET'] = (string)number_format($d->cant_ventdet,10);
+				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
 				$det['txtPRECIO_DET'] = (string)$precio;
 				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
 				$det['txtPRECIO_TIPO_CODIGO'] = '01';
