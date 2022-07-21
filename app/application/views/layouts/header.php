@@ -186,8 +186,9 @@
 <div id="ModalBusquedaGeneral" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document" style="max-width:1000px">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5>
+      <!-- <div class="modal-header"> -->
+      <div class="modal-header bg-success"><h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i></h3>
+        <!-- <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5> -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -199,8 +200,8 @@
             <input type="hidden" name="almacen">
             <input type="hidden" name="idTypeAssignmentProduct">
             <div class="row">
-                <div class="col-md-8">
-                    <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
+                <div class="col-md-12">
+                    <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">                    
                 </div>
             </div>
         </form>
@@ -211,17 +212,17 @@
             <input type="hidden" name="busqueda_general_venta" value="1">
             <table id="table-busqueda-general" class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr class="bg-success text-white" >
                         <th>Almacen</th>
                         <th>Producto</th>
                         <th>Marca</th>
                         <th>Categoría</th>
                         <th>Unidad</th>
-                        <th>P. Venta</th>
-                        <th>Stock Actual</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
                         <th>Cantidad</th>
                         <th>Subtotal</th>
-                        <th></th>
+                        <th>Op.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -229,14 +230,14 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="8"></td>
-                        <td id="total-texto">Total</td>
+                        <td colspan="8" style="text-align:right">Total:</td>
+                        <td id="total-texto" class="text-danger">0.00</td>
                         <td></td>
                     </tr>
                 </tfoot>
             </table>
 
-            <button class="btn btn-primary" type="submit">Siguiente</button>
+            <button class="btn btn-danger float-right" type="submit"><i class="fab fa-opencart"></i> Siguiente</button>
         </form>
       </div>
     </div>
