@@ -11,6 +11,8 @@ $_SSS['app']['system_path'] = $_SSS['app']['base_dir'].'/'.$_SSS['app']['app_fol
 $_SSS['app']['application_path'] = $_SSS['app']['base_dir'].'/'.$_SSS['app']['app_folder'] .'/application/'; //will be used by the CI index file
 $_SSS['app']['base_url'] = 'http://'.$_SERVER["SERVER_NAME"].'/'.$_SSS['app']['app_folder'];
 $_SSS['app']['tenant_url'] = 'http://'.$_SERVER["SERVER_NAME"].'/'.$_SSS['app']['tenant_folder'];
+// $_SSS['app']['base_url'] = 'http://'.$_SERVER["SERVER_NAME"].':81/'.$_SSS['app']['app_folder'];
+// $_SSS['app']['tenant_url'] = 'http://'.$_SERVER["SERVER_NAME"].':81/'.$_SSS['app']['tenant_folder'];
 ///The above config variable are defined to create the basic paths and URLs required for the app to work, which are defined just below
 
 
@@ -26,7 +28,7 @@ if(! defined('APP_TENANTPATH')){
 $_SSS['app']['db_host'] = 'localhost';
 $_SSS['app']['db_user'] = 'root';
 $_SSS['app']['db_pass'] = 'Washington8277!!';
-$_SSS['app']['db_name'] = 'santalucia';
+$_SSS['app']['db_name'] = 'santalucia2';
 $_SSS['app']['db_driver'] = 'mysql';
 
 

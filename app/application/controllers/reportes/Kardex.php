@@ -9,6 +9,7 @@ class Kardex extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('kardex_model');
 	}
 
 	public function kardexFisico()
@@ -21,6 +22,30 @@ class Kardex extends CI_Controller
 		$this->load->view('layouts/header');
 		$this->load->view('layouts/aside');
 		$this->load->view('reports/kardex_fisico', $data);
+		$this->load->view('layouts/footer');
+	}
+	public function CierrekardexFisico()
+	{
+		$month_start = strtotime('first day of this month', time());
+		$data['desde'] = date('Y-m-d', $month_start);
+		$month_end = strtotime('last day of this month', time());
+		$data['hasta'] = date('Y-m-d', $month_end);
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('reports/cierre_kardex_fisico', $data);
+		$this->load->view('layouts/footer');
+	}
+	public function CierrekardexValorizado()
+	{
+		$month_start = strtotime('first day of this month', time());
+		$data['desde'] = date('Y-m-d', $month_start);
+		$month_end = strtotime('last day of this month', time());
+		$data['hasta'] = date('Y-m-d', $month_end);
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('reports/cierre_kardex_valorizado', $data);
 		$this->load->view('layouts/footer');
 	}
 
@@ -36,6 +61,17 @@ class Kardex extends CI_Controller
 		$this->load->view('reports/kardex_valorado', $data);
 		$this->load->view('layouts/footer');
 	}
+	/*public function CierreKdxUnd()
+	{
+		$CodProd = $this->input->post('CodProd');
+		$almacen = $this->input->post('almacen');
+		$fecha = $this->input->post('fecha');
+		$anio = explode('-', $fecha)[0];
+		$mes = explode('-', $fecha)[1];
+		$res_cou = $this->kardex_model->CierreKdxUnd(array('CodProd'=>$CodProd,'CodAlmacen'=>$almacen,'anio'=>$anio,'mes'=>$mes));		
+		echo  json_encode($res_cou);
+	}
+	*/
 
 	public function jsonKardex()
 	{
@@ -47,6 +83,7 @@ class Kardex extends CI_Controller
 		header('content-type: application/json; charset=utf-8');
 		echo json_encode($query);
 	}
+
 
 	public function query($almacen, $anio, $mes)
 	{

@@ -31,11 +31,12 @@
                            </center> 
 
                            <h2>Si esta viendo este mensaje es probable que tengas algunas de las siguientes restricciones: <i class="fa fa-times-circle text-danger" aria-hidden="true"></i></h2>
-                             <ul>                               
+                             <ul>
+                               <li>Tienes un pago pendiente vencido</li>                                  
                                <li>Estas intentando acceder a un modulo que no esta disponible en tu plan</li>
                                <li>El administrador del sistema a restringido el acceso al modulo que estas intentando acceder</li> 
                                <li>Accediste en modo demo (modo prueba)</li>                              
-                               <li>Si crees que es un error de sistema contactate con <a  href="https://www.bfacturas.com" class="text-success stretched-link">admisnitrador del sistema</a></li>
+                               <li>Si crees que es un error de sistema contactate con <a  href="https://wa.link/57zhlu" class="text-success stretched-link">admisnitrador del sistema</a></li>
 
                              </ul>
                          </div>

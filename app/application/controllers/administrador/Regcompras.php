@@ -9,6 +9,8 @@ class Regcompras extends CI_Controller {
 		$this->load->model('compras_model');
 		$this->load->model('empresa_model');
 		$this->load->model('modelgeneral');
+		$this->load->model('notaunidad_model');
+		$this->load->model('notavalorizado_model');
 		$this->load->helper('general');
     $this->permisos = $this->backend_lib->control();
 	}
@@ -175,6 +177,7 @@ class Regcompras extends CI_Controller {
 
 	function agregarCompra()
 	{
+		
 		$data['fecha_comp'] = $this->input->post('fecha');
 		$data['documento_comp'] = $this->input->post('documento');
 		$data['numdocumento_comp'] = $this->input->post('numDocumento');
@@ -202,8 +205,30 @@ class Regcompras extends CI_Controller {
 		$resp = [];
 		if (!is_null($insert)) {
 			$total = 0;
+			$datos_empresa=$this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+			
 			foreach ($_POST['id_prod'] as $key => $value) {
-				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
+				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);				
+				if(!empty($datos_empresa)){
+					if($datos_empresa->MovAlmacenAutomatico=="S"){
+						/*Poblamos el detalle para la boleta de ingreso */
+						$undmed_prod = $this->modelgeneral->getTableWhereRow('tb_unidades',['cod_unid'=>$producto->cod_unid]);
+						$arr_det[$value]['nund']=$_POST['cant_prod'][$key]; 
+						$arr_det[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; 
+						$arr_det[$value]['ccod_art']=$value; 
+						$arr_det[$value]['cdsc_art']=$producto->nomb_product; 				
+						$arr_det[$value]['bind_lote']='N'; 
+						$arr_det[$value]['cnro_lote']='';
+						/*FIN Poblamos el detalle para la boleta de ingreso */
+						/*Poblamos el detalle para la nota de ingreso */
+						$arr_detval[$value]['nund']=$_POST['cant_prod'][$key]; 
+						$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; ; 
+						$arr_detval[$value]['ccod_art']=$value; 
+						$arr_detval[$value]['cdsc_art']=$producto->nomb_product; 
+						$arr_detval[$value]['ncosto']=$_POST['prec_prod'][$key]; 
+						/*FIN Poblamos el detalle para la nota de ingreso */
+					}
+				}				
 				$precio_unit = $_POST['prec_prod'][$key];
 				$detalle['cod_comp'] = $insert;
 				$detalle['cod_producto'] = $value;
@@ -270,6 +295,94 @@ class Regcompras extends CI_Controller {
 			$dataCompra['subtotal_comp'] = $total - $dataCompra['igv_comp'];
 			$dataCompra['pendiente_comp'] = $total - $data['efectivo_comp'];
 			$this->modelgeneral->editRegist('tb_compra',['cod_comp'=>$insert],$dataCompra);
+		if(!empty($datos_empresa)){
+			if($datos_empresa->MovAlmacenAutomatico=="S"){
+				/*poblamos array para boleta de ingreso*/
+				$_SESSION['ALM_Kardex_det']=$arr_det;
+				$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'BI','codalm'=>$this->input->post('almacen')));
+				if(sizeof($arr_serie)>0){
+					$arrboleta['Serie_Nota']=$arr_serie[0]['serie'];		
+					$arrboleta['Num_Nota']=($arr_serie[0]['correlativo']+1);
+				}
+				else{
+					$resp['success'] = false;
+					echo json_encode($resp);exit(0);
+				}
+				$arrboleta['Tipo_Nota']='I';
+				$arrboleta['Ruc_Cliente']=$this->input->post('rucdni');
+				$arrboleta['Fecha_Nota']=date('Y-m-d');
+				$arrboleta['Motivo_Recep']='19';
+				$arrboleta['obs_Nota']='Ingresado desde modulo de compras';
+				$arrboleta['Cod_Almacen']=$this->input->post('almacen');
+				if($this->input->post('documento')=="BOLETA ELECTRONICA"){
+					$arrboleta['tip_doc_ref']="03";
+				}
+				else{
+					$arrboleta['tip_doc_ref']="01";
+				}
+				$arrboleta['serie_doc_ref']='';
+				$arrboleta['num_doc_ref']=$this->input->post('numDocumento');
+				$arrboleta['Estado']='R';
+				$arrboleta['usu_reg']=$this->session->cod_usu;
+				$arrboleta['Fec_Reg']=date('Y-m-d');
+				$dins=$this->notaunidad_model->Insnotaunidad($arrboleta,"N"); 
+				 if(sizeof($dins)>0){ 
+					 if($dins['status']!="1"){
+						$resp['success'] = false;	
+					 }
+					else{
+						$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'BI','codalm'=>$this->input->post('almacen'),'Numero'=>$arrboleta['Num_Nota']));
+					}	
+				 } 
+				 else{ 
+					 $result['status']=2; 
+					 $result['msg']='PROBLEMAS AL GUARDAR EL REGISTRO'; 
+				 } 	 
+				/*fin poblamos array para boleta de ingreso*/
+				/*poblamos array para nota de ingreso*/
+				$_SESSION['ALM_Kardexval_det']=$arr_detval;
+				$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'NI','codalm'=>''));
+				if(sizeof($arr_serie)>0){
+					$arrnota['Serie_Nota']=$arr_serie[0]['serie'];		
+					$arrnota['Num_Nota']=($arr_serie[0]['correlativo']+1);
+				}
+				else{
+					$resp['success'] = false;
+					echo json_encode($resp);exit(0);
+				}
+				$arrnota['Tipo_Nota']='I';
+				$arrnota['Ruc_Cliente']=$this->input->post('rucdni');
+				$arrnota['Fecha_Nota']=date('Y-m-d');
+				$arrnota['CodMotivo']='19';
+				$arrnota['obs_Nota']='Ingresado desde modulo de compras';
+				if($this->input->post('documento')=="BOLETA ELECTRONICA"){
+					$arrnota['tip_doc_ref']="03";
+				}
+				else{
+					$arrnota['tip_doc_ref']="01";
+				}
+				$arrnota['serie_doc_ref']='';
+				$arrnota['num_doc_ref']=$this->input->post('numDocumento');
+				$arrnota['ccod_mon']='S';
+				$arrnota['nt_cambio']='3.50';			 
+				$arrnota['Estado']='R';
+				$arrnota['usu_reg']=$this->session->cod_usu;								
+				$arrnota['Fec_Reg']=date('Y-m-d');
+				$dins=$this->notavalorizado_model->Insnotaunidad($arrnota,"N"); 
+				 if(sizeof($dins)>0){ 
+					 if($dins['status']!="1"){
+						$resp['success'] = false;	
+					 }
+					 else{
+						$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'NI','codalm'=>'','Numero'=>$arrnota['Num_Nota']));
+					 }
+				 } 
+				 else{ 
+					$resp['success'] = false;
+				 } 	 
+				/*fin poblamos array para nota de ingreso*/
+			}
+		}
 			$resp['success'] = true;
 			$resp['redirect'] = 'administrador/regcompras';
 		}else{
@@ -282,7 +395,7 @@ class Regcompras extends CI_Controller {
 
 	function editar($id)
 	{
-		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+	$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
   	$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
   	$data['compra'] = $this->db->from('tb_compra')
   	->join('tb_proveedor','tb_compra.tb_proveedor_id = tb_proveedor.tb_proveedor_id')

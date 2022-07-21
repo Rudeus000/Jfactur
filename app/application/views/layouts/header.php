@@ -52,7 +52,7 @@
         <link href="<?= base_url_app() ?>assets/jquery-toast/src/jquery.toast.css" rel="stylesheet" type="text/css" />  
 
        <!--  <link href="https://file.myfontastic.com/TvcWTqoUED5DW24kLXpmZ9/icons.css" rel="stylesheet"> -->
-
+<script src="<?php echo base_url_app();?>assets/js/helpers.js"></script>
       
 
     </head>
@@ -122,13 +122,22 @@
                         <li class="list-inline-item dropdown notification-list">
                             <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button"
                                aria-haspopup="false" aria-expanded="false">
-                                <i class="noti-icon"><img src="<?php echo base_url_app();?>assets/images/users/avatar-1.jpg" alt="user" class="img-fluid rounded-circle"></i>
-                                <span class="profile-username ml-2 text-dark"><?= $this->session->userdata('nomb_usu') ?> </span> <span class="mdi mdi-menu-down text-dark"></span>                                
+                                <i class="noti-icon"><img src="<?php echo base_url_app();?>assets/images/users/usuario_inicio.png" alt="user" class="img-fluid rounded-circle"></i>
+                                <!-- <span class="profile-username ml-2 text-dark"><?= $this->session->userdata('nomb_usu') ?> </span> <span class="mdi mdi-menu-down text-dark"></span>                           -->
                             </a>
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-right profile-dropdown ">
+                           
+                                <!-- item-->
+                                <div class="dropdown-item noti-title">
+                                <i class="mdi mdi-account"></i> <span><?= $this->session->userdata('nomb_usu') ?></span>
+                                   
+                                </div>  
+                                                                  
+                                <div class="dropdown-divider"></div>
                                 <!-- item-->                                
                                 <div class="dropdown-item noti-title">
-                                    <h5 class="text-overflow"><small>TIENDA: <?= $this->session->userdata('puntoventa_nombre') ?></small> </h5>
+                                    <i class="mdi mdi-mdi mdi-store"></i> <span><?= character_limiter($this->session->userdata('puntoventa_nombre'),10,'') ?> </span>
+                                   
                                 </div>                               
                                 <!-- item-->                               
                                 <a href="<?php echo base_url(); ?>perfil" class="dropdown-item notify-item">

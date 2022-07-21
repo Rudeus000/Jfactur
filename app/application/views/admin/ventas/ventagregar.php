@@ -43,6 +43,7 @@
                            <div class="col-md-12">
                              <div class="alert alert-danger" role="alert">
                                <i class="fas fa-exclamation-triangle m-r-5 float-right fa-2x"></i>Debes aperturar una caja.
+                               <a  href="<?= base_url('administrador/regcajaapertura') ?>" class="btn btn-pink btn-bordered waves-effect w-md waves-light" ><i class="fas fa-inbox m-r-5"></i>Aperturar</a>
                              </div>
                            </div>
                          </div>
@@ -489,8 +490,12 @@
                                <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                              </div>
                            </div>
+<<<<<<< HEAD
                            <div class="col-md-12">
                            <div class="button-list">
+=======
+                           <div class="card-body d-flex flex-column flex-sm-row justify-content-center justify-content-around">
+>>>>>>> kardex
                              <button type="button" data-monto="10" class="monto-recibido btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
                              <button type="button" data-monto="20" class="monto-recibido btn btn-success btn-bordered waves-effect w-md">S/.20</button>
                              <button type="button" data-monto="50" class="monto-recibido btn btn-danger btn-bordered waves-effect w-md">S/.50</button>
@@ -874,7 +879,7 @@
 
      <div id="ModalStockMinimos" class="modal" tabindex="-1">
        <div class="modal-dialog modal-lg">
-         <div class="card-header bg-warning">
+         <div class="card-header bg-danger">
            <h3 class="my-0 text-white">Alerta de productos con stock mínimo <i class="spinner-grow text-pink float-right"></i></h3>
          </div>
          <div class="modal-content">
@@ -888,12 +893,12 @@
              <div class="modal-body">
                <table id="TableStockMinimos" class="table table-hover table-striped tblstockminimo">
                  <thead>
-                   <tr class="bg-warning text-white">
+                   <tr class="bg-danger text-white">
                      <th>Almacen</th>
                      <th>Producto</th>
-                     <th>Categoria</th>
+                     <!-- <th>Categoria</th> -->
                      <th>Unidades</th>
-                     <th>P. Costo</th>
+                     <!-- <th>P. Costo</th> -->
                      <th>Stock</th>
                      <th class="bg-danger">Mínimo</th>
                    </tr>

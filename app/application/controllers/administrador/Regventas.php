@@ -12,6 +12,10 @@ class Regventas extends CI_Controller {
 		$this->load->model('ventas_model');
 		$this->load->model('empresa_model');
 		$this->load->model('modelgeneral');
+		$this->load->model('notaunidad_model');
+		$this->load->model('notavalorizado_model');
+		$this->load->model('modelgeneral');
+		
 		$this->load->helper('general');
     	$this->permisos = $this->backend_lib->control();
 	}
@@ -459,14 +463,16 @@ class Regventas extends CI_Controller {
 			
 			$igv_acumula = 0;
 			$gravada_acumula = 0;
+			$cod_art_almacen="";
+			$datos_empresa=$this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
 			foreach ($_POST['id_prod'] as $key => $value) {
+				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
 				$pos = strpos($value, 'ser-');
 				if ($pos !== false) {
 					$precio_unitario = $_POST['prec_prod'][$value];
 					$codigo_producto = null;
 					$detalle['cod_servicio'] = substr($value,4).'-'.$insert;
-				}else{
-					$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
+				}else{					
 					$codigo_producto = $_POST['id_prod'][$key];
 					$precio_unitario = $producto->prec_costo;
 				}			
@@ -475,9 +481,11 @@ class Regventas extends CI_Controller {
 				if(isset($_POST['idTypeAssignmentProduct'][$key])){
 					$idTypeAssignmentProduct = $_POST['idTypeAssignmentProduct'][$key];
 				if ($_POST['idTypeAssignmentProduct'][$key] !== "null") {
+					$cod_art_almacen=$_POST['idTypeAssignmentProduct'][$key];
 						$detalle['cod_father_product'] = $_POST['idTypeAssignmentProduct'][$key];
 					} else {
 						$detalle['cod_father_product'] = $codigo_producto;
+						$cod_art_almacen=$codigo_producto;
 					}
 				}
 				$detalle['cod_producto'] = $codigo_producto;
@@ -510,8 +518,33 @@ class Regventas extends CI_Controller {
 
 				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
 				$insertDetalle = $this->modelgeneral->insertRegist('tb_venta_detalle',$detalle);
-			
-				
+			if(!empty($datos_empresa)){
+				if($datos_empresa->MovAlmacenAutomatico=="S"){
+					/*Poblamos el detalle para la boleta de ingreso */
+					$undmed_prod = $this->modelgeneral->getTableWhereRow('tb_unidades',['cod_unid'=>$producto->cod_unid]);
+					$arr_det[$value]['nund']=$_POST['cant_prod'][$key]; 
+					$arr_det[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; 
+					$arr_det[$value]['ccod_art']=$cod_art_almacen;//$value; 
+					$arr_det[$value]['cdsc_art']=$producto->nomb_product; 				
+					$arr_det[$value]['bind_lote']='N'; 
+					$arr_det[$value]['cnro_lote']='';
+					/*FIN Poblamos el detalle para la boleta de ingreso */
+					/*Poblamos el detalle para la nota de ingreso */
+					$arr_detval[$value]['nund']=$_POST['cant_prod'][$key]; 
+					$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; ; 
+					$arr_detval[$value]['ccod_art']=$cod_art_almacen;//$value; 
+					$arr_detval[$value]['cdsc_art']=$producto->nomb_product; 
+					//sacamos el costo actual del producto
+					$costo_actual_prod = $this->modelgeneral->getTableWhereRow('alm_stkval_actual',['ccod_art'=>$value]);
+					if(!empty($costo_actual_prod)){
+						$arr_detval[$value]['ncosto']=$costo_actual_prod->ncosto; 
+					}
+					else{
+						$arr_detval[$value]['ncosto']=0; 
+					}
+					/*FIN Poblamos el detalle para la nota de ingreso */
+				}
+			}
 				if ($pos === false) {
 					if ($producto->cod_tiparticulo==1) { //SI ES PRODUCTO 
 						// $this->descontarDeAlmacen($detalle,$data['cod_almacen']); //DESCONTAR STOCK
@@ -560,15 +593,123 @@ class Regventas extends CI_Controller {
 			]);
 
 			$this->calcularGravadaExoneradaDeVenta($insert);
-
-			
-			$resp['success'] = true;
-			$resp['id'] = $insert;
-			$resp['printType'] = $printType[0]->type_formt;
-			if ($talonario->siglas_talonario=='FC') {
-				$resp['xml'] = $this->xmlHash($insert);
-			}else{
-				$resp['xml']['archivo'] = $this->generarNoXml($insert);
+			$flg_continuar=1;
+			if(!empty($datos_empresa)){
+				if($datos_empresa->MovAlmacenAutomatico=="S"){			
+					/*poblamos array para boleta de ingreso*/
+					$_SESSION['ALM_Kardex_det']=$arr_det;
+					$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'BS','codalm'=>$this->input->post('almacen')));
+					if(sizeof($arr_serie)>0){
+						$arrboleta['Serie_Nota']=$arr_serie[0]['serie'];		
+						$arrboleta['Num_Nota']=($arr_serie[0]['correlativo']+1);
+					}
+					else{
+						$resp['success'] = false;
+						echo json_encode($resp);exit(0);
+					}
+					$arrboleta['Tipo_Nota']='S';
+					$arrboleta['Ruc_Cliente']=$this->input->post('rucdni');
+					$arrboleta['Fecha_Nota']=date('Y-m-d');
+					$arrboleta['Motivo_Recep']='4';
+					$arrboleta['obs_Nota']='salida desde modulo de ventas';
+					$arrboleta['Cod_Almacen']=$this->input->post('almacen');
+					//sacamos el tipo de documento del talonario
+					$codtalonario=$this->input->post('tipoPedido');
+					//echo 'talonario '.$this->input->post('documento');
+					$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario',['cod_talonario'=>$codtalonario]);
+					//var_export($objTalonario);
+					/*
+					if (($this->input->post('documento') =="15")) {
+						$arrboleta['tip_doc_ref']="01";
+					}
+					else if ($this->input->post('documento') =="16") {
+						$arrboleta['tip_doc_ref']="03";
+					}
+					else{
+						$arrboleta['tip_doc_ref']="00";
+					}*/
+					$arrboleta['tip_doc_ref']=$objTalonario->cod_tipdocu;								
+					$arrboleta['serie_doc_ref']=$this->input->post('serie');
+					$arrboleta['num_doc_ref']=$this->input->post('correlativo');
+					$arrboleta['Estado']='R';
+					$arrboleta['usu_reg']=$this->session->cod_usu;
+					$arrboleta['Fec_Reg']=date('Y-m-d');
+					$dins=$this->notaunidad_model->Insnotaunidad($arrboleta,"N"); 
+					 if(sizeof($dins)>0){ 
+						 if($dins['status']!="1"){
+							$resp['success'] = false;	
+							$flg_continuar=0;
+						 }
+						else{
+							$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'BS','codalm'=>$this->input->post('almacen'),'Numero'=>$arrboleta['Num_Nota']));
+						}	
+					 } 
+					 else{ 
+						 $resp['success'] = false; 
+						 $flg_continuar=0;
+					 } 	 
+					/*fin poblamos array para boleta de ingreso*/
+					/*poblamos array para nota de ingreso*/
+					$_SESSION['ALM_Kardexval_det']=$arr_detval;
+					$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'NS','codalm'=>''));
+					if(sizeof($arr_serie)>0){
+						$arrnota['Serie_Nota']=$arr_serie[0]['serie'];		
+						$arrnota['Num_Nota']=($arr_serie[0]['correlativo']+1);
+					}
+					else{
+						$resp['success'] = false;
+						echo json_encode($resp);exit(0);
+					}
+					$arrnota['Tipo_Nota']='S';
+					$arrnota['Ruc_Cliente']=$this->input->post('rucdni');
+					$arrnota['Fecha_Nota']=date('Y-m-d');
+					$arrnota['CodMotivo']='4';
+					$arrnota['obs_Nota']='salida desde modulo de ventas';
+					$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario',['cod_talonario'=>$this->input->post('tipoPedido')]);
+					$arrnota['tip_doc_ref']=$objTalonario->cod_tipdocu;	
+					/*
+					if ($this->input->post('documento') =="15") {
+						$arrnota['tip_doc_ref']="01";
+					}
+					else if ($this->input->post('documento') =="16") {
+						$arrnota['tip_doc_ref']="03";
+					}
+					else{
+						$arrnota['tip_doc_ref']="00";
+					}*/
+					$arrnota['serie_doc_ref']=$this->input->post('serie');
+					$arrnota['num_doc_ref']=$this->input->post('correlativo');
+					$arrnota['ccod_mon']='S';
+					$arrnota['nt_cambio']='3.50';			 
+					$arrnota['Estado']='R';
+					$arrnota['usu_reg']=$this->session->cod_usu;
+					$arrnota['Fec_Reg']=date('Y-m-d');
+					$dins=$this->notavalorizado_model->Insnotaunidad($arrnota,"N"); 
+					 if(sizeof($dins)>0){ 
+						if($dins['status']!="1"){
+							$resp['success'] = false;	
+							$flg_continuar=0;
+						}
+						else{
+							$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'NS','codalm'=>'','Numero'=>$arrnota['Num_Nota']));
+						}	
+					 } 
+					 else{ 
+						$resp['success'] = false;
+						$flg_continuar=0;
+					 } 	 
+					/*fin poblamos array para nota de ingreso*/
+				}
+			}				
+			if($flg_continuar==1){				
+				$resp['success'] = true;
+				$resp['id'] = $insert;
+				$resp['printType'] = $printType[0]->type_formt;
+				if ($talonario->siglas_talonario=='FC') {
+					$resp['xml'] = $this->xmlHash($insert);
+				}else{
+					$resp['xml']['archivo'] = $this->generarNoXml($insert);
+				}
 			}
 		}else{
 			$resp['success'] = false;
@@ -1039,7 +1180,7 @@ class Regventas extends CI_Controller {
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS
-				$det['txtCANTIDAD_DET'] = (string)number_format($d->cant_ventdet,10);
+				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
 				$det['txtPRECIO_DET'] = (string)$precio;
 				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
 				$det['txtPRECIO_TIPO_CODIGO'] = '01';
