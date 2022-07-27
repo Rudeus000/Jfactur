@@ -12788,7 +12788,6 @@ $('#ImportarPlantillaStock').fileupload({
 
 
 
-<<<<<<< HEAD
 
 /* ============================================ */
 /*               BUSQUEDA GENERAL               */
@@ -13143,5 +13142,3 @@ if($('input[name=busqueda_general]').length){
 
 
 });
-=======
->>>>>>> kardex

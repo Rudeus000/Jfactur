@@ -490,12 +490,7 @@
                                <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                              </div>
                            </div>
-<<<<<<< HEAD
-                           <div class="col-md-12">
-                           <div class="button-list">
-=======
                            <div class="card-body d-flex flex-column flex-sm-row justify-content-center justify-content-around">
->>>>>>> kardex
                              <button type="button" data-monto="10" class="monto-recibido btn btn-primary btn-bordered waves-effect w-md">S/.10</button>
                              <button type="button" data-monto="20" class="monto-recibido btn btn-success btn-bordered waves-effect w-md">S/.20</button>
                              <button type="button" data-monto="50" class="monto-recibido btn btn-danger btn-bordered waves-effect w-md">S/.50</button>
