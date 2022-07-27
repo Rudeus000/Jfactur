@@ -3,6 +3,7 @@
     cursor: not-allowed;
 }
 </style>
+    <input type="hidden" name="busqueda_general" value="<?= $busqueda_general ?>">
      <div id="wrapper" data-stockminimos="1">
        <div class="content-page">
          <div class="content">
@@ -497,7 +498,8 @@
                              <button type="button" data-monto="200" class="monto-recibido btn btn-pink btn-bordered waves-effect w-md">S/.200</button>
                              <button type="button" data-monto="500" class="monto-recibido btn btn-info btn-bordered waves-effect w-md">S/.500</button>
                            </div>
-                         </div>
+                           </div>
+                         <!-- </div> -->
                        </fieldset>
 
 
@@ -522,7 +524,6 @@
          </div>
        </div>
      </div>
-
 
 
      <div class="modal fade" id="ModalAccionesDespuesGuardar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
