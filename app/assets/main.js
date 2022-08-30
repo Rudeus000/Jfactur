@@ -6645,7 +6645,7 @@ $(function () {
 		}
 	});
 
-	$('#TableVentas tbody').on('click', '.enviar-whatsapp', function () {
+	$('#TableVentas tbody').on('click', '.enviar-whatsapp', function (event) {
 		let id = $(this).data('id');
 		let cliente = $(this).data('cliente');
 		let telefono = $(this).data('telefono');
@@ -6657,18 +6657,18 @@ $(function () {
 		// 	});
 		// 	return;
 		// }
+		$('#numero-whatsapp').val(telefono);
 		//$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
 		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').data('id', id).data('telefono', telefono).prop('disabled', false);
-		$('#nombre-cliente').html(cliente);
-		$('#numero-whatsapp').val(telefono);
+		$('#nombre-cliente').html(cliente);		
 		$('#enviar-whatsapp').addClass('disabled');
 		$('#numero-whatsapp').prop('disabled', false);
 		$('#ModalEnviarWhatsapp').modal();
 	});
 
-	$('#generar-documento-whatsapp').click(function () {
+	$('#ModalEnviarWhatsapp #generar-documento-whatsapp').click(function () {
 		$(this).html('<i class="fa fa-sync fa-spin"></i> Procesando');
-		let id = $(this).data('id');
+		const id = $(this).data('id');
 		const telefono = $('#numero-whatsapp').val();
 		$('#numero-whatsapp').prop('disabled', true);
 		$.post(path + "administrador/regventas/imprimirVenta/" + id + "/guardar", {},
