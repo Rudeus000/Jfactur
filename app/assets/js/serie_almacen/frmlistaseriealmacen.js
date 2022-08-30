@@ -52,17 +52,31 @@ frmlistaseriealmacen={
 	Edit:function(id){ 
 		 location.href=pathController+"/serie_almacen/Findserie_almacen/"+id; 
 	},//fin Edit
-	RmvItem:function(id,msg){
-		 ShowDeleteModal(id,'Seguro de eliminar  <strong>'+msg+'</strong>?');
+	RmvItem:function(id){
+		 //ShowDeleteModal(id,'Seguro de eliminar  <strong>'+msg+'</strong>?');
+		Swal.fire({
+		  title: 'Estas seguro de eliminar?',
+		  text: "¡No podrás revertir esto!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Si, eliminar!'
+		}).then((result) => {
+			console.log(result.value);
+		  if (result.value) {
+			frmlistaseriealmacen.Rmv(id);
+		  }
+		})
 	},
-	Rmv:function(){ 
-			 HideDeleteModal();
+	Rmv:function(id){ 
+			 //HideDeleteModal();
 			 $.ajax({
 				 url:pathController+'/serie_almacen/Rmvserie_almacen',
 				 type:'post',
 				 dataType:'json',
 				 data:{ 
-					 vp_id:$("#txtiddelete").val()
+					 vp_id:id
 				 },
 				 beforeSend:function(){
 					 //ShowWait();
@@ -86,9 +100,9 @@ frmlistaseriealmacen={
 					 } 
 				 }, 
 				 success:function(result){
-				 HideWait();
+				 //HideWait();
 				 if(result.CodMsg==1){ 
-					 $('#tr'+$("#txtiddelete").val()).remove(); 
+					 $('#tr'+id).remove(); 
 				 }
 				 else if(result.CodMsg==2){
 					 MessageBox(result.Msg);
@@ -103,25 +117,25 @@ frmlistaseriealmacen={
 		 newHtml='';
 		 newHtml='<table class="table table-striped table-bordered" cellspacing="0" width="100%" id="tabla">';
 		 newHtml+='<thead>';
-		 newHtml+='<tr>';
-		 newHtml+='<th></th>';
+		 newHtml+='<tr>';		 
 		 newHtml+='<th>ID</th>';
 		 newHtml+='<th>ALMACEN</th>';
 		 newHtml+='<th>TIPO DOCUMENTO</th>';
 		 newHtml+='<th>SERIE</th>';
 		 newHtml+='<th>CORRELATIVO</th>';
+		 newHtml+='<th>ACCION</th>';
 		 newHtml+='</tr>';
 		 newHtml+='</thead>';
 		 var cont=1;
 		 newHtml+='<tbody>';
 			 $.each(data,function(key,fila){
-				 newHtml+='<tr id="tr'+fila.IDAlmacenSerie+'">';
-				 newHtml+='<td><a href="javascript:frmlistaseriealmacen.Edit(\''+fila.IDAlmacenSerie+'\')">Editar</a>&nbsp;&nbsp;<a href="javascript:frmlistaseriealmacen.RmvItem(\''+fila.IDAlmacenSerie+'\')">Eliminar</a></td>';
+				 newHtml+='<tr id="tr'+fila.IDAlmacenSerie+'">';				 
 				 newHtml+='<td>'+fila.IDAlmacenSerie+'</td>';
 				 newHtml+='<td>'+fila.cod_almacen+'</td>';
 				 newHtml+='<td>'+fila.TipoDoc+'</td>';
 				 newHtml+='<td>'+fila.Serie+'</td>';
 				 newHtml+='<td>'+fila.Correlativo+'</td>';
+				 newHtml+='<td><a href="javascript:frmlistaseriealmacen.Edit(\''+fila.IDAlmacenSerie+'\')"><i class="fas fa-edit text-success"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:frmlistaseriealmacen.RmvItem(\''+fila.IDAlmacenSerie+'\')"><i class="fas fa-trash-alt text-pink"></i></a></td>';
 				 newHtml+='</tr>';
 			 });
 		 newHtml+='</tbody>';

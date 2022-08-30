@@ -196,8 +196,30 @@ class Kardex_model extends CI_Model{
 			return $result;
 		}
 		
-		public function CierreKdxUnd($params=NULL){	
+		public function CierreKdxUnd($params=NULL){
 			$arr_resp=NULL;
+
+			$this->db->select("nund_tot,ccod_art,und_medida,id_alm");
+			$this->db->from('alm_stkund');
+			if($params['CodProd']!=""){
+				$where = "ccod_art='".$params['CodProd']."' and anio=".$params['anio']." and mes=".$params['mes'];			
+				$this->db->where($where);
+			}
+			else{
+				$where = "anio=".$params['anio']." and mes=".$params['mes'];			
+			}
+			
+			$this->db->where($where);
+			$query=$this->db->get();
+			$arr_saldos_mes=$query->result_array();
+			$saldo=0;	
+			if(sizeof($arr_saldos_mes)>0){
+				$arr_resp['msg']="Ya existe un cierre realizado del mes ";
+				$arr_resp['status']=0;
+				return $arr_resp;						
+			}	
+			//verificamos si ya tiene saldos cerrados del mes pasado
+			
 			$query = $this->db->query("SELECT year(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as anio,month(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as mes");
 			$arr_mes_ant=$query->result_array();
 			$arr_resp['status']=0;
@@ -208,7 +230,7 @@ class Kardex_model extends CI_Model{
 				$this->db->select("cod_producto,nomb_product,cod_unid");
 				$this->db->from('tb_producto');
 				if($params['CodProd']!=""){
-					$where = "ccod_art='".$params['CodProd']."'";			
+					$where = "cod_producto='".$params['CodProd']."'";			
 					$this->db->where($where);
 				}
 				$query=$this->db->get();
@@ -302,7 +324,8 @@ class Kardex_model extends CI_Model{
 			$arr_resp['status']=1;
 			 return $arr_resp;
 		}
-		public function KardexValProd($params=NULL){
+		public function KardexValProd($params=NULL){			
+
 		//'CodProd'=>$CodProd,'CodAlmacen'=>$almacen,'anio'=>$anio,'mes'=>$mes		
 			$query = $this->db->query("SELECT year(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as anio,month(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as mes");
 			$arr_mes_ant=$query->result_array();
@@ -322,7 +345,7 @@ class Kardex_model extends CI_Model{
 				if(sizeof($arr_saldos)>0){
 					foreach($arr_saldos as $fila){
 						//sacamos el saldo inicial
-						$nom_almacen="";
+						$nom_almacen=$fila['nomb_almacen'];
 						$cod_art=$fila['ccod_art'];
 						$nom_art=$fila['nomb_product'];
 						$und_medida=$fila['und_medida'];
@@ -490,6 +513,16 @@ class Kardex_model extends CI_Model{
 		}
 		public function CierreKdxValorizado($params=NULL){	
 			$arr_resp=NULL;
+			$this->db->select("nund_tot,ccod_art");
+			$this->db->from('alm_stkval');
+			$where = "anio=".$params['anio']." and mes=".$params['mes'];
+			$query=$this->db->get();
+			$arr_saldos=$query->result_array();
+			if(sizeof($arr_saldos)>0){
+				$arr_resp['msg']="Ya existe un cierre realizado del mes ";
+				$arr_resp['status']=0;
+				return $arr_resp;	
+			}
 			$query = $this->db->query("SELECT year(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as anio,month(DATE_ADD('".$params['anio']."-".$params['mes']."-01', INTERVAL -30 day)) as mes");
 			$arr_mes_ant=$query->result_array();
 			$arr_resp['status']=0;
@@ -500,7 +533,7 @@ class Kardex_model extends CI_Model{
 				$this->db->select("cod_producto,nomb_product,cod_unid");
 				$this->db->from('tb_producto');
 				if($params['CodProd']!=""){
-					$where = "ccod_art='".$params['CodProd']."'";			
+					$where = "cod_producto='".$params['CodProd']."'";			
 					$this->db->where($where);
 				}
 				$query=$this->db->get();

@@ -13,30 +13,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			$this->load->view('layouts/aside');			
 			$this->load->view('admin/serie_almacen/frmlistaseriealmacen');
 			$this->load->view('layouts/footer');
-		 }/*
+		 }
 		 public function Rmvserie_almacen(){
-			if(ValidarSesion()){
-				$arr['vp_ID']=trim($this->request->getPost('vp_id'));
-				$arr['vp_IDEmpresa']=IDEmpresaSeleccionada();
-				$arr['vp_UsuMod']=IDUsuarioSesion();
-				$result=json_decode(RequestServer(URL_SERVICES."/serie_almacenEliminar",$arr,TokenSesion()));
-				if(!empty($result)){
-				$thearray = get_object_vars( $result );
-				echo json_encode($thearray);				}
-				else{
-				$result['CodMsg']=2;
-				$result['Msg']='Problemas al realizar la consulta!';
-				echo json_encode($result);
-				exit(0);
-				}
-				}
-				else{
-				$result['CodMsg']=2;
-				$result['Msg']='SESSION EXPIRADA, VUELVA A INICIAR!';
-				echo json_encode($result);
-				exit(0);
-				}
-		 } */
+			 $arr['vp_id']=trim($this->input->post('vp_id'));
+			 $result=NULL; 
+			 $result['CodMsg']=0; 						 
+			 $dins=$this->serie_almacen_model->Rmvserie_almacen($arr); 
+			$result['CodMsg']=1; 
+			 echo json_encode($result);
+		 }
 		 public function fillallseriealmacen(){
 			$res_cou = $this->serie_almacen_model->fillallseriealmacen();
 			$result=array();

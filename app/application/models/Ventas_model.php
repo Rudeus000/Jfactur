@@ -86,18 +86,18 @@ class Ventas_model extends CI_Model {
       <div class="btn-group">
 
       <div class="btn-group">
-      <button data-id="'.$archivoxml.'" data-email="'.$q->email_cliente.'"  data-cliente="ENVIAR A: '.$q->email_cliente.'"class="btn btn-sm btn-success enviar-email"><i class="fa fa-envelope"></i></button>
+      <button data-id="'.$archivoxml.'" data-email="'.$q->email_cliente.'"  data-cliente="ENVIAR A: '.$q->email_cliente.'"class="btn btn-xs btn-success enviar-email"><i class="fa fa-envelope"></i></button>&nbsp
 
-      <button data-telefono="'.$q->telf_cliente.'" data-cliente="ENVIAR A: '.$q->nomb_cliente.'" data-id="'.$archivoxml.'"class="btn btn-primary waves-effect waves-light enviar-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></button>
+      <button data-telefono="'.$q->telf_cliente.'" data-cliente="ENVIAR A: '.$q->nomb_cliente.'" data-id="'.$archivoxml.'"class="btn btn-xs btn-primary waves-effect waves-light enviar-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></button>&nbsp
 
-      <a href="'.base_url('administrador/regventas/editar/'.$q->cod_vent).'" class="btn btn-sm btn-info" data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye"></i></a>&nbsp
+      <a href="'.base_url('administrador/regventas/editar/'.$q->cod_vent).'" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye"></i></a>&nbsp
 
-      <button data-id="'.$q->cod_vent.'" class="anular btn btn-sm btn-pink" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash"></i></button>&nbsp
+      <button data-id="'.$q->cod_vent.'" class="anular btn btn-xs btn-pink" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash"></i></button>&nbsp
       
       '.$xml.'
       
-      <a href="'.base_url('administrador/regventas/imprimirVenta/'.$archivoxml).'" target="_blank" class="btn btn-sm btn-success" data-toggle="tooltip" title="Imprimir Venta"><i class="far fa-file-alt"></i></a>&nbsp
-      <a href="'.base_url('administrador/regventas/imprimirticketVenta/'.$archivoxml).'" target="_blank" class="btn btn-sm btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>
+      <a href="'.base_url('administrador/regventas/imprimirVenta/'.$archivoxml).'" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Venta"><i class="far fa-file-alt"></i></a>&nbsp
+      <a href="'.base_url('administrador/regventas/imprimirticketVenta/'.$archivoxml).'" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>
       </div>
        ';
 

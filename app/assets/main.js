@@ -6649,23 +6649,28 @@ $(function () {
 		let id = $(this).data('id');
 		let cliente = $(this).data('cliente');
 		let telefono = $(this).data('telefono');
-		if (telefono == '') {
-			Swal.fire({
-				title: "Error",
-				text: "Número de whatsapp desconocido",
-				type: "error"
-			});
-			return;
-		}
-		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').data('id', id).prop('disabled', false);
+		// if (telefono == '') {
+		// 	Swal.fire({
+		// 		title: "Error",
+		// 		text: "Número de whatsapp desconocido",
+		// 		type: "error"
+		// 	});
+		// 	return;
+		// }
+		//$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
+		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').data('id', id).data('telefono', telefono).prop('disabled', false);
 		$('#nombre-cliente').html(cliente);
+		$('#numero-whatsapp').val(telefono);
 		$('#enviar-whatsapp').addClass('disabled');
+		$('#numero-whatsapp').prop('disabled', false);
 		$('#ModalEnviarWhatsapp').modal();
 	});
 
 	$('#generar-documento-whatsapp').click(function () {
 		$(this).html('<i class="fa fa-sync fa-spin"></i> Procesando');
 		let id = $(this).data('id');
+		const telefono = $('#numero-whatsapp').val();
+		$('#numero-whatsapp').prop('disabled', true);
 		$.post(path + "administrador/regventas/imprimirVenta/" + id + "/guardar", {},
 			function (data, textStatus, jqXHR) {
 				var pdf = `${path}assets/temporal/whatsapp_email/${data.archivo}`;
@@ -6673,7 +6678,7 @@ $(function () {
 				if (data.xml != '') {
 					xml = `%0A%0AComprobante%20XML%0A${path}assets/temporal/whatsapp_email/${data.xml}`;
 				}
-				var mensaje = `https://api.whatsapp.com/send?phone=51${data.telefono}&text=Comprobante%20PDF%0A${pdf + xml}`
+				var mensaje = `https://api.whatsapp.com/send?phone=51${telefono}&text=Comprobante%20PDF%0A${pdf + xml}`
 
 				$('#generar-documento-whatsapp').html('<i class="fa fa-check"></i> Generado').prop('disabled', true);
 				$('#enviar-whatsapp').attr('href', mensaje).removeClass('disabled');
@@ -9916,12 +9921,12 @@ $(function () {
 		'rgba(0, 150, 136, 1)',
 	];
 
-	if ($('#VentasAnio')[0]) {
+	if ($('#ComprasAnio')[0]) {
 
-		function GraficoVentas() {
-			$("#VentasAnio").remove();
-			$("#ContentVentasAnio").html("<canvas id='VentasAnio' style='height:300px'></canvas>");
-			var selector = $("#VentasAnio");
+		function GraficoCompras() {
+			$("#ComprasAnio").remove();
+			$("#ContentComprasAnio").html("<canvas id='ComprasAnio' style='height:300px'></canvas>");
+			var selector = $("#ComprasAnio");
 			var ctx = selector.get(0).getContext("2d");
 			var container = selector.parent();
 			var ww = selector.attr('width', $(container).width());
@@ -9941,8 +9946,8 @@ $(function () {
 				responsive: true,
 				maintainAspectRatio: false
 			};
-			var formReporteVentasAnio = $('#FormFiltroReporteVentasAnio').serializeObject();
-			$.getJSON(path + 'reportes/regventasanio/jsonCompras', formReporteVentasAnio, function (json, textStatus) {
+			var formReporteComprasAnio = $('#FormFiltroReporteComprasAnio').serializeObject();
+			$.getJSON(path + 'reportes/regventasanio/jsonCompras', formReporteComprasAnio, function (json, textStatus) {
 				$.each(json, function (index, val) {
 					data.labels.push(val.mes);
 					data.datasets[0].data.push(val.monto)
@@ -9953,14 +9958,14 @@ $(function () {
 
 		}
 
-		GraficoVentas();
+		GraficoCompras();
 
-		$('#FormFiltroReporteVentasAnio select[name=anio]').change(function (event) {
-			GraficoVentas();
+		$('#FormFiltroReporteComprasAnio select[name=anio]').change(function (event) {
+			GraficoCompras();
 		});
 
-		$('#FormFiltroReporteVentasAnio input[name=Contado],#FormFiltroReporteVentasAnio input[name=Credito]').change(function (event) {
-			GraficoVentas();
+		$('#FormFiltroReporteComprasAnio input[name=Contado],#FormFiltroReporteComprasAnio input[name=Credito]').change(function (event) {
+			GraficoCompras();
 		});
 
 	}

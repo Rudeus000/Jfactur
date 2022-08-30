@@ -156,7 +156,7 @@ FrmMntNotaUnid={
 		 });
 	},
 	Cancel:function(){ 
-		 location.href=pathController+"/notaunidad/frmnotaunidad"; 
+		 location.href=pathController+"/notaunidad"; 
 	}, 
 	Register:function(){ 
 		if($.trim($('#t_codigo').val())==""){

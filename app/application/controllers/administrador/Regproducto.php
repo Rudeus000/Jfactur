@@ -14,7 +14,10 @@ class Regproducto extends CI_Controller
         }
         $this->load->model('usuario_model');
         $this->load->model('productos_model');
+		$this->load->model('empresa_model');
         $this->load->model('modelgeneral');
+		$this->load->model('notaunidad_model');
+		$this->load->model('notavalorizado_model');
         $this->load->helper('general');
         $this->permisos = $this->backend_lib->control();
     }
@@ -22,8 +25,8 @@ class Regproducto extends CI_Controller
     public function index()
     {
         $data['permisos'] = $this->permisos;
-        $data['categoria'] = $this->modelgeneral->getTableWhere('tb_categoria',['est_categoria'=>1]);
-        $data['marca'] = $this->modelgeneral->getTableWhere('tb_marca',['est_marca'=>1]);
+        $data['categoria'] = $this->modelgeneral->getTable('tb_categoria');
+        $data['marca'] = $this->modelgeneral->getTable('tb_marca');
         $data['articulo'] = $this->modelgeneral->getTable('tb_tiparticulo');
         $data['linea'] = $this->modelgeneral->getTable('tb_linea');
         $data['sublinea'] = $this->modelgeneral->getTable('tb_sublinea');
@@ -385,6 +388,8 @@ class Regproducto extends CI_Controller
 
 	private function insertProducto($productos)
 	{
+		$arr_almacen=array();	
+		$arr=array();
 		foreach ($productos as $indice => $value) {
 			$data = [];
 			$data['cod_tiparticulo'] = $value['tipo_articulo'];
@@ -417,8 +422,106 @@ class Regproducto extends CI_Controller
                 $dataStock['stock'] = $value['stock'];
                 $dataStock['stock_inicial'] = $value['stock'];
                 $this->modelgeneral->insertRegist('tb_producto_stock', $dataStock);
+				
+				/*******Ingreso nuevo********************************/
+				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$insert]);
+				/*Poblamos el detalle para la boleta de ingreso */
+				$undmed_prod = $this->modelgeneral->getTableWhereRow('tb_unidades',['cod_unid'=>$producto->cod_unid]);
+				$arr_det[$value]['nund']=$value['stock']; 
+				$arr_det[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; 
+				$arr_det[$value]['ccod_art']=$insert; 
+				$arr_det[$value]['cdsc_art']=$producto->nomb_product; 				
+				$arr_det[$value]['bind_lote']='N'; 
+				$arr_det[$value]['cnro_lote']='';
+				/*FIN Poblamos el detalle para la boleta de ingreso */
+				/*Poblamos el detalle para la nota de ingreso */
+				$arr_detval[$value]['nund']=$value['stock']; 
+				$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; ; 
+				$arr_detval[$value]['ccod_art']=$insert; 
+				$arr_detval[$value]['cdsc_art']=$producto->nomb_product; 
+				$arr_detval[$value]['ncosto']=$value['precio_compra']; 
+				/*FIN Poblamos el detalle para la nota de ingreso */
             }
-            
+		}
+		if(sizeof($arr_det)>0){
+		//**************************Ingresamos la boleta de ingreso***********************************/
+				/*poblamos array para boleta de ingreso*/
+				$datos_empresa=$this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+				$_SESSION['ALM_Kardex_det']=$arr_det;
+				foreach($arr_almacen as $ind=>$val){
+					$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'BI','codalm'=>$val));
+					if(sizeof($arr_serie)>0){
+						$arrboleta['Serie_Nota']=$arr_serie[0]['serie'];		
+						$arrboleta['Num_Nota']=($arr_serie[0]['correlativo']+1);
+					}
+					else{
+						$resp['success'] = false;
+						echo json_encode($resp);exit(0);
+					}
+					$arrboleta['Tipo_Nota']='I';
+					$arrboleta['Ruc_Cliente']=$datos_empresa->ruc_emp;
+					$arrboleta['Fecha_Nota']=date('Y-m-d');
+					$arrboleta['Motivo_Recep']='11';
+					$arrboleta['obs_Nota']='Ingresado desde importacion de articulo';
+					$arrboleta['Cod_Almacen']=$val;
+					$arrboleta['tip_doc_ref']="32";
+					$arrboleta['serie_doc_ref']='';
+					$arrboleta['num_doc_ref']='';
+					$arrboleta['Estado']='R';
+					$arrboleta['usu_reg']=$this->session->cod_usu;
+					$arrboleta['Fec_Reg']=date('Y-m-d');
+					$dins=$this->notaunidad_model->Insnotaunidad($arrboleta,"N"); 
+					 if(sizeof($dins)>0){ 
+						 if($dins['status']!="1"){
+							$resp['success'] = false;	
+						 }
+						else{
+							$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'BI','codalm'=>$val,'Numero'=>$arrboleta['Num_Nota']));
+						}	
+					 } 
+					 else{ 
+						 $result['status']=2; 
+						 $result['msg']='PROBLEMAS AL GUARDAR EL REGISTRO'; 
+					 } 	 
+					/*fin poblamos array para boleta de ingreso*/
+				}
+				/*poblamos array para nota de ingreso*/	
+				$_SESSION['ALM_Kardexval_det']=$arr_detval;				
+				$arr_serie=$this->notaunidad_model->ProxCorrelativoAlmacen(array('tipo'=>'NI','codalm'=>''));
+				if(sizeof($arr_serie)>0){
+					$arrnota['Serie_Nota']=$arr_serie[0]['serie'];		
+					$arrnota['Num_Nota']=($arr_serie[0]['correlativo']+1);
+				}
+				else{
+					$resp['success'] = false;
+					echo json_encode($resp);exit(0);
+				}
+				$arrnota['Tipo_Nota']='I';
+				$arrnota['Ruc_Cliente']=$datos_empresa->ruc_emp;
+				$arrnota['Fecha_Nota']=date('Y-m-d');
+				$arrnota['CodMotivo']='11';
+				$arrnota['obs_Nota']='Ingresado desde importacion de articulo';
+				$arrnota['tip_doc_ref']="32";
+				$arrnota['serie_doc_ref']='';
+				$arrnota['num_doc_ref']='';
+				$arrnota['ccod_mon']='S';
+				$arrnota['nt_cambio']='3.50';			 
+				$arrnota['Estado']='R';
+				$arrnota['usu_reg']=$this->session->cod_usu;								
+				$arrnota['Fec_Reg']=date('Y-m-d');
+				$dins=$this->notavalorizado_model->Insnotaunidad($arrnota,"N"); 
+				 if(sizeof($dins)>0){ 
+					 if($dins['status']!="1"){
+						$resp['success'] = false;	
+					 }
+					 else{
+						$this->notaunidad_model->ActualizarCorrelativoAlmacen(array('tipo'=>'NI','codalm'=>'','Numero'=>$arrnota['Num_Nota']));
+					 }
+				 } 
+				 else{ 
+					$resp['success'] = false;
+				 } 	 
+				/*fin poblamos array para nota de ingreso*/
 		}
 	}
 

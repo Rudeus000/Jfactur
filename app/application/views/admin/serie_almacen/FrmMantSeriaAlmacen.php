@@ -85,7 +85,7 @@ var pathController="<?php echo base_url();?>administrador";
 						&nbsp;
 					</div>
 				</div>
-				<input type="button" class="btn btn-primary" id="btnsave" value="Grabar" />&nbsp;&nbsp;<input type="button" class="btn btn-primary" id="btncancel" value="Cancelar" />
+				<input type="button" class="btn btn-primary" id="btnsave" value="Grabar" />&nbsp;&nbsp;<input type="button" class="btn btn-danger" id="btncancel" value="Cancelar" />
 				</form>
 
 					 </div>

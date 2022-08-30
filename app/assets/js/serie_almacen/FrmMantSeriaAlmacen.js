@@ -18,7 +18,7 @@ FrmMantSeriaAlmacen={
 		}
 	},
 	Cancel:function(){ 
-		 location.href=pathController+"/serie_almacen/frmserie_almacen"; 
+		 location.href=pathController+"/serie_almacen"; 
 	}, 
 	Save:function(){ 
 			//validamos el combo cod_almacen

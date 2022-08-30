@@ -136,7 +136,7 @@
                   <label class="control-label">Tipo:</label>
                     <select name="tipo" id="tipo_documento" class="form-control select2">                      
                             <option value="">SELECCIONAR</option>
-                            <option value="4">RUC</option>
+                            <option value="1">RUC</option>
                             <option value="2">DNI</option>
                    </select>
                 </div>
@@ -216,8 +216,8 @@
                 <div class="form-group">
                   <label class="control-label">Tipo:</label>
                     <select name="tipo" class="form-control select">
-                                 <option value="1" <?php echo set_value('tipo',$proveedor->tb_proveedor_tip)==1? "selected" : "" ?>>Ruc</option>
-                                  <option value="2" <?php echo set_value('tipo',$proveedor->tb_proveedor_tip)==2 ? "selected" : "" ?>>Dni</option>
+                                 <option value="1" >Ruc</option>
+                                  <option value="2" >Dni</option>
                    </select>
                 </div>
 
@@ -265,8 +265,8 @@
                 <div class="form-group">
                   <label class="control-label">Estado:</label>
                     <select name="estado" class="form-control select">
-                                 <option value="1" <?php echo set_value('estado',$proveedor->tb_proveedor_xac)==1? "selected" : "" ?>>Activo</option>
-                                  <option value="2" <?php echo set_value('estado',$proveedor->tb_proveedor_xac)==2 ? "selected" : "" ?>>Inactivo</option>
+                                 <option value="1">Activo</option>
+                                  <option value="2">Inactivo</option>
                    </select>
                 </div>
 

@@ -127,7 +127,7 @@ FrmListaNotaUnidad={
 		 newHtml+='<tbody>';
 			 $.each(data,function(key,fila){
 				 newHtml+='<tr id="tr'+fila.Cod_Nota+'">';
-				 newHtml+='<td><a href="javascript:FrmListaNotaUnidad.Imprimir(\''+fila.Cod_Nota+'\')">Imprimir</a></td>';
+				 newHtml+='<td><a href="javascript:FrmListaNotaUnidad.Imprimir(\''+fila.Cod_Nota+'\')"><i class="fa fa-print text-success"></i></a></td>';
 				 //newHtml+='<td>'+fila.Cod_Nota+'</td>';
 				 newHtml+='<td>'+fila.Serie_Nota+'</td>';
 				 newHtml+='<td>'+fila.Num_Nota+'</td>';

@@ -6,10 +6,10 @@ class Notavalorizado_model extends CI_Model{
 		 parent::__construct();
 	 } 
 	public function fillallnotavalorizado($params=NULL){		 
-		$this->db->select("case when alm_notaval.Tipo_Nota='I' then 'Ingreso' else 'Salida' end as Tipo_Nota,DATE_FORMAT(alm_notaval.Fecha_Nota, '%Y-%m-%d') as Fecha_Nota,alm_notaval.Cod_Nota,alm_notaval.Serie_Nota,alm_notaval.Num_Nota,alm_motivorecepcion.des_motivo,tb_tipodocumento.nom_tipdocumento,alm_notaval.serie_doc_ref,alm_notaval.num_doc_ref");
+		$this->db->select("case when alm_notaval.Tipo_Nota='I' then 'Ingreso' else 'Salida' end as Tipo_Nota,DATE_FORMAT(alm_notaval.Fecha_Nota, '%Y-%m-%d') as Fecha_Nota,alm_notaval.Cod_Nota,alm_notaval.Serie_Nota,alm_notaval.Num_Nota,tb_cliente.nomb_cliente,alm_motivorecepcion.des_motivo,tb_tipodocumento.nom_tipdocumento,alm_notaval.serie_doc_ref,alm_notaval.num_doc_ref");
 		$this->db->from('alm_notaval');
 		$this->db->join('alm_motivorecepcion', 'alm_notaval.CodMotivo = alm_motivorecepcion.cod_motivo');
-		//$this->db->join('tb_cliente', 'alm_notaval.Ruc_Cliente = tb_cliente.doc_cliente');
+		$this->db->join('tb_cliente', 'alm_notaval.Ruc_Cliente = tb_cliente.doc_cliente');
 		//$this->db->join('tb_almacen', 'alm_notaval.Cod_Almacen = tb_almacen.cod_almacen');
 		$this->db->join('tb_tipodocumento', 'alm_notaval.tip_doc_ref = tb_tipodocumento.cod_tipdocu');
 		$where = "alm_notaval.Fecha_Nota between '".$params['fecha_notad']."' and '".$params['fecha_notah']."'";

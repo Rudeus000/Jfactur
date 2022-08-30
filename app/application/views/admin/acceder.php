@@ -214,7 +214,7 @@
                                                                                 
                                                                             <div class="card">                                                                                
                                                                                 <div class="card-body">                                                                                    
-                                                                                    <div class="row">
+                                                                                    <div class="quehaydenuevo-content">
                                                                                         <div class="col-md-12">
                                                                                             <?= $n->contenido ?>
                                                                                         </div>

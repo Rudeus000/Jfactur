@@ -12,11 +12,13 @@ class Serie_almacen_model extends CI_Model{
 		->where('tb_almacen_serie.estado',"R");
 		return $query->get()->result();
 	} 
-	/* public function Rmvserie_almacen($params=NULL){
-		 $store=$this->prepareStore('call Eliminar_serie_almacen',$params);
-		 $consulta = $this->db->query($store);
-		 return $consulta->result_array();
-	 } */
+	public function Rmvserie_almacen($params=NULL){
+		 $data = [
+            'estado' => 'E',
+        ];
+        $this->db->where('IDAlmacenSerie', $params["vp_id"]);
+        $this->db->update('tb_almacen_serie', $data);
+	 }
 	 public function FillAllAlmacen($params=NULL){
 		 $this->db->select('cod_almacen, nomb_almacen');
 		 $query = $this->db->get('tb_almacen');

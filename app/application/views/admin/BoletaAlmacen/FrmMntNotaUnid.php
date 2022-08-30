@@ -174,7 +174,7 @@ var pathController="<?php echo base_url();?>administrador";
 							<input class="form-control" readonly type="text" id="t_cnro_lote" value=""  />
 						</div>
 					</div>
-					<div class="col-md-6" id="serie_c">
+					<!-- <div class="col-md-6" id="serie_c">
                              <div class="form-group">
                                <div class="custom-control custom-checkbox">
                                  <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto" readonly>
@@ -183,7 +183,7 @@ var pathController="<?php echo base_url();?>administrador";
                                <select id="select2-series" class="form-control selct2" name="seriesProducto[]" multiple="multiple" disabled>
                                </select>
                              </div>
-                           </div>
+                           </div> -->
 					<div class="col-md-2">
 						<div class="form-group">
 						<input type="button"  style="margin-top: 31px"  class="btn btn-primary" id="btnadddet_ALM_Kardex" value="Agregar item" />

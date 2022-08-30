@@ -1,4 +1,3 @@
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,14 +39,16 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">
-                            <div class="card-header bg-success"><h3 class="my-0 text-white">Lista de productos<a href="" class="btn btn-rounded btn-pink float-right" data-toggle="modal" data-target="#ModalAgregarProducto"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3></div>
+                                <div class="card-header bg-success">
+                                    <h3 class="my-0 text-white">Lista de productos<a href="" class="btn btn-rounded btn-pink float-right" data-toggle="modal" data-target="#ModalAgregarProducto"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3>
+                                </div>
                                 <div class="card-body table-responsive">
 
-                                                    <!-- Vertical Steps Example -->
-                    <!-- <div class="row">
+                                    <!-- Vertical Steps Example -->
+                                    <!-- <div class="row">
                         <div class="col-12">
                             <div class="card"> -->
-                                <!-- <div class="card-body"> -->
+                                    <!-- <div class="card-body"> -->
                                     <fieldset>
                                         <legend>Filtro</legend>
                                         <form id="ProductoFormBusqueda" autocomplete="off">
@@ -129,41 +130,41 @@
 
                                                 <div class="form-group col-md-2">
                                                     <label class="col-form-label" style="display: block"><br></label>
-                                                <span class="input-group-btn" style="padding-top:35px;">
-                                                    <!-- <button class="btn btn-success waves-effect waves-light"><i class="fa fa-search"></i> Buscar</button> -->
-                                                    <button  class="btn btn-rounded btn-success waves-effect w-md waves-light"><i class="fas fa-binoculars m-r-5"></i>Buscar</button>
-                                                </span>
+                                                    <span class="input-group-btn" style="padding-top:35px;">
+                                                        <!-- <button class="btn btn-success waves-effect waves-light"><i class="fa fa-search"></i> Buscar</button> -->
+                                                        <button class="btn btn-rounded btn-success waves-effect w-md waves-light"><i class="fas fa-binoculars m-r-5"></i>Buscar</button>
+                                                    </span>
 
-                                                <span class="input-group-btn" style="padding-top:35px;" data-toggle="modal" data-target="#ModalCargaMasiva">
-                                                    <!-- <button class="btn btn-success waves-effect waves-light"><i class="fa fa-search"></i> Importar</button> -->
-                                                    <button type="button" class="btn btn-rounded btn-info  waves-effect w-md waves-light"><i class="fa fa-file-excel m-r-5"></i><span>Importar</span></button>
-                                                </span>
-                                            </div>
+                                                    <span class="input-group-btn" style="padding-top:35px;" data-toggle="modal" data-target="#ModalCargaMasiva">
+                                                        <!-- <button class="btn btn-success waves-effect waves-light"><i class="fa fa-search"></i> Importar</button> -->
+                                                        <button type="button" class="btn btn-rounded btn-info  waves-effect w-md waves-light"><i class="fa fa-file-excel m-r-5"></i><span>Importar</span></button>
+                                                    </span>
+                                                </div>
                                         </form>
                                     </fieldset>
                                     <!-- End #wizard-vertical -->
-                                <!-- </div>
+                                    <!-- </div>
                             </div>
                         </div> -->
 
-                    <!-- </div>End row -->
+                                    <!-- </div>End row -->
 
                                     <table id="TableMantenimientoProducto" class="table  table-striped" cellspacing="0" width="100%">
-                                     
-                                          <div class="form-group col-md-6">                                          
-                                                    <label class="col-form-label" style="display: block"><br></label>
-                                                <!-- <span class="input-group-btn" data-toggle="modal" data-target="#ModalAgregarProducto" style="padding-top:35px;">
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-form-label" style="display: block"><br></label>
+                                            <!-- <span class="input-group-btn" data-toggle="modal" data-target="#ModalAgregarProducto" style="padding-top:35px;">
                                                     
                                                     <button  class="btn btn-success waves-effect w-md waves-light"><i class="fas fa-clipboard-list m-r-5"></i>Agregar</button>
                                                 </span>                                           -->
-                                                <span class="input-group-btn" style="padding-top:35px;">
-                                                   
-                                                    <button  class="btn btn-rounded btn-primary buttons-excel waves-effect w-md waves-light"><i class="fa fa-file-excel m-r-5"></i><span>Exportar</span></button>
-                                                </span>
-                                                <span class="input-group-btn" style="padding-top:35px;">                                                    
-                                                    <button type="button" class="btn btn-rounded btn-danger  waves-effect w-md waves-light"><i class="far fa-file-pdf m-r-5"></i><span>PDF</span></button>
-                                                </span>
-                                            </div>
+                                            <span class="input-group-btn" style="padding-top:35px;">
+
+                                                <button class="btn btn-rounded btn-primary buttons-excel waves-effect w-md waves-light"><i class="fa fa-file-excel m-r-5"></i><span>Exportar</span></button>
+                                            </span>
+                                            <span class="input-group-btn" style="padding-top:35px;">
+                                                <button type="button" class="btn btn-rounded btn-danger  waves-effect w-md waves-light"><i class="far fa-file-pdf m-r-5"></i><span>PDF</span></button>
+                                            </span>
+                                        </div>
 
                                         <div class="col-sm-12 col-md-6">
                                             <div id="datatable-buttons_filter" class="dataTables_filter"></div>
@@ -214,7 +215,7 @@
 
 </body>
 
-<div id="ModalAgregarProducto" class="modal fade bs-example-modal-center"  role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="ModalAgregarProducto" class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
@@ -224,7 +225,9 @@
                     <h4>Datos del Producto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div> -->
-                <div class="card-header bg-success"><h3 class="my-0 text-white">Agregar producto<i class="spinner-grow text-warning float-right"></i></h3></div>
+                <div class="card-header bg-success">
+                    <h3 class="my-0 text-white">Agregar producto<i class="spinner-grow text-warning float-right"></i></h3>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-8">
@@ -388,7 +391,7 @@
                             <div class="form-group">
                                 <label class="control-label">Disponibilidad venta: <span class="text-danger"> *</label>
                                 <select class="form-control select2" required="" name="dispventa">
-                                    <option value="S">Si venta</option>                                    
+                                    <option value="S">Si venta</option>
                                     <option value="N">No venta</option>
 
                                 </select>
@@ -428,6 +431,23 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- <div class="col-md-6"> -->
+                             <!-- <div class="switchery-demo"> -->
+                             <!-- <input type="checkbox" class="custom-control-input" > -->
+                             <!-- <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck" />
+                             <label for="servicioChecked">Vencimiento</label> -->
+                             <!-- </div> -->
+                           <!-- </div> -->
+                        <div class="form-group col-md-4">
+                       
+                            <br>
+                            <br>
+                                <div class="input-group">
+                                <input type="checkbox" data-plugin="switchery" data-color="#FC0B00" data-size="small" id="observacionCheck" name="observacionCheck" />
+                            <label for="servicioChecked">Fecha vencimiento</label>
+                                </div><!-- input-group -->
+                           
+                        </div>
 
                     </div>
                 </div>
@@ -450,7 +470,9 @@
                     <h4 class="custom-modal">Editar Producto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div> -->
-                <div class="card-header bg-success"><h3 class="my-0 text-white">Editar producto<i class="spinner-grow text-danger float-right"></i></h3></div>
+                <div class="card-header bg-success">
+                    <h3 class="my-0 text-white">Editar producto<i class="spinner-grow text-danger float-right"></i></h3>
+                </div>
                 <div class="modal-body">
                     <div class="row">
 
@@ -623,8 +645,8 @@
                             <div class="form-group">
                                 <label class="control-label">Disponibilidad venta: <span class="text-danger"> *</label>
                                 <select class="form-control select2 " required="" name="dispventa">
-                                    <option value="S" >Si disponible</option>
-                                    <option value="N" >No disponible</option>
+                                    <option value="S">Si disponible</option>
+                                    <option value="N">No disponible</option>
 
                                 </select>
                             </div>
@@ -633,8 +655,8 @@
                             <div class="form-group">
                                 <label class="control-label">Disponibilidad compra: <span class="text-danger"> *</label>
                                 <select class="form-control select2 " required="" name="dispcompra">
-                                    <option value="S" >Si disponible</option>
-                                    <option value="N" >No disponible</option>
+                                    <option value="S">Si disponible</option>
+                                    <option value="N">No disponible</option>
 
                                 </select>
                             </div>
@@ -676,8 +698,8 @@
                             <div class="form-group">
                                 <label class="control-label">Estado</label>
                                 <select class="form-control select2" name="estado">
-                                    <option value="1" >Activo</option>
-                                    <option value="2" >Desactivado</option>
+                                    <option value="1">Activo</option>
+                                    <option value="2">Desactivado</option>
 
                                 </select>
                             </div>
@@ -698,66 +720,69 @@
 </div><!-- /.modal -->
 
 
-     <!--  Modal content for the above example -->
-     <div class="modal fade bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-        <div class="card-header bg-success"><h3 class="my-0 text-white">Importar productos series desde excel<a type="button"   class="btn btn-rounded btn-pink float-right" data-dismiss="modal" aria-hidden="true">x</a></h3></div> 
+<!--  Modal content for the above example -->
+<div class="modal fade bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="card-header bg-success">
+            <h3 class="my-0 text-white">Importar productos series desde excel<a type="button" class="btn btn-rounded btn-pink float-right" data-dismiss="modal" aria-hidden="true">x</a></h3>
+        </div>
         <!-- <div class="card-header bg-success"><h3 class="my-0 text-white">Lista de productos<a class="btn btn-rounded btn-danger float-right">x</a></h3></div> -->
-            <div class="modal-content">
-                         
-                <!-- <div class="modal-header">
+        <div class="modal-content">
+
+            <!-- <div class="modal-header">
                     <h4 class="modal-title" id="myLargeModalLabel"> <i class="fas fa-angle-double-down m-r-5"></i>Importar productos desde excel</h4>
                     
                 </div> -->
-                
-                    <div class="modal-body">                               
-                        <div class="card m-b-20 text-xs-center">
-                            <div class="card-body">                 
-                                    <div class="row">
-                                        <div class="col-md-2">           
-                                            <i class=" fas fa-cloud-download-alt text-info fa-4x"></i>
-                                        </div>                                           
-                                        <div class="col-md-6">
-                                            <p><b>Descarga nuestra plantilla en excel!</b><br>
-                                                Para poder importar tus productos en lote debes descargar la plantilla y enviarlo utilizando el mismo formato!<p>             
-                                        </div>
-                                        <div class="col-md-2">
-                                            <a href="<?= base_url('administrador/regproducto/descargarPlantillaProducto') ?>" class="btn btn-link  waves-effect w-md waves-light"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla productos</a>
-                                            <a href="<?= base_url('administrador/regproducto/descargarPlantillaStock') ?>" class="btn btn-link  waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla stock y serie</a>
-                                        </div>
-                                    <div>                                                                                                                                           
+
+            <div class="modal-body">
+                <div class="card m-b-20 text-xs-center">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <i class=" fas fa-cloud-download-alt text-info fa-4x"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <p><b>Descarga nuestra plantilla en excel!</b><br>
+                                    Para poder importar tus productos en lote debes descargar la plantilla y enviarlo utilizando el mismo formato!
+                                <p>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="<?= base_url('administrador/regproducto/descargarPlantillaProducto') ?>" class="btn btn-link  waves-effect w-md waves-light"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla productos</a>
+                                <a href="<?= base_url('administrador/regproducto/descargarPlantillaStock') ?>" class="btn btn-link  waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-download-alt m-r-5"></i>Plantilla stock y serie</a>
+                            </div>
+                            <div>
                             </div>
                         </div>
-                        
-                        
+
+
                         <div class="card m-b-20 text-xs-center">
                             <div class="card-body">
                                 <blockquote class="card-bodyquote">
                                     <div class="custom-file">
-                                        <input type="file"  name="plantilla" class="custom-file-input" id="ImportarPlantilla" lang="es">
+                                        <input type="file" name="plantilla" class="custom-file-input" id="ImportarPlantilla" lang="es">
                                         <label class="custom-file-label label-productos" for="customFileLang">Importar productos</label>
                                     </div>
-                                    
+
                                     <div class="progress" style="display:none">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%"  aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    
+
                                     <button type="button" id="iniciarImportacionProducto" class="btn btn-primary btn-rounded btn-bordered waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-upload-alt m-r-5"></i>Iniciar</button>
                                 </blockquote>
                                 <br><br>
                                 <blockquote class="card-bodyquote">
                                     <div class="custom-file">
-                                        <input type="file"  name="plantillaStock" class="custom-file-input" id="ImportarPlantillaStock" lang="es">
+                                        <input type="file" name="plantillaStock" class="custom-file-input" id="ImportarPlantillaStock" lang="es">
                                         <label class="custom-file-label label-stock" for="customFileLang">Importar stock y serie</label>
                                     </div>
-                                    
+
                                     <div class="progressStock" style="display:none">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%"  aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    
-                                    <button type="button" id="iniciarImportacionStock" class="btn btn-success btn-rounded btn-bordered waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-upload-alt m-r-5"></i>Iniciar</button> 
+
+                                    <button type="button" id="iniciarImportacionStock" class="btn btn-success btn-rounded btn-bordered waves-effect w-md waves-light mt-2"><i class="fas fa-cloud-upload-alt m-r-5"></i>Iniciar</button>
                                 </blockquote>
-                                
+
                                 <!--
                                 <div class="card m-b-2 text-white bg-info text-xs-center">
                                     <div class="card-body">
@@ -771,12 +796,12 @@
                                         </div>                                                          
                                     </div>
                                 </div>
-                                --> 
+                                -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div id="alert-errres-plantilla" class="alert alert-danger" role="alert" style="display:none">
                                             <ul id="errores-plantilla">
-                                                
+
                                             </ul>
                                         </div>
                                     </div>
@@ -791,60 +816,60 @@
                         </div>
                         -->
                     </div>
-                
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
-<script>
-    function soloLetras(e) {
-        key = e.keyCode || e.which;
-        tecla = String.fromCharCode(key).toLowerCase();
-        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-        especiales = "8-37-39-46";
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
-        tecla_especial = false
-        for (var i in especiales) {
-            if (key == especiales[i]) {
-                tecla_especial = true;
-                break;
+        <script>
+            function soloLetras(e) {
+                key = e.keyCode || e.which;
+                tecla = String.fromCharCode(key).toLowerCase();
+                letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+                especiales = "8-37-39-46";
+
+                tecla_especial = false
+                for (var i in especiales) {
+                    if (key == especiales[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+
+                if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+                    return false;
+                }
             }
-        }
 
-        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
-            return false;
-        }
-    }
+            $("#selectAssignmentDad").prop('disabled', 'disabled');
 
-    $("#selectAssignmentDad").prop('disabled', 'disabled');
+            $("#productAssignmentDad").click(function() {
+                $("#selectAssignmentDad").prop('disabled', 'disabled');
+            });
 
-    $("#productAssignmentDad").click(function() {
-        $("#selectAssignmentDad").prop('disabled', 'disabled');
-    });
-
-    $("#productAssignmentSon").click(function() {
-        ($('#productAssignmentSon').is(':checked')) ? $("#selectAssignmentDad").prop('disabled', false): $("#selectAssignmentDad").prop('disabled', 'disabled');
-    });
+            $("#productAssignmentSon").click(function() {
+                ($('#productAssignmentSon').is(':checked')) ? $("#selectAssignmentDad").prop('disabled', false): $("#selectAssignmentDad").prop('disabled', 'disabled');
+            });
 
 
-    $("#FormEditarProducto #editproductAssignmentSon").click(function() {
-        if ($('#FormEditarProducto #editproductAssignmentSon').is(':checked')) {
-            $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', false);
-            $("#FormEditarProducto input[name='editproductAssignmentDad']").prop('checked', false);
-        } else {
-            $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
-        }
+            $("#FormEditarProducto #editproductAssignmentSon").click(function() {
+                if ($('#FormEditarProducto #editproductAssignmentSon').is(':checked')) {
+                    $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', false);
+                    $("#FormEditarProducto input[name='editproductAssignmentDad']").prop('checked', false);
+                } else {
+                    $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
+                }
 
-    });
+            });
 
-    $("#FormEditarProducto #editproductAssignmentDad").click(function() {
-        if ($('#FormEditarProducto #editproductAssignmentDad').is(':checked')) {
-            $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', true);
-            $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('value', '')
-            $("#FormEditarProducto input[name='editproductAssignmentSon']").prop('checked', false);
-        } else {
-            $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
-        }
+            $("#FormEditarProducto #editproductAssignmentDad").click(function() {
+                if ($('#FormEditarProducto #editproductAssignmentDad').is(':checked')) {
+                    $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', true);
+                    $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('value', '')
+                    $("#FormEditarProducto input[name='editproductAssignmentSon']").prop('checked', false);
+                } else {
+                    $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
+                }
 
-    });
-</script>
+            });
+        </script>

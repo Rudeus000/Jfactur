@@ -117,7 +117,7 @@
 
 
 
-<div class="modal fade" id="ModalEditarNuevo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalEditarNuevo" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 			<form id="FormEditarNuevo" action="<?= base_url('administrador/regnuevo/editar') ?>" autocomplete="off" method="post">

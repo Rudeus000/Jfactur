@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
         <!-- App favicon -->
-        <!-- <link rel="shortcut icon" href="assets/images/favicon.ico"> -->
+        <link rel="shortcut icon" href="<?= base_url_app() ?>assets/images/favicon.ico">
                   <!--Morris Chart CSS -->          
                   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
                   <!-- Custom box css -->
@@ -68,10 +68,10 @@
                 <div class="topbar-left">
                     <a href="<?php echo base_url();?>reportes/regdashboard" class="logo">
                         <span>
-                            <img src="<?php echo base_url_app();?>assets/images/logo.png" alt="" height="18">
+                            <img src="<?php echo base_url_app();?>assets/images/logo.png" alt="" height="40">
                         </span>
                         <i>
-                            <img src="<?php echo base_url_app();?>assets/images/logo_sm.png" alt="" height="22">
+                            <img src="<?php echo base_url_app();?>assets/images/logo_sm.png" alt="" height="40">
                         </i>
                     </a>
                 </div>
@@ -167,10 +167,10 @@
                         </li>
                         <li class="hide-phone app-search">
                             <form role="search" class="">
-                                <input id="input-general" type="text" placeholder="Buscar..." class="form-control" >
+                                <input id="input-general" type="text" placeholder="Buscar..." class="form-control" >                               
                                 <a href=""><i class="fa fa-search"></i></a>
                             </form>
-                        </li>
+                        </li>                   
                     </ul>
 
                 </nav>
@@ -187,7 +187,9 @@
   <div class="modal-dialog" role="document" style="max-width:1000px">
     <div class="modal-content">
       <!-- <div class="modal-header"> -->
-      <div class="modal-header bg-success"><h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i></h3>
+      <div class="modal-header bg-success">
+        
+        <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i><a> </h3>
         <!-- <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5> -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
