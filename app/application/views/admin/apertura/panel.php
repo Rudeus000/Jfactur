@@ -193,7 +193,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label class="control-label">H. Inicio</label>
-                <input type="text" name="inicio" class="form-control timepicker" readonly>
+                <input type="text" name="inicio" class="form-control timepicker">
               </div>
             </div>
             <div class="col-md-3">
