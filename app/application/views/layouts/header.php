@@ -238,9 +238,10 @@
                     </tr>
                 </tfoot>
             </table>
-
+            <div class="modal-footer">
             <button class="btn btn-danger float-right" type="submit"><i class="fab fa-opencart"></i> Siguiente</button>
-        </form>
+            </div>            
+        </form>        
       </div>
     </div>
   </div>
