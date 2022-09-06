@@ -1,12 +1,6 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-
-
 class Regfacturacion extends CI_Controller {
-
-
 
 	private $permisos;
 

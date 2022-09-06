@@ -139,7 +139,4 @@ header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="Plantilla_Stock_'.time().'.xlsx"');
 $writer->save("php://output");
 exit;
-
-
-
 ?>

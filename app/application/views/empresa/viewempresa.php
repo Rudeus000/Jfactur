@@ -182,7 +182,7 @@
 																	Configuración de opciones avanzadas:
 																</div>
 															</div>
-															<div class="col-md-6">
+															<div class="col-md-4">
 																<div class="form-group">
 																	<label class="control-label d-block">¿Envio automatico de factura a SUNAT?</label>
 																	<div class="form-check form-check-inline">
@@ -196,11 +196,15 @@
 																	</div>											
 																</div>
 															</div>
-															<div class="col-md-3">									                     
+															<div class="col-md-2">									                     
+																<input <?= $empresa->igv==1?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="igv"/>
+																<label for="igv">IGV 10%</label>										
+															</div>
+															<div class="col-md-2">									                     
 																<input <?= $empresa->movilexpert_emp==1?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="movil-expert"/>
 																<label for="movil-expert">Modulo telefonia</label>										
 															</div>
-															<div class="col-md-3">									                     
+															<div class="col-md-2">									                     
 																<input <?= $empresa->MovAlmacenAutomatico=='S'?'checked':'' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="mov-almacen"/>
 																<label for="mov-almacen">Movi. Almacén Automatico</label>										
 															</div>

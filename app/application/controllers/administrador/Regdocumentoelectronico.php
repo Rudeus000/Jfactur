@@ -1,5 +1,4 @@
 <?php
-
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 defined('BASEPATH') or exit('No direct script access allowed');

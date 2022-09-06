@@ -124,5 +124,4 @@ function getMotivoNotaCredito($motivo)
 
 	return $data[(string)$motivo];
 }
-
 ?>

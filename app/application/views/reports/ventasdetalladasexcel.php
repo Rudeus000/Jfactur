@@ -223,5 +223,4 @@ header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="Ventas Detalladas.xlsx"');
 $writer->save("php://output");
 exit;
-
 ?>
