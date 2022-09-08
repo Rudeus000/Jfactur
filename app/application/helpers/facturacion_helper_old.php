@@ -71,7 +71,7 @@ function getTipoProceso()
 
 
 
-	return $datos['beta'];
+	return $datos['produccion'];
 
 }
 

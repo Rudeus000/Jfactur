@@ -518,6 +518,9 @@ class Regventas extends CI_Controller {
 
 				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
 				$insertDetalle = $this->modelgeneral->insertRegist('tb_venta_detalle',$detalle);
+				if(!empty($producto)){
+
+				
 			if(!empty($datos_empresa)){
 				if($datos_empresa->MovAlmacenAutomatico=="S"){
 					/*Poblamos el detalle para la boleta de ingreso */
@@ -545,6 +548,7 @@ class Regventas extends CI_Controller {
 					/*FIN Poblamos el detalle para la nota de ingreso */
 				}
 			}
+		}
 				if ($pos === false) {
 					if ($producto->cod_tiparticulo==1) { //SI ES PRODUCTO 
 						// $this->descontarDeAlmacen($detalle,$data['cod_almacen']); //DESCONTAR STOCK
@@ -594,6 +598,8 @@ class Regventas extends CI_Controller {
 
 			$this->calcularGravadaExoneradaDeVenta($insert);
 			$flg_continuar=1;
+			if(!empty($arr_det)){
+							
 			if(!empty($datos_empresa)){
 				if($datos_empresa->MovAlmacenAutomatico=="S"){			
 					/*poblamos array para boleta de ingreso*/
@@ -700,7 +706,8 @@ class Regventas extends CI_Controller {
 					 } 	 
 					/*fin poblamos array para nota de ingreso*/
 				}
-			}				
+			}
+		}				
 			if($flg_continuar==1){				
 				$resp['success'] = true;
 				$resp['id'] = $insert;
