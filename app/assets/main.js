@@ -6659,8 +6659,8 @@ $(function () {
 		// }
 		$('#numero-whatsapp').val(telefono);
 		//debugger
-		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
-		// $('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').prop('disabled', false);
+		//$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
+		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').prop('disabled', false);
 		$('#generar-documento-whatsapp').data('id', id);
 		$('#generar-documento-whatsapp').data('telefono', telefono);
 		$('#nombre-cliente').html(cliente);		

@@ -168,7 +168,9 @@
           </div>
           <input id="numero-whatsapp" type="text" class="form-control" placeholder="Número de whatsapp">
           <div class="input-group-append">
-            <button id="generar-documento-whatsapp" class="btn btn-success waves-effect waves-light" type="button">Generar documento a enviar</button>
+            
+            <button id="generar-documento-whatsapp" data-id="99999" data-telefono="222222" 
+            class="btn btn-success waves-effect waves-light" type="button">Generar documento a enviar</button>
           </div>
         </div>
      
