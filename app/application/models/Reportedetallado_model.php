@@ -102,6 +102,7 @@ class Reportedetallado_model extends CI_Model {
     foreach ($query->result() as $q) {
 
 			$boton_detalle = '';
+			$q->historial = null;
 			if(is_null($q->serie_descripcion)){
 				$q->historial = $this->getHistorialCompras($q->cod_almacen,$q->tb_proveedor_id,$q->cod_producto,$data['desde'],$data['hasta']);
 				$q->historial = json_encode($q->historial);

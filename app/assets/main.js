@@ -6658,8 +6658,11 @@ $(function () {
 		// 	return;
 		// }
 		$('#numero-whatsapp').val(telefono);
-		//$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
-		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').data('id', id).data('telefono', telefono).prop('disabled', false);
+		//debugger
+		$('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar documento a enviar').data('id', id).prop('disabled', false);
+		// $('#generar-documento-whatsapp').html('<i class="fa fa-hand-pointer"></i>	Generar Documento a Enviar').prop('disabled', false);
+		$('#generar-documento-whatsapp').data('id', id);
+		$('#generar-documento-whatsapp').data('telefono', telefono);
 		$('#nombre-cliente').html(cliente);		
 		$('#enviar-whatsapp').addClass('disabled');
 		$('#numero-whatsapp').prop('disabled', false);
@@ -6671,7 +6674,7 @@ $(function () {
 		const id = $(this).data('id');
 		const telefono = $('#numero-whatsapp').val();
 		$('#numero-whatsapp').prop('disabled', true);
-		$.post(path + "administrador/regventas/imprimirVenta/" + id + "/guardar", {},
+		$.get(path + "administrador/regventas/imprimirVenta/" + id + "/guardar", {},
 			function (data, textStatus, jqXHR) {
 				var pdf = `${path}assets/temporal/whatsapp_email/${data.archivo}`;
 				var xml = '';
@@ -6685,6 +6688,7 @@ $(function () {
 			},
 			"JSON"
 		);
+
 	});
 
 	$('#enviar-whatsapp').click(function (e) {

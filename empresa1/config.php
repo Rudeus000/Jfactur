@@ -28,7 +28,7 @@ if(! defined('APP_TENANTPATH')){
 $_SSS['app']['db_host'] = 'localhost';
 $_SSS['app']['db_user'] = 'root';
 $_SSS['app']['db_pass'] = 'Washington8277!!';
-$_SSS['app']['db_name'] = 'santalucia2';
+$_SSS['app']['db_name'] = 'santaluciadb';
 $_SSS['app']['db_driver'] = 'mysql';
 
 

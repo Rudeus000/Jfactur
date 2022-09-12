@@ -1518,10 +1518,11 @@ class Regventas extends CI_Controller {
 
 		$dias_eliminacion = 7;
 		$dias_tiempo = 60*60*24 * $dias_eliminacion;
+
 		foreach ($res as $key => $value) {
 			
-			$archivo_tiempo = explode('_',trim($value['Archivo'],'.pdf'))[1];
-
+			$archivo_tiempo = explode('_',trim(trim($value['Archivo'],'.XML'),'.pdf'))[1];
+		
 			$sumado = $archivo_tiempo + $dias_tiempo;
 			if(time() > $sumado){
 				unlink($value['Nombre']);
