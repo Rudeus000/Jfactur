@@ -6679,9 +6679,9 @@ $(function () {
 				var pdf = `${path}assets/temporal/whatsapp_email/${data.archivo}`;
 				var xml = '';
 				if (data.xml != '') {
-					xml = `%0A%0AComprobante%20XML%0A${path}assets/temporal/whatsapp_email/${data.xml}`;
+					xml = `%0A%0A*Comprobante%20XML*%0A${path}../app/assets/temporal/whatsapp_email/${data.xml}`;
 				}
-				var mensaje = `https://api.whatsapp.com/send?phone=51${telefono}&text=Comprobante%20PDF%0A${pdf + xml}`
+				var mensaje = `https://api.whatsapp.com/send?phone=51${telefono}&text=Saludos%20estimado%20cliente.%0AAdjuntamos%20su%20comprobante%20de%20pago.%0A%0A*Archivo%20PDF.*%0A${pdf + xml}`
 
 				$('#generar-documento-whatsapp').html('<i class="fa fa-check"></i> Generado').prop('disabled', true);
 				$('#enviar-whatsapp').attr('href', mensaje).removeClass('disabled');
