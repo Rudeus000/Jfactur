@@ -201,7 +201,7 @@ class Reginventarioinicial extends CI_Controller {
   	$this->load->view('admin/inventarioinicial/reporte_excel_series',$data);
   }
 
-   function getInventarioInicialReporteseries()
+  function getInventarioInicialReporteseries()
   {
   	$this->db->from('tb_producto');
     $this->db->select('tb_producto.*,nomb_almacen,serie_descripcion,cod_comp,cod_vent,serie_estado,histcompstock_serie');
@@ -222,6 +222,52 @@ class Reginventarioinicial extends CI_Controller {
     }
 	  return $this->db->get()->result();
 	}
+
+	public function getFechasProducto()
+	{
+		$query = $this->db->from('tb_producto_fecha')
+		->select('tb_producto_fecha.*')
+		->join('tb_producto','tb_producto_fecha.cod_producto = tb_producto.cod_producto')
+		->join('tb_almacen','tb_producto_fecha.cod_almacen = tb_almacen.cod_almacen')
+		->where('tb_producto_fecha.cod_producto',$this->input->post('producto'))
+		->where('tb_producto_fecha.cod_almacen',$this->input->post('almacen'))
+		->where('cantidad_prodfec !=','0')
+		->get()->result();
+
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($query);
 	}
+
+	public function productoFechaGuardar()
+	{
+		$data['cantidad_prodfec'] = $this->input->post('cantidad');
+		$data['cantidad_inicial_prodfec'] = $this->input->post('cantidad');
+		$data['fecha_produccion_prodfec'] = $this->input->post('fecha_produccion');
+		$data['fecha_vencimiento_prodfec'] = $this->input->post('fecha_vencimiento');
+		$data['fecha_alerta_prodfec'] = $this->input->post('fecha_alerta');
+		$data['cod_producto'] = $this->input->post('producto');
+		$data['cod_almacen'] = $this->input->post('almacen');
+		$insert = $this->modelgeneral->insertRegist('tb_producto_fecha',$data);
+		$resp =[];
+		if(!is_null($insert)){
+			$resp['success'] = true;
+		}else{
+			$resp['success'] = false;
+		}
+		echo json_encode($resp);
+	}
+
+	public function productoFechaEliminar()
+	{
+		$this->db->where('cod_prodfec',$this->input->get('id'))
+		->delete('tb_producto_fecha');
+
+		$response = [];
+		$response['success'] = true;
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($response);
+	}
+
+}
 /* End of file Reginventarioinicial.php */
 /* Location: ./application/controllers/administrador/Reginventarioinicial.php */

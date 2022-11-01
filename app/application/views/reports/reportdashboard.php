@@ -1,5 +1,5 @@
 <!-- Begin page -->
-<div id="wrapper" data-stockminimos="1">
+<div id="wrapper" class="alerta-modal" data-stockminimos="<?= $this->session->userdata('alerta_stock') ?>" data-vencimiento="<?= $this->session->userdata('alerta_vencimiento') ?>">
 
 
     <!-- ============================================================== -->
@@ -174,44 +174,7 @@
 
 </div>
 
-<div id="ModalStockMinimos" class="modal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-  <div class="card-header bg-success"><h3 class="my-0 text-white">Alerta de productos con stock mínimo <i class="spinner-grow text-pink float-right"></i></h3></div>
-  
-  <div class="modal-content">
-  <div class="card-body table-responsive">
-      <!-- <div class="modal-header">      
-        <h4 class="modal-title"> <i class="fas fa-hourglass-half"></i> Alerta de productos con stock mínimo</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div> -->
-      <div class="modal-body">
-            <table id="TableStockMinimos" class="table table-striped  tblstockminimo">
-                <thead>
-                    <tr class="bg-success text-white">
-                        <th>Almacen</th>
-                        <th>Producto</th>
-                        <!-- <th>Categoria</th> -->
-                        <th>Unidades</th>
-                        <!-- <th>P. Costo</th> -->
-                        <th>Stock</th>
-                        <th class="bg-danger">Mínimo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-pink btn-rounded" id="posponer-stockminimo"><span class="m-r-5">Posponer</span><i class="fas fa-undo"></i></button>
-        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button> -->
-      </div>
-  </div>
-    </div>
-  </div>
-</div>
+<?php $this->load->view('reports/modal_alertas') ?>
 
 
 

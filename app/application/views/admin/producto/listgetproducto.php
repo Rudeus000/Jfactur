@@ -431,6 +431,16 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Vencimiento</label>
+                                <select name="fecha_vencimiento" class="form-control">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
+                                </select>
+                            </div>
+                        </div>
                         <!-- <div class="col-md-6"> -->
                              <!-- <div class="switchery-demo"> -->
                              <!-- <input type="checkbox" class="custom-control-input" > -->
@@ -438,6 +448,7 @@
                              <label for="servicioChecked">Vencimiento</label> -->
                              <!-- </div> -->
                            <!-- </div> -->
+                        <!--
                         <div class="form-group col-md-4">
                        
                             <br>
@@ -445,9 +456,10 @@
                                 <div class="input-group">
                                 <input type="checkbox" data-plugin="switchery" data-color="#FC0B00" data-size="small" id="observacionCheck" name="observacionCheck" />
                             <label for="servicioChecked">Fecha vencimiento</label>
-                                </div><!-- input-group -->
+                                </div>
                            
                         </div>
+                        -->
 
                     </div>
                 </div>
@@ -682,6 +694,16 @@
                                     <?php foreach ($parametros as $pr) : ?>
                                         <option value="<?= $pr->cod_parametros ?>"><?= $pr->nom_paramt ?></option>
                                     <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Vencimiento</label>
+                                <select name="fecha_vencimiento" class="form-control">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
                                 </select>
                             </div>
                         </div>

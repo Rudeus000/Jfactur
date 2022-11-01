@@ -196,6 +196,21 @@ class Modelgeneral extends CI_Model {
 		}
 	}
 
+	function getSecuenciaNotas($serie,$tipo)
+	{
+		$query = $this->db->from('tb_nota')
+		->where('seriecomp_nota',$serie)
+		->where('tiponota_nota',$tipo)
+		->limit(1)
+		->order_by('numcomp_nota','desc')
+		->get();
+		if($query->num_rows() > 0){
+			return $query->row('numcomp_nota') + 1;
+		}else{
+			return 1;
+		}
+	}
+
 
 
 

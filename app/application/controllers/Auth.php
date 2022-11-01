@@ -59,11 +59,11 @@ class Auth extends CI_Controller
 				'login' => TRUE,
 				'stock_minimo' => TRUE,
 				'movil_expert' => $empresa->movilexpert_emp,
-				'empresa'=>$empresa
+				'alerta_stock' => $empresa->alerta_stock_emp,
+				'alerta_vencimiento' => $empresa->alerta_vencimiento_emp
 			);
 			$this->session->set_userdata($data);
 			redirect(base_url('perfil'));
-			
 		}
 	}
 

@@ -251,10 +251,10 @@ class Regdashboard extends CI_Controller {
 		->update('tb_usuario');
 	}
 
-	public function productosStockMinimos()
+	public function productosStockMinimosFechasVencimiento()
 	{
 		if($this->session->userdata('stock_minimo') == true){
-			$query = $this->db->from('tb_producto_stock')
+			$query_stock_minimo = $this->db->from('tb_producto_stock')
 			->select('nomb_almacen,nomb_product,nomb_categoria,prec_costo,nomb_unid,stock,stockmin_product')
 			->join('tb_producto','tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->join('tb_categoria','tb_categoria.cod_categoria = tb_producto.cod_categoria')
@@ -265,12 +265,31 @@ class Regdashboard extends CI_Controller {
 			->get();
 			
 			$resp = [];
-			if($query->num_rows() > 0){
-				$resp['success'] = true;
-				$resp['data'] = $query->result();
-			}else{
-				$resp['success'] = false;
+
+			$success = false;
+
+			if($query_stock_minimo->num_rows() > 0){
+				$success = true;
+				$resp['data_minimo'] = $query_stock_minimo->result();
 			}
+
+			$query_vencimiento = $this->db->from('tb_producto_fecha')
+			->select('cod_prodfec, nomb_product,nomb_almacen,fecha_produccion_prodfec,fecha_vencimiento_prodfec,fecha_alerta_prodfec,cantidad_prodfec')
+			->join('tb_producto','tb_producto_fecha.cod_producto = tb_producto.cod_producto')
+			->join('tb_almacen','tb_producto_fecha.cod_almacen = tb_producto_fecha.cod_almacen')
+			->where('cantidad_prodfec > ',0)
+			->where('fecha_alerta_prodfec <=', date('Y-m-d'))
+			->order_by('cod_prodfec')
+			->group_by('tb_producto_fecha.cod_prodfec')
+			->get();
+
+			if($query_vencimiento->num_rows() > 0){
+				$success = true;
+				$resp['data_vencimiento'] = $query_vencimiento->result();
+			}
+
+			
+			$resp['success'] = $success;
 
 		}else{
 			$resp = [];

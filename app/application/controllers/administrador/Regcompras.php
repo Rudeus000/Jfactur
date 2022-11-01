@@ -76,7 +76,7 @@ class Regcompras extends CI_Controller {
 	{
 		$producto = $this->input->get('producto');
 		$result = $this->db->from('tb_producto')
-		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad')
+		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad, fecha_vencimiento')
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where('est_product',1)
 		
@@ -84,6 +84,7 @@ class Regcompras extends CI_Controller {
 		->where('(nomb_product LIKE "%' . $producto
 				. '%" OR barra_product LIKE "%' . $producto . '%")', NULL)
 		->get()->result();
+		header('content-type: application/json; charset=utf-8');
 		echo json_encode($result);
 	}
 
@@ -177,7 +178,6 @@ class Regcompras extends CI_Controller {
 
 	function agregarCompra()
 	{
-		
 		$data['fecha_comp'] = $this->input->post('fecha');
 		$data['documento_comp'] = $this->input->post('documento');
 		$data['numdocumento_comp'] = $this->input->post('numDocumento');
@@ -191,7 +191,6 @@ class Regcompras extends CI_Controller {
 			$data['dias_comp'] = $this->input->post('dias');
 			$data['fecvenc_comp'] = $this->input->post('fecVenc');
 		}
-
 		$insert = $this->modelgeneral->insertRegist('tb_compra',$data);
 
 		$pago['cod_comp'] = $insert;
@@ -229,6 +228,7 @@ class Regcompras extends CI_Controller {
 						/*FIN Poblamos el detalle para la nota de ingreso */
 					}
 				}				
+				$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
 				$precio_unit = $_POST['prec_prod'][$key];
 				$detalle['cod_comp'] = $insert;
 				$detalle['cod_producto'] = $value;
@@ -272,6 +272,28 @@ class Regcompras extends CI_Controller {
 					$this->modelgeneral->editRegist('tb_compra_detalle',['cod_compdet'=> $idCompraDetalle],['historialstock_compdet'=>$detalle['cant_compdet']]);
 				}
 				/*=====  End of SUMAS STOCK  ======*/
+
+				/* ============================================ */
+				/*          AGREGAR FECHAS DE PRODUCTO          */
+				/* ============================================ */
+				if($_POST['fec_venc'][$key] == 1)
+				{
+					$fechas_json = json_decode($_POST['fechas_producto'][$key]);
+					foreach ($fechas_json as $valueFecha) {
+						$dataFecha['cod_compdet'] = $idCompraDetalle;
+						$dataFecha['cod_producto'] = $value;
+						$dataFecha['cod_almacen'] = $data['cod_almacen'];
+						$dataFecha['cantidad_inicial_prodfec'] = $valueFecha->cantidad;
+						$dataFecha['cantidad_prodfec'] = $valueFecha->cantidad;
+						$dataFecha['fecha_produccion_prodfec'] = $valueFecha->fecha_produccion;
+						$dataFecha['fecha_vencimiento_prodfec'] = $valueFecha->fecha_vencimiento;
+						$dataFecha['fecha_alerta_prodfec'] = $valueFecha->fecha_alerta;
+						$this->modelgeneral->insertRegist('tb_producto_fecha',$dataFecha);
+					}
+				}
+				/* ============================================ */
+				/*        END AGREGAR FECHAS DE PRODUCTO        */
+				/* ============================================ */
 				
 				/* ==== AGREGAR SERIES ==== */
 				$sumStock = 1;
@@ -395,7 +417,7 @@ class Regcompras extends CI_Controller {
 
 	function editar($id)
 	{
-	$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
   	$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja',['est_caja'=>1]);
   	$data['compra'] = $this->db->from('tb_compra')
   	->join('tb_proveedor','tb_compra.tb_proveedor_id = tb_proveedor.tb_proveedor_id')
