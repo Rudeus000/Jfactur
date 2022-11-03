@@ -595,12 +595,13 @@ class Regdocumentoelectronico extends CI_Controller
     //se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
 
 		$tipo_proceso = getTipoProceso();
+    $serie = ($res->codsunat_tipdocu=="01")?"FD01":"BD01";
     $data = array(
 			//Cabecera del documento
 			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
       "porcentaje_igv"                => "18.00",
-      "serie_comprobante"             => ($res->codsunat_tipdocu=="01")?"FD01":"BD01",
-      "numero_comprobante"            => (string)$this->modelgeneral->getSecuencia('tb_nota','numcomp_nota','tiponota_nota','Débito'),
+      "serie_comprobante"             => $serie,
+      "numero_comprobante"            => (string)$this->modelgeneral->getSecuenciaNotas($serie,'Débito'),
       "fecha_comprobante"             => date('Y-m-d'),
       "cod_tipo_documento"            => "08",
       "cod_moneda"                    => (string)$res->codmoneda_vent,
@@ -797,12 +798,13 @@ class Regdocumentoelectronico extends CI_Controller
     //se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
 
 		$tipo_proceso = getTipoProceso();
+    $serie = ($res->codsunat_tipdocu=="01")?"FC01":"BC01";
     $data = array(
 			//Cabecera del documento
 			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
       "porcentaje_igv"                => "18.00",      
-      "serie_comprobante"             => ($res->codsunat_tipdocu=="01")?"FC01":"BC01",
-      "numero_comprobante"            => (string)$this->modelgeneral->getSecuencia('tb_nota','numcomp_nota','tiponota_nota','Crédito'),
+      "serie_comprobante"             => $serie,
+      "numero_comprobante"            => (string)$this->modelgeneral->getSecuenciaNotas($serie,'Crédito'),
       "fecha_comprobante"             => date('Y-m-d'),
       "cod_tipo_documento"            => "07",
       "cod_moneda"                    => (string)$res->codmoneda_vent,

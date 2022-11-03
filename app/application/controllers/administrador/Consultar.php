@@ -1,9 +1,14 @@
 <?php
+//defined('BASEPATH') OR exit('No direct script access allowed');
+//require(APP_TENANTPATH.'config.php');
 	require 'simple_html_dom.php';
 	error_reporting(E_ALL ^ E_NOTICE);
 
+
+			//private $permisos;
 	$documento  = $_REQUEST['dni'];
 	$tipo_doc   = $_REQUEST['tipo_doc'];
+	
 	
 
 

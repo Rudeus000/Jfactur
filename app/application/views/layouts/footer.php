@@ -121,7 +121,7 @@
 
                 $('#capa_load').html('<img src="<?= base_url_app() ?>assets/images/loading.gif" alt="" style="position: absolute;top: 10px;left: 46%;">');
 
-               $.post('<?= base_url_app() ?>application/controllers/consultar.php', {dni: $('#txt_documento').val(),tipo_doc: tipo_doc}, function(data) {
+               $.post('<?= base_url_app() ?>application/controllers/administrador/consultar.php', {dni: $('#txt_documento').val(),tipo_doc: tipo_doc}, function(data) {
 
 
 

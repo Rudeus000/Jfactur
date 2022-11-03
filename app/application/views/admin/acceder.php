@@ -92,7 +92,7 @@
                                                 <table class="table table-condensed">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="3"><h4 class="mt-4">Contact Information</h4></th>
+                                                            <th colspan="3"><h4 class="mt-4">Información de contacto</h4></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -209,7 +209,7 @@
                                                                         <?php foreach($nuevos as $n): ?>                                                                        
 
                                                                         <div class="col-md-12">
-                                                                            <p class="text-muted m-b-0"><small>Post credo: <?=$n->fecha ?></small></p>                                                                         
+                                                                            <p class="text-muted m-b-0"><small>Post creado: <?=$n->fecha ?></small></p>                                                                         
                                                                             <h4 class="mt-5 m-b-5 font-18 ellipsis"><?= $n->titulo ?></h4>                                                                          
                                                                                 
                                                                             <div class="card">                                                                                
