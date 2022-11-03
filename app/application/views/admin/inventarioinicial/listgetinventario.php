@@ -100,6 +100,7 @@
                                                 <th style="text-align: center;">Unidad</th>
                                                 <th style="text-align: center;">P. Costo</th>
                                                 <th style="text-align: center;">P. Venta</th>
+                                                <th style="text-align: center;">Fechas</th>
                                                 <th style="text-align: center;">Stock Actual</th>
                                                 <th style="text-align: center;">Stock Inicial</th>
                                             </tr>
@@ -149,6 +150,66 @@
 						
 					</tbody>
 				</table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="ModalFechasProductos" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Fechas del Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn btn-success" id="agregar-producto-fecha">Agregar</button>
+        
+        <form id="FormProductoFecha" action="<?= base_url('administrador/reginventarioinicial/agregarProductoFecha') ?>" autocomplete="off" style="display:none">
+            <input type="hidden" name="producto">
+            <input type="hidden" name="almacen">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label>Cantidad</label>
+                    <input type="text" name="cantidad" class="form-control">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Fecha de Producción</label>
+                    <input type="text" name="fecha_produccion" class="form-control datepicker">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Fecha de Vencimiento</label>
+                    <input type="text" name="fecha_vencimiento" class="form-control datepicker">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Fecha de Alerta</label>
+                    <input type="text" name="fecha_alerta" class="form-control datepicker">
+                </div>
+                <div class="col-md-12 form-group">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-danger" id="cerrar-producto-fecha">Cerrar</button>
+                </div>
+            </div>
+        </form>
+        <br><br>
+        <table id="TableFechasProductos" class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fec. Prod.</th>
+                    <th>Fec. Venc.</th>
+                    <th>Fec. Alerta</th>
+                    <th>Cant</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
       </div>
     </div>
   </div>

@@ -165,6 +165,7 @@
 
                               <form id="FormComprasAgregarProducto" autocomplete="off">
                                 <input type="hidden" name="producto">
+                                <input type="hidden" name="fec_venc">
                                 <fieldset>
                                   <legend>Agregar Producto</legend>
                                   <div class="row">
@@ -422,6 +423,31 @@
           <div class="row inputSeries">
             
           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="ModalFechaVencimiento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Fecha Vencimiento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="FormCompraFechaVencimiento" autocomplete="off" method="post">
+        <input type="hidden" name="producto">
+        <div class="modal-body">
+          <div id="BodyFechaVencimientoCompra"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

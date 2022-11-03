@@ -190,7 +190,7 @@ class Regventas extends CI_Controller {
 		}
 
 		$resultProducto = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -205,7 +205,7 @@ class Regventas extends CI_Controller {
 
 		if (empty($resultProducto)) {
 			$resultProducto = $this->db->from('tb_producto')
-				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo", FALSE)
+				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 				->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct')
 				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -222,7 +222,7 @@ class Regventas extends CI_Controller {
 		$this->db->flush_cache();
 
 		$resultServicio = $this->db->from('tb_producto')
-		->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / ".$cambio.") as costo,(".$precioVenta." / ".$cambio.") as venta,nomb_unid as unidad, '1' as estado,peso_product,cod_tiparticulo",FALSE)
+		->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / ".$cambio.") as costo,(".$precioVenta." / ".$cambio.") as venta,nomb_unid as unidad, '1' as estado,peso_product,cod_tiparticulo,fecha_vencimiento",FALSE)
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 		->where('est_product',1)
@@ -230,9 +230,24 @@ class Regventas extends CI_Controller {
 		.'%" OR barra_product LIKE "%'.$queryLike.'%"))',NULL)
 		->get()->result_array();
 
-		$merge = array_merge($resultProducto,$resultServicio);
+		$productos_array = array_merge($resultProducto,$resultServicio);
+
+		foreach ($productos_array as $k =>$p) {
+			if($p['fecha_vencimiento'] == 1){
+				$productos_array[$k]['fechas'] = $this->db->from('tb_producto_fecha')
+				->where('cod_producto',$p['id'])
+				->where('cod_almacen',$almacen)
+				->where('cantidad_prodfec > ',0)
+				->where('fecha_alerta_prodfec <=',date('Y-m-d'))
+				->order_by('fecha_vencimiento_prodfec','asc')
+				->get()->row();
+			}else{
+				$productos_array[$k]['fechas'] = null;
+			}
+		}
+
 		header('content-type: application/json; charset=utf-8');
-		echo json_encode($merge);
+		echo json_encode($productos_array);
 	}
 
 	public function getProducto()
@@ -307,6 +322,17 @@ class Regventas extends CI_Controller {
 			}else{
 				$resp['estado'] = false;
 			}
+
+
+			//OBTENER FECHAS
+			$result->fechas = $this->db->from('tb_producto_fecha')
+			->where('cod_producto',$producto)
+			->where('cod_almacen',$almacen)
+			->where('cantidad_prodfec > ',0)
+			->where('fecha_alerta_prodfec <=',date('Y-m-d'))
+			->order_by('fecha_vencimiento_prodfec','asc')
+			->get()->row();
+
 		}else{ //SERVICIOS
 			$result = $this->db->from('tb_producto')
 			->select("tb_producto.*,tb_marca.*,tb_unidades.*,(prec_costo / ".$cambio.") as costo,(prec_venta / ".$cambio.") as venta,cod_tiparticulo",FALSE)
@@ -472,7 +498,8 @@ class Regventas extends CI_Controller {
 					$precio_unitario = $_POST['prec_prod'][$value];
 					$codigo_producto = null;
 					$detalle['cod_servicio'] = substr($value,4).'-'.$insert;
-				}else{					
+				}else{
+					$producto = $this->modelgeneral->getTableWhereRow('tb_producto',['cod_producto'=>$value]);
 					$codigo_producto = $_POST['id_prod'][$key];
 					$precio_unitario = $producto->prec_costo;
 				}			
@@ -586,11 +613,50 @@ class Regventas extends CI_Controller {
 								$this->modelgeneral->insertRegist('tb_venta_detalle_serie',$dataVentaDetalleSerie);
 							}
 						}
+
+
+						//DESCONTAR FECHAS DE VENCIMIENTO
+						if($_POST['producto_fecha'][$codigo_producto] != ''){
+							$producto_fecha = $this->db->from('tb_producto_fecha')
+							->where('cod_prodfec',$_POST['producto_fecha'][$codigo_producto])
+							->get()->row();
+							
+							
+							//Si la cantidad del producto que el usuario eligió es mayor que la cantidad de fechas de vencimiento de la BD.
+							if($producto_fecha->cantidad_prodfec >= intval($detalle['cant_ventdet'])){
+								
+								$this->db->where('cod_prodfec',$producto_fecha->cod_prodfec)
+								->set('cantidad_prodfec', $producto_fecha->cantidad_prodfec - intval($detalle['cant_ventdet']))
+								->update('tb_producto_fecha');
+							}else{
+								//Obtenemos el sobrando de cantidad
+								$cantidad = intval($detalle['cant_ventdet']) - $producto_fecha->cod_prodfec;
+								
+								//Seteamos a cero la cantidad
+								$this->db->where('cod_prodfec',$producto_fecha->cod_prodfec)
+								->set('cantidad_prodfec', 0)
+								->update('tb_producto_fecha');
+
+								//Obtenemos una nuevo registro de fecha de vencimiento
+								$producto_fecha_nuevo = $this->db->from('tb_producto_fecha')
+								->where('cod_producto',$codigo_producto)
+								->where('cod_almacen',$data['cod_almacen'])
+								->where('cantidad_prodfec > ',0)
+								->order_by('fecha_vencimiento_prodfec','asc')
+								->get();
+
+								if($producto_fecha_nuevo->num_rows() > 0){
+									$this->db->where('cod_prodfec',$producto_fecha_nuevo->row()->cod_prodfec)
+									->set('cantidad_prodfec', $cantidad)
+									->update('tb_producto_fecha');
+								}
+							}
+						}
 					}
 				}
 			}
 		
-
+			
 			$this->modelgeneral->editRegist('tb_venta',['cod_vent'=> $insert],[
 				'igv_vent' => round((($gravada_acumula)  / 1.18) * 0.18,2),
 				'subtotal_vent' => $this->input->post('total') - round((($gravada_acumula)  / 1.18) * 0.18,2)

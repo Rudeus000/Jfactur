@@ -136,6 +136,7 @@ class Regproducto extends CI_Controller
             $data['dispo_venta'] = $this->input->post('dispventa');
             $data['dispo_compra'] = $this->input->post('dispcompra');
             $data['cod_parametros'] = $this->input->post('parametros');
+            $data['fecha_vencimiento'] = $this->input->post('fecha_vencimiento');
             $data['est_product'] =  1;
             $insert = $this->modelgeneral->insertRegist('tb_producto', $data);
             $resp = [];
@@ -214,6 +215,7 @@ class Regproducto extends CI_Controller
             $data['dispo_compra'] = $this->input->post('dispcompra');
             $data['cod_parametros'] = $this->input->post('parametros');
             $data['est_product'] = $this->input->post('estado');
+            $data['fecha_vencimiento'] = $this->input->post('fecha_vencimiento');
             $where['cod_producto'] = $this->input->post('id');
 
             $edit = $this->modelgeneral->editRegist('tb_producto', $where, $data);

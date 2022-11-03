@@ -4312,6 +4312,7 @@ $(function () {
 			$('#FormEditarProducto select[name=dispventa]').val(json.dispo_venta);
 			$('#FormEditarProducto select[name=dispcompra]').val(json.dispo_compra);
 			$('#FormEditarProducto select[name=parametros]').val(json.cod_parametros);
+			$('#FormEditarProducto select[name=fecha_vencimiento]').val(json.fecha_vencimiento);
 			$('#FormEditarProducto select[name=estado]').val(json.est_product);
 		});
 	});
@@ -4443,10 +4444,11 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
 
 		],
 		"columnDefs": [
-			{ "width": "20%", "targets": 7 }
+			{ "width": "20%", "targets": 8 }
 		]
 	});
 
@@ -4636,6 +4638,115 @@ $(function () {
 		submitHandler: function () {
 			$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
 		}
+	});
+
+	$('#agregar-producto-fecha').click(function (e) { 
+		e.preventDefault();
+		$("#FormProductoFecha")[0].reset();
+		$('#FormProductoFecha').show();
+	});
+
+	$('#cerrar-producto-fecha').click(function (e) { 
+		e.preventDefault();
+		$('#FormProductoFecha').hide();
+	});
+
+	$('#FormProductoFecha').validate({
+		ignore: [],
+		rules: {
+			cantidad: { required: true },
+			fecha_produccion: { required: true },
+			fecha_vencimiento: { required: true },
+			fecha_alerta: { required: true }
+		},
+		submitHandler: function () {
+			const form = $('#FormProductoFecha').serializeObject();
+			$.ajax({
+				type: "POST",
+				url: path+"administrador/reginventarioinicial/productoFechaGuardar",
+				data: form,
+				dataType: "JSON",
+				success: function (response) {
+					$('#FormProductoFecha').hide();
+					let producto = $(this).data('producto');
+					let almacen = $(this).data('almacen');
+					loadProductoFecha(producto,almacen);
+					$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
+				}
+			});
+		}
+	});
+
+
+	$('#TableAlmacenInventarioInicial tbody').on('click', '.fechas-producto', function (event) {
+		let producto = $(this).data('producto');
+		let almacen = $(this).data('almacen');
+		$('#FormProductoFecha input[name=producto]').val(producto);
+		$('#FormProductoFecha input[name=almacen]').val(almacen);
+		loadProductoFecha(producto,almacen);
+	});
+
+
+	function loadProductoFecha()
+	{
+		const producto = $('#FormProductoFecha input[name=producto]').val();
+		const almacen = $('#FormProductoFecha input[name=almacen]').val();
+		$.ajax({
+			type: "POST",
+			url: path+"administrador/reginventarioinicial/getFechasProducto",
+			data: {producto,almacen},
+			dataType: "JSON",
+			success: function (response) {
+				var tr = '';
+				$.each(response, function (index, value) { 
+					tr += `<tr>
+						<td>${ index + 1}</td>
+					 	<td>${value.fecha_produccion_prodfec}</td>
+						<td>${value.fecha_vencimiento_prodfec}</td>
+						<td>${value.fecha_alerta_prodfec}</td>
+						<td>${value.cantidad_prodfec}</td>
+						<td><button class="btn btn-sm btn-danger eliminar-producto-fecha" type="button" data-id="${value.cod_prodfec}"><i class="fa fa-trash"></i></button></td>
+					</tr>`;
+				});
+
+				$('#TableFechasProductos tbody').html(tr);
+				$('#ModalFechasProductos').modal();
+			}
+		});
+	}
+	$('#TableFechasProductos tbody').on('click', '.eliminar-producto-fecha', function () {
+		var fila = $(this).parent().parent();
+		var id = $(this).data('id');
+		Swal.fire({
+			title: "Confirmar",
+			type: "warning",
+			cancelButtonText: 'No',
+			confirmButtonText: 'Si',
+			showCancelButton: true,
+			confirmButtonColor: "#007AFF",
+			cancelButtonColor: "#d43f3a",
+			text: "¿Eliminar fecha?"
+		}).then((result) => {
+			if (result.value) {
+				$.getJSON(path + 'administrador/reginventarioinicial/productoFechaEliminar', { id }, function (json, textStatus) {
+					if (json.success) {
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se eliminó correctamente.",
+							type: "success"
+						});
+						fila.remove();
+						$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "Ocurrio un error, vuelva a intentarlo.",
+							type: "error"
+						});
+					}
+				});
+			}
+		});
 	});
 	/*=====  End of INVENTARIO INICIAL  ======*/
 
@@ -4884,12 +4995,72 @@ $(function () {
 				$('input[name=unidadProducto]').val(selectedItemValue.unidad);
 				$('input[name=precioProducto]').val(selectedItemValue.costo);
 				$('input[name=producto]').val(selectedItemValue.id);
+
+				if(selectedItemValue.fecha_vencimiento==1){
+					$('#FormComprasAgregarProducto input[name=fec_venc]').val('1');
+				}else{
+					$('#FormComprasAgregarProducto input[name=fec_venc]').val('0');
+				}
 			},
+			onClickEvent: function () {
+				/*var selectedItemValue = $("#nombreProductoAutocomplete").getSelectedItemData();
+				if(selectedItemValue.fecha_vencimiento==1){
+					$('#FormFechaVencimiento input[name=fecha_produccion]').val('');
+					$('#FormFechaVencimiento input[name=fecha_vencimiento]').val('');
+					$('#FormFechaVencimiento input[name=fecha_alerta]').val('');
+					$("#ModalFechaVencimiento").modal();
+				}*/
+			}
 
 		}
 	});
 
+	$('#FormFechaVencimiento').validate({
+		ignore: [],
+		rules: {
+			fecha_produccion: { required: true },
+			fecha_vencimiento: { required: true },
+			fecha_alerta: { required: true },
+		},
+		submitHandler: function () {
+			$('#FormComprasAgregarProducto input[name=fecha_produccion]').val($('#FormFechaVencimiento input[name=fecha_produccion]').val());
+			$('#FormComprasAgregarProducto input[name=fecha_vencimiento]').val($('#FormFechaVencimiento input[name=fecha_vencimiento]').val());
+			$('#FormComprasAgregarProducto input[name=fecha_alerta]').val($('#FormFechaVencimiento input[name=fecha_alerta]').val());
+			$("#ModalFechaVencimiento").modal('hide');
+		}
+	});
 
+	function verificarIgualdadCantidadFechasVencimiento()
+	{
+		var errores = [];
+		$('#TableComprasProductos tbody tr').each(function(){
+			var verifica = parseInt($(this).find('input[name="fec_venc[]"]').val())
+			if(verifica){
+				var cantidad = parseInt($(this).find('.cant').val());
+				var cantidad_fechas = JSON.parse($(this).find('input[name="fechas_producto[]"]').val());
+				var suma = cantidad_fechas.reduce((partialSum, a) => partialSum + parseInt(a.cantidad), 0);
+				var producto = $(this).find('.nombre_producto_compra').html()
+	
+				if(cantidad != suma){
+					errores.push(producto + " .La cantidad de fechas debe ser igual a la cantidad de productos")
+				}
+			}
+
+		});
+
+		if(errores.length > 0){
+			
+			Swal.fire({
+				title: "Error",
+				text: errores.join(', '),
+				type: "error"
+			});
+			return false;
+		}else{
+			return true;
+		}
+
+	}
 
 	$('#FormComprasAgregar').validate({
 		ignore: [],
@@ -4907,6 +5078,13 @@ $(function () {
 				$('#FormComprasAgregarProducto').valid();
 				return;
 			}
+			var verifica = verificarIgualdadCantidadFechasVencimiento();
+			
+			
+			if(!verifica){
+				return;
+			}
+			
 
 			var efectivo = parseFloat($('input[name=efectivo]').val());
 			var credito = parseFloat($('input[name=credito]').val());
@@ -4935,7 +5113,7 @@ $(function () {
 					if (resp.success) {
 						Swal.fire({
 							title: "Buen trabajo",
-							text: "Se resgistro la compra con éxito.",
+							text: "Se registró la compra con éxito.",
 							type: "success"
 						});
 						window.location.href = path + 'administrador/regcompras';
@@ -4963,35 +5141,151 @@ $(function () {
 			cantidadProducto: { required: true, number: true }
 		},
 		submitHandler: function () {
-			if (!$('input[name=seriesProducto]').prop('checked')) {
-				guardarProducto();
-			} else {
-				var series = [];
-				var producto = $('input[name=producto]').val();
-				if (producto == '') {
-					return;
-				}
 
-				var cantidad = parseInt($('#FormComprasAgregarProducto input[name=cantidadProducto]').val());
-				$('#FormSeriesVerificar input[name=prodseri]').val($('input[name=producto]').val());
-				$('#FormSeriesVerificar input[name=almseri]').val($('select[name=almacen]').val());
-				$('#ModalSeries .modal-body .inputSeries').html('');
-				for (i = 1; i <= cantidad; i++) {
-					var serie = `
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="control-label">Serie ${i}</label>
-							<input type="text" name="serie[${i}]" class="form-control" validate>
-						</div>
-					</div>
-					`;
-					$('#ModalSeries .modal-body .inputSeries').append(serie);
-					$('#FormSeriesVerificar input[name="serie[' + i + ']"]').rules("add", "required");
+			if($('#FormComprasAgregarProducto input[name=fec_venc]').val() == '1'){
+				cargarFechasComprasProducto();
+			}else{
+				if (!$('input[name=seriesProducto]').prop('checked')) {
+					guardarProducto();
+				} else {
+					guardarSeries();
 				}
-				$('#ModalSeries').modal();
 			}
+			
+
+
 		}
 	});
+
+
+	function cargarFechasComprasProducto()
+	{
+			var numero = window.prompt("Escriba la cantidad de fechas", 'Ingrese la cantidad de fechas');
+			if(isNaN(numero)){
+				alert('No es un número valido');
+				return;
+			}
+			numero = parseInt(numero);
+			if(numero < 1){
+				alert('El número mínimo es 1');
+				return;
+			}
+
+			var cantidad = $("#FormComprasAgregarProducto input[name=cantidadProducto]").val();
+			cantidad = parseInt(cantidad);
+
+			if(numero > cantidad){
+				alert('No puede ser mayor que la cantidad del producto ingresado');
+				return;
+			}
+			var row = '';
+			for (let index = 0; index < numero; index++) {
+				row += `<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>Cantidad</label>
+											<input type="text" name="cantidad[${index}]" class="form-control cantidad">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>Fecha Producción</label>
+											<input type="text" name="fecha_produccion[${index}]"  class="form-control datepicker-manual">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>Fecha Vencimiento</label>
+											<input type="text" name="fecha_vencimiento[${index}]" class="form-control datepicker-manual">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>Fecha Alerta</label>
+											<input type="text" name="fecha_alerta[${index}]" class="form-control datepicker-manual">
+										</div>
+									</div>
+									<div class="col-md-12"><hr></div>
+								</div>`
+			}
+			$('#BodyFechaVencimientoCompra').html(row);
+
+			$('.datepicker-manual').each(function(){
+					$(this).datepicker({
+						autoclose: true,
+						language: "es",
+						format: "yyyy-mm-dd",
+						todayHighlight: true
+					});
+
+					$(this).rules("add", { required: true });
+			});
+
+			$('#FormCompraFechaVencimiento .cantidad').each(function(){
+				$(this).rules("add", { required: true, number:true });
+			});
+			$('#FormCompraFechaVencimiento input[name=producto]').val('');
+			$('#ModalFechaVencimiento').modal();
+	}
+
+	$('#FormCompraFechaVencimiento').validate({
+		ignore: [],
+		rules: {
+			
+		},
+		submitHandler: function () {
+			var cant = 0;
+			$('#FormCompraFechaVencimiento .cantidad').each(function(){
+				cant += parseInt($(this).val());
+			});
+			
+			if($('#FormCompraFechaVencimiento input[name=producto]').val() != ''){
+				let prod = $('#FormCompraFechaVencimiento input[name=producto]').val();
+				var cantidadProducto = $('#prod-'+prod).find('.cant').val();
+			}else{
+				var cantidadProducto = parseInt($("#FormComprasAgregarProducto input[name=cantidadProducto]").val());
+			}
+
+			if(cant != cantidadProducto){
+				Swal.fire({
+					title: "Error",
+					text: "La cantidad de fechas debe ser igual a la cantidad de productos",
+					type: "error"
+				});
+				return;
+			}
+
+			$('#ModalFechaVencimiento').modal('hide');
+
+			if($('#FormCompraFechaVencimiento input[name=producto]').val() != ''){
+				editarFechaProducto()
+			}else{
+				if (!$('input[name=seriesProducto]').prop('checked')) {
+					guardarProducto();
+				} else {
+					guardarSeries();
+				}
+			}
+
+		}
+	});
+
+	
+	function editarFechaProducto()
+	{
+		var id = $('#FormCompraFechaVencimiento input[name=producto]').val();
+		var fechas_array = [];
+		$.each($('#FormCompraFechaVencimiento .cantidad'), function (index, value) { 
+			var objeto = {};
+			objeto.cantidad = $('#FormCompraFechaVencimiento input[name="cantidad['+index+']"]').val();
+			objeto.fecha_produccion = $('#FormCompraFechaVencimiento input[name="fecha_produccion['+index+']"]').val();
+			objeto.fecha_vencimiento = $('#FormCompraFechaVencimiento input[name="fecha_vencimiento['+index+']"]').val();
+			objeto.fecha_alerta = $('#FormCompraFechaVencimiento input[name="fecha_alerta['+index+']"]').val();
+			fechas_array.push(objeto);
+		});
+		fechas_producto = JSON.stringify(fechas_array);
+		$('#prod-'+id).find('input[name="fechas_producto[]"]').val(fechas_producto);
+	}
 
 	$('#FormSeriesVerificar').validate({
 		ignore: [],
@@ -5046,9 +5340,53 @@ $(function () {
 
 
 	var id_array = [];
+
+	function guardarSeries(){
+		//var series = [];
+		var producto = $('input[name=producto]').val();
+		if (producto == '') {
+			return;
+		}
+
+		var cantidad = parseInt($('#FormComprasAgregarProducto input[name=cantidadProducto]').val());
+		$('#FormSeriesVerificar input[name=prodseri]').val($('input[name=producto]').val());
+		$('#FormSeriesVerificar input[name=almseri]').val($('select[name=almacen]').val());
+		$('#ModalSeries .modal-body .inputSeries').html('');
+		for (i = 1; i <= cantidad; i++) {
+			var serie = `
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Serie ${i}</label>
+					<input type="text" name="serie[${i}]" class="form-control" validate>
+				</div>
+			</div>
+			`;
+			$('#ModalSeries .modal-body .inputSeries').append(serie);
+			$('#FormSeriesVerificar input[name="serie[' + i + ']"]').rules("add", "required");
+		}
+		$('#ModalSeries').modal();
+	}
+
 	function guardarProducto() {
 		var producto = $('#FormComprasAgregarProducto input[name=producto]').val();
 		var cantidad = $('#FormComprasAgregarProducto input[name=cantidadProducto]').val();
+		const fec_venc = $('#FormComprasAgregarProducto input[name=fec_venc]').val();
+
+		var fechas_producto = '';
+		if(fec_venc == '1'){
+			
+			var fechas_array = [];
+			$.each($('#FormCompraFechaVencimiento .cantidad'), function (index, value) { 
+				var objeto = {};
+				objeto.cantidad = $('#FormCompraFechaVencimiento input[name="cantidad['+index+']"]').val();
+				objeto.fecha_produccion = $('#FormCompraFechaVencimiento input[name="fecha_produccion['+index+']"]').val();
+				objeto.fecha_vencimiento = $('#FormCompraFechaVencimiento input[name="fecha_vencimiento['+index+']"]').val();
+				objeto.fecha_alerta = $('#FormCompraFechaVencimiento input[name="fecha_alerta['+index+']"]').val();
+				fechas_array.push(objeto);
+			});
+			fechas_producto = JSON.stringify(fechas_array);
+		}
+
 		var series = null;
 		if ($('input[name=seriesProducto]').prop('checked')) {
 			var producto = $('#FormSeriesVerificar input[name=prodseri]').val();
@@ -5069,15 +5407,22 @@ $(function () {
 				}
 			}
 
+			var buttonFecha = '';
+			if(fec_venc == '1'){
+				buttonFecha = `<button data-id="${resp.cod_producto}" class="fechaProducto btn btn-info btn-sm" type="button"><i class="fas fa-calendar"></i></button>`;
+			}
+
 			var tr = `
 				<tr class="fila-producto hide" id="prod-${resp.cod_producto}" data-id="${resp.cod_producto}">
 					<input type="hidden" name="id_prod[]" value="${resp.cod_producto}"/>
+					<input type="hidden" name="fec_venc[]" value="${fec_venc}"/>
+					<input type="hidden" name="fechas_producto[]" value='${fechas_producto}'/>
 					<td class="details-control">
 					${(series != null) ? '<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>' : ''}
 						
 					</td>
 					<td>${resp.cod_producto}</td>
-					<td>${resp.nomb_product}</td>
+					<td class="nombre_producto_compra">${resp.nomb_product}</td>
 					<td>${resp.nomb_marca}</td>
 					<td>${resp.nomb_unid}</td>
 					<td style="width:120px;"><input type="${(series == null ? 'number' : 'hidden')}" class="cant form-control" name="cant_prod[]" value="${cantidad}"  />${(series != null) ? cantidad : ''}</td>
@@ -5088,6 +5433,7 @@ $(function () {
 					<td>
 						<div class="btn-group btn-group-justified m-b-10">
 							<button data-id="${resp.cod_producto}" class="removerProducto btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
+							${buttonFecha}
 						</div>
 					</td>
 				</tr>
@@ -5226,6 +5572,66 @@ $(function () {
 		}
 		$('#prod-' + $(this).data('id')).remove();
 		calcularTotalCompra();
+	});
+
+	$('#TableComprasProductos tbody').on('click', '.fechaProducto', function (event) {
+		event.preventDefault();
+		var json_fechas_productos = $('#prod-' + $(this).data('id')).find('input[name="fechas_producto[]"]').val();
+
+		$('#FormCompraFechaVencimiento input[name=producto]').val($(this).data('id'));
+		json_fechas_productos = JSON.parse(json_fechas_productos);
+
+		var row = '';
+		$.each(json_fechas_productos, function (index, value) { 
+			row += `<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Cantidad</label>
+						<input type="text" name="cantidad[${index}]" class="form-control cantidad"  value="${value.cantidad}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Fecha Producción</label>
+						<input type="text" name="fecha_produccion[${index}]"  class="form-control datepicker-manual" value="${value.fecha_produccion}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Fecha Vencimiento</label>
+						<input type="text" name="fecha_vencimiento[${index}]" class="form-control datepicker-manual" value="${value.fecha_vencimiento}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Fecha Alerta</label>
+						<input type="text" name="fecha_alerta[${index}]" class="form-control datepicker-manual" value="${value.fecha_alerta}">
+					</div>
+				</div>
+				<div class="col-md-12"><hr></div>
+			</div>`
+		});
+
+		$('#BodyFechaVencimientoCompra').html(row);
+
+		$('.datepicker-manual').each(function(){
+				$(this).datepicker({
+					autoclose: true,
+					language: "es",
+					format: "yyyy-mm-dd",
+					todayHighlight: true
+				});
+
+				$(this).rules("add", { required: true });
+		});
+
+		$('#FormCompraFechaVencimiento .cantidad').each(function(){
+			$(this).rules("add", { required: true, number:true });
+		});
+
+		$('#ModalFechaVencimiento').modal();
+
+
 	});
 
 	$("#TableComprasProductos").on('focusout', 'input[name="cant_prod[]"], input[name="prec_prod[]"]', function () {
@@ -6645,7 +7051,7 @@ $(function () {
 		}
 	});
 
-	$('#TableVentas tbody').on('click', '.enviar-whatsapp', function (event) {
+	$('#TableVentas tbody').on('click', '.enviar-whatsapp', function () {
 		let id = $(this).data('id');
 		let cliente = $(this).data('cliente');
 		let telefono = $(this).data('telefono');
@@ -6665,11 +7071,10 @@ $(function () {
 		$('#generar-documento-whatsapp').data('telefono', telefono);
 		$('#nombre-cliente').html(cliente);		
 		$('#enviar-whatsapp').addClass('disabled');
-		$('#numero-whatsapp').prop('disabled', false);
 		$('#ModalEnviarWhatsapp').modal();
 	});
 
-	$('#ModalEnviarWhatsapp #generar-documento-whatsapp').click(function () {
+	$('#generar-documento-whatsapp').click(function () {
 		$(this).html('<i class="fa fa-sync fa-spin"></i> Procesando');
 		const id = $(this).data('id');
 		const telefono = $('#numero-whatsapp').val();
@@ -6782,17 +7187,29 @@ $(function () {
 		},
 		requestDelay: 500,
 		getValue: function (element) {
-			var disponible = '';
-			if (element.estado == '0') {
-				disponible = ' (No Disponible)';
-			} else {
-				if (element.cod_tiparticulo == 1) {
-					disponible = ' (stock' + ' ' + element.stock + ')'
+			return element.nombre
+		},
+		template: {
+			type: "custom",
+			method: function(value, element) {
+				var disponible = '';
+				if (element.estado == '0') {
+					disponible = ' (No Disponible)';
 				} else {
-					disponible = '';
+					if (element.cod_tiparticulo == 1) {
+						disponible = ' (stock' + ' ' + element.stock + ')'
+					} else {
+						disponible = '';
+					}
 				}
+
+				var fechas = '';
+				if(element.fecha_vencimiento == 1 && element.fechas != null){
+					fechas = ' - <span style="background:#d03f3f;color:white;padding:0px 5px; border-radius:3px">Vencen ' + element.fechas.cantidad_prodfec + ' el ' + element.fechas.fecha_vencimiento_prodfec + '</span>'
+				}
+
+				return element.nombre + disponible + fechas;
 			}
-			return element.nombre + disponible;
 		},
 		list: {
 			onKeyEnterEvent: function () {
@@ -7200,7 +7617,12 @@ $(function () {
 					}
 
 					var almacen = $('select[name=almacen]').val();
-					// console.log('holaa');
+
+					var producto_fecha = '';
+					if(resp.response.fechas != null){
+						producto_fecha = resp.response.fechas.cod_prodfec;
+					}
+					
 					var tr = `
           <tr class="fila-producto hide" id="prod-${producto}" data-id="${producto}">
             <input type="hidden" name="id_prod[${producto}]" value="${producto}"/>
@@ -7211,6 +7633,7 @@ $(function () {
 			<input type="hidden" name="peso_prod[${producto}]" value="${peso}" />
 			<input type="hidden" name="tipo[${producto}]" value="${tipo}" class="tipo"/>
 			<input type="hidden" name="tipo_igv[${producto}]" value="${resp.response.cod_parametros}" class="tipo_igv"/>
+			<input type="hidden" name="producto_fecha[${producto}]" value="${producto_fecha}"/>
             <td class="details-control">
               ${(seriesCheckBox) ? '<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>' : ''}
             </td>
@@ -9925,12 +10348,12 @@ $(function () {
 		'rgba(0, 150, 136, 1)',
 	];
 
-	if ($('#ComprasAnio')[0]) {
+	if ($('#VentasAnio')[0]) {
 
-		function GraficoCompras() {
-			$("#ComprasAnio").remove();
-			$("#ContentComprasAnio").html("<canvas id='ComprasAnio' style='height:300px'></canvas>");
-			var selector = $("#ComprasAnio");
+		function GraficoVentas() {
+			$("#VentasAnio").remove();
+			$("#ContentVentasAnio").html("<canvas id='VentasAnio' style='height:300px'></canvas>");
+			var selector = $("#VentasAnio");
 			var ctx = selector.get(0).getContext("2d");
 			var container = selector.parent();
 			var ww = selector.attr('width', $(container).width());
@@ -9950,8 +10373,8 @@ $(function () {
 				responsive: true,
 				maintainAspectRatio: false
 			};
-			var formReporteComprasAnio = $('#FormFiltroReporteComprasAnio').serializeObject();
-			$.getJSON(path + 'reportes/regventasanio/jsonCompras', formReporteComprasAnio, function (json, textStatus) {
+			var formReporteVentasAnio = $('#FormFiltroReporteVentasAnio').serializeObject();
+			$.getJSON(path + 'reportes/regventasanio/jsonCompras', formReporteVentasAnio, function (json, textStatus) {
 				$.each(json, function (index, val) {
 					data.labels.push(val.mes);
 					data.datasets[0].data.push(val.monto)
@@ -9962,14 +10385,14 @@ $(function () {
 
 		}
 
-		GraficoCompras();
+		GraficoVentas();
 
-		$('#FormFiltroReporteComprasAnio select[name=anio]').change(function (event) {
-			GraficoCompras();
+		$('#FormFiltroReporteVentasAnio select[name=anio]').change(function (event) {
+			GraficoVentas();
 		});
 
-		$('#FormFiltroReporteComprasAnio input[name=Contado],#FormFiltroReporteComprasAnio input[name=Credito]').change(function (event) {
-			GraficoCompras();
+		$('#FormFiltroReporteVentasAnio input[name=Contado],#FormFiltroReporteVentasAnio input[name=Credito]').change(function (event) {
+			GraficoVentas();
 		});
 
 	}
@@ -12511,25 +12934,69 @@ $('#BalanceExcel').click(function (event) {
 /*=========================================
 =           VERIFICAR STOCK MINIMO       =
 ===========================================*/
-if ($('#wrapper[data-stockminimos]').length) {
-	$.post(path + "reportes/regdashboard/productosStockMinimos", {},
+var data_stockminimos = $('.alerta-modal').data('stockminimos');
+var data_vencimiento = $('.alerta-modal').data('vencimiento');
+
+if(data_stockminimos && data_vencimiento){
+	$('#ModalStockMinimos .modal-dialog').attr('style','max-width:1500px !important');
+}
+
+if (data_stockminimos || data_vencimiento) {
+	$.post(path + "reportes/regdashboard/productosStockMinimosFechasVencimiento", {},
 		function (data, textStatus, jqXHR) {
 			if (data.success) {
-				var tr = '';
-				$.each(data.data, function (index, value) {
-					tr += `
-						<tr>
-							<td>${value.nomb_almacen}</td>
-							<td>${value.nomb_product}</td>
-							
-							<td>${value.nomb_unid}</td>
-							
-							<td>${value.stock}</td>
-							<td>${value.stockmin_product}</td>
-						</tr>
-					`;
-				});
-				$('#TableStockMinimos tbody').html(tr);
+
+				if(data_stockminimos){
+					if(data_vencimiento){
+						$('#stock-minimo-contenido').removeClass('col-lg-12');
+						$('#stock-minimo-contenido').addClass('col-lg-6');
+					}
+
+					var tr = '';
+					$.each(data.data_minimo, function (index, value) {
+						tr += `
+							<tr>
+								<td>${value.nomb_almacen}</td>
+								<td>${value.nomb_product}</td>
+								<td>${value.nomb_categoria}</td>
+								<td>${value.nomb_unid}</td>
+								<td>${value.prec_costo}</td>
+								<td>${value.stock}</td>
+								<td>${value.stockmin_product}</td>
+							</tr>
+						`;
+					});
+					$('#TableStockMinimos tbody').html(tr);
+					
+				}else{
+					$('#stock-minimo-contenido').hide();
+				}
+
+				if(data_vencimiento){
+
+					if(data_stockminimos){
+						$('#stock-vencimiento-contenido').removeClass('col-lg-12');
+						$('#stock-vencimiento-contenido').addClass('col-lg-6');
+					}
+					
+					var tr = '';
+					$.each(data.data_vencimiento, function (index, value) { 
+						tr += `
+							<tr>
+								<td>${value.nomb_almacen}</td>
+								<td>${value.nomb_product}</td>
+								<td>${value.fecha_produccion_prodfec}</td>
+								<td>${value.fecha_vencimiento_prodfec}</td>
+								<td>${value.cantidad_prodfec}</td>
+							</tr>
+						`;
+					});
+					$('#TableProductoFechaVencimiento tbody').html(tr);
+
+				}else{
+					$('#stock-vencimiento-contenido').hide();
+				}
+				
 
 
 				$('#ModalStockMinimos').modal();

@@ -96,8 +96,13 @@ class Inventarioinicial_model extends CI_Model {
             </div>';
   			}
 
+        if($q->fecha_vencimiento==1){
+          $fecha = $this->getFechas($q->cod_producto,$q->cod_almacen,$q->stock);
+        }else{
+          $fecha = '';
+        }
         
-        $row[] = [$q->nomb_product,$q->nomb_marca,$q->nomb_categoria,$q->nomb_unid,$q->prec_costo,$q->prec_venta,$q->stock,$inputStockInicial];
+        $row[] = [$q->nomb_product,$q->nomb_marca,$q->nomb_categoria,$q->nomb_unid,$q->prec_costo,$q->prec_venta,$fecha,$q->stock,$inputStockInicial];
   		}
 
   		$result['aaData'] = $row;
@@ -123,6 +128,34 @@ class Inventarioinicial_model extends CI_Model {
       return $button;
 
     }
+
+    private function getFechas($producto, $almacen, $stock)
+    {
+      $query = $this->db->from('tb_producto_fecha')
+      ->select('SUM(cantidad_prodfec) as numero')
+      ->where('cod_producto',$producto)
+      ->where('cod_almacen',$almacen)
+      ->where('cantidad_prodfec !=','0')
+      ->get();
+
+      $data = ' data-producto="'.$producto.'" data-almacen="'.$almacen.'"';
+      if($query->row('numero') != null){
+        if($query->row('numero') == $stock){
+          $resultado = '<button class="btn btn-success fechas-producto" disabled '.$data.'>'.$query->row('numero').' <i class="fa fa-check"></i></button>';
+        }else if($query->row('numero') > $stock){
+          $resultado = '<button class="btn btn-danger fechas-producto" '.$data.'>'.$query->row('numero').'</button>';
+        }else{
+          $resultado = '<button class="btn btn-warning fechas-producto" '.$data.'>'.$query->row('numero').'</button>';
+        }
+      }else{
+        $resultado = '<button class="btn btn-danger fechas-producto" '.$data.'>0</button>';
+      }
+
+
+
+      return $resultado;
+    }
+
 
 }
 
