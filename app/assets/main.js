@@ -8315,46 +8315,49 @@ $(function () {
 		}
 	});
 
+	async function enviarProcesoFacturas(id,boton,fila,fila_dias)
+	{
+		await $.ajax({
+			beforeSend: function () {
+				boton.prop('disabled', true);
+			},
+			type: "POST",
+			url: path + 'administrador/regfacturacion/enviarDocumentoSunat',
+			data: { id },
+			dataType: "JSON",
+		}).then(function (data) {
+			if (data.respuesta == 'ok' && data.hash_cdr != '') {
+				fila_dias.html('<span class="fas fa-check icon-verde"></span>');
+				fila.html('<label class="label label-success">Aceptada</label>');
+				var btn_imprimir = `<a target="_blank" title="Imprimir" href="${path + 'administrador/regventas/imprimirVenta/' + data.query.archivoxml_vent}" class="btn btn-sm btn-primary"><i class="far fa-file-alt"></i></a>`;
+				var btn_xml = `<a target="_blank" href="${path_app + 'facturacion/' + data.query.rutaxml_vent + '/' + data.query.archivoxml_vent + '.XML'}" class="btn btn-sm btn-primary">XML</a>`;
+				var btn_cdr = `<a target="_blank" href="${path_app + 'facturacion/' + data.query.rutaxml_vent + '/R-' + data.query.archivoxml_vent + '.XML'}" class="btn btn-sm btn-primary">CDR</a>`;
+				fila.next().html(btn_imprimir + ' ' + btn_xml + btn_cdr);
+			} else {
+				fila.html('<label class="label label-danger">Rechazada</label>');
+				fila.next().find('input').prop('disabled', false).prop('checked', false);
+			}
+		});
+	}
+
+	
 	$('#procesar-facturas').click(function () {
 		var boton = $(this);
 		var seleccionados = $("#TableFacturacion input[name='factura']:checked:enabled");
-		var contador = 0;
-		$.each(seleccionados, function () {
+		
+		$.each(seleccionados, async function () {
+			boton.prop('disabled', true);
 			var id = $(this).data('id');
-			$(this).prop('disabled', true);
 			var fila = $(this).parent().prev();
 			var fila_dias = $(this).parent().prev().prev();
 			fila.html('<div class="spinner-grow text-warning"></div> <label class="label label-warning">Procesando</label>');
-			$.ajax({
-				beforeSend: function () {
-					boton.prop('disabled', true);
-				},
-				type: "POST",
-				url: path + 'administrador/regfacturacion/enviarDocumentoSunat',
-				data: { id },
-				dataType: "JSON",
-			}).then(function (data) {
-				if (data.respuesta == 'ok' && data.hash_cdr != '') {
-					fila_dias.html('<span class="fas fa-check icon-verde"></span>');
-					fila.html('<label class="label label-success">Aceptada</label>');
-					var btn_imprimir = `<a target="_blank" title="Imprimir" href="${path + 'administrador/regventas/imprimirVenta/' + data.query.archivoxml_vent}" class="btn btn-sm btn-primary"><i class="far fa-file-alt"></i></a>`;
-					var btn_xml = `<a target="_blank" href="${path + 'facturacion/' + data.query.rutaxml_vent + '/' + data.query.archivoxml_vent + '.XML'}" class="btn btn-sm btn-primary">XML</a>`;
-					var btn_cdr = `<a target="_blank" href="${path + 'facturacion/' + data.query.rutaxml_vent + '/R-' + data.query.archivoxml_vent + '.XML'}" class="btn btn-sm btn-primary">CDR</a>`;
-					fila.next().html(btn_imprimir + ' ' + btn_xml + btn_cdr);
-				} else {
-					fila.html('<label class="label label-danger">Rechazada</label>');
-					fila.next().find('input').prop('disabled', false).prop('checked', false);
-				}
-				contador++;
-				if (seleccionados.length == contador) {
-					boton.prop('disabled', false);
-				}
-			});
-
-
+			await enviarProcesoFacturas(id,boton,fila,fila_dias)
+			boton.prop('disabled', false);
 		});
+		
 
 	});
+
 
 	$('#Reportexcelfe').click(function (event) {
 		let form = $('#FormFacturasFiltro').serializeObject();//FormReporteVentasDetalladasBusqueda

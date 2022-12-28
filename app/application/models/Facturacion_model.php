@@ -47,7 +47,7 @@ class Facturacion_model extends CI_Model
 			$check = '';
 			$label = '';
 
-			if (!is_null($q->cod_doc) or in_array($q->tipo_documento, ['NOTA DE CRÉDITO', 'NOTA DE DÉBITO'])) {
+			if ((!is_null($q->cod_doc) or in_array($q->tipo_documento, ['NOTA DE CRÉDITO', 'NOTA DE DÉBITO','BOLETA ELECTRONICA'])) AND ($q->hash != '' OR !is_null($q->hash))) {
 				$label = '<label class="label label-success">Aceptada</label>';
 				if ($q->estado_vent == 'A') {
 					$label = '<label class="label label-danger">Anulado</label>';

@@ -90,12 +90,22 @@ class Regfacturacion extends CI_Controller {
 		$response = json_decode($respuesta,true);
 		
 		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '') {
-			$this->db->set('cod_fecha',date('Y-m-d'))
-			->set('cod_vent',$id)
-			->set('cod_usu',$this->session->userdata('cod_usu'))
-			->set('hashcdr_fac',$response['hash_cdr'])
-			->set('estado_fac',"1")
-			->insert('tb_facturacion');
+
+			$verifica = $this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
+			$this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
+			$this->db->set('cod_fecha',date('Y-m-d'));
+			$this->db->set('cod_usu',$this->session->userdata('cod_usu'));
+			$this->db->set('hashcdr_fac',$response['hash_cdr']);
+			$this->db->set('estado_fac',"1");
+			
+			
+			if(is_null($verifica)){
+				$this->db->set('cod_vent',$id);
+				$this->db->insert('tb_facturacion');
+			}else{
+				$this->db->where('cod_vent',$id);
+				$this->db->update('tb_facturacion');
+			}
 
 			$query = $this->db->select('cod_vent,rutaxml_vent,archivoxml_vent')
 			->where('cod_vent',$id)
