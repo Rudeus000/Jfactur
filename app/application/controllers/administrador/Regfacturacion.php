@@ -89,11 +89,16 @@ class Regfacturacion extends CI_Controller {
 		curl_close($ch);
 		$response = json_decode($respuesta,true);
 		
-		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '') {
+		$msj_sunat = msj_sunat($response['msj_sunat']);
 
-			$verifica = $this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
+		$verifica = $this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
+
+		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '' AND $response['cod_sunat'] == '0') {
+
 			$this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
 			$this->db->set('cod_fecha',date('Y-m-d'));
+			$this->db->set('msj_sunat_fac',$msj_sunat);
+			$this->db->set('cod_sunat_fac',$response['cod_sunat']);
 			$this->db->set('cod_usu',$this->session->userdata('cod_usu'));
 			$this->db->set('hashcdr_fac',$response['hash_cdr']);
 			$this->db->set('estado_fac',"1");
@@ -114,11 +119,26 @@ class Regfacturacion extends CI_Controller {
 
 			$response['query'] = $query;
 		}else{
-
+			
+			$this->modelgeneral->getTableWhereRow('tb_facturacion',['cod_vent' => $id]);
+			$this->db->set('cod_fecha',date('Y-m-d'));
+			$this->db->set('msj_sunat_fac',$msj_sunat);
+			$this->db->set('cod_sunat_fac',$response['cod_sunat']);
+			$this->db->set('estado_fac',"2");
+			
+			if(is_null($verifica)){
+				$this->db->set('cod_vent',$id);
+				$this->db->insert('tb_facturacion');
+			}else{
+				$this->db->where('cod_vent',$id);
+				$this->db->update('tb_facturacion');
+			}
 		}
 
+		$response['msj_sunat'] = $msj_sunat;
 		echo json_encode($response);
 	}
+
 // reporte en excel FE
 
 	function reporteComprobates()

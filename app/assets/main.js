@@ -8295,6 +8295,7 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		],
 		"columnDefs": [
@@ -8337,8 +8338,22 @@ $(function () {
 				fila.html('<label class="label label-danger">Rechazada</label>');
 				fila.next().find('input').prop('disabled', false).prop('checked', false);
 			}
+			var msj_sunat = '';
+			if(data.msj_sunat!=''){
+				msj_sunat = `<button data-mensaje="${data.msj_sunat}" class="btn btn-sm btn-info ver-mensaje-sunat">Mensaje</button>`;
+			}
+			var arriba = fila.append().next().next().html(msj_sunat);
 		});
 	}
+
+	$('#TableFacturacion tbody').on('click','.ver-mensaje-sunat', function () {
+		var mensaje = $(this).data('mensaje');
+		Swal.fire({
+			title: "Mensaje",
+			text: mensaje,
+			type: "info"
+		});
+	});
 
 	
 	$('#procesar-facturas').click(function () {

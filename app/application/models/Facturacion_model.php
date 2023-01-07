@@ -77,8 +77,15 @@ class Facturacion_model extends CI_Model
 			//$nota_debito = $this->getNotaCreditoDebito($q->cod_vent,'Débito');
 
 
+			$msj_sunat = '';
+			if($q->msj_sunat!=''){
+				$msj_sunat = '<button data-mensaje="'.$q->msj_sunat.'" class="btn btn-sm btn-info ver-mensaje-sunat">Mensaje</button>';
+			}
 
-			$row[] = [$q->id, $q->nomb_cliente, $q->fecha, $q->subtotal, $q->igv, $q->total, $q->tipo_documento . ' ' . $q->serie . '-' . $q->numero, $limite, $label, $check];
+			if($q->estado_doc=='2'){
+				$label = '<label class="label label-danger">Rechazada</label>';
+			}
+			$row[] = [$q->id, $q->nomb_cliente, $q->fecha, $q->subtotal, $q->igv, $q->total, $q->tipo_documento . ' ' . $q->serie . '-' . $q->numero, $limite, $label, $check, $msj_sunat];
 		}
 
 		$result['aaData'] = $row;

@@ -94,6 +94,7 @@
                         <th>Fecha Limite</th>
                         <th>Estado</th>
 												<th>Facturación</th>
+                        <th>Msj. Sunat</th>
                       </tr>
                     </thead>
 

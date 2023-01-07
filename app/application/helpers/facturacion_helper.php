@@ -124,4 +124,25 @@ function getMotivoNotaCredito($motivo)
 
 	return $data[(string)$motivo];
 }
+
+
+function msj_sunat($string)
+{
+	$emisor = getEmisor();
+
+	$pos = strpos($string, "?xml version=");
+	if($pos !== false){
+		$xml = simplexml_load_string($string, NULL, NULL, "http://schemas.xmlsoap.org/soap/envelope/");
+		$ns = $xml->getNamespaces(true);
+		if($emisor['usuariosol']=='MODDATOS'){
+			$soap = $xml->children($ns['soap-env']);
+		}else{
+			$soap = $xml->children($ns['env']);
+		}
+		return (string)$soap->Body->Fault->children()->faultstring[0];
+	}else{
+		return $string;
+	}
+}
+
 ?>

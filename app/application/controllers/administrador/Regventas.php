@@ -1320,14 +1320,14 @@ class Regventas extends CI_Controller {
 			->set('hash_vent',$response['hash_cpe'])
 			->update('tb_venta');
 				if($empresa->enviar_factura_emp==1){
-				$response['factura_enviada'] = true;
+					$response['factura_enviada'] = true;
 					if($data['cod_tipo_documento']=='01'){
-					$response['response_factura_enviada'] = $this->enviarDocumento($id);
-				}
+						$response['response_factura_enviada'] = $this->enviarDocumento($id);
+					}
 
-				if($data['cod_tipo_documento']=='03'){
-					$response['response_factura_enviada'] = $this->resumenBoleta($id);
-				}
+					if($data['cod_tipo_documento']=='03'){
+						$response['response_factura_enviada'] = $this->resumenBoleta($id);
+					}
 				return $response;
 			}else{
 				$response['factura_enviada'] = false;
@@ -1387,11 +1387,14 @@ class Regventas extends CI_Controller {
 		$queryFacturacion = $this->db->from('tb_facturacion')
 		->where('cod_vent',$id)
 		->get();
-		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '') {	
+		
+		$msj_sunat = msj_sunat($response['msj_sunat']);
+
+		if ($response['respuesta']=='ok' AND $response['hash_cdr'] != '' AND $response['cod_sunat'] == '0') {	
 			$hash = $response['hash_cdr'];
 			$estado = 1;
 		}else{
-			$hash = '';
+			$hash = null;
 			$estado = 2;
 		}
 
@@ -1401,12 +1404,16 @@ class Regventas extends CI_Controller {
 			->set('cod_usu',$this->session->userdata('cod_usu'))
 			->set('hashcdr_fac',$hash)
 			->set('estado_fac',$estado)
+			->set('msj_sunat_fac',$msj_sunat)
+			->set('cod_sunat_fac',$response['cod_sunat'])
 			->insert('tb_facturacion');
 		}else{
 			$this->db->set('cod_fecha',date('Y-m-d'))
 			->set('cod_usu',$this->session->userdata('cod_usu'))
 			->set('hashcdr_fac',$hash)
 			->set('estado_fac',$estado)
+			->set('msj_sunat_fac',$msj_sunat)
+			->set('cod_sunat_fac',$response['cod_sunat'])
 			->where('cod_vent',$id)
 			->update('tb_facturacion');
 		}
@@ -1545,7 +1552,7 @@ class Regventas extends CI_Controller {
     curl_close($ch);
 
     $response = json_decode($respuesta,true);
-    return $response;
+		return $response;
   }
 
 
