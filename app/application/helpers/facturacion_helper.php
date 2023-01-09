@@ -145,4 +145,9 @@ function msj_sunat($string)
 	}
 }
 
+function reintentos()
+{
+	return 3;
+}
+
 ?>

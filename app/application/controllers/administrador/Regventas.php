@@ -1312,7 +1312,6 @@ class Regventas extends CI_Controller {
 		$response = json_decode($respuesta,true);
 		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
 		
-		
 		if($response['respuesta']=='ok'){
 			$this->db->where('cod_vent',$id)
 			->set('rutaxml_vent',$response['ruta'])
@@ -1322,11 +1321,21 @@ class Regventas extends CI_Controller {
 				if($empresa->enviar_factura_emp==1){
 					$response['factura_enviada'] = true;
 					if($data['cod_tipo_documento']=='01'){
-						$response['response_factura_enviada'] = $this->enviarDocumento($id);
+						for ($i=0; $i < reintentos(); $i++) {
+							$response['response_factura_enviada'] = $this->enviarDocumento($id);
+							if ($response['response_factura_enviada']['cod_sunat']=='0') {
+								break;
+							}
+						}
 					}
 
 					if($data['cod_tipo_documento']=='03'){
-						$response['response_factura_enviada'] = $this->resumenBoleta($id);
+						for ($i=0; $i < reintentos(); $i++) { 
+							$response['response_factura_enviada'] = $this->resumenBoleta($id);
+							if ($response['response_factura_enviada']['resp']['hash_cdr']!='') {
+								break;
+							}
+						}
 					}
 				return $response;
 			}else{
@@ -1453,11 +1462,12 @@ class Regventas extends CI_Controller {
     if (!is_null($insert)) {
       $resp['success'] = true;
       $resp['resp'] = $this->resumenDocumento($insert,$fecha,$secuencia);
-
+		
       $editData['rutaxml_res'] = $resp['resp']['ruta'];
       $editData['archivoxml_res'] = $resp['resp']['archivo'];
       $editData['hash_res'] = $resp['resp']['hash_cpe'];
       $editData['ticket_res'] = $resp['resp']['id_ticket'];
+			$editData['DesRptaSunat'] = msj_sunat($resp['resp']['msj_sunat']);
       $this->modelgeneral->editRegist('tb_resumenboleta',['cod_res'=>$insert],$editData);
 
     }else{
