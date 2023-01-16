@@ -475,6 +475,7 @@ class Regventas extends CI_Controller {
 		}
 		$cobro['tipo_cobro'] = $tipo_cobro;
 		$cobro['cod_caja'] = $apertura->cod_caja;
+		$cobro['estado_vent'] = 'G';
 		$cobro['fecha_cobro'] = $this->input->post('fecha');
 		$cobro['detalle_cobro'] = 'PAGO COBRO: '.$venta->nom_tipdocumento.'-'.$venta->serie.'-'.$venta->numero_vent;
 		$cobro['monto_cobro'] = $this->input->post('monto');
@@ -921,6 +922,11 @@ class Regventas extends CI_Controller {
 				->set('serie_estado','D')
 				->set('cod_vent',null)
 				->update('tb_producto_serie');
+
+				//Cambia estado venta en la tabla cobros
+				$this->db->where('cod_vent',$where['cod_vent'])
+				->set('estado_vent','A')				
+				->update('tb_cobro');
 			}
 		}
 		/*=====  End of SUMAR STOCK  ======*/

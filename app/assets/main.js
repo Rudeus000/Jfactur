@@ -8199,7 +8199,7 @@ $(function () {
 			showCancelButton: true,
 			confirmButtonColor: "#007AFF",
 			cancelButtonColor: "#d43f3a",
-			text: "¿Anular venta?"
+			text: "¿Estás seguro de anular el documento? los cambios no se podrán revertir, recuerda una vez anulado debes crear una nota de credito o comunicacion de baja!?"
 		}).then((result) => {
 			if (result.value) {
 				$.getJSON(path + 'administrador/regventas/anular', { id }, function (json, textStatus) {

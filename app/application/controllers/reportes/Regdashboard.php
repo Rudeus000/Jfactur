@@ -131,6 +131,7 @@ class Regdashboard extends CI_Controller {
 		",NULL);
 		$this->db->join('tb_venta','tb_cobro.cod_vent = tb_venta.cod_vent');
 		$this->db->group_by('fecha_cobro');
+		$this->db->where('tb_cobro.estado_vent','G');
 		$this->db->where('YEAR(fecha_cobro)',date('Y'));
 		$this->db->where('MONTH(fecha_cobro)',$mesNum);
 		if ($this->session->userdata('puntoventa_reportes')!='admin') {
