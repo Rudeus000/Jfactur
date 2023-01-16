@@ -1,7 +1,10 @@
 <div id="ModalStockMinimos" class="modal" tabindex="-1">
   <div class="modal-dialog modal-lg">
-  <div class="card-header bg-success"><h3 class="my-0 text-white"><i class="spinner-grow text-pink float-right"></i></h3></div>
+  <!-- <div class="card-header bg-success"><h3 class="my-0 text-white"><i class="spinner-grow text-pink float-right"></i></h3></div> -->
     <div class="modal-content">
+    <div class="card-header bg-warning">
+                    <h3 class="my-0 text-white">Alerta de productos con stock minimo y proximos a vencer<i class="spinner-grow text-warning float-right"></i></h3>
+                </div>
       <div class="modal-body">
             <div class="row">
                 <div id="stock-minimo-contenido" class="col-lg-12">
@@ -11,9 +14,9 @@
                             <tr class="bg-success text-white">
                                 <th>Almacen</th>
                                 <th>Producto</th>
-                                <th>Categoria</th>
+                                <!-- <th>Categoria</th> -->
                                 <th>Unidades</th>
-                                <th>P. Costo</th>
+                                <!-- <th>P. Costo</th> -->
                                 <th>Stock</th>
                                 <th class="bg-danger">Mínimo</th>
                             </tr>
