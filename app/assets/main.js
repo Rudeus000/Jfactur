@@ -6952,6 +6952,36 @@ $(function () {
 		]
 	});
 
+/*====== FIRMAR DOCUMENTO =======*/
+$('#TableVentas tbody').on('click', '.firmar', function () {
+	var id = $(this).data('id');
+	$.get(path+"administrador/regventas/xmlHash/"+id+"/firmar",{},
+		function (data, textStatus, jqXHR) {
+			var mensaje = '';
+			if(data.response_factura_enviada == undefined){
+				mensaje = `<b>Archivo firma:</b> ${data.archivo}`;
+			}else{
+
+				if(data.response_factura_enviada.resp == undefined){
+					mensaje = `<b>Archivo firma:</b> ${data.archivo} <br> <b>Respuesta SUNAT:</b> ${data.response_factura_enviada.msj_sunat}`;
+				}else{
+					mensaje = `<b>Archivo firma:</b> ${data.archivo} <br> <b>Respuesta SUNAT:</b> ${data.response_factura_enviada.resp.msj_sunat} <br> <b>Archivo SUNAT BOLETA:</b> ${data.response_factura_enviada.resp.archivo}`
+				}
+			}
+			Swal.fire({
+				title: "Respuesta",
+				html: mensaje,
+				type: "info"
+			});
+		},
+		"JSON"
+	);
+});
+
+/*====== END FIRMAR DOCUMENTO ====*/
+
+
+
 	$('#TableVentas tbody').on('click', 'td.details-control', function () {
 		var tr = $(this).closest('tr');
 		var row = TableVentas.row(tr);

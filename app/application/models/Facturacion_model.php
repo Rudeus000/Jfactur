@@ -60,9 +60,15 @@ class Facturacion_model extends CI_Model
 					$imprimir = base_url('administrador/regdocumentoelectronico/imprimirCredito/' . $q->id_impresion);
 				}
 
+				if($q->tipo_documento=='BOLETA ELECTRONICA'){
+					$ruta_xml = base_url_app('facturacion/' . $q->ruta_xml . '/' . $q->archivo_xml . '.XML');
+				}else{
+					$ruta_xml = base_url_app('facturacion/' . $q->ruta_xml . '/R-' . $q->archivo_xml . '.XML');
+				}
+
 				$check = '
 				<a href="' . $imprimir . '" target="_blank" class="btn btn-sm btn-primary" title="Imprimir"><i class="far fa-file-alt"></i></a>
-				<a target="_blank" href="' . base_url_app('facturacion/' . $q->ruta_xml . '/' . $q->archivo_xml . '.XML') . '" class="btn btn-sm btn-primary">XML</a><a target="_blank" href="' . base_url_app('facturacion/' . $q->ruta_xml . '/R-' . $q->archivo_xml . '.XML') . '" class="btn btn-sm btn-primary">CDR</a>';
+				<a target="_blank" href="' . base_url_app('facturacion/' . $q->ruta_xml . '/' . $q->archivo_xml . '.XML') . '" class="btn btn-sm btn-primary">XML</a><a target="_blank" href="' . $ruta_xml . '" class="btn btn-sm btn-primary">CDR</a>';
 				$limite = '<label class="label label-primary">Procesado</label>';
 			} else {
 
