@@ -6954,9 +6954,14 @@ $(function () {
 
 /*====== FIRMAR DOCUMENTO =======*/
 $('#TableVentas tbody').on('click', '.firmar', function () {
+	var boton = $(this);
+	boton.html('Proc...');
+
+	$(this).html('Proc...');
 	var id = $(this).data('id');
 	$.get(path+"administrador/regventas/xmlHash/"+id+"/firmar",{},
 		function (data, textStatus, jqXHR) {
+			boton.html('FIR');
 			var mensaje = '';
 			if(data.response_factura_enviada == undefined){
 				mensaje = `<b>Archivo firma:</b> ${data.archivo}`;
