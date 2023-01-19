@@ -99,6 +99,9 @@ class Ventas_model extends CI_Model
       <a href="' . base_url('administrador/regventas/imprimirVenta/' . $archivoxml) . '" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Venta"><i class="far fa-file-alt"></i></a>&nbsp
       <a href="' . base_url('administrador/regventas/imprimirticketVenta/' . $archivoxml) . '" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>
       </div>
+
+      <button title="Firmar" class="btn btn-default firmar" data-id="'.$q->cod_vent.'">FIR</button>
+
        ';
 
       $boton_detalle = '<button class="btn btn-icon waves-effect waves-light btn-success" ><span class="fa fa-caret-right"></span></button>';

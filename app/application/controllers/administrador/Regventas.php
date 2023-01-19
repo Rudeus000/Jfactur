@@ -1193,7 +1193,7 @@ class Regventas extends CI_Controller {
 
 	}
 
-	public function xmlHash($id)
+	public function xmlHash($id, $firmar = NULL)
 	{
 		$res = $this->ventas_model->getVenta($id);
 		
@@ -1343,10 +1343,19 @@ class Regventas extends CI_Controller {
 							}
 						}
 					}
-				return $response;
+				if(!is_null($firmar)){
+					echo json_encode($response);
+				}else{
+					return $response;
+				}
 			}else{
-				$response['factura_enviada'] = false;
-				return $response;
+				if(!is_null($firmar)){
+					echo json_encode($response);
+				}else{
+					$response['factura_enviada'] = false;
+					return $response;
+				}
+				
 			}
 		}else{
 			return false;
@@ -1451,31 +1460,37 @@ class Regventas extends CI_Controller {
     ->where('tb_venta.cod_vent',$id)
     ->get()->row();
 
+		$verificaResumenDetalle = $this->modelgeneral->getTableWhereRow('tb_resumenboletadetalle',['cod_vent' => $query->cod_vent]);
+		if(is_null($verificaResumenDetalle)){
+			$data['codigo_res'] = 'RC';
+			$data['serie_res'] = date("Ymd", strtotime($fecha));
+			$data['secuencia_res'] = $secuencia;
+			$data['fechareferencia_res'] = $fecha;
+			$data['fechadocumento_res'] = $fecha;
+			$insert = $this->modelgeneral->insertRegist('tb_resumenboleta',$data);
 
-    $data['codigo_res'] = 'RC';
-    $data['serie_res'] = date("Ymd", strtotime($fecha));
-    $data['secuencia_res'] = $secuencia;
-    $data['fechareferencia_res'] = $fecha;
-    $data['fechadocumento_res'] = $fecha;
-    $insert = $this->modelgeneral->insertRegist('tb_resumenboleta',$data);
+			$detalle['cod_res'] = $insert;
+			$detalle['cod_vent'] = $query->cod_vent;
+			$this->modelgeneral->insertRegist('tb_resumenboletadetalle',$detalle);
 
-    
-		$detalle['cod_res'] = $insert;
-		$detalle['cod_vent'] = $query->cod_vent;
-		$this->modelgeneral->insertRegist('tb_resumenboletadetalle',$detalle);
+			$cod_res = $insert;
+		}else{
+			$cod_res = $verificaResumenDetalle->cod_res;
+		}
+
 
     $resp = [];
-    if (!is_null($insert)) {
+
+    if (!is_null($cod_res)) {
       $resp['success'] = true;
-      $resp['resp'] = $this->resumenDocumento($insert,$fecha,$secuencia);
+      $resp['resp'] = $this->resumenDocumento($cod_res,$fecha,$secuencia);
 		
       $editData['rutaxml_res'] = $resp['resp']['ruta'];
       $editData['archivoxml_res'] = $resp['resp']['archivo'];
       $editData['hash_res'] = $resp['resp']['hash_cpe'];
       $editData['ticket_res'] = $resp['resp']['id_ticket'];
 			$editData['DesRptaSunat'] = msj_sunat($resp['resp']['msj_sunat']);
-      $this->modelgeneral->editRegist('tb_resumenboleta',['cod_res'=>$insert],$editData);
-
+      $this->modelgeneral->editRegist('tb_resumenboleta',['cod_res'=>$cod_res],$editData);
     }else{
       $resp['success'] = false;
     }
