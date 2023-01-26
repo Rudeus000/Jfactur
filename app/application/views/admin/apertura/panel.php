@@ -107,7 +107,7 @@
 </div>
 <!-- END wrapper -->
 
-<div class="modal fade" id="ModalAgregarConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <form id="FormConfirmarAgregar" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">
@@ -134,7 +134,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="ModalAgregarApertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarApertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormApertura" action="<?= base_url('administrador/regcajaapertura/agregar') ?>" method="post" autocomplete="off">
@@ -213,7 +213,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="ModalEditarApertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalEditarApertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormAperturaEditar" action="<?= base_url('administrador/regcajaapertura/editar') ?>" method="post" autocomplete="off">

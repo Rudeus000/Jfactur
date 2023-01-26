@@ -215,7 +215,7 @@
 
 </body>
 
-<div id="ModalAgregarProducto" class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="ModalAgregarProducto" class="modal bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
@@ -473,7 +473,7 @@
 </div><!-- /.modal -->
 
 
-<div id="ModalEditarProducto" class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+<div id="ModalEditarProducto" class="modal bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form id="FormEditarProducto" action="<?= base_url('administrador/regproducto/editProducto') ?>" method="post" autocomplete="off">
@@ -743,7 +743,7 @@
 
 
 <!--  Modal content for the above example -->
-<div class="modal fade bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal bs-example-modal-lg" id="ModalCargaMasiva" tabindex="" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="card-header bg-success">
             <h3 class="my-0 text-white">Importar productos series desde excel<a type="button" class="btn btn-rounded btn-pink float-right" data-dismiss="modal" aria-hidden="true">x</a></h3>

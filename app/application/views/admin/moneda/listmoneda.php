@@ -132,7 +132,7 @@
 
     </body>
 
-     <div id="ModalAgregarMoneda" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarMoneda" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormMoneda" action="<?= base_url('administrador/regmoneda/agregarMoneda') ?>" method="post" autocomplete="off">
@@ -188,7 +188,7 @@
 
 
 
-    <div id="ModalEditarMoneda" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarMoneda" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarMoneda" action="<?= base_url('administrador/regmoneda/editmoneda') ?>" method="post" autocomplete="off">

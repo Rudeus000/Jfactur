@@ -105,7 +105,7 @@
 
     </body>
 
-     <div id="ModalAgregarMarca" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarMarca" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormMarca" action="<?= base_url('administrador/regmarca/insertMarca') ?>" method="post" autocomplete="off">
@@ -142,7 +142,7 @@
 
 
 
-    <div id="ModalEditarMarca" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarMarca" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarMarca" action="<?= base_url('administrador/Regmarca/editMarca') ?>" method="post" autocomplete="off">

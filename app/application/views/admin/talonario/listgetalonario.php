@@ -145,7 +145,7 @@
 
     </body>
 
-      <div id="ModalAgregarTalonario" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+      <div id="ModalAgregarTalonario" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                                                 <form id="FormTalonario" action="<?= base_url('administrador/regtalonario/agregarTalonario') ?>" method="post" autocomplete="off">
@@ -269,7 +269,7 @@
 
 
 
-    <div id="ModalEditarTalonario" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+    <div id="ModalEditarTalonario" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                                                 <form id="FormEditarTalonario" action="<?= base_url('administrador/regtalonario/editTalonario') ?>" method="post" autocomplete="off">

@@ -251,7 +251,7 @@ FrmMntNotaUnid.listar_cbo_tip_doc_ref('');
 FrmMntNotaUnid.PintarDatosdet_ALM_Kardex('');
 <?php }
  ?></script>
-<div class="modal fade" id="ModalSeries" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalSeries" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <form id="form2" method="post" name="form2" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">

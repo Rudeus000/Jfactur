@@ -18,7 +18,7 @@
 		  <div class="col-lg-4 col-md-12 mb-4">
             
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -71,7 +71,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -125,7 +125,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -183,7 +183,7 @@
 		  <div class="col-lg-4 col-md-12 mb-4">
             
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -237,7 +237,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -291,7 +291,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -349,7 +349,7 @@
 		  <div class="col-lg-4 col-md-12 mb-4">
             
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -403,7 +403,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -457,7 +457,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal9" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal9" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -515,7 +515,7 @@
 		  <div class="col-lg-4 col-md-12 mb-4">
             
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -569,7 +569,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->
@@ -623,7 +623,7 @@
 		  <div class="col-lg-4 col-md-6 mb-4">
 
 		    <!--Modal: Name-->
-		    <div class="modal fade" id="modal12" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal" id="modal12" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		      <div class="modal-dialog modal-lg" role="document">
 
 		        <!--Content-->

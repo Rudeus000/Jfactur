@@ -123,7 +123,7 @@
 
     </body>
 
-     <div id="ModalAgregarTiparticulo" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarTiparticulo" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormTipo" action="<?= base_url('administrador/regtiparticulo/agregarTiparticulo') ?>" method="post" autocomplete="off">
@@ -172,7 +172,7 @@
 
 
 
-    <div id="ModalEditarTiparticulo" class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarTiparticulo" class="modal bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarTiparticulo" action="<?= base_url('administrador/regtiparticulo/ediTiparticulo') ?>" method="post" autocomplete="off">

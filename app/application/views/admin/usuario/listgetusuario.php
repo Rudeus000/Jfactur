@@ -159,7 +159,7 @@
 <!-- END wrapper -->
 
 
-<div class="modal fade" id="ModalAsignarCajaDocumento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAsignarCajaDocumento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -259,7 +259,7 @@
 </div>
 
 
-<div id="ModalAgregarUsuario" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+<div id="ModalAgregarUsuario" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
     <form id="FormUsuario" action="<?= base_url('administrador/regusuario/agregarUsuario') ?>" method="post" autocomplete="off">
@@ -391,7 +391,7 @@
 
 
 
-<div id="ModalEditarUsuario" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+<div id="ModalEditarUsuario" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
     <form id="FormEditarUsuario" action="<?= base_url('administrador/regusuario/editUsuario') ?>" method="post" autocomplete="off">

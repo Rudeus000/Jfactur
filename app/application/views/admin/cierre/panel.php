@@ -211,7 +211,7 @@
 
 
 
-<div class="modal fade" id="ModalAgregarCierre" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarCierre" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <form id="FormCierre" action="<?= base_url('administrador/regcajacierre/agregar') ?>" method="post" autocomplete="off">
@@ -339,7 +339,7 @@
   </div>
 </div>
 
-<div id="ModalAgregarMovimiento" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="ModalAgregarMovimiento" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 

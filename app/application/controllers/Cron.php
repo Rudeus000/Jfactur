@@ -161,8 +161,8 @@ class Cron extends CI_Controller {
     ->where('fecha_vent',$fecha)
     ->get()->result();
 
-		var_dump($query);
-		exit();
+		// var_dump($query);
+		// exit();
 
 
     $data['codigo_res'] = 'RC';

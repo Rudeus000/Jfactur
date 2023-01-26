@@ -106,7 +106,7 @@
 
 
 
-  <div id="ModalAsignarCuenta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+  <div id="ModalAsignarCuenta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormAgregarcuentas" action="<?= base_url('administrador/regcuenta/agregarCuent') ?>" method="post" autocomplete="off">
@@ -160,7 +160,7 @@
 
 
 
-    <div id="ModalEditarCuenta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarCuenta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarCuenta" action="<?= base_url('administrador/regcuenta/editCuenta') ?>" method="post" autocomplete="off">

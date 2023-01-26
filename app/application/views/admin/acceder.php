@@ -263,7 +263,7 @@
                 </div> <!-- content -->
 
                 <footer class="footer text-right">                    
-                    2019 - 2022 © Bee company - SMS
+                    2019 - 2023 © Bee company - SMS
                 </footer>
 
             </div>

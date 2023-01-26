@@ -125,7 +125,7 @@
 
 
 
-     <div id="ModalAgregarAlmacen" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarAlmacen" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormAlmacen" action="<?= base_url('administrador/regalmacen/agregarAlmacen') ?>" method="post" autocomplete="off">
@@ -172,7 +172,7 @@
 
 
 
-    <div id="ModalEditarAlmacen" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarAlmacen" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarAlmacen" action="<?= base_url('administrador/regalmacen/editAlmacen') ?>" method="post" autocomplete="off">

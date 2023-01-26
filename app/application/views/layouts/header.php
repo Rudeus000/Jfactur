@@ -187,7 +187,7 @@
 </html>
 
 
-<div id="ModalBusquedaGeneral" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalBusquedaGeneral" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width:1000px">
         <div class="modal-content">
             <!-- <div class="modal-header"> -->

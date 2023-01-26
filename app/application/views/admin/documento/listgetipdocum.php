@@ -130,7 +130,7 @@
 
     </body>
 
-     <div id="ModalAgregarDocum" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarDocum" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormDocumento" action="<?= base_url('administrador/regtipodocum/agregarDocum') ?>" method="post" autocomplete="off">
@@ -163,7 +163,7 @@
 
 
 
-    <div id="ModalEditarDocumento" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarDocumento" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarDocumento" action="<?= base_url('administrador/regtipodocum/editDocumento') ?>" method="post" autocomplete="off">

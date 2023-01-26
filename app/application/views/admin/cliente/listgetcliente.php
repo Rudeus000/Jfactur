@@ -117,7 +117,7 @@
 <!-- END wrapper -->
 
 
-<div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal bs-example-modal-lg" id="ModalAgregarCliente"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -207,7 +207,7 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" id="ModalEditarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal bs-example-modal-lg" id="ModalEditarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -310,7 +310,7 @@
 </div>
 
 
-<div id="ModalCumpleanos" class="modal fade-lg" id="exampleModalCenter" role="dialog">
+<div id="ModalCumpleanos" class="modal-lg" id="exampleModalCenter" role="dialog">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <form id="FormCumpleanos" action="<?= base_url('administrador/regcliente/cumpleanos') ?>" method="post" autocomplete="off">

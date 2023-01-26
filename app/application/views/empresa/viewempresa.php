@@ -328,7 +328,7 @@
   </div>
 
 
-	<div class="modal fade" id="ModalMovilExpertConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal" id="ModalMovilExpertConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <form id="FormConfirmarMovilExpert" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">

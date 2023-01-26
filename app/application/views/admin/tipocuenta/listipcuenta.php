@@ -135,7 +135,7 @@
 
     </body>
 
-     <div id="ModalAgregarTipoCuenta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarTipoCuenta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormTipoCuenta" action="<?= base_url('administrador/regtipcuenta/agregarTipcuenta') ?>" method="post" autocomplete="off">
@@ -184,7 +184,7 @@
 
 
 
-    <div id="ModalEditarTipoCuenta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarTipoCuenta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarTipocuenta" action="<?= base_url('administrador/regtipcuenta/editTipoCuenta') ?>" method="post" autocomplete="off">

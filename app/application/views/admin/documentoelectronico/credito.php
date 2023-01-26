@@ -109,7 +109,7 @@
 
 
 
-<div class="modal fade" id="ModalNotaCredito" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalNotaCredito" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <form id="FormNotaCredito" action="<?= base_url('administrador/regdocumentoelectronico/creditoDocumento') ?>" method="post" autocomplete="off">

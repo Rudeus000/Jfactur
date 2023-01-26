@@ -184,7 +184,7 @@
 
 </body>
 
-<div id="ModalAgregarGastos" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="ModalAgregarGastos" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
@@ -306,7 +306,7 @@
 
 
 
-<div id="ModalEditarGastos" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+<div id="ModalEditarGastos" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form id="FormEditarGastos" action="<?= base_url('administrador/regastos/editGastos') ?>" method="post" autocomplete="off">

@@ -125,7 +125,7 @@
 
 
     </body>
-    <div id="ModalEditarPerfil" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarPerfil" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarPerfil" action="<?= base_url('administrador/regperfil/editPerfil') ?>" method="post" autocomplete="off">

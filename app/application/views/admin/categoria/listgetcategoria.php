@@ -107,7 +107,7 @@
 
     </body>
 
-     <div id="ModalAgregarCategoria" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarCategoria" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormCategoria" action="<?= base_url('administrador/regcategoria/agregarCategoria') ?>" method="post" autocomplete="off">
@@ -141,7 +141,7 @@
 
 
 
-    <div id="ModalEditarCategoria" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarCategoria" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarCategoria" action="<?= base_url('administrador/regcategoria/editCategoria') ?>" method="post" autocomplete="off">

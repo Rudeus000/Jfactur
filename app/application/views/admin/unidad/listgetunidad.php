@@ -143,7 +143,7 @@
 
     </body>
 
-     <div id="ModalAgregarUmedida" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarUmedida" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                                                 <form id="FormUmedida" action="<?= base_url('administrador/regunidad/insertUmedida') ?>" method="post" autocomplete="off">
@@ -209,7 +209,7 @@
          </div><!-- /.modal -->
 
 
-    <div id="ModalEditarUmedida" class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+    <div id="ModalEditarUmedida" class="modal bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                                                 <form id="FormEditarUmedida" action="<?= base_url('administrador/regunidad/editUmedida') ?>" method="post" autocomplete="off">

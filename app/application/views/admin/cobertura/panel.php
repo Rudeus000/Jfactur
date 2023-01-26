@@ -92,7 +92,7 @@
 
 
 
-<div class="modal fade" id="ModalAgregarCobertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarCobertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormCobertura" action="<?= base_url('administrador/regclientecobertura/agregar') ?>" method="post" autocomplete="off">
@@ -154,7 +154,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="ModalEditarCobertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalEditarCobertura" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormCoberturaEditar" action="<?= base_url('administrador/regclientecobertura/editar') ?>" method="post" autocomplete="off">

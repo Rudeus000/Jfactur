@@ -148,7 +148,7 @@
 <!-- END wrapper -->
 
 <!-- Modal -->
-<div class="modal fade" id="ModalAsignarAlmacen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAsignarAlmacen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -221,7 +221,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="ModalAsignarCaja" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAsignarCaja" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -293,7 +293,7 @@
 </div>
 
 
-<div id="ModalAgregarPunto" class="modal fade bs-example-modal-center" tabindex="" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+<div id="ModalAgregarPunto" class="modal bs-example-modal-center" tabindex="" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
     <form id="FormPuntoVenta" action="<?= base_url('administrador/regpventa/agregarPventa') ?>" method="post" autocomplete="off">
@@ -410,7 +410,7 @@
 
 
 
-<div id="ModalEditarPventa" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+<div id="ModalEditarPventa" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
     <form id="FormEditarPventa" action="<?= base_url('administrador/regpventa/editPventa') ?>" method="post" autocomplete="off">

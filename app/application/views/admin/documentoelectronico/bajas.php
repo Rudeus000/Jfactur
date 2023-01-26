@@ -99,7 +99,7 @@
 
 
 
-<div class="modal fade" id="ModalBajaSunat" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalBajaSunat" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormBajaSunat" action="<?= base_url('administrador/regdocumentoelectronico/bajaDocumento') ?>" method="post" autocomplete="off">

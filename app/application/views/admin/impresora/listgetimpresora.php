@@ -141,7 +141,7 @@
 
     </body>
 
-     <div id="ModalAgregarImpresora" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+     <div id="ModalAgregarImpresora" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormImpresora" action="<?= base_url('administrador/regimpresora/agregarImpresora') ?>" method="post" autocomplete="off">
@@ -204,7 +204,7 @@
 
 
 
-    <div id="ModalEditarImpresora" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarImpresora" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarImpresora" action="<?= base_url('administrador/regimpresora/editimpresora') ?>" method="post" autocomplete="off">

@@ -91,7 +91,7 @@
 
 
 
-  <div id="ModalAgregarBanco" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+  <div id="ModalAgregarBanco" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormAgregarBanco" action="<?= base_url('administrador/regbanco/agregarBanco') ?>" method="post" autocomplete="off">
@@ -125,7 +125,7 @@
 
 
 
-    <div id="ModalEditarBanco" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarBanco" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarBanco" action="<?= base_url('administrador/regbanco/editBanco') ?>" method="post" autocomplete="off">

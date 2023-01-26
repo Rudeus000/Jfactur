@@ -117,7 +117,7 @@
 <!-- END wrapper -->
 
 
-<div class="modal fade bs-example-modal-lg" id="ModalAgregarProveedor"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal bs-example-modal-lg" id="ModalAgregarProveedor"  data-refresh="true" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -198,7 +198,7 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" id="ModalEditarProveedor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal bs-example-modal-lg" id="ModalEditarProveedor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">

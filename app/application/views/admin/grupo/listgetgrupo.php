@@ -125,7 +125,7 @@
 
 
     </body>
-    <div id="ModalEditarGrupo" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarGrupo" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarGrupo" action="<?= base_url('administrador/regrupo/editGrupo') ?>" method="post" autocomplete="off">

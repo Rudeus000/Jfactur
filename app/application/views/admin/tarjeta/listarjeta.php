@@ -91,7 +91,7 @@
 
 
 
-  <div id="ModalAgregarTarjeta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+  <div id="ModalAgregarTarjeta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
              <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                                                 <form id="FormAgregarTarjeta" action="<?= base_url('administrador/regtarjeta/agregarTarjeta') ?>" method="post" autocomplete="off">
@@ -125,7 +125,7 @@
 
 
 
-    <div id="ModalEditarTarjeta" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div id="ModalEditarTarjeta" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                 <form id="FormEditarTarjeta" action="<?= base_url('administrador/regtarjeta/editTarjeta') ?>" method="post" autocomplete="off">
