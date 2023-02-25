@@ -1,5 +1,5 @@
 <footer class="footer text-center">
-2019 -2023 © BEE COMPANY - SOFTWARE SMS
+2019 - 2023 © BEE COMPANY - SOFTWARE SMS
 </footer>
 <!-- <script src="<?= base_url_app() ?>assets/js/quill.min.js"></script> -->
 <script src="<?= base_url_app() ?>assets/js/jquery.min.js"></script>

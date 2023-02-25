@@ -11963,7 +11963,11 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 				d.hasta = $("input[name=hasta]").val();
 				d.almacen = $("input[name=almacen]").val();
 				d.cliente = $("input[name=cliente]").val();
-				d.vendedor = $("input[name=vendedor]").val();
+				if (d.vendedor = $('select[name=vendedor]').val()) {
+					d.vendedor = $('select[name=vendedor]').val();
+				} else {
+					d.vendedor = $('input[name=vendedor]').val();
+				}
 			}
 		},
 		"columns": [

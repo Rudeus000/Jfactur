@@ -2,7 +2,11 @@
 		<div><img style="max-width: 120px" src="<?= base_url_app('assets/uploads/logo/'.$empresa->photo) ?>" ></div>
 		<div><b><?= $empresa->nombre_comercial ?></b></div>
 		<div><b><?= $empresa->direcc_emp ?></b></div>
-		<!-- <div><?= $ventas->direccion_puntoventa ?></div> -->
+
+		<?php if($ventas->direccion_puntoventa!=$empresa->direcc_emp): ?>
+		<div><?= $ventas->direccion_puntoventa ?></div>
+		<?php endif?>
+	
 		<div>Ruc:<?= $empresa->ruc_emp ?></div>
 		<div> Web: <?= WEBSITE ?> </div>
 		<div><b><?= $ventas->nom_tipdocumento ?> </b></div>
