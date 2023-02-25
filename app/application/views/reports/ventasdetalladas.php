@@ -67,7 +67,7 @@
                             </select>
                           <?php endif  ?>
                           <?php if ($this->session->userdata('perfil') != 1) : ?>
-                            <input type="text" id="vendedor" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
+                            <input type="text" id="vendedorcod" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
                             <input type="text" name="vendedor" readonly class="form-control" value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
                           <?php endif ?>
                         </div>
