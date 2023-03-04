@@ -348,7 +348,7 @@
                            <div class="col-md-2">
                              <div class="form-group">
                                <label class="control-label">Cantidad</label>
-                               <input type="text" name="cantidadProducto" class="form-control" value="1">
+                               <input type="text" name="cantidadProducto" class="form-control" value="">
                              </div>
                            </div>
                            <div class="col-md-2">

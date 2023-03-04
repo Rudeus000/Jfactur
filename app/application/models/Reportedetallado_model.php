@@ -243,9 +243,12 @@ class Reportedetallado_model extends CI_Model {
 		if ($data['cliente']!='') {
       $this->db->like('nomb_cliente',$data['cliente']);
 		}
-		if($data['vendedor']!=''){
-      $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
-    }
+		if ($data['vendedor'] != '') {
+			$this->db->where('tb_venta.cod_usu', $data['vendedor']);
+		  }
+	// 	if($data['vendedor']!=''){
+    //   $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
+    // }
 		$queryLike = $this->db->get();
 		
 		$total = 0;
@@ -287,9 +290,12 @@ class Reportedetallado_model extends CI_Model {
 			if ($data['cliente']!='') {
 		$this->db->like('nomb_cliente',$data['cliente']);
 			}
-			if($data['vendedor']!=''){
-		$this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
-   		 }
+			if ($data['vendedor'] != '') {
+				$this->db->where('tb_venta.cod_usu', $data['vendedor']);
+			  }
+		// 	if($data['vendedor']!=''){
+		// $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
+   		//  }
 
 		if ($data['length']!=-1) {
 			$this->db->limit($data['length'],$data['start']);
@@ -313,6 +319,11 @@ class Reportedetallado_model extends CI_Model {
 
 		$result['aaData'] = $row;
 		return $result;
+	}
+	function getVendedores()
+	{
+	  return $this->db->from('tb_usuario')
+		->get()->result();
 	}
 
 	function getVentasDetalladasExcel($data)
@@ -350,9 +361,12 @@ class Reportedetallado_model extends CI_Model {
 		if ($data['cliente']!='') {
       $this->db->like('nomb_cliente',$data['cliente']);
 		}
-		if($data['vendedor']!=''){
-      $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
-    }
+		if ($data['vendedorcod'] != '') {
+			$this->db->where('tb_venta.cod_usu', $data['vendedorcod']);
+		  }
+	// 	if($data['vendedor']!=''){
+    //   $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
+    // }
 		return $this->db->get()->result();
 	}
 

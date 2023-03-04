@@ -75,7 +75,7 @@ class Ventas_model extends CI_Model
       $xml = '';
       $id_venta = '';
       if ($q->siglas_talonario == 'FC') {
-        $xml = '<a title="Archivo XML" class="btn btn-sm btn-success" target="_blank" href="' . base_url_app('facturacion/' . $q->rutaxml_vent . '/' . $q->archivoxml_vent . '.XML') . '">XML</a>&nbsp';
+        $xml = '<a title="Archivo XML" class="btn btn-sm" target="_blank" href="' . base_url_app('facturacion/' . $q->rutaxml_vent . '/' . $q->archivoxml_vent . '.XML') . '"><i class="fas fa-file-excel"></i></a>&nbsp';
 
         $archivoxml = $q->archivoxml_vent;
       } else {
@@ -86,23 +86,25 @@ class Ventas_model extends CI_Model
       <div class="btn-group">
 
       <div class="btn-group">
-      <button data-id="' . $archivoxml . '" data-email="' . $q->email_cliente . '"  data-cliente="ENVIAR A: ' . $q->email_cliente . '"class="btn btn-xs btn-success enviar-email"><i class="fa fa-envelope"></i></button>&nbsp
+      <button data-id="' . $archivoxml . '" data-email="' . $q->email_cliente . '"  data-cliente="ENVIAR A: ' . $q->email_cliente . '"class="btn  enviar-email"><i class="fa fa-envelope text-success"></i></button>&nbsp
 
-      <button data-telefono="' . $q->telf_cliente . '" data-cliente="ENVIAR A: ' . $q->nomb_cliente . '" data-id="' . $archivoxml . '"class="btn btn-xs btn-primary waves-effect waves-light enviar-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></button>&nbsp
+      <button data-telefono="' . $q->telf_cliente . '" data-cliente="ENVIAR A: ' . $q->nomb_cliente . '" data-id="' . $archivoxml . '"class="btn  waves-effect waves-light enviar-whatsapp" target="_blank"><i class="fab fa-whatsapp text-primary"></i></button>&nbsp
 
-      <a href="' . base_url('administrador/regventas/editar/' . $q->cod_vent) . '" class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye"></i></a>&nbsp
+      <a href="' . base_url('administrador/regventas/editar/' . $q->cod_vent) . '" class="btn btn-xs " data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye text-info"></i></a>&nbsp
 
-      <button data-id="' . $q->cod_vent . '" class="anular btn btn-xs btn-pink" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash"></i></button>&nbsp
+      <button data-id="' . $q->cod_vent . '" class="anular btn btn-dafault" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash text-danger"></i></button>&nbsp
       
       ' . $xml . '
       
-      <a href="' . base_url('administrador/regventas/imprimirVenta/' . $archivoxml) . '" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Venta"><i class="far fa-file-alt"></i></a>&nbsp
-      <a href="' . base_url('administrador/regventas/imprimirticketVenta/' . $archivoxml) . '" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>
+      <a href="' . base_url('administrador/regventas/imprimirVenta/' . $archivoxml) . '" target="_blank" class="btn 
+      " data-toggle="tooltip" title="Imprimir Venta"><i class="far fa-file-alt text-pink"></i></a>&nbsp
+      <a href="' . base_url('administrador/regventas/imprimirticketVenta/' . $archivoxml) . '" target="_blank" class="btn" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt text-primary"></i></a>
       </div>
 
-      <button title="Firmar" class="btn btn-default firmar" data-id="'.$q->cod_vent.'">FIR</button>
+      
 
        ';
+      //  <button title="Firmar" class="btn btn-default firmar" data-id="'.$q->cod_vent.'">FIR</button>
 
       $boton_detalle = '<button class="btn btn-icon waves-effect waves-light btn-success" ><span class="fa fa-caret-right"></span></button>';
       $row[] = [$boton_detalle, $q->nom_tipdocumento . '-' . $q->serie . '-' . $q->numero_vent, $q->fecha_vent, $q->nomb_cliente, $q->doc_cliente, $q->moneda_vent == 'S' ? 'Soles' : 'Dolares', $q->total_vent, $estado, $cobros, $q->pendiente_vent, $buttons, json_encode($detalle)];

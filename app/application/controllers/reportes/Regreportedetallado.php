@@ -67,9 +67,10 @@ class Regreportedetallado extends CI_Controller {
 
 	public function ventas()
 	{
+		$data['vendedores'] = $this->reportedetallado_model->getVendedores();	
 		$this->load->view('layouts/header');
 		$this->load->view('layouts/aside');
-		$this->load->view('reports/ventasdetalladas');    
+		$this->load->view('reports/ventasdetalladas',$data);    
 		$this->load->view('layouts/footer');
 	}
 
@@ -119,7 +120,7 @@ class Regreportedetallado extends CI_Controller {
 		$data['desde'] = $this->input->get('desde');
 		$data['hasta'] = $this->input->get('hasta');
 		$data['cliente'] = $this->input->get('cliente');
-		$data['vendedor'] = $this->input->get('vendedor');
+		$data['vendedorcod'] = $this->input->get('vendedorcod');
 		$data['almacen'] = $this->input->get('almacen');
 		$data['datos'] = $this->reportedetallado_model->getVentasDetalladasExcel($data);
 		$this->load->view('reports/ventasdetalladasexcel',$data);
