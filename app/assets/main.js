@@ -13663,8 +13663,109 @@ if($('input[name=busqueda_general]').length){
 
 
 
+/* ========================================================================== */
+/*                               LIBRO DE VENTAS                              */
+/* ========================================================================== */
+var TableLibroVentas = $('#TableLibroVentas').DataTable({
+	"language": {
+		"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+	},
+	"searching": false,
+	"processing": true,
+	"serverSide": false,
+	"iDisplayLength": 10,
+	"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, 'Todos']],
+	"aaSorting": [[1, 'asc']],
+	"ajax": {
+		"url": path + 'reportes/libroventas/jsonLibroVentas',
+		"type": "GET",
+		"data": function (d) {
+			d.desde = $('input[name=desde]').val();
+			d.hasta = $('input[name=hasta]').val();
+			d.tipo_comprobante = $('select[name=tipo_comprobante]').val();
+		}
+	},
+	"columns":[
+		{"data" : "PERIODO"},
+		{"data" : "COD_UNIC"},
+		{"data" : "TIPO_REGIMEN"},
+		{"data" : "F_EMISION"},
+		{"data" : "F_VENCIMIENTO"},
+		{"data" : "TIPO_DOCUMENTO"},
+		{"data" : "SERIE"},
+		{"data" : "NUMERO"},
+		{"data" : "NUM_MAQ_REG"},
+		{"data" : "T_DOC"},
+		{"data" : "NUMERO_CLIENTE"},
+		{"data" : "RAZON_SOCIAL"},
+		{"data" : "OP_EXPORT"},
+		{"data" : "OP_GRAVADA"},
+		{"data" : "DESCUENTO"},
+		{"data" : "IGV"},
+		{"data" : "DESC_IGV"},
+		{"data" : "OP_EXONERADA"},
+		{"data" : "OP_INAFECTA"},
+		{"data" : "ISC"},
+		{"data" : "OP_ARROZ_P"},
+		{"data" : "IMP_ARROZ_OP"},
+		{"data" : "ICB_PER"},
+		{"data" : "OTROS_TRIBUTOS"},
+		{"data" : "TOTAL"},
+		{"data" : "MONEDA"},
+		{"data" : "T_C"},
+		{"data" : "FECHA_COM_MODIF"},
+		{"data" : "TIPO_DOC_MODIF"},
+		{"data" : "SERIE_DOC_MODIF"},
+		{"data" : "NUM_DOC_MODIF"},
+		{"data" : "ID_CONTR"},
+		{"data" : "ERR_T_C"},
+		{"data" : "COMP_M_P"},
+		{"data" : "ESTADO"},
+		{"data" : "CAMP_LIB"},
+		{"data" : "ESTADO_COMP"}
+	]
+});
 
 
+$('#FormLibroElectronicoVentas').validate({
+	rules: {
+		desde: { required: true },
+		hasta: { required: true }
+	},
+	submitHandler: function () {
+		$('#TableLibroVentas').DataTable().ajax.reload();
+
+		let form = $('#FormLibroElectronicoVentas').serializeObject();
+
+		$.ajax({
+			type: "GET",
+			url: path + "reportes/libroventas/descargarTxtSunat",
+			data: form,
+			dataType: "JSON",
+			success: function (response) {
+				$('#btn-generar-txt-sunat').attr('href', response.link);
+				$('#btn-generar-txt-sunat').attr('download', response.nombre);
+			}
+		});
+	}
+});
+
+
+$('#btn-generar-xlsx-sunat').click(function (event) {
+	let form = $('#FormLibroElectronicoVentas').serializeObject();
+	let params = $.param(form);
+	$(this).attr('href', path + 'reportes/libroVentas/descargarExcelSunat?' + params);
+});
+
+$('#btn-generar-ejb').click(function (event) {
+	let form = $('#FormLibroElectronicoVentas').serializeObject();
+	let params = $.param(form);
+	$(this).attr('href', path + 'reportes/libroVentas/descargarExcelEJB?' + params);
+});
+
+/* ========================================================================== */
+/*                             END LIBRO DE VENTAS                            */
+/* ========================================================================== */
 
 
 
