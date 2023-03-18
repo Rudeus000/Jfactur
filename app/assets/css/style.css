@@ -45,20 +45,26 @@
     color: #fff;
 
 }
-.tblcierrea td:nth-child(10) {
+.tblcierrey td:nth-child(10) {
+  background: #716cb0;
+   text-align: center;
+  color: #fff;
+
+}
+.tblcierrea td:nth-child(11) {
   background: #33b0e0;
    text-align: center;
   color: #fff;
 
 }
-.tblcierret td:nth-child(11) {
+.tblcierret td:nth-child(12) {
     background: #4489e4;
      text-align: center;
     color: #fff;
 
 }
 
-.tblcierre td:nth-child(12) {
+.tblcierre td:nth-child(13) {
   background: #d03f3f;
    text-align: center;
   color: #fff;

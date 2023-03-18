@@ -51,12 +51,12 @@ class Cajacierre_model extends CI_Model
     }
     $queryLike = $this->db->get();
 
-    $efectivo_apertura = 0;
+    $total_apertura = 0;
     $totalEgresos = 0;
     $totalCierre = 0;
 
     foreach ($queryLike->result() as $r) {
-      $efectivo_apertura += $r->efectivo_apertura;
+      $total_apertura += $r->total_apertura;
       $totalEgresos += $r->monto_movimiento;
       $totalCierre += $r->bonos_apertura;
     }
@@ -89,9 +89,9 @@ class Cajacierre_model extends CI_Model
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryTotal->num_rows();
     $result['iTotalDisplayRecords'] = $query->num_rows();
-    $result['efectivo_apertura'] = $efectivo_apertura;
+    $result['efectivo_apertura'] = $total_apertura;
     $result['totalEgresos'] = $totalEgresos;
-    $result['totalCierre'] = $efectivo_apertura - $totalEgresos;
+    $result['totalCierre'] = $total_apertura - $totalEgresos;
 
     $row = [];
     foreach ($query->result() as $q) {
@@ -100,7 +100,7 @@ class Cajacierre_model extends CI_Model
       $buttons = '
       <div class="btn-group">
      <a href="' . base_url('administrador/regcajacierre/imprimirCierrecaja/' . $q->cod_apertura) . '" target="_blank" class="btn btn-sm btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>';
-      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
+      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura,$q->yape_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
     }
 
     $result['aaData'] = $row;

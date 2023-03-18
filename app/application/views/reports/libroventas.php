@@ -12,8 +12,8 @@
                   <div class="page-title-box">
                      <h4 class="page-title float-left"><i class="far fa-money-bill-alt" aria-hidden="true"></i> LIBRO ELECTRONICO DE VENTAS</h4>
                      <ol class="breadcrumb float-right">
-                        <li class="breadcrumb-item"><a href="#">Utilidad</a></li>
-                        <li class="breadcrumb-item active">Listado</li>
+                        <li class="breadcrumb-item"><a href="#">Contabilidad</a></li>
+                        <li class="breadcrumb-item active">ebook</li>
                      </ol>
                   </div>
                </div>
@@ -73,14 +73,9 @@
                                     <button type="submit" class="btn btn-primary btn-md" style="margin-top:27px">Generar</button>
                                  </div>
                                  
-                              </div>
-                           </form>
-                        </fieldset>
-                        
-
-                        <div class="row">
-                           <div class="col-md-12 my-4">
-                              <div class="dropdown">
+                                 <div class="row">
+                           <div class="col-md-2 form-group">
+                              <div class="dropdown" style="margin-top:27px">
                                  <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                                     Opciones
                                  </button>
@@ -92,8 +87,13 @@
                               </div>
                            </div>
                         </div>
+                              </div>
+                           </form>
+                        </fieldset>                       
 
+                     
 
+                        <div class="table-responsive">
                         <table id="TableLibroVentas" class="table table-bordered table-condensed"  cellspacing="0" width="100%">
                           <thead>
                             <tr class="btn-primary btn-xs">
@@ -138,6 +138,7 @@
                           </thead>
                            
                         </table>
+                        </div>
                         <!-- End #wizard-vertical -->
 
                      </div>

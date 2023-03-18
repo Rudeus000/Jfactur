@@ -1888,7 +1888,141 @@ $(function () {
 	});
 
 
+/*==============================================
+	=            TYPE PAY LIST                    =
+	===============================================*/
+	var TableTpaylist = $('#TableTpaylist').DataTable({
+		"language": {
+			"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+		},
+		"searching": false,
+		"processing": true,
+		"serverSide": true,
+		"iDisplayLength": 10,
+		"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'Todos']],
+		"aaSorting": [[0, 'desc']],
+		"ajax": {
+			"url": path + 'administrador/regtipopay/jsontpay',
+			"type": "POST",
+			"data": function (d) {
+				d.tpay = $("input[name=tpay").val();
+			}
+		},
+		"columns": [
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": false }
+		]
+	});
 
+
+	$('#FormTpay').validate({
+		submitHandler: function () {
+			$('#TableTpaylist').DataTable().ajax.reload();
+		}
+	});
+
+
+	/*==========================================
+				BANCO - AGREGAR
+	===========================================*/
+
+
+	$('#FormAddTpay').validate({
+		rules: {
+
+			nombre: { required: true },
+
+
+		},
+		submitHandler: function () {
+			$('#ModalAddTpay').modal('hide');
+			enviarFormulario('#FormAddTpay', function (json) {
+				if (json.success) {
+					$('#TableTpaylist').DataTable().ajax.reload();
+					$('#FormAddTpay input[name=nombre]').val('');
+
+				}
+
+
+			})
+		}
+	});
+
+
+	/*==========================================
+			 TYPE PAY - UPDATE
+	===========================================*/
+
+	$('#TableTpaylist').on('click', '.editar-banco', function (event) {
+		event.preventDefault();
+		var id = $(this).data('id');
+		$.getJSON(path + 'administrador/regtipopay/gettpay', { id }, function (json, textStatus) {
+			$('#FormUpdateTpay input[name=id]').val(json.cod_tipopago);
+			$('#FormUpdateTpay input[name=nombre]').val(json.nom_tipopago);
+
+		});
+	});
+
+	$('#FormUpdateTpay').validate({
+		ignore: [],
+		rules: {
+
+			nombre: { required: true },
+
+
+		},
+		submitHandler: function () {
+			enviarFormulario('#FormUpdateTpay', function (json) {
+				if (json.success) {
+					$('#TableTpaylist').DataTable().ajax.reload();
+				}
+				$('#ModalUpdateTpay').modal('hide');
+				$('#FormUpdateTpay input[name=nombre]').val('');
+
+			})
+		}
+	});
+
+
+	/*==========================================
+			 BANCO - ANULAR
+	===========================================*/
+
+	$('#TableTpaylist').on('click', '.anular-banco', function (event) {
+		event.preventDefault();
+		var id = $(this).data('id');
+		Swal.fire({
+			title: "Confirmar",
+			type: "warning",
+			cancelButtonText: 'No',
+			confirmButtonText: 'Si',
+			showCancelButton: true,
+			confirmButtonColor: "#007AFF",
+			cancelButtonColor: "#d43f3a",
+			text: "¿Anular Tipo pago?"
+		}).then((result) => {
+			if (result.value) {
+				$.getJSON(path + 'administrador/regtipopay/deletetpay', { id }, function (json, textStatus) {
+					if (json.success) {
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se anulo correctamente.",
+							type: "success"
+						});
+						$('#TableTpaylist').DataTable().ajax.reload();
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "Ocurrio un error, vuelva a intentarlo.",
+							type: "error"
+						});
+					}
+				});
+			}
+		});
+	});
 
 
 	/*==============================================
@@ -2296,7 +2430,7 @@ $(function () {
 			{ "orderable": false },					
 			{ "orderable": false },
 			{ "orderable": false },
-			// { "orderable": false },			
+			{ "orderable": false },			
 			{ "orderable": false }
 		],
 
@@ -2354,16 +2488,18 @@ $(function () {
 		var apertura = $('select[name=apertura]').val();
 		$.getJSON(path + 'administrador/regcajacierre/datosCajaApertura', { apertura }, function (json, textStatus) {
 			if (json != null) {
-				$('input[name=totalCierre]').val(parseFloat(json.tarjeta) + parseFloat(json.efectivo) + parseFloat(json.bonos_cobrados));
+				$('input[name=totalCierre]').val(parseFloat(json.yape)+ parseFloat(json.tarjeta) + parseFloat(json.efectivo) + parseFloat(json.bonos_cobrados));
 				$('input[name=credito]').val(json.credito);
 				$('input[name=tarjeta]').val(json.tarjeta);
 				$('input[name=efectivo]').val(json.efectivo);
+				$('input[name=yape]').val(json.yape);
 				$('input[name=bonos_cobrados]').val(json.bonos_cobrados);
 			} else {
 				$('input[name=totalCierre]').val(0);
 				$('input[name=credito]').val(0);
 				$('input[name=tarjeta]').val(0);
 				$('input[name=efectivo]').val(0);
+				$('input[name=yape]').val(0);
 				$('input[name=amountmovement]').val(0);
 			}
 		});
@@ -11985,6 +12121,8 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		],
 		"initComplete": function (settings, json) {
@@ -11992,7 +12130,7 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 		}
 	});
 
-	TableReporteDetalladoVentas.column(8).visible(movilexpert == '0' ? false : true);
+	TableReporteDetalladoVentas.column(9).visible(movilexpert == '0' ? false : true);
 
 	$('#FormReporteVentasDetalladasBusqueda').validate({
 		submitHandler: function () {

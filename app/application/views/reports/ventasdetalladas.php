@@ -83,7 +83,7 @@
                 </fieldset>  
                 <br>             
                 <div class="table-responsive">
-                  <table id="TableReporteDetalladoVentas" class="table table-borderless table-striped" cellspacing="0" width="100%">
+                  <table id="TableReporteDetalladoVentas" class="table table-bordered table-striped" cellspacing="0" width="100%">
                    
                     <thead>
                       <tr class="btn-success">
@@ -94,10 +94,12 @@
 												<th style="text-align: center;">Cliente</th>
 												<th style="text-align: center;">Documento</th>
 												<th style="text-align: center;">Vendedor</th>
+                        <th style="text-align: center;">Unidad.M.</th>
 												<th style="text-align: center;">Producto</th>
                         <th style="text-align: center;">ISDN</th>
 												<th style="text-align: center;">Serie</th>
-												<th style="text-align: center;">Prec. Unid.</th> 
+                        <th style="text-align: center;">T.Pago</th>
+												<th style="text-align: center;">Prec.Unid.</th> 
 												<th style="text-align: center;">Descuento</th>
 												<th style="text-align: center;">Prec. con Desc.</th> 
 												<th class="bg-danger" tyle="text-align: center;">Cantidad</th>
@@ -106,7 +108,7 @@
                     </thead>
 											<tfoot>
 												<tr>
-													<th colspan="14" style="text-align:right">Total:</th>
+													<th colspan="16" style="text-align:right">Total:</th>
 													<th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
 												</tr>
 											</tfoot>

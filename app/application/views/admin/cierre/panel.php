@@ -98,7 +98,7 @@
                     <br>
 
                     <div>
-                      <table id="TableCierre" class="table  table-striped tblcierre tblcierree tblcierret tblcierrea" cellspacing="0" width="100%">
+                      <table id="TableCierre" class="table  table-striped tblcierre tblcierree tblcierret tblcierrey tblcierrea" cellspacing="0" width="100%">
                         <thead>
                           <tr class="bg-success text-white">
                             <th>Secuencia</th>
@@ -110,6 +110,7 @@
                             <th class="bg-danger">Egresos</th>
                             <th class="bg-primary">Efectivo</th>
                             <th class="bg-warning">Tarjeta</th>
+                            <th class="bg-purple">Yape</th>
                             <th class="bg-info">Abonado</th>
                             <th class="bg-success">Crédito</th>
                             <th class="bg-danger">Total</th>
@@ -118,15 +119,15 @@
                         </thead>
                         <tfoot>
                           <tr>
-                            <th colspan="11" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
+                            <th colspan="12" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
                             <th><strong><span id="Totalingresos"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="11" style="text-align:right"><span class="text-danger">Egresos caja:</th>
+                            <th colspan="12" style="text-align:right"><span class="text-danger">Egresos caja:</th>
                             <th><strong><span id="Totalegresos" class="label label-danger"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="11" style="text-align:right">Total en caja:</th>
+                            <th colspan="12" style="text-align:right">Total en caja:</th>
                             <th><strong><span id="Totalcaja"></span></strong></th>
                           </tr>
                         </tfoot>
@@ -300,6 +301,12 @@
                   <div class="form-group">
                     <label class="control-label">Efectivo</label>
                     <input type="text" name="efectivo" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">Yape</label>
+                    <input type="text" name="yape" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="col-md-12">

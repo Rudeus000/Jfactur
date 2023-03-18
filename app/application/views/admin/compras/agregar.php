@@ -48,6 +48,7 @@
                                           <option value="">Seleccionar</option>
                                           <option value="BOLETA ELECTRONICA">BOLETA ELECTRONICA</option>
                                           <option value="FACTURA ELECTRONICA">FACTURA ELECTRONICA</option>
+                                          <option value="ORDEN DE COMPRA">ORDEN DE COMPRA</option>
                                         </select>
                                       </div>
                                     </div>

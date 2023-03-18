@@ -75,7 +75,7 @@ class Ventas_model extends CI_Model
       $xml = '';
       $id_venta = '';
       if ($q->siglas_talonario == 'FC') {
-        $xml = '<a title="Archivo XML" class="btn btn-sm" target="_blank" href="' . base_url_app('facturacion/' . $q->rutaxml_vent . '/' . $q->archivoxml_vent . '.XML') . '"><i class="fas fa-file-excel"></i></a>&nbsp';
+        $xml = '<a title="Archivo XML" class="btn " target="_blank" href="' . base_url_app('facturacion/' . $q->rutaxml_vent . '/' . $q->archivoxml_vent . '.XML') . '"><i class="fas fa-file-excel"></i></a>&nbsp';
 
         $archivoxml = $q->archivoxml_vent;
       } else {

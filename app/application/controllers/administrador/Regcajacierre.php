@@ -81,6 +81,7 @@ class Regcajacierre extends CI_Controller
 			->select(" 
 			IFNULL(SUM(CASE WHEN cod_tipopago = 1 AND pago_vent = 'CO' THEN monto_vent END ),0) as efectivo,
 			IFNULL(SUM(CASE WHEN cod_tipopago = 2 AND pago_vent = 'CO' THEN monto_vent END ),0) as tarjeta,
+			IFNULL(SUM(CASE WHEN cod_tipopago = 3 AND pago_vent = 'CO' THEN monto_vent END ),0) as yape,
 			IFNULL(SUM(pendiente_vent),0) as credito,
 			", FALSE)
 			->where('estado_vent', 'G')
@@ -92,10 +93,12 @@ class Regcajacierre extends CI_Controller
 			$result['efectivo'] = 0;
 			$result['tarjeta'] = 0;
 			$result['credito'] = 0;
+			$result['yape'] = 0;
 		} else {
 			$result['efectivo'] = $query->row()->efectivo;
 			$result['tarjeta'] = $query->row()->tarjeta;
 			$result['credito'] = $query->row()->credito;
+			$result['yape'] = $query->row()->yape;
 		}
 
 
@@ -121,6 +124,7 @@ class Regcajacierre extends CI_Controller
 		$data['fechacierre_apertura'] = $this->input->post('fechaHora');
 		$data['efectivo_apertura'] = $this->input->post('efectivo');
 		$data['tarjeta_apertura'] = $this->input->post('tarjeta');
+		$data['yape_apertura'] = $this->input->post('yape');
 		$data['credito_apertura'] = $this->input->post('credito');
 		$data['bonos_apertura'] = $this->input->post('bonos_cobrados');
 		$data['total_apertura'] = $this->input->post('totalCierre');

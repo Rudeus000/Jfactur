@@ -147,6 +147,19 @@
            </ul>
          </li>
          <?php if ($this->session->userdata('perfil') == 1) : ?>
+
+<li>
+  <a href="javascript: void(0);"><i class="fas fa-calculator"></i><span class="float-right label bg-danger inline m-t-10">Beta</span> <span> Contabilidad </a>
+  <ul class="nav-second-level" aria-expanded="false">
+
+    <li><a href="<?php echo base_url(); ?>reportes/libroventas"><i class="ion ion-md-book"></i>Libro electronico</a></li>
+
+
+  </ul>
+</li>
+
+<?php endif ?>
+         <?php if ($this->session->userdata('perfil') == 1) : ?>
            <li>
              <a href="javascript: void(0);"><i class=" fas fa-chart-bar"></i><span> Graficos </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -212,7 +225,7 @@
                <li><a href="<?php echo base_url(); ?>administrador/serie_almacen"><i class="ion ion-md-cube"></i>Serie almacén</a></li>
                <li><a href="<?php echo base_url(); ?>administrador/regtarjeta"><i class="fab fa-cc-visa"></i>Tarjetas</a></li>
                <li><a href="<?php echo base_url(); ?>administrador/regbanco"><i class="fas fa-clipboard-list"></i>Banco</a></li>
-
+               <li><a href="<?php echo base_url(); ?>administrador/regtipopay"><i class="fab fa-amazon-pay"></i>Tipo pago</a></li>
                <li><a href="<?php echo base_url(); ?>administrador/regnuevo"><i class="ion ion-ios-create"></i>Editor wysiwyg</a></li>
 
              </ul>
