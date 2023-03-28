@@ -55,7 +55,7 @@ class Banco_model extends CI_Model
 		$botones .= '&nbsp;&nbsp;&nbsp;<button data-id="'.$q->cod_ban.'" class="anular-banco btn btn-sm btn-pink" title="Anular cuenta"> <i class="far fa-trash-alt"></i></button>';
 
         
-			$row[] = [$q->cod_ban,$q->nomb_ban,$estado,$botones];
+			$row[] = [$q->cod_ban,$q->moneda_ban,$q->tipo_cuenta_ban,$q->nomb_ban, $q->nomb_titular_ban,$q->nro_cuenta_ban,$q->cci_cuenta_ban,$q->id_entidad_financiera,$estado,$botones];
 		}
 		$result['aaData'] = $row;
 		return $result;

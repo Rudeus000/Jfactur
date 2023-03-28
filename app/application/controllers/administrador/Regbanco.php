@@ -22,6 +22,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
      public function index()
          {
+            $data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros',['nom_paramt'=>'DOLAR']);
+            $data['entidad'] = $this->modelgeneral->getTable('sunat_codigoentidadfinanciera');
             $data['permisos'] =$this->permisos;
             $data['tipo'] = $this->modelgeneral->getTable('tipo_cuenta');
             $this->load->view('layouts/header');
@@ -56,10 +58,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
        function agregarBanco()
        {
 
-         $this->form_validation->set_rules('nombre','','required'); 
+         $this->form_validation->set_rules('name_ban','','required'); 
          if($this->form_validation->run() == TRUE){
             
-             $data['nomb_ban'] = $this->input->post('nombre');            
+            $data['moneda_ban'] = $this->input->post('moneda');
+            $data['tipo_cuenta_ban'] = $this->input->post('type_account'); 
+            $data['nomb_ban'] = $this->input->post('name_ban'); 
+            $data['nomb_titular_ban'] = $this->input->post('card_name_ban'); 
+            $data['nro_cuenta_ban'] = $this->input->post('account_number'); 
+            $data['cci_cuenta_ban'] = $this->input->post('cci_number'); 
+            $data['id_entidad_financiera'] = $this->input->post('ent_name');           
              $data['est_ban']=  1;
              $insert = $this->modelgeneral->insertRegist('tb_banco',$data);
              $resp =[];
@@ -67,7 +75,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             
                  $resp['success'] = true;
              }else{
-                 $resp['success'] = false;
+                $resp['success'] = false;
+                //  echo var_dump($resp);
              }
             echo json_encode($resp);
           

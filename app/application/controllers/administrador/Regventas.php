@@ -104,6 +104,9 @@ class Regventas extends CI_Controller {
 
 	public function agregar()
 	{
+		$data['cod_medio_pay'] = $this->modelgeneral->getTable('sunat_mediosdepago');
+		$data['cod_bien'] = $this->modelgeneral->getTable('sunat_codigodetraccion');
+		$data['banco'] = $this->modelgeneral->getTableWhere('tb_banco',['id_entidad_financiera'=>18]);
 		$data['busqueda_general'] = urlencode(json_encode($_GET));
 		$data['tipos_pagos'] = $this->modelgeneral->getTableWhere('tb_tipo_pago',['estado_tipopago'=>1]);
 		$data['tipos_tarjetas'] = $this->modelgeneral->getTableWhere('tb_tarjeta',['estado_tarj'=>1]);

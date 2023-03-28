@@ -1197,7 +1197,7 @@ $(function () {
 				if (json.success) {
 					$('#TableMantenimientoCaja').DataTable().ajax.reload();
 					$('#FormCaja input[name=descripcion]').val('');
-					$('#FormCaja select[name=estadoventa]').select2('val', '');
+					// $('#FormCaja select[name=estadoventa]').select2('val', '');
 
 
 
@@ -1772,6 +1772,12 @@ $(function () {
 			}
 		},
 		"columns": [
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },

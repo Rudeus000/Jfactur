@@ -15,10 +15,11 @@
                     <div class="container-fluid">
 
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div class="profile-bg-picture" style="background-image:url('<?= base_url_app() ?>assets/images/portada/fondo.jpg')">
-                                    <span class="picture-bg-overlay"></span><!-- overlay -->
-                                </div>
+                            <div class="col-lg-12">
+                            <div class="embed-responsive  profile-bg-picture ">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/OHudD0tD_4s?autoplay=1&mute=1&start=10" frameborder="0" allowfullscreen></iframe>
+        </div>
+                              
                                 <!-- meta -->
                                 <div class="profile-user-box">
                                     <div class="row">
