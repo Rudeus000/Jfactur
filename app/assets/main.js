@@ -7045,9 +7045,9 @@ $(function () {
 
 
 
-	/*==================================
-	=            VENTAS            =
-	==================================*/
+	/* ========================================================================== */
+	/*                                MODULO VENTA                                */
+	/* ========================================================================== */
 	var TableVentas = $('#TableVentas').DataTable({
 		"language": {
 			"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
@@ -8076,6 +8076,8 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 		$('input[name=total]').val(round(total, 2));
 		$('input[name=montoRecibido]').val(round(total, 2));
 
+		calcularMontoDetraccion();
+
 	}
 
 	function calcularDescuento() {
@@ -8437,7 +8439,36 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 		calcularVueltoProductoVenta();
 	});
 
-	/*=====  End of VENTAS  ======*/
+		/* ======================== FUNCIONALIDAD DETRACCIÓN ================= */
+		$('#detraccion-check').change(function () {
+			if (this.checked) {
+				$('#content-detalles-detraccion').show();
+			} else {
+				$('#content-detalles-detraccion').hide();
+			}
+		});
+
+		$('select[name=detraccion_bien]').change(function(){
+			calcularMontoDetraccion();
+		})
+		
+		function calcularMontoDetraccion()
+		{
+			let porcentaje = parseFloat($('select[name=detraccion_bien]').find(':selected').data('porcentaje'))
+			$('input[name=detraccion_porcentaje]').val(porcentaje);
+			let total = parseFloat($('input[name=total]').val());
+			if(total != NaN && total > 0){
+				let detraccion_monto = total * (porcentaje/100);
+				detraccion_monto = round(detraccion_monto,2)
+				$('input[name=detraccion_monto]').val(detraccion_monto);
+			}
+			
+		}
+		/* ==================== END FUNCIONALIDAD DETRACCIÓN ================= */
+
+	/* ========================================================================== */
+	/*                              END MODULO VENTA                              */
+	/* ========================================================================== */
 
 
 	/*===================================

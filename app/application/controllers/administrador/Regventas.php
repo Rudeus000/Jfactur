@@ -464,6 +464,17 @@ class Regventas extends CI_Controller {
 		if(isset($_POST['observacion'])){
 			$data['observacion_vent'] = $this->input->post('observacion');
 		}
+
+		//DETRACCION
+		if($this->input->post('detraccion-check')=='on'){
+			$data['detraccion_id_mediopago'] = $this->input->post('detraccion_medio_pago');
+			$data['detraccion_cuenta'] = $this->input->post('detraccion_cuenta');
+			$data['detraccion_iddetraccion'] = $this->input->post('detraccion_bien');
+			$data['detraccion_porcentaje'] = $this->input->post('detraccion_porcentaje');
+			$data['detraccion_monto'] = $this->input->post('detraccion_monto');
+			$data['detraccion_texto'] = $this->input->post('detraccion_informacion');
+		}
+
 		$insert = $this->modelgeneral->insertRegist('tb_venta',$data);
 
 		$venta = $this->db->from('tb_venta')
@@ -781,7 +792,9 @@ class Regventas extends CI_Controller {
 			if($flg_continuar==1){				
 				$resp['success'] = true;
 				$resp['id'] = $insert;
-				$resp['printType'] = $printType[0]->type_formt;
+				
+				//$resp['printType'] = $printType[0]->type_formt;
+				$resp['printType'] = 'T';
 				if ($talonario->siglas_talonario=='FC') {
 					$resp['xml'] = $this->xmlHash($insert);
 				}else{
@@ -1199,17 +1212,35 @@ class Regventas extends CI_Controller {
 	public function xmlHash($id, $firmar = NULL)
 	{
 		$res = $this->ventas_model->getVenta($id);
+		//var_dump($res);
+		//exit();
 		
 		// RUTA para enviar documentos: Tu puedes definir tu propia ruta, en nustro caso la tenemos en la siguiente dirección
 		$ruta = base_url_app()."/facturacion/api_facturacion/factura_xml.php";
  
 		//se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
 		$tipo_proceso = getTipoProceso();
+
+		$detraccion = array();
+		$detraccion['activo'] = false;
+
+		if($res->codsunat_tipdocu == '01' AND $res->detraccion_id_mediopago!='' AND $res->detraccion_cuenta!='' AND $res->detraccion_iddetraccion!=''){
+			$detraccion['activo'] = true;
+			$detraccion['id_mediopago'] = $res->detraccion_id_mediopago;
+			$detraccion['cuenta'] = $res->detraccion_cuenta;
+			$detraccion['iddetraccion'] = $res->detraccion_iddetraccion;
+			$detraccion['porcentaje'] = $res->detraccion_porcentaje;
+			$detraccion['monto'] = $res->detraccion_monto;
+			$detraccion['texto'] = $res->detraccion_texto;
+		}
+
 		$data = array(
 
+			//DETRACION
+			"detraccion" => $detraccion,
 			//Cabecera del documento
 			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
-			"tipo_operacion"				=> "0101", //Venta interna pag 28
+			"tipo_operacion"				=> $detraccion['activo']==true?"1001":"0101", //Venta interna pag 28
 			//"total_gravadas"               	=> strval($res->subtotal_vent),
 			"total_inafecta"                => "0",
 			//"total_exoneradas"				=> "0",
@@ -1327,7 +1358,7 @@ class Regventas extends CI_Controller {
 			->set('archivoxml_vent',$response['archivo'])
 			->set('hash_vent',$response['hash_cpe'])
 			->update('tb_venta');
-				if($empresa->enviar_factura_emp==1){
+				if($empresa->enviar_factura_emp==999){
 					$response['factura_enviada'] = true;
 					if($data['cod_tipo_documento']=='01'){
 						for ($i=0; $i < reintentos(); $i++) {

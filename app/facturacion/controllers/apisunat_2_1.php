@@ -8,11 +8,31 @@ class Apisunat {
         //$doc->encoding = 'ISO-8859-1';
 		$doc->encoding = 'utf-8';
 
+        if ($cabecera['DETRACCION']['activo'] == TRUE) {
+
+            $detraccion = '
+            <cac:PaymentMeans>
+                <cbc:ID>Detraccion</cbc:ID>
+                <cbc:PaymentMeansCode>'. $cabecera['DETRACCION']['id_mediopago'] .'</cbc:PaymentMeansCode>
+                <cac:PayeeFinancialAccount>
+                <cbc:ID>'. $cabecera['DETRACCION']['cuenta'] .'</cbc:ID>
+            </cac:PayeeFinancialAccount>
+            </cac:PaymentMeans>
+                <cac:PaymentTerms>
+                <cbc:ID>Detraccion</cbc:ID>
+                <cbc:PaymentMeansID>'. $cabecera['DETRACCION']['iddetraccion'] .'</cbc:PaymentMeansID>
+                <cbc:PaymentPercent>'. (float)$cabecera['DETRACCION']['porcentaje'] .'</cbc:PaymentPercent>
+                <cbc:Amount currencyID="PEN">'. $cabecera['DETRACCION']['monto'] .'</cbc:Amount>
+            </cac:PaymentTerms>';
+        }
+            
+
         if(is_null($cabecera['CUOTAS'])){
-            $formaPago = '<cac:PaymentTerms>
-            <cbc:ID>FormaPago</cbc:ID>
-            <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
-          </cac:PaymentTerms>';
+            $formaPago = '
+            <cac:PaymentTerms>
+                <cbc:ID>FormaPago</cbc:ID>
+                <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
+            </cac:PaymentTerms>';
         }else{
             $formaPago = '<cac:PaymentTerms>
                             <cbc:ID>FormaPago</cbc:ID>
@@ -44,11 +64,19 @@ class Apisunat {
 	<cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
 	<cbc:IssueTime>00:00:00</cbc:IssueTime>
 	<cbc:DueDate>' . $cabecera["FECHA_VTO"] . '</cbc:DueDate>
-	<cbc:InvoiceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Documento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01" listID="0101" name="Tipo de Operacion" listSchemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">' . $cabecera["COD_TIPO_DOCUMENTO"] . '</cbc:InvoiceTypeCode>';
+	<cbc:InvoiceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Documento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01" listID="'.$cabecera["TIPO_OPERACION"].'" name="Tipo de Operacion" listSchemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">' . $cabecera["COD_TIPO_DOCUMENTO"] . '</cbc:InvoiceTypeCode>';
 	if ($cabecera["TOTAL_LETRAS"] <> "") {
             $xmlCPE = $xmlCPE .
                 '<cbc:Note languageLocaleID="1000">' . $cabecera["TOTAL_LETRAS"] . '</cbc:Note>';
         }
+
+        if($cabecera['DETRACCION']['activo'] == TRUE){
+            $xmlCPE = $xmlCPE .
+                '<cbc:Note languageLocaleID="2006">
+                <![CDATA[Operación sujeta a detracción]]>
+            </cbc:Note>';
+        }
+
         $xmlCPE = $xmlCPE .
                 '<cbc:DocumentCurrencyCode listID="ISO 4217 Alpha" listName="Currency" listAgencyName="United Nations Economic Commission for Europe">' . $cabecera["COD_MONEDA"] . '</cbc:DocumentCurrencyCode>
             <cbc:LineCountNumeric>' . count($detalle) . '</cbc:LineCountNumeric>';
@@ -151,7 +179,7 @@ class Apisunat {
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingCustomerParty>
-	'.$formaPago.'
+	'. $detraccion . $formaPago .'
 	
 	<cac:TaxTotal>
 		<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>

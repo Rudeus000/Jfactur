@@ -259,6 +259,15 @@
                                     <div style="display:none" class="alert alert-danger cuotas-error" role="alert"></div>
                                   </div>
                                 </div>
+                                <div class="row">
+                                  <div class="col-md-4">
+                                    <!-- <div class="switchery-demo"> -->
+                                    <!-- <input type="checkbox" class="custom-control-input" > -->
+                                    <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
+                                    <label for="detraccion-check">Detracción</label>
+                                    <!-- </div> -->
+                                  </div>
+                                </div>
                               </fieldset>
                               <!-- End #wizard-vertical -->
                             </div>
@@ -274,20 +283,21 @@
                   <fieldset>
                     <legend>Agregar Producto</legend>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="servicioCheck" name="servicioCheck" />
                         <label for="servicioCheck">Servicio/producto</label>
                         <!-- </div> -->
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck" />
                         <label for="servicioChecked">Observaciones</label>
                         <!-- </div> -->
                       </div>
+                     
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -491,16 +501,16 @@
                           <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                         </div>
                       </div>
-                      <div class="col-md-12">
+                      <div id="content-detalles-detraccion" class="col-md-12">
                         <fieldset class="scheduler-border">
                           <legend class="scheduler-border">Detalles de detraccion</legend>
                           <div class="row">
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="control-label">Cuenta de banco de la nacion:</label>
-                                <select name="cod_bien" class="form-control select2">
+                                <select name="detraccion_cuenta" class="form-control select2">
                                   <?php foreach ($banco as $b) : ?>
-                                    <option value="<?= $b->cod_ban ?>"><?= $b->nro_cuenta_ban, " - ", $b->nomb_ban ?></option>
+                                    <option value="<?= $b->nro_cuenta_ban ?>"><?= $b->nro_cuenta_ban, " - ", $b->nomb_ban ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>
@@ -508,9 +518,9 @@
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="control-label">Codigo del bien: </label>
-                                <select name="cod_bien" class="form-control select2">
+                                <select name="detraccion_bien" class="form-control select2">
                                   <?php foreach ($cod_bien as $e) : ?>
-                                    <option value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
+                                    <option data-porcentaje="<?= $e->porcentaje?>" value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>
@@ -518,7 +528,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="control-label">Medio de pago: </label>
-                                <select name="cod_bien" class="form-control select2">
+                                <select name="detraccion_medio_pago" class="form-control select2">
                                   <?php foreach ($cod_medio_pay as $pay) : ?>
                                     <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->descripcion ?></option>
                                   <?php endforeach ?>
@@ -526,15 +536,12 @@
                               </div>
                             </div>
                             <div class="col-md-1">
-                              <label class="control-label">Porsentaje: </label>
-
+                              <label class="control-label">Porcentaje: </label>
                               <div class="input-group">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
                                 </div>
-
-                                <input type="text" class="form-control" value="0" disabled>
-
+                                <input type="text" name="detraccion_porcentaje" class="form-control" value="0" readonly>
                               </div>
                             </div>
                             <div class="col-md-2">
@@ -543,13 +550,13 @@
                                 <div class="input-group-append">
                                   <span class="input-group-text">S/.</span>
                                 </div>
-                                <input type="text" name="operacion" class="form-control" value="0.00" disabled>
+                                <input type="text" name="detraccion_monto" class="form-control" value="0.00" readonly>
                               </div>
                             </div>
                             <div class="col-md-12"  id="observacion-a">
                         <div class="form-group">
                           <label for="exampleFormControlTextarea1">Informacion</label>
-                          <input class="form-control" id="exampleFormControlTextarea1" name="informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
+                          <input class="form-control" id="exampleFormControlTextarea1" name="detraccion_informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
                         </div>
                       </div>
                             <div class="form-group col-md-12">
