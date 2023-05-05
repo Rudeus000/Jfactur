@@ -477,6 +477,14 @@ class Regventas extends CI_Controller {
 
 		$insert = $this->modelgeneral->insertRegist('tb_venta',$data);
 
+		if (is_null($insert)) {
+			header('content-type: application/json; charset=utf-8');
+			$resp = [];
+			$resp['success'] = false;
+			echo json_encode($resp);
+			exit();
+		}
+
 		$venta = $this->db->from('tb_venta')
 							->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario')
 							->join('tb_tipodocumento','tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
