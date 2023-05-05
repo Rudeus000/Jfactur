@@ -501,7 +501,7 @@
                           <textarea class="form-control" id="exampleFormControlTextarea1" name="observacion" rows="3"></textarea>
                         </div>
                       </div>
-                      <div id="content-detalles-detraccion" class="col-md-12">
+                      <div id="content-detalles-detraccion" class="col-md-12" style="display:none">
                         <fieldset class="scheduler-border">
                           <legend class="scheduler-border">Detalles de detraccion</legend>
                           <div class="row">
