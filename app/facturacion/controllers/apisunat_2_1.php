@@ -72,9 +72,7 @@ class Apisunat {
 
         if($cabecera['DETRACCION']['activo'] == TRUE){
             $xmlCPE = $xmlCPE .
-                '<cbc:Note languageLocaleID="2006">
-                <![CDATA[Operación sujeta a detracción]]>
-            </cbc:Note>';
+                '<cbc:Note languageLocaleID="2006"><![CDATA[Operación Sujeta a Detracción]]></cbc:Note>';
         }
 
         $xmlCPE = $xmlCPE .

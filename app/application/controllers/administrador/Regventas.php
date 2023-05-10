@@ -1366,7 +1366,7 @@ class Regventas extends CI_Controller {
 			->set('archivoxml_vent',$response['archivo'])
 			->set('hash_vent',$response['hash_cpe'])
 			->update('tb_venta');
-				if($empresa->enviar_factura_emp==999){
+				if($empresa->enviar_factura_emp==1){
 					$response['factura_enviada'] = true;
 					if($data['cod_tipo_documento']=='01'){
 						for ($i=0; $i < reintentos(); $i++) {

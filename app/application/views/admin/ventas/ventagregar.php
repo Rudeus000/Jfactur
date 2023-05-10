@@ -110,13 +110,15 @@
                               <fieldset>
                                 <legend>Cliente</legend>
                                 <div class="row">
-                                  <div class="col-md-2">
+                                
+                                  <!-- <div class="col-md-2">
                                     <label class="control-label" style="display: block"></label><br>
                                     <!-- <div class="btn-group"> -->
-                                    <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
-                                    <button id="VentaEditarCliente" type="button" class="btn btn-rounded btn-warning waves-effect "><i class="fas fa-user-edit m-r-5"></i>Editar</button>
+                                      
+                                    <!-- <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
+                                    <button id="VentaEditarCliente" type="button" class="btn btn-rounded btn-warning waves-effect "><i class="fas fa-user-edit m-r-5"></i>Editar</button> -->
                                     <!-- </div> -->
-                                  </div>
+                                  <!-- </div> --> 
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <label class="control-label">RUC/DNI</label>
@@ -125,9 +127,15 @@
                                   </div>
                                   <div class="col-md-3">
                                     <div class="form-group">
-                                      <label class="control-label">Cliente</label>
-                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>">
+                                      <label class="control-label">Cliente</label>                                      
+                                    <div class="input-group">
+                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" style="width: 265px;" class="form-control"  disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>" >
+                                      <div class="input-group-append">
+                                        <button data-toggle="modal" data-target="#ModalAgregarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-astronaut"></i> </button>
+                                        <button id="VentaEditarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-edit"></i> </button>
+                                      </div>
                                     </div>
+                                  </div>
                                   </div>
                                   <div class="col-md-2">
                                     <div class="form-group">
@@ -140,8 +148,14 @@
                                       <label class="control-label">Dirección</label>
                                       <input type="text" id="DireccionCliente" class="form-control" readonly value="<?= !is_null($cliente) ? $cliente->direccion : '' ?>">
                                     </div>
-                                  </div>
+                                  </div> 
+                                  <div class="col-md-2">
+                                    <div class="form-group">
+                                      <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-danger waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>
+                                    </div>
+                                  </div>                                 
                                 </div>
+                                
                               </fieldset>
 
                               <fieldset>
@@ -183,12 +197,7 @@
                                       <label class="control-label">Monto</label>
                                       <input type="text" name="monto" class="form-control" value="0" required readonly>
                                     </div>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <div class="form-group">
-                                      <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-rounded btn-pink waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>
-                                    </div>
-                                  </div>
+                                  </div>                                  
                                   <div id="pagocredito" class="col-md-2" style="display: none">
                                     <div class="form-group">
                                       <label class="control-label">Dias / Cuotas</label>
@@ -259,15 +268,7 @@
                                     <div style="display:none" class="alert alert-danger cuotas-error" role="alert"></div>
                                   </div>
                                 </div>
-                                <div class="row">
-                                  <div class="col-md-4">
-                                    <!-- <div class="switchery-demo"> -->
-                                    <!-- <input type="checkbox" class="custom-control-input" > -->
-                                    <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
-                                    <label for="detraccion-check">Detracción</label>
-                                    <!-- </div> -->
-                                  </div>
-                                </div>
+
                               </fieldset>
                               <!-- End #wizard-vertical -->
                             </div>
@@ -297,7 +298,17 @@
                         <label for="servicioChecked">Observaciones</label>
                         <!-- </div> -->
                       </div>
-                     
+
+
+                      <div class="col-md-4">
+                        <!-- <div class="switchery-demo"> -->
+                        <!-- <input type="checkbox" class="custom-control-input" > -->
+                        <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
+                        <label for="detraccion-check">Detracción</label>
+                        <!-- </div> -->
+                      </div>
+
+
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -351,7 +362,7 @@
                             <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto" readonly>
                             <label class="custom-control-label" for="serieChek">Series</label>
                           </div>
-                          <select id="select2-series" class="form-control selct2" name="seriesProducto[]" multiple="multiple" disabled>
+                          <select id="select2-series" class="form-control selct2" name="seriesProducto[]" multiple="multiple" style="margin-top: 6px" disabled>
                           </select>
                         </div>
                       </div>
@@ -520,7 +531,7 @@
                                 <label class="control-label">Codigo del bien: </label>
                                 <select name="detraccion_bien" class="form-control select2">
                                   <?php foreach ($cod_bien as $e) : ?>
-                                    <option data-porcentaje="<?= $e->porcentaje?>" value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
+                                    <option data-porcentaje="<?= $e->porcentaje ?>" value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>
@@ -553,12 +564,12 @@
                                 <input type="text" name="detraccion_monto" class="form-control" value="0.00" readonly>
                               </div>
                             </div>
-                            <div class="col-md-12"  id="observacion-a">
-                        <div class="form-group">
-                          <label for="exampleFormControlTextarea1">Informacion</label>
-                          <input class="form-control" id="exampleFormControlTextarea1" name="detraccion_informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
-                        </div>
-                      </div>
+                            <div class="col-md-12" id="observacion-a">
+                              <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Informacion</label>
+                                <input class="form-control" id="exampleFormControlTextarea1" name="detraccion_informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
+                              </div>
+                            </div>
                             <div class="form-group col-md-12">
                               <div class="text-info text-size-small"><i class="fa fa-info text-info hover-q font-italic"> </i> <em>&nbsp;Operacion Sujeta a Detracción: Debe existir al menos un artículo sujeto a detracción. Si existe más de uno, el facturador tomara el mayor porcentaje por una interpretación conservadora Resolución 183-204 SUNAT/15.08.2004.</em></div>
                             </div>
@@ -750,9 +761,9 @@
                         <div class="form-group">
                           <label class="control-label">Ruc|Dni:</label>
                           <div class="input-group">
-                            <input type="text" id="txt_documento" name="documento" class="form-control" maxlength="11" minlength="8" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
+                            <input type="text" id="txt_documento" name="documento" class="form-control input-number" maxlength="11" minlength="8">
                             <div class="input-group-append">
-                              <button class="btn btn-info waves-effect waves-light" id="scan" type="button" onclick="buscar();">RENIEC-SUNAT
+                              <button class="btn btn-info" id="scan" type="button" onclick="buscar();">RENIEC-SUNAT
                                 <i class="fa fa-search"></i>
                               </button>
                             </div>
@@ -763,7 +774,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="control-label">Nombre o Razon Social</label>
-                          <input type="text" id="txt_nombre" name="nombre" class="form-control">
+                          <input type="text" id="txt_nombre" name="nombre" class="form-control  text-uppercase">
                         </div>
                       </div>
                       <div class="col-md-12">
@@ -963,5 +974,8 @@
       }
     }
 
+  });
+  $('.input-number').on('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
   });
 </script>

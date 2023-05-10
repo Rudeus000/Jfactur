@@ -5251,6 +5251,7 @@ $(function () {
 				data: compras
 			})
 				.done(function (resp) {
+					$('#ComprasContenedorGuardar').find('button:submit').prop('disabled', true).html('Procesando');
 
 					if (resp.success) {
 						Swal.fire({

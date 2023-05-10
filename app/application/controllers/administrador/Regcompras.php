@@ -67,6 +67,7 @@ class Regcompras extends CI_Controller {
 		$result = $this->db->from('tb_proveedor')
 		->select('tb_proveedor_id as id,tb_proveedor_nom as nombre,tb_proveedor_doc as ruc')
 		->like('tb_proveedor_nom',$q)
+		->where('tb_proveedor_xac',1)
 		->get()->result();
 
 		echo json_encode($result);

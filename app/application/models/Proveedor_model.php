@@ -55,16 +55,16 @@ function getProveedor($data)
 				$estado = '<label class="label label-danger">Inactivo</label>';
 		}
 
-      
+      $tb_proveedor_tip="";
 
 		$botones = '<div class="btn-footer text-center">
 		<a data-id="'.$q->tb_proveedor_id.'" class="editar-proveedor on-default edit-row hidden" 
 		data-toggle="modal" data-target="#ModalEditarProveedor" data-placement="top" title data-original-title="Edit"><i style="color:#4285F4;" class="fas fa-pencil-alt"></i></a>';                                      
 		$botones .= '&nbsp;&nbsp;&nbsp;<a data-id="'.$q->tb_proveedor_id.'" class="anular-proveedor on-default remove-row"><i style="color:#ff4444;"class="far fa-trash-alt"></i></a>';
 
-         if ($q->tb_proveedor_tip=='1') {
+         if ($q->tb_proveedor_tip=='2') {
 				$tb_proveedor_tip = '<label class="label label-purple">Ruc</label>';
-		}elseif($q->tb_proveedor_tip=='2'){
+		}elseif($q->tb_proveedor_tip=='4'){
 				$tb_proveedor_tip = '<label class="label label-danger">Dni</label>';
 		}
 		
