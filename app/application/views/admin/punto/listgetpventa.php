@@ -410,7 +410,7 @@
 
 
 
-<div id="ModalEditarPventa" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
+<div id="ModalEditarPventa" class="modal bs-example-modal-center" tabindex="" role="dialog" aria-labelledby="mySmallModalLabel"  style="display: none;" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
     <form id="FormEditarPventa" action="<?= base_url('administrador/regpventa/editPventa') ?>" method="post" autocomplete="off">
@@ -430,7 +430,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label class="control-label">Almacen:<span class="text-danger"> *</span></label>
-              <select class="form-control select" name="almacen" >
+              <select class="form-control select2" name="almacen" >
 
                <?php foreach ($almacen as $a): ?>
                 <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
@@ -443,7 +443,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label class="control-label">Caja:<span class="text-danger"> *</span></label>
-            <select class="form-control select" name="caja" >
+            <select class="form-control select2" name="caja" >
 
              <?php foreach ($caja as $c): ?>
               <option value="<?= $c->cod_caja ?>"><?= $c->nomb_caja ?></option>
@@ -455,7 +455,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <label class="control-label">Impresora:<span class="text-danger"> *</span></label>
-          <select class="form-control select" name="impresora" >
+          <select class="form-control select2" name="impresora" >
 
            <?php foreach ($impresora as $i): ?>
             <option value="<?= $i->cod_impresora ?>"><?= $i->nom_impresora ?></option>
@@ -466,7 +466,7 @@
     <div class="col-md-4">
       <div class="form-group">
         <label class="control-label">Sede:<span class="text-danger"> *</span></label>
-        <select class="form-control select" name="sede" >
+        <select class="form-control select2" name="sede" >
 
          <?php foreach ($sede as $s): ?>
             <option value="<?= $s->cod_sede ?>"><?= $s->sede_nombre ?></option>
@@ -513,13 +513,13 @@
     <div class="col-md-6">
       <div class="form-group">
         <label class="control-label">Comp. Elect. por defecto</label>
-        <select name="comp_elect_defecto" class="form-control"></select>
+        <select name="comp_elect_defecto" class="form-control select2"></select>
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label class="control-label">Cliente por defecto</label>
-        <select name="cliente_defecto" class="form-control"></select>
+        <select name="cliente_defecto" class="form-control select2"></select>
       </div>
     </div>
 </div> 

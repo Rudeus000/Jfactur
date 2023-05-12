@@ -146,7 +146,7 @@ class Ventas_model extends CI_Model
   function getTiposVentas()
   {
     return $this->db->from('tb_talonario')
-      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario')
+      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario,doccliex_talonario,docclipass_talonario')
       ->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
       ->join('tb_usuario_documento', 'tb_tipodocumento.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND cod_usu = ' . $this->session->userdata('cod_usu'))
       ->where('cod_puntoventa', $this->session->userdata('puntoventa'))
@@ -268,7 +268,7 @@ class Ventas_model extends CI_Model
   function getDocumentosCliente()
   {
     return $this->db->from('tb_tipodocumentocliente')
-      ->where_in('codsunat_tipdocucli', ['1', '6'])
+      ->where_in('codsunat_tipdocucli', ['1', '6','4','7'])
       ->get()
       ->result();
   }

@@ -158,6 +158,8 @@ class Regventas extends CI_Controller {
 		$q = $this->input->get('q');
 		$dni = $this->input->get('dni');
 		$ruc = $this->input->get('ruc');
+		$ex = $this->input->get('ex');
+		$pass = $this->input->get('pass');
 
 		$array = [];
 		if ($dni=='1') {
@@ -165,6 +167,12 @@ class Regventas extends CI_Controller {
 		}
 		if ($ruc=='1') {
 			$array[] = 6;
+		}
+		if ($ex=='1') {
+			$array[] = 4;
+		}
+		if ($pass=='1') {
+			$array[] = 7;
 		}
 		$this->db->from('tb_cliente');
 		$this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as ruc, direc_cliente as direccion, precio_cliente');

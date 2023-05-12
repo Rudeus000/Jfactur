@@ -103,6 +103,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
          if($this->form_validation->run() == TRUE){
 
              $data['nomb_ban'] = $this->input->post('nombre');
+             $data['moneda_ban'] = $this->input->post('moneda');
+            $data['tipo_cuenta_ban'] = $this->input->post('type_account');            
+            $data['nomb_titular_ban'] = $this->input->post('card_name_ban'); 
+            $data['nro_cuenta_ban'] = $this->input->post('account_number'); 
+            $data['cci_cuenta_ban'] = $this->input->post('cci_number'); 
+            $data['id_entidad_financiera'] = $this->input->post('ent_name');
+
              $where['cod_ban'] = $this->input->post('id');
              $edit = $this->modelgeneral->editRegist('tb_banco',$where,$data);
              $resp =[];

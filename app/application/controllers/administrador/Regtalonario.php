@@ -81,6 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
              $data['fecha_modificacion'] = date("Y-m-d H:i:s");
              $data['est_talonario']=  1;
              $data['siglas_talonario']=  $this->input->post('siglas');
+          
              if($this->input->post('doccli_dni')=='on'){
                 $data['docclidni_talonario']=  '1';
              }else{
@@ -91,6 +92,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
              }else{
                 $data['doccliruc_talonario']=  '0';
              }
+             if($this->input->post('doccli_pass')=='on'){
+               $data['docclipass_talonario']=  '1';
+            }else{
+               $data['docclipass_talonario']=  '0';
+            }
+             if($this->input->post('doccli_ex')=='on'){
+               $data['doccliex_talonario']=  '1';
+            }else{
+               $data['doccliex_talonario']=  '0';
+            }
              $insert = $this->modelgeneral->insertRegist('tb_talonario',$data);
              $resp =[];
              if(!is_null($insert)){
@@ -149,6 +160,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
              }else{
                 $data['doccliruc_talonario']=  '0';
              }
+             if($this->input->post('doccli_pass')=='on'){
+               $data['docclipass_talonario']=  '1';
+            }else{
+               $data['docclipass_talonario']=  '0';
+            }
+             if($this->input->post('doccli_ex')=='on'){
+               $data['doccliex_talonario']=  '1';
+            }else{
+               $data['doccliex_talonario']=  '0';
+            }
              $where['cod_talonario'] = $this->input->post('id');
              $edit = $this->modelgeneral->editRegist('tb_talonario',$where,$data);
              $resp =[];

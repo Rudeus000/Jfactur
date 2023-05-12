@@ -71,7 +71,7 @@
                                       <select name="tipoPedido" class="form-control select2 select2-hidden-accessible input-sm">
                                         <option value="">Seleccion</option>
                                         <?php foreach ($tipos as $t) : ?>
-                                          <option value="<?= $t->cod_talonario ?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" <?= $punto->talonario_defecto == $t->cod_talonario ? 'selected' : '' ?>><?= $t->nom_tipdocumento . ' - ' . $t->serie ?></option>
+                                          <option value="<?= $t->cod_talonario ?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" data-ex="<?= $t->doccliex_talonario ?>" data-pass="<?= $t->docclipass_talonario ?>" <?= $punto->talonario_defecto == $t->cod_talonario ? 'selected' : '' ?>><?= $t->nom_tipdocumento . ' - ' . $t->serie ?></option>
                                         <?php endforeach ?>
                                       </select>
                                     </div>
@@ -699,7 +699,7 @@
 </div>
 
 
-<div class="modal" id="ModalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarCliente" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="card-header bg-primary">
       <h3 class="my-0 text-white">Agregar cliente</h3>
@@ -759,11 +759,11 @@
 
                       <div class="col-md-8">
                         <div class="form-group">
-                          <label class="control-label">Ruc|Dni:</label>
+                          <label class="control-label" id="txtdocu">Ruc|Dni:</label>
                           <div class="input-group">
-                            <input type="text" id="txt_documento" name="documento" class="form-control input-number" maxlength="11" minlength="8">
+                            <input type="text" id="txt_documento" name="documento" class="form-control">
                             <div class="input-group-append">
-                              <button class="btn btn-info" id="scan" type="button" onclick="buscar();">RENIEC-SUNAT
+                              <button class="btn btn-info" id="scan" type="button" onclick="buscar();">
                                 <i class="fa fa-search"></i>
                               </button>
                             </div>
@@ -975,7 +975,63 @@
     }
 
   });
-  $('.input-number').on('input', function() {
-    this.value = this.value.replace(/[^0-9]/g, '');
-  });
+
+var tipo_documento = document.getElementById("tipo_documento");
+var txt_documento = document.getElementById("txt_documento");
+var scan = document.getElementById("scan");
+var txtdocu = document.getElementById("txtdocu");
+
+tipo_documento.addEventListener("change", function() {
+  var selectedValue = tipo_documento.value;
+  txt_documento.value = ''; // Limpiar el valor del input al cambiar la opción
+  
+  txt_documento.removeEventListener("input", validarDni);
+  txt_documento.removeEventListener("input", validarRuc);
+  
+  if (selectedValue === "2") {    
+    txtdocu.textContent = "Ingrese DNI";
+    scan.style.display="block";
+    txt_documento.addEventListener("input", validarDni);
+    scan.textContent = "RENIEC";
+
+  }if (selectedValue === "4") {
+    txtdocu.textContent = "Ingrese RUC";
+    scan.style.display="block"
+    txt_documento.addEventListener("input", validarRuc);
+    scan.textContent = "SUNAT";
+
+  }if (selectedValue === "3") {
+    txtdocu.textContent = "Ingrese Carnet Ex.";
+    txt_documento.addEventListener("input", validarOthers);
+    scan.style.display = "none";
+  }if(selectedValue === "5"){
+    txtdocu.textContent = "Ingrese Pasaporte";
+    txt_documento.addEventListener("input", validarOthers);
+    scan.style.display = "none";
+  }
+});
+
+   
+function validarDni(input) {
+  var regex = /^\d{8}$/;
+  if (!regex.test(txt_documento.value)) {
+    txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 8);
+  }
+}
+
+function validarRuc(input) {
+  var regex = /^\d{11}$/;
+  if (!regex.test(txt_documento.value)) {
+    txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 11);
+  }
+}
+
+function validarOthers(input) {
+  var regex = /^[0-9a-zA-Z]{12}$/;
+  if (!regex.test(input.value)) {
+    txt_documento.value = txt_documento.value.replace(/[^0-9a-zA-Z]/g, '').substring(0, 12);;
+  }
+}
+
+    
 </script>

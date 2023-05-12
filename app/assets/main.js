@@ -1829,7 +1829,15 @@ $(function () {
 		var id = $(this).data('id');
 		$.getJSON(path + 'administrador/regbanco/getBan', { id }, function (json, textStatus) {
 			$('#FormEditarBanco input[name=id]').val(json.cod_ban);
+			$('#FormEditarBanco select[name=moneda]').val(json.moneda_ban).trigger('change.select2');
 			$('#FormEditarBanco input[name=nombre]').val(json.nomb_ban);
+			$('#FormEditarBanco select[name=type_account]').val(json.tipo_cuenta_ban).trigger('change.select2');
+			$('#FormEditarBanco input[name=card_name_ban]').val(json.nomb_titular_ban);
+			$('#FormEditarBanco input[name=account_number]').val(json.nro_cuenta_ban);
+			$('#FormEditarBanco input[name=cci_number]').val(json.cci_cuenta_ban);
+			$('#FormEditarBanco select[name=ent_name]').val(json.id_entidad_financiera).trigger('change.select2');
+			
+			
 
 		});
 	});
@@ -3512,11 +3520,19 @@ $(function () {
 			$('#FormEditarTalonario select[name=estado]').val(json.est_talonario);
 			$('input[name=doccli_dni]').prop('checked', false);
 			$('input[name=doccli_ruc]').prop('checked', false);
+			$('input[name=doccli_ex]').prop('checked', false);
+			$('input[name=doccli_pass]').prop('checked', false);
 			if (json.docclidni_talonario == 1) {
 				$('#FormEditarTalonario input[name=doccli_dni]').prop('checked', true);
 			}
 			if (json.doccliruc_talonario == 1) {
 				$('#FormEditarTalonario input[name=doccli_ruc]').prop('checked', true);
+			}
+			if (json.doccliex_talonario == 1) {
+				$('#FormEditarTalonario input[name=doccli_ex]').prop('checked', true);
+			}
+			if (json.docclipass_talonario == 1) {
+				$('#FormEditarTalonario input[name=doccli_pass]').prop('checked', true);
 			}
 		});
 	});
@@ -7323,7 +7339,9 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 		url: function (query) {
 			var dni = $('select[name=tipoPedido] option:selected').data('dni');
 			var ruc = $('select[name=tipoPedido] option:selected').data('ruc');
-			return path + "administrador/regventas/getClientes?q=" + query + '&dni=' + dni + '&ruc=' + ruc
+			var ex = $('select[name=tipoPedido] option:selected').data('ex');
+			var pass = $('select[name=tipoPedido] option:selected').data('pass');
+			return path + "administrador/regventas/getClientes?q=" + query + '&dni=' + dni + '&ruc=' + ruc + '&ex=' + ex + '&pass=' + pass
 		},
 		getValue: function (element) {
 			return element.nombre;
@@ -7538,6 +7556,8 @@ $('#TableVentas tbody').on('click', '.firmar', function () {
 		var tipoPedido = $('#FormVentaAgregar select[name=tipoPedido]');
 		var dni = $(tipoPedido).find('option:selected').data('dni');
 		var ruc = $(tipoPedido).find('option:selected').data('ruc');
+		var ex = $(tipoPedido).find('option:selected').data('ex');
+		var pass = $(tipoPedido).find('option:selected').data('pass');
 
 		if (dni == 1) {
 			$('#fnacimiento').prop('disabled', false).show();

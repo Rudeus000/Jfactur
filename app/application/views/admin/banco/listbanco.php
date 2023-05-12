@@ -180,8 +180,8 @@
 
 
 
-<div id="ModalEditarBanco" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div id="ModalEditarBanco" class="modal bs-example-modal-center" tabindex="" role="dialog" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="FormEditarBanco" action="<?= base_url('administrador/regbanco/editBanco') ?>" method="post" autocomplete="off">
                 <input type="hidden" name="id">
@@ -191,11 +191,59 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                    <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Moneda:</label>
+                                <select name="moneda" class="form-control select2">
+                                    <option value="PEN" data-valor="1">Soles</option>
+                                    <option value="USD" data-valor="<?= $dolar->valor_paramt ?>">Dolares</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Tipo de cuenta:</label>
+                                <select class="form-control select2 select2-hidden-accessible input-sm" name="type_account">
+                                    <option value="">--Selecciona--</option>
+                                    <option value="cuenta_corriente" data-valor="1">Cuenta corriente</option>
+                                    <option value="cuenta_ahorro" data-valor="2">Cuenta de ahorro</option>
+                                    <option value="Cuenta_detraccion" data-valor="3">Cuenta de detraccion</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Nombre:</label>
                                 <input type="text" name="nombre" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Nombre del titular:</label>
+                                <input type="text" name="card_name_ban" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Numero de cuenta:</label>
+                                <input type="text" name="account_number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">CCI:</label>
+                                <input type="text" name="cci_number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Entidad:</label>
+                                <select name="ent_name" class="form-control select2">
+                                    <?php foreach ($entidad as $e) : ?>
+                                        <option value="<?= $e->id_entidadfinanciera ?>"><?= $e->descripcion ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                         </div>
 
