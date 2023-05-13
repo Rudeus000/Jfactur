@@ -60,7 +60,7 @@ class Ventas_model extends CI_Model
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryLike->num_rows();
     $result['iTotalDisplayRecords'] = $queryLike->num_rows();
-
+$cobros="";
     $row = [];
     foreach ($query->result() as $q) {
       $cobros = $this->getCobros($q->cod_vent);

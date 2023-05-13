@@ -129,7 +129,7 @@
                                     <div class="form-group">
                                       <label class="control-label">Cliente</label>                                      
                                     <div class="input-group">
-                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" style="width: 265px;" class="form-control"  disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>" >
+                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control"  disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>" >
                                       <div class="input-group-append">
                                         <button data-toggle="modal" data-target="#ModalAgregarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-astronaut"></i> </button>
                                         <button id="VentaEditarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-edit"></i> </button>
