@@ -110,15 +110,15 @@
                               <fieldset>
                                 <legend>Cliente</legend>
                                 <div class="row">
-                                
+
                                   <!-- <div class="col-md-2">
                                     <label class="control-label" style="display: block"></label><br>
                                     <!-- <div class="btn-group"> -->
-                                      
-                                    <!-- <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
+
+                                  <!-- <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
                                     <button id="VentaEditarCliente" type="button" class="btn btn-rounded btn-warning waves-effect "><i class="fas fa-user-edit m-r-5"></i>Editar</button> -->
-                                    <!-- </div> -->
-                                  <!-- </div> --> 
+                                  <!-- </div> -->
+                                  <!-- </div> -->
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <label class="control-label">RUC/DNI</label>
@@ -127,16 +127,15 @@
                                   </div>
                                   <div class="col-md-3">
                                     <div class="form-group">
-                                      <label class="control-label">Cliente</label>                                      
-                                    <div class="input-group">
-                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control"  disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>" >
-                                      <div class="input-group-append">
-                                        <button data-toggle="modal" data-target="#ModalAgregarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-astronaut"></i> </button>
-                                        <button id="VentaEditarCliente" class="btn btn-dark waves-effect waves-light" type="button"><i class="fas fa-user-edit"></i> </button>
-                                      </div>
+                                      <label class="control-label">Cliente [<a title="" data-toggle="modal" data-target="#ModalAgregarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
+                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i> ]
+                                        </a></label>
+                                      <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>">
                                     </div>
                                   </div>
-                                  </div>
+
+
+
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <label class="control-label">Precio</label>
@@ -148,14 +147,14 @@
                                       <label class="control-label">Dirección</label>
                                       <input type="text" id="DireccionCliente" class="form-control" readonly value="<?= !is_null($cliente) ? $cliente->direccion : '' ?>">
                                     </div>
-                                  </div> 
+                                  </div>
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-danger waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>
                                     </div>
-                                  </div>                                 
+                                  </div>
                                 </div>
-                                
+
                               </fieldset>
 
                               <fieldset>
@@ -197,7 +196,7 @@
                                       <label class="control-label">Monto</label>
                                       <input type="text" name="monto" class="form-control" value="0" required readonly>
                                     </div>
-                                  </div>                                  
+                                  </div>
                                   <div id="pagocredito" class="col-md-2" style="display: none">
                                     <div class="form-group">
                                       <label class="control-label">Dias / Cuotas</label>
@@ -976,62 +975,63 @@
 
   });
 
-var tipo_documento = document.getElementById("tipo_documento");
-var txt_documento = document.getElementById("txt_documento");
-var scan = document.getElementById("scan");
-var txtdocu = document.getElementById("txtdocu");
+  var tipo_documento = document.getElementById("tipo_documento");
+  var txt_documento = document.getElementById("txt_documento");
+  var scan = document.getElementById("scan");
+  var txtdocu = document.getElementById("txtdocu");
 
-tipo_documento.addEventListener("change", function() {
-  var selectedValue = tipo_documento.value;
-  txt_documento.value = ''; // Limpiar el valor del input al cambiar la opción
-  
-  txt_documento.removeEventListener("input", validarDni);
-  txt_documento.removeEventListener("input", validarRuc);
-  
-  if (selectedValue === "2") {    
-    txtdocu.textContent = "Ingrese DNI";
-    scan.style.display="block";
-    txt_documento.addEventListener("input", validarDni);
-    scan.textContent = "RENIEC";
+  tipo_documento.addEventListener("change", function() {
+    var selectedValue = tipo_documento.value;
+    txt_documento.value = ''; // Limpiar el valor del input al cambiar la opción
 
-  }if (selectedValue === "4") {
-    txtdocu.textContent = "Ingrese RUC";
-    scan.style.display="block"
-    txt_documento.addEventListener("input", validarRuc);
-    scan.textContent = "SUNAT";
+    txt_documento.removeEventListener("input", validarDni);
+    txt_documento.removeEventListener("input", validarRuc);
 
-  }if (selectedValue === "3") {
-    txtdocu.textContent = "Ingrese Carnet Ex.";
-    txt_documento.addEventListener("input", validarOthers);
-    scan.style.display = "none";
-  }if(selectedValue === "5"){
-    txtdocu.textContent = "Ingrese Pasaporte";
-    txt_documento.addEventListener("input", validarOthers);
-    scan.style.display = "none";
+    if (selectedValue === "2") {
+      txtdocu.textContent = "Ingrese DNI";
+      scan.style.display = "block";
+      txt_documento.addEventListener("input", validarDni);
+      scan.textContent = "RENIEC";
+
+    }
+    if (selectedValue === "4") {
+      txtdocu.textContent = "Ingrese RUC";
+      scan.style.display = "block"
+      txt_documento.addEventListener("input", validarRuc);
+      scan.textContent = "SUNAT";
+
+    }
+    if (selectedValue === "3") {
+      txtdocu.textContent = "Ingrese Carnet Ex.";
+      txt_documento.addEventListener("input", validarOthers);
+      scan.style.display = "none";
+    }
+    if (selectedValue === "5") {
+      txtdocu.textContent = "Ingrese Pasaporte";
+      txt_documento.addEventListener("input", validarOthers);
+      scan.style.display = "none";
+    }
+  });
+
+
+  function validarDni(input) {
+    var regex = /^\d{8}$/;
+    if (!regex.test(txt_documento.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 8);
+    }
   }
-});
 
-   
-function validarDni(input) {
-  var regex = /^\d{8}$/;
-  if (!regex.test(txt_documento.value)) {
-    txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 8);
+  function validarRuc(input) {
+    var regex = /^\d{11}$/;
+    if (!regex.test(txt_documento.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 11);
+    }
   }
-}
 
-function validarRuc(input) {
-  var regex = /^\d{11}$/;
-  if (!regex.test(txt_documento.value)) {
-    txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 11);
+  function validarOthers(input) {
+    var regex = /^[0-9a-zA-Z]{12}$/;
+    if (!regex.test(input.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^0-9a-zA-Z]/g, '').substring(0, 12);;
+    }
   }
-}
-
-function validarOthers(input) {
-  var regex = /^[0-9a-zA-Z]{12}$/;
-  if (!regex.test(input.value)) {
-    txt_documento.value = txt_documento.value.replace(/[^0-9a-zA-Z]/g, '').substring(0, 12);;
-  }
-}
-
-    
 </script>
