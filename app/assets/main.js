@@ -13954,13 +13954,13 @@ $('#FormLibroElectronicoVentas').validate({
 $('#btn-generar-xlsx-sunat').click(function (event) {
 	let form = $('#FormLibroElectronicoVentas').serializeObject();
 	let params = $.param(form);
-	$(this).attr('href', path + 'reportes/libroVentas/descargarExcelSunat?' + params);
+	$(this).attr('href', path + 'reportes/libroventas/descargarExcelSunat?' + params);
 });
 
 $('#btn-generar-ejb').click(function (event) {
 	let form = $('#FormLibroElectronicoVentas').serializeObject();
 	let params = $.param(form);
-	$(this).attr('href', path + 'reportes/libroVentas/descargarExcelEJB?' + params);
+	$(this).attr('href', path + 'reportes/libroventas/descargarExcelEJB?' + params);
 });
 
 /* ========================================================================== */

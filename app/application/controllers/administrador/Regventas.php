@@ -983,7 +983,7 @@ class Regventas extends CI_Controller {
     if($this->form_validation->run() == TRUE){
     	$data['cod_tipdocucli '] = $this->input->post('tipo');
     	$data['nomb_cliente'] = $this->input->post('nombre');
-    	$data['doc_cliente'] = $this->input->post('documento');
+    	$data['doc_cliente'] = trim($this->input->post('documento'));
     	$data['fena_pac'] = $this->input->post('fnacimiento');
     	$data['precio_cliente'] = $this->input->post('precio_venta');
     	$data['telf_cliente'] = $this->input->post('telefono');

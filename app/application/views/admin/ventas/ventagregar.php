@@ -540,7 +540,7 @@
                                 <label class="control-label">Medio de pago: </label>
                                 <select name="detraccion_medio_pago" class="form-control select2">
                                   <?php foreach ($cod_medio_pay as $pay) : ?>
-                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->descripcion ?></option>
+                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->name_descripcion ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>

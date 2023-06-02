@@ -223,7 +223,7 @@ $cobros="";
   function getImpresionVenta($archivoxml)
   {
     $tb_venta = $this->db->from('tb_venta')
-      ->select("tb_venta.*, fecha_vent,pago_vent,num_cuotas_vent,observacion_vent, nom_tipdocumento, serie, nomb_cliente, direc_cliente, doc_cliente, email_cliente, telf_cliente, contac_cliente,CASE pago_vent WHEN 'CO' THEN 'CONTADO' ELSE 'CREDITO' END as tipopago, nomb_caja,hash_vent,codsunat_tipdocucli,nomb_usu,apell_usu, tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento")
+      ->select("tb_venta.*, fecha_vent,pago_vent,num_cuotas_vent,observacion_vent, nom_tipdocumento, serie, nomb_cliente, direc_cliente, doc_cliente, email_cliente, telf_cliente, contac_cliente,CASE pago_vent WHEN 'CO' THEN 'CONTADO' ELSE 'CREDITO' END as tipopago, nomb_caja,hash_vent,codsunat_tipdocucli,nomb_usu,apell_usu,descripcion,name_descripcion, tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento")
       ->join('tb_cliente', 'tb_venta.id_cliente = tb_cliente.id_cliente')
       ->join('tb_talonario', 'tb_venta.cod_talonario = tb_talonario.cod_talonario')
       ->join('tb_caja', 'tb_venta.cod_caja = tb_caja.cod_caja')
@@ -231,6 +231,8 @@ $cobros="";
       ->join('tb_tipodocumentocliente', 'tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli')
       ->join('tb_usuario', 'tb_venta.cod_usu = tb_usuario.cod_usu')
       ->join('tb_puntoventa', 'tb_venta.cod_puntoventa = tb_puntoventa.cod_puntoventa')
+      ->join('sunat_codigodetraccion', 'tb_venta.detraccion_iddetraccion = sunat_codigodetraccion.id_cod_detraccion')
+      ->join('sunat_mediosdepago', 'tb_venta.detraccion_id_mediopago = sunat_mediosdepago.id_mediopago')
       ->join('ubigeo_distritos', 'tb_puntoventa.ubigeo_puntoventa = ubigeo_distritos.id')
       ->join('ubigeo_provincias', 'ubigeo_provincias.id = ubigeo_distritos.provincia_id')
       ->join('ubigeo_departamentos', 'ubigeo_departamentos.id = ubigeo_distritos.departamento_id')
