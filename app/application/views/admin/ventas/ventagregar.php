@@ -71,7 +71,7 @@
                                       <select name="tipoPedido" class="form-control select2 select2-hidden-accessible input-sm">
                                         <option value="">Seleccion</option>
                                         <?php foreach ($tipos as $t) : ?>
-                                          <option value="<?= $t->cod_talonario ?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" <?= $punto->talonario_defecto == $t->cod_talonario ? 'selected' : '' ?>><?= $t->nom_tipdocumento . ' - ' . $t->serie ?></option>
+                                          <option value="<?= $t->cod_talonario ?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" data-ex="<?= $t->doccliex_talonario ?>" data-pass="<?= $t->docclipass_talonario ?>" <?= $punto->talonario_defecto == $t->cod_talonario ? 'selected' : '' ?>><?= $t->nom_tipdocumento . ' - ' . $t->serie ?></option>
                                         <?php endforeach ?>
                                       </select>
                                     </div>
@@ -110,13 +110,15 @@
                               <fieldset>
                                 <legend>Cliente</legend>
                                 <div class="row">
-                                  <div class="col-md-2">
+
+                                  <!-- <div class="col-md-2">
                                     <label class="control-label" style="display: block"></label><br>
                                     <!-- <div class="btn-group"> -->
-                                    <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
-                                    <button id="VentaEditarCliente" type="button" class="btn btn-rounded btn-warning waves-effect "><i class="fas fa-user-edit m-r-5"></i>Editar</button>
-                                    <!-- </div> -->
-                                  </div>
+
+                                  <!-- <button data-toggle="modal" data-target="#ModalAgregarCliente" type="button" class="btn btn-rounded btn-success waves-effect "><i class="fas fa-user-alt m-r-5"></i>Agregar</button>
+                                    <button id="VentaEditarCliente" type="button" class="btn btn-rounded btn-warning waves-effect "><i class="fas fa-user-edit m-r-5"></i>Editar</button> -->
+                                  <!-- </div> -->
+                                  <!-- </div> -->
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <label class="control-label">RUC/DNI</label>
@@ -125,10 +127,15 @@
                                   </div>
                                   <div class="col-md-3">
                                     <div class="form-group">
-                                      <label class="control-label">Cliente</label>
+                                      <label class="control-label">Cliente [<a title="" data-toggle="modal" data-target="#ModalAgregarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
+                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i> ]
+                                        </a></label>
                                       <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>">
                                     </div>
                                   </div>
+
+
+
                                   <div class="col-md-2">
                                     <div class="form-group">
                                       <label class="control-label">Precio</label>
@@ -141,7 +148,13 @@
                                       <input type="text" id="DireccionCliente" class="form-control" readonly value="<?= !is_null($cliente) ? $cliente->direccion : '' ?>">
                                     </div>
                                   </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group">
+                                      <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-danger waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>
+                                    </div>
+                                  </div>
                                 </div>
+
                               </fieldset>
 
                               <fieldset>
@@ -182,11 +195,6 @@
                                     <div class="form-group">
                                       <label class="control-label">Monto</label>
                                       <input type="text" name="monto" class="form-control" value="0" required readonly>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <div class="form-group">
-                                      <button id="DeudaCliente" style="margin-top: 32px" data-toggle="modal" data-target="#ModalDeudaCliente" type="button" class="btn btn-rounded btn-pink waves-effect"><i class="fas fa-eye m-r-5"></i>Deuda</button>
                                     </div>
                                   </div>
                                   <div id="pagocredito" class="col-md-2" style="display: none">
@@ -259,15 +267,7 @@
                                     <div style="display:none" class="alert alert-danger cuotas-error" role="alert"></div>
                                   </div>
                                 </div>
-                                <div class="row">
-                                  <div class="col-md-4">
-                                    <!-- <div class="switchery-demo"> -->
-                                    <!-- <input type="checkbox" class="custom-control-input" > -->
-                                    <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
-                                    <label for="detraccion-check">Detracción</label>
-                                    <!-- </div> -->
-                                  </div>
-                                </div>
+
                               </fieldset>
                               <!-- End #wizard-vertical -->
                             </div>
@@ -297,7 +297,17 @@
                         <label for="servicioChecked">Observaciones</label>
                         <!-- </div> -->
                       </div>
-                     
+
+
+                      <div class="col-md-4">
+                        <!-- <div class="switchery-demo"> -->
+                        <!-- <input type="checkbox" class="custom-control-input" > -->
+                        <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
+                        <label for="detraccion-check">Detracción</label>
+                        <!-- </div> -->
+                      </div>
+
+
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -351,7 +361,7 @@
                             <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto" readonly>
                             <label class="custom-control-label" for="serieChek">Series</label>
                           </div>
-                          <select id="select2-series" class="form-control selct2" name="seriesProducto[]" multiple="multiple" disabled>
+                          <select id="select2-series" class="form-control selct2" name="seriesProducto[]" multiple="multiple" style="margin-top: 6px" disabled>
                           </select>
                         </div>
                       </div>
@@ -520,7 +530,7 @@
                                 <label class="control-label">Codigo del bien: </label>
                                 <select name="detraccion_bien" class="form-control select2">
                                   <?php foreach ($cod_bien as $e) : ?>
-                                    <option data-porcentaje="<?= $e->porcentaje?>" value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
+                                    <option data-porcentaje="<?= $e->porcentaje ?>" value="<?= $e->id_cod_detraccion ?>"><?= $e->id_cod_detraccion, " - ", $e->descripcion, " ", "(", $e->porcentaje, ")" ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>
@@ -530,7 +540,7 @@
                                 <label class="control-label">Medio de pago: </label>
                                 <select name="detraccion_medio_pago" class="form-control select2">
                                   <?php foreach ($cod_medio_pay as $pay) : ?>
-                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->descripcion ?></option>
+                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->name_descripcion ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>
@@ -553,12 +563,12 @@
                                 <input type="text" name="detraccion_monto" class="form-control" value="0.00" readonly>
                               </div>
                             </div>
-                            <div class="col-md-12"  id="observacion-a">
-                        <div class="form-group">
-                          <label for="exampleFormControlTextarea1">Informacion</label>
-                          <input class="form-control" id="exampleFormControlTextarea1" name="detraccion_informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
-                        </div>
-                      </div>
+                            <div class="col-md-12" id="observacion-a">
+                              <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Informacion</label>
+                                <input class="form-control" id="exampleFormControlTextarea1" name="detraccion_informacion" rows="3" value="OPERACION SUJETA AL SISTEMA DE PAGO OBLIGACIONES TRIBUTARIAS DEL BANCO DE LA NACION"></input>
+                              </div>
+                            </div>
                             <div class="form-group col-md-12">
                               <div class="text-info text-size-small"><i class="fa fa-info text-info hover-q font-italic"> </i> <em>&nbsp;Operacion Sujeta a Detracción: Debe existir al menos un artículo sujeto a detracción. Si existe más de uno, el facturador tomara el mayor porcentaje por una interpretación conservadora Resolución 183-204 SUNAT/15.08.2004.</em></div>
                             </div>
@@ -688,7 +698,7 @@
 </div>
 
 
-<div class="modal" id="ModalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="ModalAgregarCliente" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="card-header bg-primary">
       <h3 class="my-0 text-white">Agregar cliente</h3>
@@ -748,11 +758,11 @@
 
                       <div class="col-md-8">
                         <div class="form-group">
-                          <label class="control-label">Ruc|Dni:</label>
+                          <label class="control-label" id="txtdocu">Ruc|Dni:</label>
                           <div class="input-group">
-                            <input type="text" id="txt_documento" name="documento" class="form-control" maxlength="11" minlength="8" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
+                            <input type="text" id="txt_documento" name="documento" class="form-control">
                             <div class="input-group-append">
-                              <button class="btn btn-info waves-effect waves-light" id="scan" type="button" onclick="buscar();">RENIEC-SUNAT
+                              <button class="btn btn-info" id="scan" type="button" onclick="buscar();">
                                 <i class="fa fa-search"></i>
                               </button>
                             </div>
@@ -763,7 +773,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="control-label">Nombre o Razon Social</label>
-                          <input type="text" id="txt_nombre" name="nombre" class="form-control">
+                          <input type="text" id="txt_nombre" name="nombre" class="form-control  text-uppercase">
                         </div>
                       </div>
                       <div class="col-md-12">
@@ -964,4 +974,64 @@
     }
 
   });
+
+  var tipo_documento = document.getElementById("tipo_documento");
+  var txt_documento = document.getElementById("txt_documento");
+  var scan = document.getElementById("scan");
+  var txtdocu = document.getElementById("txtdocu");
+
+  tipo_documento.addEventListener("change", function() {
+    var selectedValue = tipo_documento.value;
+    txt_documento.value = ''; // Limpiar el valor del input al cambiar la opción
+
+    txt_documento.removeEventListener("input", validarDni);
+    txt_documento.removeEventListener("input", validarRuc);
+
+    if (selectedValue === "2") {
+      txtdocu.textContent = "Ingrese DNI";
+      scan.style.display = "block";
+      txt_documento.addEventListener("input", validarDni);
+      scan.textContent = "RENIEC";
+
+    }
+    if (selectedValue === "4") {
+      txtdocu.textContent = "Ingrese RUC";
+      scan.style.display = "block"
+      txt_documento.addEventListener("input", validarRuc);
+      scan.textContent = "SUNAT";
+
+    }
+    if (selectedValue === "3") {
+      txtdocu.textContent = "Ingrese Carnet Ex.";
+      txt_documento.addEventListener("input", validarOthers);
+      scan.style.display = "none";
+    }
+    if (selectedValue === "5") {
+      txtdocu.textContent = "Ingrese Pasaporte";
+      txt_documento.addEventListener("input", validarOthers);
+      scan.style.display = "none";
+    }
+  });
+
+
+  function validarDni(input) {
+    var regex = /^\d{8}$/;
+    if (!regex.test(txt_documento.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 8);
+    }
+  }
+
+  function validarRuc(input) {
+    var regex = /^\d{11}$/;
+    if (!regex.test(txt_documento.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^\d$]/g, '').substring(0, 11);
+    }
+  }
+
+  function validarOthers(input) {
+    var regex = /^[0-9a-zA-Z]{12}$/;
+    if (!regex.test(input.value)) {
+      txt_documento.value = txt_documento.value.replace(/[^0-9a-zA-Z]/g, '').substring(0, 12);;
+    }
+  }
 </script>

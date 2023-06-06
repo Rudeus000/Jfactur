@@ -158,6 +158,8 @@ class Regventas extends CI_Controller {
 		$q = $this->input->get('q');
 		$dni = $this->input->get('dni');
 		$ruc = $this->input->get('ruc');
+		$ex = $this->input->get('ex');
+		$pass = $this->input->get('pass');
 
 		$array = [];
 		if ($dni=='1') {
@@ -165,6 +167,12 @@ class Regventas extends CI_Controller {
 		}
 		if ($ruc=='1') {
 			$array[] = 6;
+		}
+		if ($ex=='1') {
+			$array[] = 4;
+		}
+		if ($pass=='1') {
+			$array[] = 7;
 		}
 		$this->db->from('tb_cliente');
 		$this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as ruc, direc_cliente as direccion, precio_cliente');
@@ -975,7 +983,7 @@ class Regventas extends CI_Controller {
     if($this->form_validation->run() == TRUE){
     	$data['cod_tipdocucli '] = $this->input->post('tipo');
     	$data['nomb_cliente'] = $this->input->post('nombre');
-    	$data['doc_cliente'] = $this->input->post('documento');
+    	$data['doc_cliente'] = trim($this->input->post('documento'));
     	$data['fena_pac'] = $this->input->post('fnacimiento');
     	$data['precio_cliente'] = $this->input->post('precio_venta');
     	$data['telf_cliente'] = $this->input->post('telefono');
@@ -1366,7 +1374,7 @@ class Regventas extends CI_Controller {
 			->set('archivoxml_vent',$response['archivo'])
 			->set('hash_vent',$response['hash_cpe'])
 			->update('tb_venta');
-				if($empresa->enviar_factura_emp==999){
+				if($empresa->enviar_factura_emp==1){
 					$response['factura_enviada'] = true;
 					if($data['cod_tipo_documento']=='01'){
 						for ($i=0; $i < reintentos(); $i++) {

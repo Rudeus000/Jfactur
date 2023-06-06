@@ -22,7 +22,7 @@
 				<p>
 				<div class="Com-Datos" style="font-size: 15px; background: #03A6BF"><b><?= $ventas->nom_tipdocumento ?></b></div>
 				<br>
-				<b style="font-size: 15px;"><?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>
+				<b style="font-size: 15px;"><?= $ventas->serie ?>-<?= str_pad($ventas->numero_vent,7,"0",STR_PAD_LEFT); ?></b>
 
 	</div>
 </div>
@@ -182,8 +182,8 @@
 			<div class="w40"><b>Monto detracción: </b></div>
 			<div class="w40" style="text-align:right"><?= $ventas->detraccion_monto ?></div>
 		</div>
-		<!-- </div> -->
-	</div>
+		</div>
+	</div>	
 	<br>
 	<br>
 

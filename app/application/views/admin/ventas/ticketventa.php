@@ -10,7 +10,7 @@
 		<div>Ruc:<?= $empresa->ruc_emp ?></div>
 		<div> Web: <?= WEBSITE ?> </div>
 		<div><b><?= $ventas->nom_tipdocumento ?> </b></div>
-		<div><?= $ventas->serie ?> -  <?= $ventas->numero_vent ?></div>
+		<div><?= $ventas->serie ?> -  <?= str_pad($ventas->numero_vent,7,"0",STR_PAD_LEFT); ?></div>
 </div>
 <div class="w100" style="font-size:12px">
 		<div class="w30">
@@ -136,7 +136,7 @@
 
 <br>
 
-<div class="w100 text-center" style="font-size:10px">
+<div class="w100 text-center" style="font-size:9px">
 	Autorizado a ser emisor electrónico
 	mediante R.I. SUNAT N° 018-005-
 	0002378 Representación impresa
@@ -150,7 +150,7 @@
 <div class="w120 text-center">
 	
 		
-<barcode code="<?= $qr ?>" type="QR" class="barcode" size="1.3" error="M" disableborder="1" />
+<barcode code="<?= $qr ?>" type="QR" class="barcode" size="0.8" error="M" disableborder="1" />
 	
 
 </div>

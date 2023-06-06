@@ -74,8 +74,8 @@ class Cajaapertura_model extends CI_Model {
     ->join('tb_puntoventa','tb_usuario_puntoventa.cod_puntoventa = tb_puntoventa.cod_puntoventa')
     ->join('tb_puntoventa_caja','tb_puntoventa.cod_puntoventa = tb_puntoventa_caja.cod_puntoventa')
     ->join('tb_caja','tb_puntoventa_caja.cod_caja = tb_caja.cod_caja')
-    ->where('tb_usuario_puntoventa.cod_usu',$this->session->userdata('cod_usu'))
-    ->where('tb_usuario_puntoventa.cod_puntoventa',$this->session->userdata('puntoventa'))
+    //->where('tb_usuario_puntoventa.cod_usu',$this->session->userdata('cod_usu'))
+    //->where('tb_usuario_puntoventa.cod_puntoventa',$this->session->userdata('puntoventa'))
     ->get()->result();
   }
 

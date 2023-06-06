@@ -46,7 +46,7 @@ function getCliente($data)
 	$result['iTotalRecords'] = $queryTotal->num_rows();
 	$result['iTotalDisplayRecords'] = $queryLike->num_rows();
 
-
+$estado="";
 	$row = [];
 	foreach ($query->result() as $q) {
 		if ($q->estado_cliente=='1') {

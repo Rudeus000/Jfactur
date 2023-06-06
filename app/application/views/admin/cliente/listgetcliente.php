@@ -310,7 +310,7 @@
 </div>
 
 
-<div id="ModalCumpleanos" class="modal-lg" id="exampleModalCenter" role="dialog">
+<div id="ModalCumpleanos" class="modal bs-example-modal-lg" id="exampleModalCenter" role="dialog">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <form id="FormCumpleanos" action="<?= base_url('administrador/regcliente/cumpleanos') ?>" method="post" autocomplete="off">

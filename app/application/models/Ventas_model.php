@@ -60,7 +60,7 @@ class Ventas_model extends CI_Model
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryLike->num_rows();
     $result['iTotalDisplayRecords'] = $queryLike->num_rows();
-
+$cobros="";
     $row = [];
     foreach ($query->result() as $q) {
       $cobros = $this->getCobros($q->cod_vent);
@@ -146,7 +146,7 @@ class Ventas_model extends CI_Model
   function getTiposVentas()
   {
     return $this->db->from('tb_talonario')
-      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario')
+      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario,doccliex_talonario,docclipass_talonario')
       ->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
       ->join('tb_usuario_documento', 'tb_tipodocumento.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND cod_usu = ' . $this->session->userdata('cod_usu'))
       ->where('cod_puntoventa', $this->session->userdata('puntoventa'))
@@ -231,6 +231,8 @@ class Ventas_model extends CI_Model
       ->join('tb_tipodocumentocliente', 'tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli')
       ->join('tb_usuario', 'tb_venta.cod_usu = tb_usuario.cod_usu')
       ->join('tb_puntoventa', 'tb_venta.cod_puntoventa = tb_puntoventa.cod_puntoventa')
+      ->join('sunat_codigodetraccion', 'tb_venta.detraccion_iddetraccion = sunat_codigodetraccion.id_cod_detraccion')
+      ->join('sunat_mediosdepago', 'tb_venta.detraccion_id_mediopago = sunat_mediosdepago.id_mediopago')
       ->join('ubigeo_distritos', 'tb_puntoventa.ubigeo_puntoventa = ubigeo_distritos.id')
       ->join('ubigeo_provincias', 'ubigeo_provincias.id = ubigeo_distritos.provincia_id')
       ->join('ubigeo_departamentos', 'ubigeo_departamentos.id = ubigeo_distritos.departamento_id')
@@ -270,7 +272,7 @@ class Ventas_model extends CI_Model
   function getDocumentosCliente()
   {
     return $this->db->from('tb_tipodocumentocliente')
-      ->where_in('codsunat_tipdocucli', ['1', '6'])
+      ->where_in('codsunat_tipdocucli', ['1', '6','4','7'])
       ->get()
       ->result();
   }
