@@ -1122,7 +1122,7 @@ class Regventas extends CI_Controller {
  
 	if(is_null($guardar)){
     $this->mpdf->Output($data['ventas']->archivoxml_vent.'.pdf','I');
-    }else{
+  }else{
 			$resp = [];
 			$this->limpiarComprobantesTemporales();
 			$archivo = $archivoxml.'_'.time().'.pdf';

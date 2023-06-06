@@ -59,7 +59,7 @@ class Apisunat {
 	</ext:UBLExtensions>
 	<cbc:UBLVersionID>2.1</cbc:UBLVersionID>
 	<cbc:CustomizationID schemeAgencyName="PE:SUNAT">2.0</cbc:CustomizationID>
-	<cbc:ProfileID schemeName="Tipo de Operacion" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">' . $cabecera["TIPO_OPERACION"] . '</cbc:ProfileID>
+	
 	<cbc:ID>' . $cabecera["NRO_COMPROBANTE"] . '</cbc:ID>
 	<cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
 	<cbc:IssueTime>00:00:00</cbc:IssueTime>
@@ -72,7 +72,7 @@ class Apisunat {
 
         if($cabecera['DETRACCION']['activo'] == TRUE){
             $xmlCPE = $xmlCPE .
-                '<cbc:Note languageLocaleID="2006"><![CDATA[Operación Sujeta a Detracción]]></cbc:Note>';
+                '<cbc:Note languageLocaleID="2006"><![CDATA[Operación sujeta a Detracción]]></cbc:Note>';
         }
 
         $xmlCPE = $xmlCPE .
