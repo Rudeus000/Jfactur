@@ -163,24 +163,24 @@
 		</div>
 		<div class="w60">
 			<div class="w40"><b>Bien o servicio</b></div>
-			<div class="w40" style="text-align:left">019 Arrendamiento de bienes muebles</div>
+			<div class="w40" style="text-align:left"><?= $ventas->id_cod_detraccion. ' ' .$ventas->detraccion_bien_descripcion ?></div>
 		</div>
 		<div class="w60">
 			<div class="w40"><b>Medio de pago</b></div>
-			<div class="w40" style="text-align:left">003 Transferencia de fondos</div>
+			<div class="w40" style="text-align:left"><?= $ventas->id_mediopago. ' '.$ventas->detraccion_medio_descripcion ?></div>
 		</div>
 		<div class="w60">
 			<div class="w40"><b>Nro. Cta. Banco de la Nación:</b></div>
-			<div class="w40" style="text-align:left">00401242007</div>
+			<div class="w40" style="text-align:left"><?= $ventas->detraccion_cuenta ?></div>
 		</div>
 
 		<div class="w60">
 			<div class="w40"><b>Porcentaje de detracción: </b></div>
-			<div class="w40" style="text-align:left"><?= $ventas->total_vent ?></div>
+			<div class="w40" style="text-align:left"><?= $ventas->detraccion_porcentaje ?></div>
 		</div>
 		<div class="w40">
 			<div class="w40"><b>Monto detracción: </b></div>
-			<div class="w40" style="text-align:right"><?= $ventas->total_vent ?></div>
+			<div class="w40" style="text-align:right"><?= $ventas->detraccion_monto ?></div>
 		</div>
 		<!-- </div> -->
 	</div>
