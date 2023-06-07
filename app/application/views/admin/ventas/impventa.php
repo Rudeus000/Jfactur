@@ -150,12 +150,13 @@
 	<br>
 <?php endif ?>
 
+<?php if($ventas->id_cod_detraccion != null AND $ventas->id_mediopago != null): ?>
 
 <div class="w100">
-	<div class="w100" style=" padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
+		<div class="w100" style=" padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
 		<div class="w100">
 			<div class="w100"><b style="font-size:13px">Informacion de la detraccion:</b></div>
-
+			
 		</div>
 		<div class="w60">
 			<div class="w40"><b>Tipo Operación:</b></div>
@@ -173,7 +174,7 @@
 			<div class="w40"><b>Nro. Cta. Banco de la Nación:</b></div>
 			<div class="w40" style="text-align:left"><?= $ventas->detraccion_cuenta ?></div>
 		</div>
-
+		
 		<div class="w60">
 			<div class="w40"><b>Porcentaje de detracción: </b></div>
 			<div class="w40" style="text-align:left"><?= $ventas->detraccion_porcentaje ?></div>
@@ -182,10 +183,11 @@
 			<div class="w40"><b>Monto detracción: </b></div>
 			<div class="w40" style="text-align:right"><?= $ventas->detraccion_monto ?></div>
 		</div>
-		</div>
-	</div>	
-	<br>
-	<br>
+	</div>
+</div>	
+<br>
+<br>
+<?php endif ?>
 
 	<?php if (!is_null($ventas->cuotas)) : ?>
 		<div class="w100">
