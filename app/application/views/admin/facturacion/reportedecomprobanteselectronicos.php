@@ -201,7 +201,7 @@ foreach ($datos as $d) {
 	->getStyleByColumnAndRow(7,$row)
 	->applyFromArray($styleNormal);	
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(8,$row,$d->estado_vent=='G'?'ACEPTADO':'ANULADO')
+	->setCellValueByColumnAndRow(8,$row,$d->msj_sunat!=NULL?'ACEPTADO':'SIN REPSUESTA')
 	->getStyleByColumnAndRow(8,$row)
 	->applyFromArray($styleNormal);	
 

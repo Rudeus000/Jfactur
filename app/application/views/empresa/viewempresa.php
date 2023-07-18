@@ -81,35 +81,42 @@
 											<div id="capa_load"></div>
 											<label class="control-label">RUC</label>
 											<div class="input-group">
-												<input type="text" class="form-control" name="RUC" value="<?= $empresa->ruc_emp ?>" id="txt_documento">
+												<input type="text" class="form-control" name="RUC" value="<?= $empresa->ruc_emp ?>" id="txt_documento" readonly>
 												<div class="input-group-append">
-													<button class="btn btn-primary waves-effect waves-light" type="button" onclick="buscar();">sunat</button>
+													<button class="btn btn-primary waves-effect waves-light" type="button" id="scanRuc" onclick="buscar();" disabled>sunat</button>
 												</div>
 											</div>
 										</div>
 
-										<div class="col-md-6">
+										<div class="col-md-5">
 											<div class="form-group">
 												<label class="control-label">Razon Social</label>
-												<input type="text" class="form-control" name="razon_social" value="<?= $empresa->razon_social ?>" id="txt_nombre">
+												<input type="text" class="form-control" name="razon_social" value="<?= $empresa->razon_social ?>" id="txt_nombre" readonly>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+											<a  id="editEmp" class="btn btn-primary " style="margin-top: 30px">
+											<i class="mdi mdi-square-edit-outline"></i>
+													</a>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label">Nombre Comercial</label>
-												<input type="text" class="form-control" name="nombre_comercial" value="<?= $empresa->nombre_comercial ?>" id="txt_nombre_comercial">
+												<input type="text" class="form-control" name="nombre_comercial" value="<?= $empresa->nombre_comercial ?>" id="txt_nombre_comercial" readonly>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label">Teléfono</label>
-												<input type="text" class="form-control" name="telefono" value="<?= $empresa->telf_emp ?>">
+												<input type="text" class="form-control" name="telefono" id="txt_telefono" value="<?= $empresa->telf_emp ?>" readonly>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label">Email</label>
-												<input type="text" class="form-control" name="email" value="<?= $empresa->email_emp ?>">
+												<input type="text" class="form-control" name="email" id="txt_email" value="<?= $empresa->email_emp ?>" readonly>
 											</div>
 										</div>
 										<div class="col-md-4">
@@ -126,13 +133,13 @@
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label">Urbanización</label>
-												<input type="text" class="form-control" name="urbanizacion" value="<?= $empresa->urbanizacion_emp ?>">
+												<input type="text" class="form-control" name="urbanizacion" id="txt_urbanizacion" value="<?= $empresa->urbanizacion_emp ?>" readonly>
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label">Direccion Fiscal</label>
-												<input type="text" class="form-control" name="direccion" value="<?= $empresa->direcc_emp ?>" id="txt_direccion">
+												<input type="text" class="form-control" name="direccion" value="<?= $empresa->direcc_emp ?>" id="txt_direccion" readonly>
 											</div>
 										</div>
 										<div class="col-md-3">
@@ -218,13 +225,13 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label class="control-label">Usuario SOL</label>
-												<input type="text" class="form-control" name="usuario_sol" value="<?= $empresa->usuario_sol_emp ?>">
+												<input type="text" class="form-control" name="usuario_sol" id="txt_user_sol" value="<?= $empresa->usuario_sol_emp ?>" readonly>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label class="control-label">Contraseña SOL</label>
-												<input type="password" class="form-control" name="contrasena_sol" value="<?= $empresa->contrasena_sol_emp ?>">
+												<input type="password" class="form-control" name="contrasena_sol" id="txt_password_sol" value="<?= $empresa->contrasena_sol_emp ?>" readonly>
 											</div>
 										</div>
 										<div class="col-md-12">
@@ -246,13 +253,13 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label class="control-label">Contraseña Certificado</label>
-												<input type="password" class="form-control" name="contrasena_certificado" value="<?= $empresa->contrasena_certificado_emp ?>">
+												<input type="password" class="form-control" name="contrasena_certificado" value="<?= $empresa->contrasena_certificado_emp ?>" id="txt_password_cert" readonly>
 											</div>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-12">
-											<button class="btn btn-primary btn-md mt-4">Guardar Cambios</button>
+											<button  id="saveEmp" class="btn btn-primary btn-md mt-4" disabled>Guardar Cambios</button>
 										</div>
 									</div>
 								</div>
@@ -316,16 +323,10 @@
 							</form>
 						</div>
 						<div class="tab-pane" id="api">
-							<form id="FormEmpresacum" action="<?= base_url('empresa/Regempresa/apisunat') ?>" enctype="multipart/form-data" method="POST">
+							<form id="FormEmpresaApi" action="<?= base_url('empresa/Regempresa/apisunat') ?>" enctype="multipart/form-data" method="POST">
 
-								<div class="form-group">
-									<div class="alert alert-icon alert-info alert-dismissible fade show" role="alert">
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										<i class="mdi mdi-information"></i>
-										<strong>Mensaje actual!</strong> <?= $empresa->cumpleano_clin ?>
-									</div>
+								<div class="form-group">							
+									
 									<fieldset>
 										<legend>Credenciales de API SUNAT GRE</legend>
 
@@ -333,32 +334,32 @@
 											<div class="col-md-2">
 												<div class="form-group">
 													<label class="control-label">Usuario SOL</label>
-													<input type="text" class="form-control" name="user_sol" value="" id="user_sol">
+													<input type="text" class="form-control" name="user_sol" id="user_sol" value="<?= $empresa->user_sol ?>">
 												</div>
 											</div>
 											<div class="col-md-2">
 												<div class="form-group">
 													<label class="control-label">Contraseña SOL</label>
-													<input type="text" class="form-control" name="pass_sol" value="" id="pass_sol">
+													<input type="text" class="form-control" name="pass_sol" value="<?= $empresa->pass_sol ?>" id="pass_sol" >
 												</div>
 											</div>
 											<div class="col-md-3">
 												<div class="form-group">
 													<label class="control-label">Cliente_ID</label>
-													<input type="text" class="form-control" name="cliente_id" value="" id="cliente_id">
+													<input type="text" class="form-control" name="cliente_id" value="<?= $empresa->cliente_id ?>" id="cliente_id">
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label">Cliente_secret</label>
-													<input type="text" class="form-control" name="cliente_secret" value="" id="cliente_secret">
+													<input type="text" class="form-control" name="cliente_secret" value="<?= $empresa->cliente_secret ?>" id="cliente_secret">
 												</div>
 											</div>
 											<div class="col-md-1">
 											<div class="form-group">
-											<button type="submit" class="btn btn-default waves-effect waves-light" style="margin-top: 30px">
+											<a  id="editApi" class="btn btn-primary " style="margin-top: 30px">
 											<i class="mdi mdi-square-edit-outline"></i>
-										</button>
+													</a>
 											</div>
 										</div>
 										</div>										
@@ -367,7 +368,7 @@
 
 								<div class="form-group mb-0">
 									<div>
-										<button type="submit" class="btn btn-primary waves-effect waves-light">
+										<button type="submit" id="saveApi" class="btn btn-primary waves-effect waves-light">
 											Guardar
 										</button>
 										<button type="reset" class="btn btn-secondary waves-effect ml-1">

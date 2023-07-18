@@ -128,7 +128,8 @@
                                   <div class="col-md-3">
                                     <div class="form-group">
                                       <label class="control-label">Cliente [<a title="" data-toggle="modal" data-target="#ModalAgregarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
-                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i> ]
+                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i> ][<a title="" id="VentaEditarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
+                                          <i class=" fas fa-user-edit noti-icon text-primary waves-light waves-effect"></i> ]
                                         </a></label>
                                       <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>">
                                     </div>
@@ -310,21 +311,54 @@
 
                     </div>
                     <div class="row">
-                      <div class="col-md-12">
+                      <div class="col-md-8">
                         <div class="form-group">
                           <label class="control-label">Nombre</label>
                           <textarea name="nombreProducto" id="nombre-servicio" class="form-control" placeholder="Ingrese descripcion del producto o servicio" rows="5" disabled style="display:none"></textarea>
                           <input type="text" id="VentaProductoAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
                         </div>
                       </div>
+
+                      <div class="col-md-1">
+                        <div class="form-group">
+                          <label class="control-label" id="precio_u">Precio Unit.</label>
+                          <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
+                          <input type="text" name="precioProducto" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Cantidad</label>
+                          <input type="text" name="cantidadProducto" class="form-control" value="">
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="submit" style="margin-top: 32px" class="btn btn-sm btn-pink"><i class="fa fa-plus"></i></button>
+                      </div>
                     </div>
                     <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Tipo</label>
+                          <select name="tipo" class="form-control">
+                            <option value="V">Venta</option>
+                            <option value="B">Bonificacion</option>
+                            <option value="O">Obsequio</option>
+                            <option value="E">Exonerada</option>
+                            <option value="1001">Operacion sujeta a detraccion</option>
+                          </select>
+                        </div>
+                      </div>
+
                       <div class="col-md-2" id="unidad_p">
                         <div class="form-group">
                           <label class="control-label">Unidad Med.</label>
                           <input type="text" name="unidadProducto" class="form-control">
                         </div>
                       </div>
+
                       <div class="col-md-3" id="unidad_medida" style="display:none">
                         <div class="form-group">
                           <label class="control-label">Unidad Med.</label>
@@ -335,19 +369,14 @@
                           </select>
                         </div>
                       </div>
+
                       <div class="col-md-1" id="peso_p">
                         <div class="form-group">
                           <label class="control-label">Peso</label>
                           <input type="text" name="pesoProducto" class="form-control">
                         </div>
                       </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <label class="control-label" id="precio_u">Precio Unit.</label>
-                          <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
-                          <input type="text" name="precioProducto" class="form-control">
-                        </div>
-                      </div>
+
                       <div class="col-md-1">
                         <div class="form-group">
                           <label class="control-label">Dscto.</label>
@@ -365,34 +394,15 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <label class="control-label">Cantidad</label>
-                          <input type="text" name="cantidadProducto" class="form-control" value="">
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <label class="control-label">Tipo</label>
-                          <select name="tipo" class="form-control">
-                            <option value="V">Venta</option>
-                            <option value="B">Bonificacion</option>
-                            <option value="O">Obsequio</option>
-                            <option value="E">Exonerada</option>
-                            <option value="1001">Operacion sujeta a detraccion</option>
-                          </select>
-                        </div>
-                      </div>
+
                       <div class="col-md-2 <?= ($this->session->userdata('movil_expert') == '0' ? 'd-none' : '') ?>" id="isdn_product">
                         <div class="form-group">
                           <label class="control-label">Numero ISDN</label>
                           <input type="text" name="numeroisdn" class="form-control" id="producto_isdn">
                         </div>
                       </div>
-                      <div class="col-md-1">
-                        <button type="submit" style="margin-top: 32px" class="btn btn-sm btn-pink"><i class="fa fa-plus"></i></button>
-                      </div>
                     </div>
+              
                   </fieldset>
                   <div class="table-responsive">
                     <table id="TableVentaProductos" class="table table-striped table-hover">
@@ -540,7 +550,7 @@
                                 <label class="control-label">Medio de pago: </label>
                                 <select name="detraccion_medio_pago" class="form-control select2">
                                   <?php foreach ($cod_medio_pay as $pay) : ?>
-                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->name_descripcion ?></option>
+                                    <option value="<?= $pay->id_mediopago ?>"><?= $pay->id_mediopago, " - ", $pay->descripcion ?></option>
                                   <?php endforeach ?>
                                 </select>
                               </div>

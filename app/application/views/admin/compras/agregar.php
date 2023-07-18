@@ -419,7 +419,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="FormSeriesVerificar" action="<?= base_url('administrador/regcompras/verificarSerties') ?>" autocomplete="off" method="post">
+      <form id="FormSeriesVerificar" action="<?= base_url('administrador/regcompras/verificaSerie') ?>" autocomplete="off" method="post">
         <input type="hidden" name="prodseri">
         <input type="hidden" name="almseri">
         <div class="modal-body">

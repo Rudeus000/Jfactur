@@ -25,7 +25,7 @@ if ($tipo_doc == "2") {
 		2 => $info['apellidoPaterno'],
 		3 => $info['apellidoMaterno'],
 		4 => $info['nombres'],	
-		5 => 'S/N',
+		5 => "S/N",
 		6 => $info['distrit'],
 
 	);

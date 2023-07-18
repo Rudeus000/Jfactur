@@ -206,6 +206,8 @@ class Regdashboard extends CI_Controller {
 
 		$query = $this->db->get()->result();
 
+		header('Content-Type: application/json');
+
 		echo json_encode($query);
 
 	}

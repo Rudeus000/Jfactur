@@ -13,11 +13,19 @@ class Regempresa extends CI_Controller {
 		//$this->permisos = $this->backend_lib->control();
 		$this->load->model('modelgeneral');
 		$this->load->model('confempresa_model');
+		// Cargar el modelo
+		$this->load->model('tokensunat_model');
+	
+		// Generar el token
+		
+
+		
 
 	}
 
   public function index()
   {
+	
 		$data['permisos'] =$this->permisos;
 		$this->load->helper('url');
 		$this->load->view('layouts/header');
@@ -27,6 +35,16 @@ class Regempresa extends CI_Controller {
 		$data['regimen'] = $this->modelgeneral->getTable('sunat_tiporegimen');
 		$this->load->view('empresa/viewempresa',$data);
 		$this->load->view('layouts/footer');
+	}
+
+	function token(){
+		$token = $this->tokensunat_model->generateToken();
+	if ($token) {
+		echo 'Token generado: ' . $token;
+	} else {
+		echo 'Error al generar el token';
+	}
+
 	}
 	
 	function guardarDatos()
@@ -56,7 +74,11 @@ class Regempresa extends CI_Controller {
 		$data['restriccion_precio_minimo_emp'] = $this->input->post('restriccion_precio_minimo');
 		$data['usuario_sol_emp'] = $this->input->post('usuario_sol');
 		$data['contrasena_sol_emp'] = $this->input->post('contrasena_sol');
-		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');	
+		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');
+		$data['user_sol'] = $this->input->post('user_sol');	
+		$data['pass_sol'] = $this->input->post('pass_sol');
+		$data['cliente_id'] = $this->input->post('cliente_id');
+		$data['cliente_secret'] = $this->input->post('cliente_secret');
 		$certificado = $this->uploadCertificado();
 		if($certificado['success']==true){
 			$data['certificado_emp'] = $certificado['name'];
@@ -179,5 +201,32 @@ class Regempresa extends CI_Controller {
 		
 		echo json_encode($resp);
 	}
+
+	function apisunat(){		
+		// $data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
+		$data['user_sol'] = $this->input->post('user_sol');
+		$data['pass_sol'] = $this->input->post('pass_sol');
+		$data['cliente_id'] = $this->input->post('cliente_id');
+		$data['cliente_secret'] = $this->input->post('cliente_secret');		
+		$where['cod_empresa '] = 1;
+		$edit = $this->modelgeneral->editRegist('tb_empresa',$where,$data);
+		$resp =[];
+		if(!is_null($edit)){
+				$resp['success'] = true;
+				$resp['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		}else{
+				$resp['success'] = false;
+		}
+
+		
+		
+		echo json_encode($resp);
+	}
+	
+	
+			
+	
+			
+	
 
 }

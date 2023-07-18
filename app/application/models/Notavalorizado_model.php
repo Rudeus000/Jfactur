@@ -254,7 +254,15 @@ class Notavalorizado_model extends CI_Model{
 				if($Tipo_Nota=="I"){
 					$total_valorizado=$arr_data_prod[0]["ncosto"]*$arr_data_prod[0]["nund_tot"];
 					$valor_ingreso=$ncosto*$cant;
-					$costo_actual=($total_valorizado+$valor_ingreso)/($arr_data_prod[0]["nund_tot"]+$cant);
+
+					if ($arr_data_prod[0]["nund_tot"] + $cant != 0) {
+						$costo_actual = ($total_valorizado + $valor_ingreso) / ($arr_data_prod[0]["nund_tot"] + $cant);
+					} else {
+						// Manejo del error de división por cero
+						// Por ejemplo, puedes asignar un valor predeterminado o lanzar una excepción.
+						$costo_actual = 0; // Valor predeterminado o cualquier otro valor adecuado
+					}
+					//$costo_actual=($total_valorizado+$valor_ingreso)/($arr_data_prod[0]["nund_tot"]+$cant);
 					/*echo 'total valorizado '.$total_valorizado."<br>";
 					echo 'total valor  '.$valor_ingreso."<br>";
 					echo 'cantidad '.($arr_data_prod[0]["nund_tot"]+$cant)."<br>";*/

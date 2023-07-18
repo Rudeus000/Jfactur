@@ -177,6 +177,24 @@ class Regcompras extends CI_Controller {
 		echo json_encode($resp);
 	}
 
+	public function validaCompraUnica()
+	{
+	  $documento = $this->input->post('numDocumento');
+	  $this->db->from('tb_compra');
+	  $this->db->where('numdocumento_comp',$documento);
+	  if($this->input->post('id')!=''){
+		$this->db->where_not_in('cod_comp',[$this->input->post('id')]);
+	  }
+	  $query = $this->db->get();
+  
+	  if($query->num_rows() == 0){
+		echo 'true';
+	  }else{
+		echo 'false';
+	  }
+	}
+	
+
 	function agregarCompra()
 	{
 		$data['fecha_comp'] = $this->input->post('fecha');

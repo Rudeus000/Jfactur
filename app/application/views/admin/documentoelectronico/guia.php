@@ -29,7 +29,7 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header bg-primary">
-                <h3 class="my-0 text-white">Guia de remision</h3>
+                <h3 class="my-0 text-white">Guia de remision<a href="" class="btn btn-pink float-right" data-toggle="modal" data-target="#ModalGuiaRemision"><i class="fa fa-plus m-r-5"></i>GRE</a></h3>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -118,7 +118,11 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label class="control-label">Cliente</label>
-                  <input type="text" name="peso" class="form-control">
+                  <div class="input-group">
+                  <input type="text" name="name_cliente" class="form-control">
+                  <div class="input-group-append">
+                      <button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#ModalAgregarCliente" type="button">[+]</i></button>
+                    </div>
                 </div>
               </div>
             </div>
@@ -186,25 +190,31 @@
           <fieldset>
             <legend>Datos del transportista</legend>
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="control-label">Doc. Transporte</label>
-                  <select name="doc_transporte" class="form-control">
-                    <option value="6">RUC</option>
-                    <option value="1">DNI</option>
+                  <select name="doc_transporte" id="tipo_documento" class="form-control">
+                    <option value="4">RUC</option>
+                    <option value="2">DNI</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label">Num Doc. Transp.</label>
-                  <input type="text" name="num_doc_transporte" class="form-control">
+                  <div class="input-group">
+                    <input type="text" name="num_doc_transporte" id="txt_documento" class="form-control">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary waves-effect waves-light" type="button" onclick="buscar();"><i class="fas fa-search
+"></i></button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-5">
                 <div class="form-group">
                   <label class="control-label">Nombre / Razon Social Transporte</label>
-                  <input type="text" name="razon_social_transporte" class="form-control">
+                  <input type="text" name="razon_social_transporte" id="txt_nombre" class="form-control">
                 </div>
               </div>
               <div class="col-md-4">
@@ -213,7 +223,7 @@
                   <input type="text" name="razon_social_transporte" class="form-control">
                 </div>
               </div>
-              <div class="col-md-4" >
+              <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label"> N° Placa Vehíc.: *</label>
                   <input type="text" name="razon_social_transporte" class="form-control">
@@ -290,7 +300,7 @@
                   </thead>
                 </table>
               </form>
-            </div>              
+            </div>
             <div class="tab-pane" id="doc_ref">
               <div class="row">
                 <div class="col-md-4">
@@ -312,8 +322,8 @@
                   </div>
                 </div>
               </div>
-            </div>  
-          </div>        
+            </div>
+          </div>
           <fieldset>
             <legend>Información adicional para SUNAT</legend>
             <div class="row">
@@ -331,6 +341,164 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="ModalAgregarCliente" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="card-header bg-primary">
+      <h3 class="my-0 text-white">Agregar cliente</h3>
+    </div>
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cliente - Agregar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+      <form id="FormVentaAgregarCliente" action="<?= base_url('administrador/regventas/agregarCliente') ?>" autocomplete="off" method="post">
+        <div id="capa_load"></div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <div class="card"> -->
+              <div class="card-body">
+                <!-- <h4 class="header-title m-t-0 m-b-30">Tabs Bordered Justified</h4> -->
+
+                <ul class="nav nav-tabs tabs-bordered nav-justified">
+                  <li class="nav-item">
+                    <a href="#home-b2" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                      Datos del cliente
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#profile-b2" data-toggle="tab" aria-expanded="true" class="nav-link">
+                      Dirección
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#messages-b2" data-toggle="tab" aria-expanded="false" class="nav-link">
+                      Datos adicionales
+                    </a>
+                  </li>
+                  <!-- <li class="nav-item">
+                                                <a href="#settings-b2" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                                    Settings
+                                                </a>
+                                            </li> -->
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="home-b2">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Tipo:</label>
+                          <select name="tipo" id="tipo_documento" class="form-control">
+                            <option value="">Seleccione</option>
+                            <?php foreach ($doc_clientes as $d) : ?>
+                              <option value="<?= $d->cod_tipdocucli ?>"><?= $d->nom_tipdocucli ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <label class="control-label" id="txtdocu">Ruc|Dni:</label>
+                          <div class="input-group">
+                            <input type="text" id="txt_documento" name="documento" class="form-control">
+                            <div class="input-group-append">
+                              <button class="btn btn-info" id="scan" type="button" onclick="buscar();">
+                                <i class="fa fa-search"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label">Nombre o Razon Social</label>
+                          <input type="text" id="txt_nombre" name="nombre" class="form-control  text-uppercase">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label">Precio Venta:</label>
+                          <select name="precio_venta" class="form-control">
+                            <option value="Normal">Precio Normal</option>
+                            <option value="Mayor">Precio x Mayor</option>
+                            <option value="Especial">Precio Especial</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label">Dirección</label>
+                          <input type="text" id="txt_direccion" name="direccion" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="tab-pane" id="profile-b2">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="control-label">Contacto</label>
+                        <input type="text" name="contacto" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-md-6" id="telefono">
+                      <div class="form-group">
+                        <label class="control-label">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
+                      </div>
+                    </div>
+                    <div class="col-md-12" id="idtelefono">
+                      <div class="form-group">
+                        <label class="control-label">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="email" name="email" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane" id="messages-b2">
+                    <!-- <div class="col-md-6" id="fnacimiento">
+                                              <div class="form-group">
+                                                <label class="control-label">F.nacimiento</label>
+                                                <input type="date" id="fnacimiento" name="fnacimiento" class="form-control" >
+                                              </div> -->
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label">F.nacimiento</label>
+                        <div class="input-group">
+                          <input type="text" id="fnacimiento" name="fnacimiento" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                          <div class="input-group-append">
+                            <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- </div> -->
+          </div> <!-- end col -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>
