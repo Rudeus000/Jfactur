@@ -19,29 +19,32 @@ class Regdashboard extends CI_Controller {
 			'credito' => $this->reportdashboard_model->rowCountVentasCredito(),
 			'compras' => $this->reportdashboard_model->rowCountComprasDia(),
 			'years' => $this->reportdashboard_model->years(),
-			'meses' => $this->db->from('tb_cobro')
-											->select("
-												CASE 
-							WHEN MONTH(fecha_cobro) = 1 THEN 'Enero'
-							WHEN MONTH(fecha_cobro) = 2 THEN 'Febrero'
-							WHEN MONTH(fecha_cobro) = 3 THEN 'Marzo'
-							WHEN MONTH(fecha_cobro) = 4 THEN 'Abril'
-							WHEN MONTH(fecha_cobro) = 5 THEN 'Mayo'
-							WHEN MONTH(fecha_cobro) = 6 THEN 'Junio'
-							WHEN MONTH(fecha_cobro) = 7 THEN 'Julio'
-							WHEN MONTH(fecha_cobro) = 8 THEN 'Agosto'
-							WHEN MONTH(fecha_cobro) = 9 THEN 'Septiembre'
-							WHEN MONTH(fecha_cobro) = 10 THEN 'Octubre'
-							WHEN MONTH(fecha_cobro) = 11 THEN 'Noviembre'
-							WHEN MONTH(fecha_cobro) = 12 THEN 'Diciembre'
-							END as mes") 
-											->where('YEAR(fecha_cobro)',date('Y'))
-											->group_by('MONTH(fecha_cobro)')
-											->order_by("MONTH(fecha_cobro)","desc")																						
-											->get()->result(),
-				'product' => $this->db->from('tb_venta')
-											->select("
-												CASE 
+			// 'meses' => $this->db->from('tb_cobro')
+			'meses' => $this->db->select("
+					MONTH(fecha_cobro) as month_num,
+					MAX(CASE 
+						WHEN MONTH(fecha_cobro) = 1 THEN 'Enero'
+						WHEN MONTH(fecha_cobro) = 2 THEN 'Febrero'
+						WHEN MONTH(fecha_cobro) = 3 THEN 'Marzo'
+						WHEN MONTH(fecha_cobro) = 4 THEN 'Abril'
+						WHEN MONTH(fecha_cobro) = 5 THEN 'Mayo'
+						WHEN MONTH(fecha_cobro) = 6 THEN 'Junio'
+						WHEN MONTH(fecha_cobro) = 7 THEN 'Julio'
+						WHEN MONTH(fecha_cobro) = 8 THEN 'Agosto'
+						WHEN MONTH(fecha_cobro) = 9 THEN 'Septiembre'
+						WHEN MONTH(fecha_cobro) = 10 THEN 'Octubre'
+						WHEN MONTH(fecha_cobro) = 11 THEN 'Noviembre'
+						WHEN MONTH(fecha_cobro) = 12 THEN 'Diciembre'
+					END) as mes") 
+				->from('tb_cobro')
+				->where('YEAR(fecha_cobro)', date('Y'))
+				->group_by('MONTH(fecha_cobro)')
+				->order_by('MONTH(fecha_cobro)', 'desc')
+				->get()
+				->result(),
+				'product' => $this->db->select("
+				MONTH(fecha_vent) as month_num,
+				MAX(CASE  
 							WHEN MONTH(fecha_vent) = 1 THEN 'Enero'
 							WHEN MONTH(fecha_vent) = 2 THEN 'Febrero'
 							WHEN MONTH(fecha_vent) = 3 THEN 'Marzo'
@@ -54,7 +57,8 @@ class Regdashboard extends CI_Controller {
 							WHEN MONTH(fecha_vent) = 10 THEN 'Octubre'
 							WHEN MONTH(fecha_vent) = 11 THEN 'Noviembre'
 							WHEN MONTH(fecha_vent) = 12 THEN 'Diciembre'
-							END as mes")
+							END) as mes")
+							->from('tb_venta')
 											->where('YEAR(fecha_vent)',date('Y'))
 											->group_by('MONTH(fecha_vent)')
 											->order_by("MONTH(fecha_vent)","desc")	

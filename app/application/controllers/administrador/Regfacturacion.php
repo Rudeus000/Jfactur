@@ -11,6 +11,8 @@ class Regfacturacion extends CI_Controller {
 		$this->load->model('ventas_model');
 		$this->load->model('modelgeneral');
     	$this->load->helper('general');
+		$this->load->model('empresa_model');
+		// $this->load->model('modelgeneral');
     //$this->permisos = $this->backend_lib->control();
 	}
 
@@ -306,6 +308,7 @@ class Regfacturacion extends CI_Controller {
 
 	function reporteComprobates()
 	{
+		$data['empresa'] = $this->empresa_model->getEmpresa();
 		$data['desde'] = $this->input->get('desde');
 		$data['hasta'] = $this->input->get('hasta');
 		// $data['cliente'] = $this->input->get('cliente');

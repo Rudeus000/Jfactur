@@ -49,7 +49,7 @@ $objPHPExcel->getActiveSheet()
 						->mergeCells('A1:H1');
 $objPHPExcel->getActiveSheet()
 						->getCell('A1')
-						->setValue("MI EMPRESA");
+						->setValue($empresa->razon_social);
 $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14)->setBold(true);
 $objPHPExcel->getActiveSheet()
     ->getStyle('A1:H1')

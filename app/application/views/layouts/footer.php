@@ -121,7 +121,7 @@
 
                 $('#capa_load').html('<img src="<?= base_url_app() ?>assets/images/loading.gif" alt="" style="position: absolute;top: 10px;left: 46%;">');
 
-               $.post('<?= base_url_app() ?>application/controllers/consultar.php', {dni: $('#txt_documento').val(),tipo_doc: tipo_doc}, function(data) {
+               $.post('<?= base_url_app() ?>application/controllers/validardatos.php', {dni: $('#txt_documento').val(),tipo_doc: tipo_doc}, function(data) {
 
 
 
@@ -139,11 +139,11 @@
 
                         }else{
 
-                            // $('#txt_documento').val(datos[0]);
+                            $('#txt_documento').val(datos[0]);
 
-                            $('#txt_nombre').val(datos[4]+" "+datos[2]+ " "+datos[3]);
+                            $('#txt_nombre').val(datos[5]);
 
-                            $('#txt_direccion').val(datos[5]);
+                            $('#txt_direccion').val(datos[4]);
 
                             $('#fnacimiento').val(datos[6]);
                             

@@ -15,7 +15,7 @@ class Regventas extends CI_Controller
 		$this->load->model('modelgeneral');
 		$this->load->model('notaunidad_model');
 		$this->load->model('notavalorizado_model');
-		$this->load->model('modelgeneral');
+		// $this->load->model('modelgeneral');
 
 		$this->load->helper('general');
 		$this->permisos = $this->backend_lib->control();
@@ -973,6 +973,15 @@ class Regventas extends CI_Controller
 		$this->form_validation->set_rules('nombre', '', 'required');
 		$this->form_validation->set_rules('documento', '', 'required');
 		// $this->form_validation->set_rules('telefono','','required');
+		 // Validación del documento
+		 $documento = trim($this->input->post('documento'));
+		 if (preg_match('/^[0-9]{8}$/', $documento) !== 1) {
+			 $resp['success'] = false;
+			 $resp['message'] = 'El documento debe tener exactamente 8 dígitos.';
+			 echo json_encode($resp);			
+			 return;
+		 }
+
 		if ($this->form_validation->run() == TRUE) {
 			$data['cod_tipdocucli '] = $this->input->post('tipo');
 			$data['nomb_cliente'] = $this->input->post('nombre');

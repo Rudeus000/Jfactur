@@ -166,7 +166,7 @@ function enviarFormulario($form, callback) {
 			} else {
 				Swal.fire({
 					title: "Error",
-					text: "Ha ocurrido un error.",
+					text: data.message,
 					type: "error",
 				});
 			}
@@ -5287,16 +5287,19 @@ $(function () {
 				dataType: 'JSON',
 				data: compras
 			})
-				.done(function (resp) {
-					$('#ComprasContenedorGuardar').find('button:submit').prop('disabled', true).html('Procesando');
 
+				.done(function (resp) {
 					if (resp.success) {
 						Swal.fire({
 							title: "Buen trabajo",
 							text: "Se registró la compra con éxito.",
-							type: "success"
+							type: "success",
+							timer: 2500,
+							onClose: () => {
+								window.location.href = path + resp.redirect; // Redirigir después de cerrar la notificación
+							}
 						});
-						window.location.href = path + 'administrador/regcompras';
+						//window.location.href = path + resp.redirect;
 					} else {
 						Swal.fire({
 							title: "Error",
@@ -5305,8 +5308,27 @@ $(function () {
 						});
 					}
 
-
 				});
+			// .done(function (resp) {
+			// 	$('#ComprasContenedorGuardar').find('button:submit').prop('disabled', true).html('Procesando');
+
+			// 	if (resp.success) {
+			// 		Swal.fire({
+			// 			title: "Buen trabajo",
+			// 			text: "Se registró la compra con éxito.",
+			// 			type: "success"
+			// 		});
+			// 		window.location.href = path + 'administrador/regcompras';
+			// 	} else {
+			// 		Swal.fire({
+			// 			title: "Error",
+			// 			text: "Ocurrio un error, vuelva a intentarlo.",
+			// 			type: "error"
+			// 		});
+			// 	}
+
+
+			// });
 
 
 		}
