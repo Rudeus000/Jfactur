@@ -12198,9 +12198,9 @@ $(function () {
 				d.almacen = $("input[name=almacen]").val();
 				d.cliente = $("input[name=cliente]").val();
 				if (d.vendedor = $('select[name=vendedor]').val()) {
-					d.vendedor = $('select[name=vendedor]').val();
+					d.vendedor = $('select[name=vendedor').val();
 				} else {
-					d.vendedor = $('input[name=vendedor]').val();
+					d.vendedor = $('input[name=vendedorcod]').val();
 				}
 			}
 		},
@@ -14088,7 +14088,15 @@ $(function () {
 	/*                             END LIBRO DE VENTAS                            */
 	/* ========================================================================== */
 
+	/* ========================================================================== */
+	/*                             VALIDAR DOC CLIENTE                            */
+	/* ========================================================================== */
 
+	
+
+	/* ========================================================================== */
+	/*                            FIN VALIDAR DOC CLIENTE                         */
+	/* ========================================================================== */
 
 
 

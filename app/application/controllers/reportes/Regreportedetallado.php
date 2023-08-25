@@ -91,7 +91,8 @@ class Regreportedetallado extends CI_Controller {
 		$hasta = $this->input->get_post('hasta');
 		$almacen = $this->input->get_post('almacen');
 		$cliente = $this->input->get_post('cliente');
-		$vendedor = $this->input->get_post('vendedor');
+		$vendedorcod = $this->input->get_post('vendedorcod');
+		// $vendedor = $this->input->get_post('vendedor');
 
 		if ($desde!='' AND $hasta!='') {
 			$data['desde'] = $desde;
@@ -107,8 +108,9 @@ class Regreportedetallado extends CI_Controller {
 		// 	$data['almacen'] = $almacen;
 		// }
 		$data['cliente'] = $cliente;
-		$data['vendedor'] = $vendedor;
+		$data['vendedorcod'] = $vendedorcod;
 		$data['almacen'] = $almacen;
+		// $data['vendedor'] = $vendedor;
 	
 		$datos = $this->reportedetallado_model->getVentas($data);
 		header('content-type: application/json; charset=utf-8');

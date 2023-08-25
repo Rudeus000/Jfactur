@@ -244,9 +244,12 @@ class Reportedetallado_model extends CI_Model {
 		if ($data['cliente']!='') {
       $this->db->like('nomb_cliente',$data['cliente']);
 		}
-		if ($data['vendedor'] != '') {
-			$this->db->where('tb_venta.cod_usu', $data['vendedor']);
+		if ($data['vendedorcod'] != '') {
+			$this->db->where('tb_venta.cod_usu', $data['vendedorcod']);
 		  }
+		//   if ($data['vendedor'] != '') {
+		// 	$this->db->where('tb_venta.cod_usu', $data['vendedor']); // Aplicar filtro por valor seleccionado
+		// }
 	// 	if($data['vendedor']!=''){
     //   $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
     // }
@@ -292,9 +295,12 @@ class Reportedetallado_model extends CI_Model {
 			if ($data['cliente']!='') {
 		$this->db->like('nomb_cliente',$data['cliente']);
 			}
-			if ($data['vendedor'] != '') {
-				$this->db->where('tb_venta.cod_usu', $data['vendedor']);
+			if ($data['vendedorcod'] != '') {
+				$this->db->where('tb_venta.cod_usu', $data['vendedorcod']);
 			  }
+			//   if ($data['vendedor'] != '') {
+			// 	$this->db->where('tb_venta.cod_usu', $data['vendedor']); // Aplicar filtro por valor seleccionado
+			// }
 		// 	if($data['vendedor']!=''){
 		// $this->db->having("nombre_apellido LIKE '%".$data['vendedor']."%'");
    		//  }

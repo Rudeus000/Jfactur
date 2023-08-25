@@ -645,7 +645,8 @@ class Regventas extends CI_Controller
 
 
 						//DESCONTAR FECHAS DE VENCIMIENTO
-						if ($_POST['producto_fecha'][$codigo_producto] != '') {
+						if (isset($_POST['producto_fecha'][$codigo_producto]) && $_POST['producto_fecha'][$codigo_producto] != '') {
+						// if ($_POST['producto_fecha'][$codigo_producto] != '') {
 							$producto_fecha = $this->db->from('tb_producto_fecha')
 								->where('cod_prodfec', $_POST['producto_fecha'][$codigo_producto])
 								->get()->row();
@@ -974,13 +975,37 @@ class Regventas extends CI_Controller
 		$this->form_validation->set_rules('documento', '', 'required');
 		// $this->form_validation->set_rules('telefono','','required');
 		 // Validación del documento
-		 $documento = trim($this->input->post('documento'));
-		 if (preg_match('/^[0-9]{8}$/', $documento) !== 1) {
-			 $resp['success'] = false;
-			 $resp['message'] = 'El documento debe tener exactamente 8 dígitos.';
-			 echo json_encode($resp);			
-			 return;
-		 }
+		 if ($this->form_validation->run() == TRUE) {
+			$tipo = $this->input->post('tipo');
+			$nombre = $this->input->post('nombre');
+			$documento = trim($this->input->post('documento'));
+
+			$existingCliente = $this->modelgeneral->getTableWhereRow('tb_cliente', ['doc_cliente' => $documento]);
+			if (!is_null($existingCliente)) {
+				$resp['success'] = false;
+				$resp['message'] = "Ya existe un cliente con este documento en la base de datos.";
+				echo json_encode($resp);
+				return;
+			}
+	
+			// Realizar la validación aquí según el tipo de documento seleccionado
+			if ($tipo === "2" && !preg_match('/^\d{8}$/', $documento)) {
+				$resp['success'] = false;
+				$resp['message'] = "El DNI no es válido.";
+				echo json_encode($resp);
+				return;
+			} elseif ($tipo === "4" && !preg_match('/^\d{11}$/', $documento)) {
+				$resp['success'] = false;
+				$resp['message'] = "El RUC no es válido.";
+				echo json_encode($resp);
+				return;
+			} elseif (($tipo === "3" || $tipo === "5") && !preg_match('/^[0-9a-zA-Z]{12}$/', $documento)) {
+				$resp['success'] = false;
+				$resp['message'] = "El documento no es válido, recuerda ingresar los datos correctos.";
+				echo json_encode($resp);
+				return;
+			}
+		}
 
 		if ($this->form_validation->run() == TRUE) {
 			$data['cod_tipdocucli '] = $this->input->post('tipo');
