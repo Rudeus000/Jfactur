@@ -15,7 +15,7 @@ class Regventas extends CI_Controller
 		$this->load->model('modelgeneral');
 		$this->load->model('notaunidad_model');
 		$this->load->model('notavalorizado_model');
-		// $this->load->model('modelgeneral');
+		$this->load->model('modelgeneral');
 
 		$this->load->helper('general');
 		$this->permisos = $this->backend_lib->control();

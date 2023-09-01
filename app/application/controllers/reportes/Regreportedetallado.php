@@ -91,7 +91,7 @@ class Regreportedetallado extends CI_Controller {
 		$hasta = $this->input->get_post('hasta');
 		$almacen = $this->input->get_post('almacen');
 		$cliente = $this->input->get_post('cliente');
-		$vendedorcod = $this->input->get_post('vendedorcod');
+		$vendedor = $this->input->get_post('vendedor');
 		// $vendedor = $this->input->get_post('vendedor');
 
 		if ($desde!='' AND $hasta!='') {
@@ -108,7 +108,7 @@ class Regreportedetallado extends CI_Controller {
 		// 	$data['almacen'] = $almacen;
 		// }
 		$data['cliente'] = $cliente;
-		$data['vendedorcod'] = $vendedorcod;
+		$data['vendedor'] = $vendedor;
 		$data['almacen'] = $almacen;
 		// $data['vendedor'] = $vendedor;
 	
@@ -122,7 +122,14 @@ class Regreportedetallado extends CI_Controller {
 		$data['desde'] = $this->input->get('desde');
 		$data['hasta'] = $this->input->get('hasta');
 		$data['cliente'] = $this->input->get('cliente');
-		$data['vendedorcod'] = $this->input->get('vendedorcod');
+		if($data['vendedorcod'] = $this->input->get('vendedorcod')){
+			$data['vendedorcod'] = $this->input->get('vendedorcod');
+			
+		}else{
+			$data['vendedorcod'] = $this->input->get('vendedorcod');
+
+		}		
+		$data['vendedor'] = $this->input->get('vendedor');
 		$data['almacen'] = $this->input->get('almacen');
 		$data['datos'] = $this->reportedetallado_model->getVentasDetalladasExcel($data);
 		$this->load->view('reports/ventasdetalladasexcel',$data);

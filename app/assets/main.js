@@ -7126,7 +7126,7 @@ $(function () {
 				if (d.vendedor = $('select[name=vendedor]').val()) {
 					d.vendedor = $('select[name=vendedor]').val();
 				} else {
-					d.vendedor = $('input[name=vendedor]').val();
+					d.vendedorcod = $('input[name=vendedocod]').val();
 				}
 				d.punto = $('select[name=punto]').val();
 				d.estado = $('select[name=estado]').val();
@@ -12673,8 +12673,8 @@ $(function () {
 		editApi.addEventListener('click', function () {
 			// Campos de entrada para habilitar
 			var apiFields = [
-				user_sol,
-				pass_sol,
+				// user_sol,
+				// pass_sol,
 				cliente_id,
 				cliente_secret
 			];
@@ -12687,8 +12687,8 @@ $(function () {
 	// Bloquear los campos de entrada inicialmente
 	if (typeof editApi !== 'undefined' && editApi !== null) {
 		var apiFields = [
-			user_sol,
-			pass_sol,
+			// user_sol,
+			// pass_sol,
 			cliente_id,
 			cliente_secret
 		];
@@ -13646,6 +13646,9 @@ $(function () {
 		$('#ModalBusquedaGeneral').modal();
 	});
 
+	$('#search-phone').click(function () {
+		$('#ModalBusquedaGeneralPhone').modal();
+	});
 
 	$('#FormBusquedaGeneral').validate({
 		submitHandler: function () {

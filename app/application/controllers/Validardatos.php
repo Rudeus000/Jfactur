@@ -2,7 +2,7 @@
 // Variables
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoid2FzaGluZ3RvbiIsImV4cCI6MTY5MjYzNjM1Mn0.6xKk9ni1qIXuw9arOZA3e4JbbGYKlUaDZvRqWQUi_80';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiV2FzaGluZ3RvbiIsImV4cCI6MTY5NTk0OTcxNH0.Sslt6SfmBKMkN5GE_xs83uLaMzIQZbVhiR5pU7n0ZfA';
 
 
 if ($tipo_doc == "2") {
@@ -11,7 +11,7 @@ if ($tipo_doc == "2") {
         $documento = trim($documento);    
     }
 // API URL
-$url = "http://datos.test/datos.php?token=$token&dni=$documento";
+$url = "https://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
 
 // Initialize cURL session
 $ch = curl_init();

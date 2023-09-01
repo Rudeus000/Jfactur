@@ -12,7 +12,7 @@ class Regfacturacion extends CI_Controller {
 		$this->load->model('modelgeneral');
     	$this->load->helper('general');
 		$this->load->model('empresa_model');
-		// $this->load->model('modelgeneral');
+		$this->load->model('modelgeneral');
     //$this->permisos = $this->backend_lib->control();
 	}
 

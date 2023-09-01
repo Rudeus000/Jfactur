@@ -331,7 +331,7 @@
 										<legend>Credenciales de API SUNAT GRE</legend>
 
 										<div class="row">
-											<div class="col-md-2">
+											<!-- <div class="col-md-2">
 												<div class="form-group">
 													<label class="control-label">Usuario SOL</label>
 													<input type="text" class="form-control" name="user_sol" id="user_sol" value="<?= $empresa->user_sol ?>">
@@ -342,17 +342,17 @@
 													<label class="control-label">Contraseña SOL</label>
 													<input type="text" class="form-control" name="pass_sol" value="<?= $empresa->pass_sol ?>" id="pass_sol" >
 												</div>
-											</div>
+											</div> -->
 											<div class="col-md-3">
 												<div class="form-group">
 													<label class="control-label">Cliente_ID</label>
-													<input type="text" class="form-control" name="cliente_id" value="<?= $empresa->cliente_id ?>" id="cliente_id">
+													<input type="text" class="form-control" name="cliente_id" value="<?= $empresa->client_id_emp ?>" id="cliente_id">
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label">Cliente_secret</label>
-													<input type="text" class="form-control" name="cliente_secret" value="<?= $empresa->cliente_secret ?>" id="cliente_secret">
+													<input type="text" class="form-control" name="cliente_secret" value="<?= $empresa->client_secret_emp ?>" id="cliente_secret">
 												</div>
 											</div>
 											<div class="col-md-1">

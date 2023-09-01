@@ -75,10 +75,10 @@ class Regempresa extends CI_Controller {
 		$data['usuario_sol_emp'] = $this->input->post('usuario_sol');
 		$data['contrasena_sol_emp'] = $this->input->post('contrasena_sol');
 		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');
-		$data['user_sol'] = $this->input->post('user_sol');	
-		$data['pass_sol'] = $this->input->post('pass_sol');
-		$data['cliente_id'] = $this->input->post('cliente_id');
-		$data['cliente_secret'] = $this->input->post('cliente_secret');
+		// $data['user_sol'] = $this->input->post('user_sol');	
+		// $data['pass_sol'] = $this->input->post('pass_sol');
+		$data['client_id_emp'] = $this->input->post('cliente_id');
+		$data['client_secret_emp'] = $this->input->post('cliente_secret');
 		$certificado = $this->uploadCertificado();
 		if($certificado['success']==true){
 			$data['certificado_emp'] = $certificado['name'];
@@ -204,10 +204,10 @@ class Regempresa extends CI_Controller {
 
 	function apisunat(){		
 		// $data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
-		$data['user_sol'] = $this->input->post('user_sol');
-		$data['pass_sol'] = $this->input->post('pass_sol');
-		$data['cliente_id'] = $this->input->post('cliente_id');
-		$data['cliente_secret'] = $this->input->post('cliente_secret');		
+		// $data['user_sol'] = $this->input->post('user_sol');
+		// $data['pass_sol'] = $this->input->post('pass_sol');
+		$data['client_id_emp'] = $this->input->post('cliente_id');
+		$data['client_secret_emp'] = $this->input->post('cliente_secret');		
 		$where['cod_empresa '] = 1;
 		$edit = $this->modelgeneral->editRegist('tb_empresa',$where,$data);
 		$resp =[];
