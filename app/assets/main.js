@@ -13647,7 +13647,7 @@ $(function () {
 	});
 
 	$('#search-phone').click(function () {
-		$('#ModalBusquedaGeneralPhone').modal();
+		$('#ModalBusquedaGeneral').modal();
 	});
 
 	$('#FormBusquedaGeneral').validate({

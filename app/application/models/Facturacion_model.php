@@ -38,8 +38,8 @@ class Facturacion_model extends CI_Model
 			$dias = $diff->days;
 
 			$limite = '';
-			if ($dias >= 0 and $dias <= 5) {
-				$limite = '<label class="label label-info">' . (5 - $dias) . ' dias</label>';
+			if ($dias >= 0 and $dias <= 2) {
+				$limite = '<label class="label label-info">' . (2 - $dias) . ' dias</label>';
 			} else {
 				$limite = '<label class="label label-danger">Caducó</label>';
 			}
@@ -72,7 +72,7 @@ class Facturacion_model extends CI_Model
 				$limite = '<label class="label label-primary">Procesado</label>';
 			} else {
 
-				if ($dias >= 0 and $dias <= 5) {
+				if ($dias >= 0 and $dias <= 2) {
 
 					$label = '<label class="label label-info">Pendiente</label>';
 					$check = $check = '<input type="checkbox" name="factura" class="seleccion" data-id="' . $q->cod_vent . '" value="' . $q->cod_vent . '" />';
