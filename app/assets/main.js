@@ -13309,86 +13309,92 @@ $(function () {
 	=           VERIFICAR STOCK MINIMO       =
 	===========================================*/
 	var data_stockminimos = $('.alerta-modal').data('stockminimos');
-	var data_vencimiento = $('.alerta-modal').data('vencimiento');
+var data_vencimiento = $('.alerta-modal').data('vencimiento');
 
-	if (data_stockminimos && data_vencimiento) {
-		$('#ModalStockMinimos .modal-dialog').attr('style', 'max-width:1500px !important');
-	}
+if (data_stockminimos && data_vencimiento) {
+    $('#ModalStockMinimos .modal-dialog').attr('style', 'max-width:1500px !important');
+}
 
-	if (data_stockminimos || data_vencimiento) {
-		$.post(path + "reportes/regdashboard/productosStockMinimosFechasVencimiento", {},
-			function (data, textStatus, jqXHR) {
-				if (data.success) {
+if (data_stockminimos || data_vencimiento) {
+    $.post(path + "reportes/regdashboard/productosStockMinimosFechasVencimiento", {},
+        function (data, textStatus, jqXHR) {
+            if (data.success) {
+                var tableOptions = {
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                    }
+                };
 
-					if (data_stockminimos) {
-						if (data_vencimiento) {
-							$('#stock-minimo-contenido').removeClass('col-lg-12');
-							$('#stock-minimo-contenido').addClass('col-lg-6');
-						}
+                if (data_stockminimos) {
+                    if (data_vencimiento) {
+                        $('#stock-minimo-contenido').removeClass('col-lg-12');
+                        $('#stock-minimo-contenido').addClass('col-lg-6');
+                    }
 
-						var tr = '';
-						$.each(data.data_minimo, function (index, value) {
-							tr += `
-							<tr>
-								<td>${value.nomb_almacen}</td>
-								<td>${value.nomb_product}</td>
-								
-								<td>${value.nomb_unid}</td>
-								
-								<td>${value.stock}</td>
-								<td>${value.stockmin_product}</td>
-							</tr>
-						`;
-						});
-						$('#TableStockMinimos tbody').html(tr);
+                    var tr = '';
+                    $.each(data.data_minimo, function (index, value) {
+                        tr += `
+                            <tr>
+                                <td>${value.nomb_almacen}</td>
+                                <td>${value.nomb_product}</td>
+                                <td>${value.nomb_unid}</td>
+                                <td>${value.stock}</td>
+                                <td>${value.stockmin_product}</td>
+                            </tr>
+                        `;
+                    });
+                    $('#TableStockMinimos tbody').html(tr);
 
-					} else {
-						$('#stock-minimo-contenido').hide();
-					}
+                    // Inicializar DataTable con paginación
+                    $('#TableStockMinimos').DataTable(tableOptions);
 
-					if (data_vencimiento) {
+                } else {
+                    $('#stock-minimo-contenido').hide();
+                }
 
-						if (data_stockminimos) {
-							$('#stock-vencimiento-contenido').removeClass('col-lg-12');
-							$('#stock-vencimiento-contenido').addClass('col-lg-6');
-						}
+                if (data_vencimiento) {
+                    if (data_stockminimos) {
+                        $('#stock-vencimiento-contenido').removeClass('col-lg-12');
+                        $('#stock-vencimiento-contenido').addClass('col-lg-6');
+                    }
 
-						var tr = '';
-						$.each(data.data_vencimiento, function (index, value) {
-							tr += `
-							<tr>
-								<td>${value.nomb_almacen}</td>
-								<td>${value.nomb_product}</td>
-								<td>${value.fecha_produccion_prodfec}</td>
-								<td>${value.fecha_vencimiento_prodfec}</td>
-								<td>${value.cantidad_prodfec}</td>
-							</tr>
-						`;
-						});
-						$('#TableProductoFechaVencimiento tbody').html(tr);
+                    var tr = '';
+                    $.each(data.data_vencimiento, function (index, value) {
+                        tr += `
+                            <tr>
+                                <td>${value.nomb_almacen}</td>
+                                <td>${value.nomb_product}</td>
+                                <td>${value.fecha_produccion_prodfec}</td>
+                                <td>${value.fecha_vencimiento_prodfec}</td>
+                                <td>${value.cantidad_prodfec}</td>
+                            </tr>
+                        `;
+                    });
+                    $('#TableProductoFechaVencimiento tbody').html(tr);
 
-					} else {
-						$('#stock-vencimiento-contenido').hide();
-					}
+                    // Inicializar DataTable con paginación
+                    $('#TableProductoFechaVencimiento').DataTable(tableOptions);
+                } else {
+                    $('#stock-vencimiento-contenido').hide();
+                }
 
+                $('#ModalStockMinimos').modal();
+            }
+        },
+        "JSON"
+    );
+}
 
+$('#posponer-stockminimo').click(function () {
+    $('#ModalStockMinimos').modal('hide');
+    $.post(path + "reportes/regdashboard/productosStockMinimosPosponer", {},
+        function (data, textStatus, jqXHR) {
 
-					$('#ModalStockMinimos').modal();
-				}
-			},
-			"JSON"
-		);
-	}
+        },
+        "HTML"
+    );
+});
 
-	$('#posponer-stockminimo').click(function () {
-		$('#ModalStockMinimos').modal('hide');
-		$.post(path + "reportes/regdashboard/productosStockMinimosPosponer", {},
-			function (data, textStatus, jqXHR) {
-
-			},
-			"HTML"
-		);
-	})
 
 	/*=========================================
 	=         END VERIFICAR STOCK MINIMO      =

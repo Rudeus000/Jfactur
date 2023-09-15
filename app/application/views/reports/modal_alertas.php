@@ -7,9 +7,9 @@
                 </div>
       <div class="modal-body">
             <div class="row">
-                <div id="stock-minimo-contenido" class="col-lg-12">
+                <div id="stock-minimo-contenido" class="col-lg-12 table-responsive">
                     <h4>Alerta de productos con stock mínimo</h4>
-                    <table id="TableStockMinimos" class="table table-striped  table-condensed tblstockminimo">
+                    <table id="TableStockMinimos" class="table table-striped  table-condensed tblstockminimo" cellspacing="0" width="100%">
                         <thead>
                             <tr class="bg-success text-white">
                                 <th>Almacen</th>

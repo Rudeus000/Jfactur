@@ -259,53 +259,52 @@ class Regdashboard extends CI_Controller {
 	}
 
 	public function productosStockMinimosFechasVencimiento()
-	{
-		if($this->session->userdata('stock_minimo') == true){
-			$query_stock_minimo = $this->db->from('tb_producto_stock')
-			->select('nomb_almacen,nomb_product,nomb_categoria,prec_costo,nomb_unid,stock,stockmin_product')
-			->join('tb_producto','tb_producto_stock.cod_producto = tb_producto.cod_producto')
-			->join('tb_categoria','tb_categoria.cod_categoria = tb_producto.cod_categoria')
-			->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
-			->join('tb_almacen','tb_producto_stock.cod_almacen = tb_almacen.cod_almacen')
-			->where('tb_producto_stock.stock <= tb_producto.stockmin_product', null)
-			->where('tb_producto.est_product',1)
-			->get();
-			
-			$resp = [];
+{
+    if ($this->session->userdata('stock_minimo') == true) {
+        $resp = [];
 
-			$success = false;
+        // Consulta para productos con stock mínimo
+        $query_stock_minimo = $this->db->from('tb_producto_stock')
+            ->select('nomb_almacen, nomb_product, nomb_categoria, prec_costo, nomb_unid, stock, stockmin_product')
+            ->join('tb_producto', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
+            ->join('tb_categoria', 'tb_categoria.cod_categoria = tb_producto.cod_categoria')
+            ->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+            ->join('tb_almacen', 'tb_producto_stock.cod_almacen = tb_almacen.cod_almacen')
+            ->where('tb_producto_stock.stock <= tb_producto.stockmin_product', null)
+            ->where('tb_producto.est_product', 1)
+            ->get();
 
-			if($query_stock_minimo->num_rows() > 0){
-				$success = true;
-				$resp['data_minimo'] = $query_stock_minimo->result();
-			}
+        if ($query_stock_minimo->num_rows() > 0) {
+            $resp['success'] = true;
+            $resp['data_minimo'] = $query_stock_minimo->result();
+        } else {
+            $resp['success'] = false;
+        }
 
-			$query_vencimiento = $this->db->from('tb_producto_fecha')
-			->select('cod_prodfec, nomb_product,nomb_almacen,fecha_produccion_prodfec,fecha_vencimiento_prodfec,fecha_alerta_prodfec,cantidad_prodfec')
-			->join('tb_producto','tb_producto_fecha.cod_producto = tb_producto.cod_producto')
-			->join('tb_almacen','tb_producto_fecha.cod_almacen = tb_producto_fecha.cod_almacen')
-			->where('cantidad_prodfec > ',0)
-			->where('fecha_alerta_prodfec <=', date('Y-m-d'))
-			->order_by('cod_prodfec')
-			->group_by('tb_producto_fecha.cod_prodfec')
-			->get();
+        // Consulta para productos con fechas de vencimiento
+        $query_vencimiento = $this->db->from('tb_producto_fecha')
+            ->select('cod_prodfec, nomb_product, nomb_almacen, fecha_produccion_prodfec, fecha_vencimiento_prodfec, fecha_alerta_prodfec, cantidad_prodfec')
+            ->join('tb_producto', 'tb_producto_fecha.cod_producto = tb_producto.cod_producto')
+            ->join('tb_almacen', 'tb_producto_fecha.cod_almacen = tb_almacen.cod_almacen')
+            ->where('cantidad_prodfec >', 0)
+            ->where('fecha_alerta_prodfec <=', date('Y-m-d'))
+            ->order_by('cod_prodfec')
+            ->get();
 
-			if($query_vencimiento->num_rows() > 0){
-				$success = true;
-				$resp['data_vencimiento'] = $query_vencimiento->result();
-			}
+        if ($query_vencimiento->num_rows() > 0) {
+            $resp['success'] = true;
+            $resp['data_vencimiento'] = $query_vencimiento->result();
+        }
 
-			
-			$resp['success'] = $success;
+    } else {
+        $resp = [];
+        $resp['success'] = false;
+    }
 
-		}else{
-			$resp = [];
-			$resp['success'] = false;
-		}
-		
-		header('content-type: application/json; charset=utf-8');
-		echo json_encode($resp);
-	}
+    header('content-type: application/json; charset=utf-8');
+    echo json_encode($resp);
+}
+
 
 	public function productosStockMinimosPosponer()
 	{

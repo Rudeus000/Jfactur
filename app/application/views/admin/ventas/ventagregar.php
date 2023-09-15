@@ -323,7 +323,7 @@
                         <div class="form-group">
                           <label class="control-label" id="precio_u">Precio Unit.</label>
                           <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
-                          <input type="text" name="precioProducto" class="form-control">
+                          <input type="text" name="precioProducto" class="form-control" min="1">
                         </div>
                       </div>
 
