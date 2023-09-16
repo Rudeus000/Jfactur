@@ -1,8 +1,8 @@
 var path = $('body').data('path');
 var path_app = $('body').data('path-app');
 var movilexpert = $('body').data('movilexpert');
-// $('body').addClass('enlarged');
-// $('ul.collapse').removeClass('in');
+$('body').addClass('enlarged');
+$('ul.collapse').removeClass('in');
 
 /*==================================================
 =            SERIALIZAR DATOS EN OBJETO            =

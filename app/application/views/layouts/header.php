@@ -59,7 +59,8 @@
 </head>
 
 <body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>">
-    <!-- Begin page -->
+   
+<!-- Begin page -->
     <div id="wrapper">
 
         <!-- Top Bar Start -->
@@ -79,17 +80,8 @@
 
             <nav class="navbar-custom">
 
-                <ul class="list-inline float-right mb-0">
-                    <!-- <li class="list-inline-item dropdown notification-list ">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="alert alert-danger" role="alert">
-                                    Su ciclo de facturacion vence: 22-07-2021 / 00:00 AM, paga a tiempo y evita las molestias de corte de servicio...
-                                    </div>
-                                </div>
-                            </div> 
-                        </li>                         -->
-                        <li class="list-inline-item dropdown notification-list">
+                <ul class="list-inline float-right mb-0">                                   
+                    <li class="list-inline-item dropdown notification-list">
                         <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Buscar">
                             <i class="fa fa-search noti-icon text-purple waves-light waves-effect" id="search-phone"></i>
                         </a>
@@ -185,11 +177,11 @@
 
         </div>
         <!-- Top Bar End -->
-
+    <!-- </div> -->
 
 </body>
 
-</html>
+
 
 
 <div id="ModalBusquedaGeneral" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -255,3 +247,5 @@
         </div>
     </div>
 </div>
+
+</html>

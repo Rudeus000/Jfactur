@@ -6,7 +6,7 @@
      <div id="sidebar-menu">
        <!-- Left Menu Start -->
        <ul class="metismenu" id="side-menu">
-         <li class="menu-title">Menú de navegación</li>              
+         <li class="menu-title">Menú de navegación</li>
          <li>
            <a href="<?php echo base_url(); ?>reportes/regdashboard"><i class="fas fa-home"></i> <span> Inicio </span> </a>
          </li>
@@ -146,17 +146,17 @@
          </li>
          <?php if ($this->session->userdata('perfil') == 1) : ?>
 
-<li>
-  <a href="javascript: void(0);"><i class="fas fa-calculator"></i><span class="float-right label bg-danger inline m-t-10">Beta</span> <span> Contabilidad </a>
-  <ul class="nav-second-level" aria-expanded="false">
+           <li>
+             <a href="javascript: void(0);"><i class="fas fa-calculator"></i><span class="float-right label bg-danger inline m-t-10">Beta</span> <span> Contabilidad </a>
+             <ul class="nav-second-level" aria-expanded="false">
 
-    <li><a href="<?php echo base_url(); ?>reportes/libroventas"><i class="ion ion-md-book"></i>Libro electronico</a></li>
+               <li><a href="<?php echo base_url(); ?>reportes/libroventas"><i class="ion ion-md-book"></i>Libro electronico</a></li>
 
 
-  </ul>
-</li>
+             </ul>
+           </li>
 
-<?php endif ?>
+         <?php endif ?>
          <?php if ($this->session->userdata('perfil') == 1) : ?>
            <li>
              <a href="javascript: void(0);"><i class=" fas fa-chart-bar"></i><span> Graficos </span> <span class="menu-arrow"></span></a>
