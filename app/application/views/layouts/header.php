@@ -190,7 +190,7 @@
             <!-- <div class="modal-header"> -->
             <div class="modal-header bg-success">
 
-                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i><a> </h3>
+                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i></h3>
                 <!-- <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5> -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
