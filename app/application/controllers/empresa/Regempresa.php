@@ -29,11 +29,12 @@ class Regempresa extends CI_Controller {
 		$data['permisos'] =$this->permisos;
 		$this->load->helper('url');
 		$this->load->view('layouts/header');
-		$this->load->view('layouts/aside');
+		
 		$data['ubigeos'] = $this->ubigeo();
 		$data['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
 		$data['regimen'] = $this->modelgeneral->getTable('sunat_tiporegimen');
 		$this->load->view('empresa/viewempresa',$data);
+		$this->load->view('layouts/aside',$data);
 		$this->load->view('layouts/footer');
 	}
 
@@ -164,6 +165,15 @@ class Regempresa extends CI_Controller {
 			['movilexpert_emp' => $estado]
 		);
 		$this->session->set_userdata('movil_expert',$estado);
+	}
+	public function companyStatus()
+	{
+		$companystatus = $this->input->post('com_status');
+		$this->modelgeneral->editRegist('tb_empresa',
+			['cod_empresa' => 1],
+			['company_status' => $companystatus]
+		);
+		// $this->session->set_userdata('movil_expert',$estado);
 	}
 
 	function anuncio(){		

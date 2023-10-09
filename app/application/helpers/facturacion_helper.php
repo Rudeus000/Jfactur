@@ -1,4 +1,4 @@
-<?php 
+<?php
 function getEmisor()
 {
 	$empresa = getDatosEmpresa();
@@ -17,13 +17,17 @@ function getEmisor()
 		"codigo_sunat" 				=> $empresa['punto_venta']->codigosunat_puntoventa,
 	];
 
+	
+
+	//$datos = [];
+
 	$tipo = getTipoProceso();
-	if($tipo['tipo_proceso']=='1'){ //PRODUCCION
+	if ($tipo['tipo_proceso'] == '1') { //PRODUCCION
 		$datos['usuariosol'] = $empresa['empresa']->usuario_sol_emp;
 		$datos['clavesol'] = $empresa['empresa']->contrasena_sol_emp;
 		$datos['certificado'] = $empresa['empresa']->certificado_emp;
 		$datos['contrasena_certificado'] = $empresa['empresa']->contrasena_certificado_emp;
-	}else{ //BETA
+	} else { //BETA
 		$datos['usuariosol'] = 'MODDATOS';
 		$datos['clavesol'] = 'moddatos';
 		$datos['certificado'] = 'firmabeta.pfx';
@@ -35,32 +39,41 @@ function getEmisor()
 
 function getDatosEmpresa()
 {
-	$CI =& get_instance();
+	$CI = &get_instance();
 	$resultado = [];
 	$resultado['empresa'] = $CI->db->from('tb_empresa')
-	->where('cod_empresa',1)
-	->get()->row();
+		->where('cod_empresa', 1)
+		->get()->row();
 
 	$resultado['punto_venta'] = $CI->db->from('tb_puntoventa')
-	->select('tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento')
-	->where('cod_puntoventa',$CI->session->userdata('puntoventa'))
-	->join('ubigeo_distritos','tb_puntoventa.ubigeo_puntoventa = ubigeo_distritos.id')
-	->join('ubigeo_provincias','ubigeo_provincias.id = ubigeo_distritos.provincia_id')
-	->join('ubigeo_departamentos','ubigeo_departamentos.id = ubigeo_distritos.departamento_id')
-	// ->where('cod_empresa',1)
-	->get()->row();
+		->select('tb_puntoventa.*,ubigeo_distritos.nombre as distrito,ubigeo_provincias.nombre as provincia, ubigeo_departamentos.nombre as departamento')
+		->where('cod_puntoventa', $CI->session->userdata('puntoventa'))
+		->join('ubigeo_distritos', 'tb_puntoventa.ubigeo_puntoventa = ubigeo_distritos.id')
+		->join('ubigeo_provincias', 'ubigeo_provincias.id = ubigeo_distritos.provincia_id')
+		->join('ubigeo_departamentos', 'ubigeo_departamentos.id = ubigeo_distritos.departamento_id')
+		// ->where('cod_empresa',1)
+		->get()->row();
 	return $resultado;
 }
 
 function getTipoProceso()
 {
-	$datos['beta']['tipo_proceso'] = '3';
-	$datos['beta']['ruta_ws'] = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService';
-	
-	$datos['produccion']['tipo_proceso'] = '1';
-	$datos['produccion']['ruta_ws'] = 'https://www.sunat.gob.pe/ol-ti-itcpfegem/billService';
+	 // Obtiene el valor de company_status
+	 $empresa = getDatosEmpresa();
+	 $company_status = $empresa['empresa']->company_status;
+	$datos = [];
 
-	return $datos['beta'];
+	if ($company_status == 1) {
+		// Producción
+		$datos['tipo_proceso'] = '1';
+		$datos['ruta_ws'] = 'https://www.sunat.gob.pe/ol-ti-itcpfegem/billService';
+	} else {
+		// Beta
+		$datos['tipo_proceso'] = '3';
+		$datos['ruta_ws'] = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService';
+	}
+
+	return $datos;
 }
 
 function getTipoTransporte($tipo)
@@ -131,16 +144,16 @@ function msj_sunat($string)
 	$emisor = getEmisor();
 
 	$pos = strpos($string, "?xml version=");
-	if($pos !== false){
+	if ($pos !== false) {
 		$xml = simplexml_load_string($string, NULL, NULL, "http://schemas.xmlsoap.org/soap/envelope/");
 		$ns = $xml->getNamespaces(true);
-		if($emisor['usuariosol']=='MODDATOS'){
+		if ($emisor['usuariosol'] == 'MODDATOS') {
 			$soap = $xml->children($ns['soap-env']);
-		}else{
+		} else {
 			$soap = $xml->children($ns['env']);
 		}
 		return (string)$soap->Body->Fault->children()->faultstring[0];
-	}else{
+	} else {
 		return $string;
 	}
 }
@@ -149,5 +162,3 @@ function reintentos()
 {
 	return 3;
 }
-
-?>

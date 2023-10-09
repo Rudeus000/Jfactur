@@ -1,5 +1,5 @@
 <?php 
-require 'vendor/autoload.php';
+require APP_PATH.'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -110,10 +110,12 @@ foreach ($datos as $d) {
 	->setCellValueByColumnAndRow(6,$row,$d->cant_trasdet)
 	->getStyleByColumnAndRow(6,$row)
 	->applyFromArray($styleNormal);
-	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(7,$row,$d->serie_trasdet)
-	->getStyleByColumnAndRow(7,$row)
-	->applyFromArray($styleNormal);
+	
+	$objPHPExcel->getActiveSheet()->getCell('G'.$row)
+	->setValueExplicit(
+		$d->serie_trasdet,
+			\PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING
+	);
 	$objPHPExcel->getActiveSheet()
 	->setCellValueByColumnAndRow(8,$row,$d->usuario)
 	->getStyleByColumnAndRow(8,$row)
@@ -126,13 +128,13 @@ foreach ($datos as $d) {
 }
 
 
-$objPHPExcel->getActiveSheet()->setTitle('Reporte');
+$objPHPExcel->getActiveSheet()->setTitle('Reporte de traspasos');
 $objPHPExcel->getActiveSheet(0);
 						
 
 $writer = new Xlsx($objPHPExcel);
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="Reporte.xlsx"');
+header('Content-Disposition: attachment; filename="Reporte de traspasos.xlsx"');
 $writer->save("php://output");
 exit;
 ?>

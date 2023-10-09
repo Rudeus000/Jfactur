@@ -330,7 +330,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Cantidad</label>
-                          <input type="text" name="cantidadProducto" class="form-control" value="">
+                          <input type="text" name="cantidadProducto" id="cantidadProducto" class="form-control" value="">
                         </div>
                       </div>
                       <div class="col-md-1">
@@ -1044,4 +1044,19 @@
       txt_documento.value = txt_documento.value.replace(/[^0-9a-zA-Z]/g, '').substring(0, 12);;
     }
   }
+</script>
+
+<script type="text/javascript">
+  document.getElementById('ClienteVentaAutocomplete').addEventListener('paste', function(event) {
+    // Prevenir la acción predeterminada de pegar
+    event.preventDefault();
+
+    // Obtener el texto pegado
+    const clipboardData = event.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData('text');
+
+    // Eliminar espacios en blanco y actualizar el valor del campo de entrada
+    const trimmedText = pastedText.replace(/\s+/g, '');
+    this.value = trimmedText;
+  });
 </script>

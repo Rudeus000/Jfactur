@@ -14,6 +14,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true)
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true);
 
 $objPHPExcel->getActiveSheet()
 						->mergeCells('A1:H1');
@@ -57,71 +58,79 @@ $styleBold = [
 
 $row = 2;
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(1,$row,'PRODUCTO')
+->setCellValueByColumnAndRow(1,$row,'ALMACEN')
 ->getStyleByColumnAndRow(1,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(2,$row,'MARCA')
+->setCellValueByColumnAndRow(2,$row,'PRODUCTO')
 ->getStyleByColumnAndRow(2,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(3,$row,'CATEGORIA')
+->setCellValueByColumnAndRow(3,$row,'MARCA')
 ->getStyleByColumnAndRow(3,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(4,$row,'UNIDAD')
+->setCellValueByColumnAndRow(4,$row,'CATEGORIA')
 ->getStyleByColumnAndRow(4,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(5,$row,'P. COSTO')
+->setCellValueByColumnAndRow(5,$row,'UNIDAD')
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,'P. VENTA')
+->setCellValueByColumnAndRow(6,$row,'P. COSTO')
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,'STOCK ACTUAL')
+->setCellValueByColumnAndRow(7,$row,'P. VENTA')
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,'STOCK INICIAL')
+->setCellValueByColumnAndRow(8,$row,'STOCK ACTUAL')
 ->getStyleByColumnAndRow(8,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(9,$row,'STOCK INICIAL')
+->getStyleByColumnAndRow(9,$row)
 ->applyFromArray($styleBold);
 
 $row++;
 foreach ($datos as $d) {
 	$objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(1,$row,$d->nomb_product)
-->getStyleByColumnAndRow(1,$row)
-->applyFromArray($styleNormal);
-$objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(2,$row,$d->nomb_marca)
+	->setCellValueByColumnAndRow(1,$row,$d->nomb_almacen)
+	->getStyleByColumnAndRow(1,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(2,$row,$d->nomb_product)
 ->getStyleByColumnAndRow(2,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(3,$row,$d->nomb_categoria)
+->setCellValueByColumnAndRow(3,$row,$d->nomb_marca)
 ->getStyleByColumnAndRow(3,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(4,$row,$d->nomb_unid)
+->setCellValueByColumnAndRow(4,$row,$d->nomb_categoria)
 ->getStyleByColumnAndRow(4,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(5,$row,$d->prec_costo)
+->setCellValueByColumnAndRow(5,$row,$d->nomb_unid)
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,$d->prec_venta)
+->setCellValueByColumnAndRow(6,$row,$d->prec_costo)
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,$d->stock + $d->stock_inicial)
+->setCellValueByColumnAndRow(7,$row,$d->prec_venta)
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,$d->stock_inicial)
+->setCellValueByColumnAndRow(8,$row,$d->stock)
 ->getStyleByColumnAndRow(8,$row)
+->applyFromArray($styleNormal);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(9,$row,$d->stock_inicial)
+->getStyleByColumnAndRow(9,$row)
 ->applyFromArray($styleNormal);
 	$row++;
 }

@@ -9512,7 +9512,10 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
+			
 
 		]
 	});
@@ -9533,7 +9536,7 @@ $(function () {
 	});
 
 	function formatTraspasoDetalle(d) {
-		var query = jQuery.parseJSON(d[10]);
+		var query = jQuery.parseJSON(d[12]);
 
 		var table = `
 	
@@ -12760,7 +12763,63 @@ $(function () {
 	/*               END MOVIL EXPERT               */
 	/* ============================================ */
 
+	/* ============================================ */
+	/* Estado sistema produccion o demo             */
+	/* ============================================ */
+	$('#company-status').change(function (e) {
+		//e.preventDefault();
+		var check = $(this);
+		if (check.is(':checked')) {
+			$('#company-status').trigger('click');
+			$('#ModalCompanyStatusConfirmar').modal();
+		} else {
+			$.post(path + "empresa/regempresa/companyStatus", { 'com_status': 0 },
+				function (data, textStatus, jqXHR) {
+				},
+				"HTML"
+			);
+			return;
+		}
+	});
 
+
+	$('#FormConfirmarCompanys').validate({
+		rules: {
+			contrasenacs: { required: true }
+		},
+		submitHandler: function () {
+			var contrasena = $('input[name=contrasenacs]').val();
+			$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
+				function (data, textStatus, jqXHR) {
+					if (data['success'] == true) {
+						$.post(path + "empresa/regempresa/companyStatus", { 'com_status': 1 },
+							function (data, textStatus, jqXHR) {
+							},
+							"HTML"
+						);
+						$('#company-status').trigger('click');
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se activo el sistema en modo producción.",
+							type: "success"
+						});
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "La contraseña es incorrecta.",
+							type: "error"
+						});
+					}
+					$('#ModalCompanyStatusConfirmar').modal('hide');
+				},
+				"JSON"
+			);
+		}
+	});
+
+	/* ============================================ */
+	/*               END COMPANY STATUS             */
+	/* ============================================ */
 
 	/* ======================== */
 	/*           KARDEX         */
@@ -14109,4 +14168,49 @@ $('#posponer-stockminimo').click(function () {
 
 
 
+});
+
+$(document).ready(function() {
+    $('#ClienteVentaAutocomplete').on('change', function() {
+        var nombreCliente = $('input[name=cliente]').val();
+
+        // Realizar solicitud AJAX para verificar la deuda del cliente
+        $.getJSON('deudasCliente', { cliente: nombreCliente }, function(json) {
+            // Limpiar el contenido previo de la tabla
+            $('#TableDeudaCliente tbody').empty();
+
+            // Verificar si el cliente tiene deuda
+            if (json.length > 0) {
+                // Mostrar un mensaje con botones "Ver Detalle" y "Cancelar"
+                Swal.fire({
+                    title: 'Cliente con deuda',
+                    text: 'El cliente tiene deuda.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ver Detalle',
+                    cancelButtonText: 'Cancelar'
+                }).then(function(result) {
+                    if (result.value) {
+                        // Si el usuario hace clic en "Ver Detalle", mostrar el modal de deuda del cliente
+                        $('#ModalDeudaCliente').modal('show');
+
+                        // Llenar la tabla con el detalle de la deuda
+                        $.each(json, function(index, val) {
+                            var row = `
+                                <tr>
+                                    <td>${val.nomb_cliente}</td>
+                                    <td>${val.doc_cliente}</td>
+                                    <td>${val.fecha_vent}</td>
+                                    <td>${val.total_vent}</td>
+                                    <td>${val.pendiente_vent}</td>
+                                    <td><a target="_blank" href="${path + 'administrador/regcuentascobrar/detalle/' + val.id_cliente}" class="btn btn-xs btn-success"><i class="fas fa-hand-holding-usd"></i> Pagar</a></td>
+                                </tr>
+                            `;
+                            $('#TableDeudaCliente tbody').append(row);
+                        });
+                    }
+                });
+            } 
+        });
+    });
 });

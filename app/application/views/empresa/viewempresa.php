@@ -96,9 +96,9 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-											<a  id="editEmp" class="btn btn-primary " style="margin-top: 30px">
-											<i class="mdi mdi-square-edit-outline"></i>
-													</a>
+												<a id="editEmp" class="btn btn-primary " style="margin-top: 30px">
+													<i class="mdi mdi-square-edit-outline"></i>
+												</a>
 											</div>
 										</div>
 										<div class="col-md-4">
@@ -215,6 +215,10 @@
 											<input <?= $empresa->MovAlmacenAutomatico == 'S' ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="mov-almacen" />
 											<label for="mov-almacen">Movi. Almacén Automatico</label>
 										</div>
+										<div class="col-md-2">
+											<input <?= $empresa->company_status == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="company-status" />
+											<label for="company-status">Produccion</label>
+										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-12">
@@ -259,7 +263,7 @@
 									</div>
 									<div class="row">
 										<div class="col-md-12">
-											<button  id="saveEmp" class="btn btn-primary btn-md mt-4" disabled>Guardar Cambios</button>
+											<button id="saveEmp" class="btn btn-primary btn-md mt-4" disabled>Guardar Cambios</button>
 										</div>
 									</div>
 								</div>
@@ -325,8 +329,8 @@
 						<div class="tab-pane" id="api">
 							<form id="FormEmpresaApi" action="<?= base_url('empresa/Regempresa/apisunat') ?>" enctype="multipart/form-data" method="POST">
 
-								<div class="form-group">							
-									
+								<div class="form-group">
+
 									<fieldset>
 										<legend>Credenciales de API SUNAT GRE</legend>
 
@@ -356,13 +360,13 @@
 												</div>
 											</div>
 											<div class="col-md-1">
-											<div class="form-group">
-											<a  id="editApi" class="btn btn-primary " style="margin-top: 30px">
-											<i class="mdi mdi-square-edit-outline"></i>
+												<div class="form-group">
+													<a id="editApi" class="btn btn-primary " style="margin-top: 30px">
+														<i class="mdi mdi-square-edit-outline"></i>
 													</a>
+												</div>
 											</div>
 										</div>
-										</div>										
 									</fieldset>
 								</div>
 
@@ -414,3 +418,31 @@
 			</form>
 		</div>
 	</div>
+</div>
+
+<div class="modal" id="ModalCompanyStatusConfirmar" role="dialog" aria-labelledby="exampleModalLabelCompany" aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<form id="FormConfirmarCompanys" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">
+				<div class="modal-header bg-danger">
+					<h5 class="modal-title text-white" id="exampleModalLabel"><i class="fab fa-expeditedssl m-r-5"></i>Confirmar permiso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<label>Confirmar permiso del Administrador</label>
+							<input type="password" name="contrasenacs" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-primary btn-rounded">Confirmar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

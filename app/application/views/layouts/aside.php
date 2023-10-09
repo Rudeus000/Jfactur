@@ -6,7 +6,19 @@
      <div id="sidebar-menu">
        <!-- Left Menu Start -->
        <ul class="metismenu" id="side-menu">
-         <li class="menu-title">Menú de navegación</li>
+        <?php $empresa = getDatosEmpresa(); ?>
+         <?php if (isset($empresa) && !empty($empresa)) : ?>
+           <li class="menu-title" style="text-align:center">
+             <span class="<?= ($empresa['empresa']->company_status==1) ? 'label label-primary' : 'label label-danger' ?>">
+               <?= ($empresa['empresa']->company_status == 1) ? 'SISTEMA EN PRODUCCION' : 'BETA' ?>
+             </span>
+           </li>
+         <?php else : ?>
+           <!-- Manejar el caso en el que $empresa no está definida o está vacía -->
+           <li class="menu-title" style="text-align:center">
+             <span class="label label-danger">Sistema en mantenimiento</span>
+           </li>
+         <?php endif; ?>
          <li>
            <a href="<?php echo base_url(); ?>reportes/regdashboard"><i class="fas fa-home"></i> <span> Inicio </span> </a>
          </li>

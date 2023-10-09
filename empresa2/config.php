@@ -26,7 +26,7 @@ if(! defined('APP_TENANTPATH')){
 $_SSS['app']['db_host'] = 'local';
 $_SSS['app']['db_user'] = 'root';
 $_SSS['app']['db_pass'] = 'Washington8277!!';
-$_SSS['app']['db_name'] = 'bfacturas';
+$_SSS['app']['db_name'] = 'empresa2';
 $_SSS['app']['db_driver'] = 'mysql';
 
 
