@@ -10,7 +10,7 @@
          <?php if (isset($empresa) && !empty($empresa)) : ?>
            <li class="menu-title" style="text-align:center">
              <span class="<?= ($empresa['empresa']->company_status==1) ? 'label label-primary' : 'label label-danger' ?>">
-               <?= ($empresa['empresa']->company_status == 1) ? 'SISTEMA EN PRODUCCION' : 'BETA' ?>
+               <?= ($empresa['empresa']->company_status == 1) ? 'SISTEMA EN PRODUCCION' : 'DEMO' ?>
              </span>
            </li>
          <?php else : ?>
