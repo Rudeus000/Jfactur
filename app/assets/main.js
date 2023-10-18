@@ -9614,9 +9614,36 @@ $(function () {
 		url: function (query) {
 			return path + "administrador/regtraspasos/getProductoBusqueda?producto=" + query
 		},
+		// getValue: function (element) {
+		// 	return element.nombre;
+		// },
+		requestDelay: 500,
 		getValue: function (element) {
-			return element.nombre;
+			return element.nombre
 		},
+		template: {
+			type: "custom",
+			method: function (value, element) {
+				var disponible = '';
+				if (element.estado == '0') {
+					disponible = ' (No Disponible)';
+				} else {
+					if (element.cod_tiparticulo == 1) {
+						disponible = ' (stock' + ' ' + element.stock + ')'
+					} else {
+						disponible = '';
+					}
+				}
+
+				var fechas = '';
+				if (element.fecha_vencimiento == 1 && element.fechas != null) {
+					fechas = ' - <span style="background:#d03f3f;color:white;padding:0px 5px; border-radius:3px">Vencen ' + element.fechas.cantidad_prodfec + ' el ' + element.fechas.fecha_vencimiento_prodfec + '</span>'
+				}
+
+				return element.nombre + disponible + fechas;
+			}
+		},
+
 		list: {
 			onSelectItemEvent: function () {
 				var selectedItemValue = $("#nombreProductoTraspasoAutocomplete").getSelectedItemData();

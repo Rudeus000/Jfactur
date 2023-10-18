@@ -68,13 +68,19 @@ class Regtraspasos extends CI_Controller {
 
 	public function getProductoBusqueda()
 	{
-		$producto = $this->input->get('producto');
+		$queryLike = $this->input->get('producto');
+		$almacen = $this->input->get('almacen');
+		//$producto = $this->input->get('producto');
 		$result = $this->db->from('tb_producto')
-		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad')
+		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,(CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,cod_tiparticulo,stock')
+		->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where('est_product',1)
-		->like('nomb_product',$producto)
-		->get()->result();
+		//->like('nomb_product',$producto)
+		->where('(nomb_product LIKE "%' . $queryLike
+				. '%" OR barra_product LIKE "%' . $queryLike . '%")', NULL)
+		
+		->get()->result_array();
 		echo json_encode($result);
 	}
 
