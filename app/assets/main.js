@@ -8520,7 +8520,7 @@ $(function () {
 		let total = parseFloat($('input[name=total]').val());
 		if (total != NaN && total > 0) {
 			let detraccion_monto = total * (porcentaje / 100);
-			detraccion_monto = round(detraccion_monto, 2)
+			detraccion_monto = Math.round(detraccion_monto);
 			$('input[name=detraccion_monto]').val(detraccion_monto);
 		}
 
