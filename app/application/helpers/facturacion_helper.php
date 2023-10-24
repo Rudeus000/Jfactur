@@ -66,7 +66,7 @@ function getTipoProceso()
 	if ($company_status == 1) {
 		// Producción
 		$datos['tipo_proceso'] = '1';
-		$datos['ruta_ws'] = 'https://www.sunat.gob.pe/ol-ti-itcpfegem/billService';
+		$datos['ruta_ws'] = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService';
 	} else {
 		// Beta
 		$datos['tipo_proceso'] = '3';
