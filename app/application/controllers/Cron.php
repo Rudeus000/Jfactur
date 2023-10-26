@@ -50,7 +50,7 @@ class Cron extends CI_Controller
 
 	public function buscarFacturasAyer()
 	{
-		$diaAnterior = date('Y-m-d', strtotime('-2 day'));
+		$diaAnterior = date('Y-m-d', strtotime('-1 day'));
 		$query = $this->db->from('tb_venta')
 			->select('tb_venta.cod_vent as codigo_venta')
 			->join('tb_talonario', 'tb_venta.cod_talonario = tb_talonario.cod_talonario')
