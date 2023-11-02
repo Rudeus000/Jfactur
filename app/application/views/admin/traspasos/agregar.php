@@ -133,7 +133,7 @@
                               <div class="row">
                                 <div class="col-md-12">
                                   <div class="form-group">
-                                    <button type="submit" form="FormAgregarTraspasos" class="btn btn-rounded btn-info"><i class="fa fa-save"></i> Guardar</button>
+                                    <button type="submit" form="FormAgregarTraspasos" id="guardarTraspaso" class="btn btn-rounded btn-info"><i class="fa fa-save"></i> Guardar</button>
                                     <a href="<?= base_url('administrador/regtraspasos') ?>" class="btn btn-rounded btn-pink"><i class="fas fa-times"></i> Cerrar</a>
                                     <!-- <button type="button" class="btn btn-danger" ><i class="fas fa-times"></i>  Cerrar</button> -->
                                   </div>

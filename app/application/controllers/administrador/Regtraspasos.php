@@ -69,14 +69,19 @@ class Regtraspasos extends CI_Controller {
 	public function getProductoBusqueda()
 	{
 		$queryLike = $this->input->get('producto');
-		$almacen = $this->input->get('almacen');
-		//$producto = $this->input->get('producto');
+		$almacen = $this->input->get('origen');
+		// $producto = $this->input->get('producto');
 		$result = $this->db->from('tb_producto')
+		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad')
 		->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,(CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,cod_tiparticulo,stock')
 		->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 		->join('tb_unidades','tb_producto.cod_unid = tb_unidades.cod_unid')
 		->where('est_product',1)
-		//->like('nomb_product',$producto)
+		// ->like('nomb_product',$producto)
+		// ->get()->result();
+		->where('cod_tiparticulo', 1)
+			->where('(tb_producto_stock.cod_almacen = "' . $almacen . '" AND (nomb_product LIKE "%' . $queryLike
+				. '%" OR barra_product LIKE "%' . $queryLike . '%"))', NULL)
 		->where('(nomb_product LIKE "%' . $queryLike
 				. '%" OR barra_product LIKE "%' . $queryLike . '%")', NULL)
 		
@@ -164,82 +169,76 @@ class Regtraspasos extends CI_Controller {
 	}
 
 	function agregarTraspaso()
-	{
-		$data['origen_tras'] = $this->input->post('origen');
-		$data['destino_tras'] = $this->input->post('destino');
-		$data['fecha_tras'] = $this->input->post('fecha');
-		$data['observacion_tras'] = $this->input->post('observacion');
-		$data['cod_usu'] = $this->session->userdata('cod_usu');
-		$insert =		$this->modelgeneral->insertRegist('tb_traspasos',$data);
+{
+    $data['origen_tras'] = $this->input->post('origen');
+    $data['destino_tras'] = $this->input->post('destino');
+    $data['fecha_tras'] = $this->input->post('fecha');
+    $data['observacion_tras'] = $this->input->post('observacion');
+    $data['cod_usu'] = $this->session->userdata('cod_usu');
+    $insert = $this->modelgeneral->insertRegist('tb_traspasos', $data);
 
+    $resp = [];
+    if (!is_null($insert)) {
+        // Actualizar stock en el almacén de origen
+        foreach ($_POST['id_producto'] as $key => $value) {
+            $detalle['cod_tras'] = $insert;
+            $detalle['cod_producto'] = $_POST['id_producto'][$key];
+            $detalle['cant_trasdet'] = $_POST['cant_producto'][$key];
 
-		$resp = [];
-		if (!is_null($insert)) {
-			foreach ($_POST['id_producto'] as $key => $value) {
-				$detalle['cod_tras'] = $insert;
-				$detalle['cod_producto'] = $_POST['id_producto'][$key];
-				$detalle['cant_trasdet'] = $_POST['cant_producto'][$key];
-	
-				if (isset($_POST['serie_producto'][$value])) {
-					if (is_array($_POST['serie_producto'][$value])) {
-						// Iterate through each serie and create a new row for each serie
-						foreach ($_POST['serie_producto'][$value] as $serie) {
-							// Create a new detalle row for each serie
-							$detalle['serie_trasdet'] = $serie;
-							$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
-						}
-	
-						// Traspasar series al almacén destino
-						$this->traspasarSerie($_POST['id_producto'][$key], $_POST['serie_producto'][$value], $data['origen_tras'], $data['destino_tras']);
-					} else {
-						// If only one serie, add a single row with that serie
-						$detalle['serie_trasdet'] = $_POST['serie_producto'][$value];
-						$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
-	
-						// Traspasar series al almacén destino
-						$this->traspasarSerie($_POST['id_producto'][$key], $_POST['serie_producto'][$value], $data['origen_tras'], $data['destino_tras']);
-					}
-				} else {
-					// Handle products without series
-					$detalle['serie_trasdet'] = ''; // Empty serie for products without series
-					$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
-				}
-	
-				// Restar la cantidad del almacén origen
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $_POST['cant_producto'][$key] . " WHERE cod_almacen = " . $data['origen_tras'] . " AND cod_producto = " . $_POST['id_producto'][$key]);
-				// Sumar la cantidad al almacén destino
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $_POST['cant_producto'][$key] . " WHERE cod_almacen = " . $data['destino_tras'] . " AND cod_producto = " . $_POST['id_producto'][$key]);
-				
-				//OBTENER PRODUCTO EN ALMACEN DESTINO
-				$queryDestino = $this->db->from('tb_producto')
-				->join('tb_producto_stock','tb_producto.cod_producto = tb_producto_stock.cod_producto')
-				->where('cod_almacen',$data['destino_tras'])
-				->where('tb_producto.cod_producto',$detalle['cod_producto'])
-				->get();
+            if (isset($_POST['serie_producto'][$value])) {
+                if (is_array($_POST['serie_producto'][$value])) {
+                    // Iterate through each serie and create a new row for each serie
+                    foreach ($_POST['serie_producto'][$value] as $serie) {
+                        // Create a new detalle row for each serie
+                        $detalle['serie_trasdet'] = $serie;
+                        $this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
+                    }
 
-				if ($queryDestino->num_rows() > 0){
-					
-					//SUMAR EN ALMACEN
-					$this->db->query("UPDATE tb_producto_stock SET stock = stock + ".$_POST['cant_producto'][$key]." WHERE cod_almacen = ".$data['destino_tras']." AND cod_producto = ".$_POST['id_producto'][$key]);
-				}else{
-					//CREAR NUEVO PRODUCTO EN ALMACEN DESTINO
-					$productoStock['cod_producto'] = $_POST['id_producto'][$key];
-					$productoStock['cod_almacen'] = $data['destino_tras'];
-					$productoStock['stock'] = $_POST['cant_producto'][$key];
-					$productoStock['stock_inicial'] = 0;
-					$this->modelgeneral->insertRegist('tb_producto_stock',$productoStock);
-				}
-			}
-		
-	
-			
-			$resp['success'] = true;
-		}else{
-			$resp['success'] = false;
-		}
+                    // Traspasar series al almacén destino
+                    $this->traspasarSerie($_POST['id_producto'][$key], $_POST['serie_producto'][$value], $data['origen_tras'], $data['destino_tras']);
+                } else {
+                    // If only one serie, add a single row with that serie
+                    $detalle['serie_trasdet'] = $_POST['serie_producto'][$value];
+                    $this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
+                }
+            } else {
+                // Handle products without series
+                $detalle['serie_trasdet'] = ''; // Empty serie for products without series
+                $this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
+            }
+        }
 
-		echo json_encode($resp);
-	}
+        // Actualizar stock en el almacén de origen
+        $this->db->query("UPDATE tb_producto_stock SET stock = stock - " . array_sum($_POST['cant_producto']) . " WHERE cod_almacen = " . $data['origen_tras'] . " AND cod_producto IN (" . implode(',', $_POST['id_producto']) . ")");
+
+        // Verificar si los productos existen en el almacén de destino y actualizar o insertar según corresponda
+        foreach ($_POST['id_producto'] as $key => $value) {
+            $queryDestino = $this->db->from('tb_producto_stock')
+                ->where('cod_almacen', $data['destino_tras'])
+                ->where('cod_producto', $value)
+                ->get();
+
+            if ($queryDestino->num_rows() > 0) {
+                // Actualizar stock en el almacén de destino
+                $this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $_POST['cant_producto'][$key] . " WHERE cod_almacen = " . $data['destino_tras'] . " AND cod_producto = " . $value);
+            } else {
+                // Crear un nuevo registro de producto en el almacén de destino
+                $productoStock['cod_producto'] = $value;
+                $productoStock['cod_almacen'] = $data['destino_tras'];
+                $productoStock['stock'] = $_POST['cant_producto'][$key];
+                $productoStock['stock_inicial'] = 0;
+                $this->modelgeneral->insertRegist('tb_producto_stock', $productoStock);
+            }
+        }
+
+        $resp['success'] = true;
+    } else {
+        $resp['success'] = false;
+    }
+
+    echo json_encode($resp);
+}
+
 
 	function traspasarSerie($producto, $serie, $origen, $destino)
 	{

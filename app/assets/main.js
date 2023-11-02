@@ -9612,7 +9612,8 @@ $(function () {
 	$("#nombreProductoTraspasoAutocomplete").easyAutocomplete({
 		minCharNumber: 2,
 		url: function (query) {
-			return path + "administrador/regtraspasos/getProductoBusqueda?producto=" + query
+			return path + "administrador/regtraspasos/getProductoBusqueda?producto=" + query + '&origen=' + $('select[name=origen]').val();
+			
 		},
 		// getValue: function (element) {
 		// 	return element.nombre;
@@ -9663,6 +9664,8 @@ $(function () {
 			destino: { required: true }
 		},
 		submitHandler: function () {
+			 // Desactivar el botón "Guardar" para evitar envíos duplicados
+			//  $('guardarTraspaso').prop('disabled', true);
 			if ($('#TableTraspasosProductos tbody tr').length == 0) {
 				$('#FormTraspasosAgregarProducto').valid();
 				return;
@@ -9671,6 +9674,10 @@ $(function () {
 			var traspaso = $('#FormAgregarTraspasos').serializeObject();
 			var productos = $('#FormTraspasosAgregarProducto').serializeObject();
 			jQuery.extend(traspaso, productos);
+
+			$('#FormAgregarTraspasos').on('submit', function () {
+				$('#guardarTraspaso').prop('disabled', true);
+			});
 
 			$.ajax({
 				url: path + 'administrador/regtraspasos/agregarTraspaso',
@@ -9694,6 +9701,9 @@ $(function () {
 							text: "Ocurrio un error, vuelva a intentarlo.",
 							type: "error"
 						});
+
+						// Habilitar el botón "Guardar" nuevamente en caso de error
+						$('#guardarTraspaso').prop('disabled', false);
 					}
 				});
 		}
