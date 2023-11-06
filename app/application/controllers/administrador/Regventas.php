@@ -552,10 +552,10 @@ class Regventas extends CI_Controller
 				$detalle['cant_ventdet'] = $_POST['cant_prod'][$key];
 				$detalle['precunitcomp_ventdet'] = $precio_unitario;
 				$detalle['precunit_ventdet'] = $_POST['prec_prod'][$key];
-				if ($_POST['desc_prod'][$key] == '') {
+				if (empty($_POST['desc_prod'][$key])) {
 					$descuento = 0;
 				} else {
-					$descuento = $_POST['desc_prod'][$key];
+					$descuento = (float)$_POST['desc_prod'][$key];
 				}
 				$detalle['subtotal_ventdet'] = (($detalle['precunit_ventdet'] - $descuento) * $detalle['cant_ventdet']);
 				if ($_POST['tipo_igv'][$key] == '4') {
@@ -1328,7 +1328,7 @@ class Regventas extends CI_Controller
 		$total_gravadas = 0;
 		$total_exoneradas = 0;
 		foreach ($res->detalle as $d) {
-			if ($d->tipo_ventdet == 'V' or $d->tipo_ventdet == 'E') {
+			if ($d->tipo_ventdet == 'V' || $d->tipo_ventdet == 'E') {
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS

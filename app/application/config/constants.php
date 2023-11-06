@@ -87,4 +87,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 
-defined('WEBSITE')      OR define('WEBSITE', 'https://bfacturas.com');
+defined('WEBSITE')      OR define('WEBSITE', 'https://bfacturas.pro');

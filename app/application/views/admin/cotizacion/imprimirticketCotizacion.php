@@ -116,7 +116,7 @@
 </div>
 
 <div class="w120 text-center" style="font-size: 12px;">
-<b>www.bfacturas.com</b>
+<b>www.bfacturas.pro</b>
 </div>
 
 	
