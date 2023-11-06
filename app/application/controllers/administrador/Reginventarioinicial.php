@@ -242,30 +242,39 @@ class Reginventarioinicial extends CI_Controller
 
 	function getInventarioInicialReporteseries()
 	{
+		$this->db->select('tb_producto.*, nomb_almacen, serie_descripcion, cod_comp, cod_vent, serie_estado, histcompstock_serie');
 		$this->db->from('tb_producto');
-		$this->db->select('tb_producto.*,nomb_almacen,serie_descripcion,cod_comp,cod_vent,serie_estado,histcompstock_serie');
 		$this->db->join('tb_marca', 'tb_producto.cod_marca = tb_marca.cod_marca');
 		$this->db->join('tb_categoria', 'tb_producto.cod_categoria = tb_categoria.cod_categoria');
 		$this->db->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid');
 		$this->db->join('tb_producto_serie', 'tb_producto.cod_producto = tb_producto_serie.cod_producto');
 		$this->db->join('tb_almacen', 'tb_producto_serie.cod_almacen = tb_almacen.cod_almacen');
-		$this->db->join('tb_producto_stock', 'tb_producto.cod_producto = tb_producto_stock.cod_producto','left');
+		$this->db->join('tb_producto_stock', 'tb_producto.cod_producto = tb_producto_stock.cod_producto AND tb_producto_serie.cod_almacen = tb_producto_stock.cod_almacen', 'left');
+		
 		if ($this->input->get('producto') != '') {
 			$this->db->like('nomb_product', $this->input->get('producto'));
 		}
+		
 		if ($this->input->get('categoria') != '') {
 			$this->db->where('tb_categoria.cod_categoria', $this->input->get('categoria'));
 		}
+		
 		if ($this->input->get('marca') != '') {
 			$this->db->where('tb_marca.cod_marca', $this->input->get('marca'));
 		}
-		// Filtrar por almacén si se ha seleccionado uno
+		
+			// Filtrar por almacén si se ha seleccionado uno
 		$almacen = $this->input->get('almacen');
 		if ($almacen !== null) {
 			$this->db->like('tb_producto_stock.cod_almacen', $almacen);
 		}
+		
+		$this->db->distinct();
+		
 		return $this->db->get()->result();
 	}
+	
+
 
 	public function getFechasProducto()
 	{
