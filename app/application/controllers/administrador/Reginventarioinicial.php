@@ -77,7 +77,7 @@ class Reginventarioinicial extends CI_Controller
 		$data['cod_producto'] = $this->input->get('producto');
 
 		// Obtener el código de almacén para "almacen central" si no se proporciona uno
-		$selectedAlmacen = $this->input->get('cod_almacen');
+		$selectedAlmacen = $this->input->get('almacen');
 		if (empty($selectedAlmacen)) {
 			$almacenCentral = $this->db->get_where('tb_almacen', ['nomb_almacen' => 'almacen central', 'est_almacen' => 1])->row();
 			if ($almacenCentral) {
