@@ -223,27 +223,81 @@
 <div id="ModalSeleccionAlmacen" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Seleccione un almacén</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <label for="selectAlmacen">Almacén:</label>
-                <select id="selectAlmacen" class="form-control">
-                    <option value="">Seleccione</option>
-                    <?php foreach ($almacenes as $a) : ?>
-                        <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalSeleccionAlmacen">
-    Seleccionar Almacén
-</button>
-            </div>
+            <form id="FormSeleccionarAlmacen">
+                <input type="hidden" name="producto">
+                <input type="hidden" name="series">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Seleccione un almacén</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <input type="text" name="nombre_producto" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>Stock</label>
+                            <input type="text" name="stock" class="form-control">
+                        </div>
+                        <div class="col-md-9 form-group">
+                            <label for="selectAlmacen">Almacén:</label>
+                            <select name="almacen" class="form-control">
+                                <option value="">Seleccione</option>
+                                <?php foreach ($almacenes as $a) : ?>
+                                    <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="ModalSeleccionAlmacenParaFechaVencimiento" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="FormSeleccionarAlmacenParaFechaVencimiento" action="" method="post">
+                <input type="hidden" name="producto">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Seleccione un almacén</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <input type="text" name="nombre_producto" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label for="selectAlmacen">Almacén:</label>
+                            <select name="almacen" class="form-control">
+                                <option value="">Seleccione</option>
+                                <?php foreach ($almacenes as $a) : ?>
+                                    <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+            
         </div>
     </div>
 </div>

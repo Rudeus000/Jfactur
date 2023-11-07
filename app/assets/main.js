@@ -4638,9 +4638,28 @@ $(function () {
 
 	$('#TableAlmacenInventarioInicial tbody').on('click', '.agregarStockAlmacenInicial', function (event) {
 		event.preventDefault();
+		var _this = $(this);
 		var producto = $(this).data('producto');
 		var almacen = $(this).data('almacen');
 		var stock = $('#cantidad-producto-' + producto).val();
+		if(stock == '' || stock == null){
+			Swal.fire({
+				title: "Error",
+				text: "Debe ingresar un valor de stock",
+				type: "error"
+			});
+			return;
+		}
+
+		let numero = parseInt(stock, 10);
+		if(isNaN(numero) || numero < 1){
+			Swal.fire({
+				title: "Error",
+				text: "El valor ingresado debe ser mayor a 0",
+				type: "error"
+			});
+			return;
+		}
 		var series = $('input[name^="producto-' + producto + '"]').serializeObject();
 		var array_series = [];
 		$('input[name="producto-' + producto + '"]').each(function (index, elem) {
@@ -4663,6 +4682,17 @@ $(function () {
 			return;
 		}
 
+		if(almacen == '' || almacen == null){
+			let nombre_producto = _this.parent().parent().parent().parent().parent().find('td').eq(0).html();
+			$('#FormSeleccionarAlmacen input[name=nombre_producto]').val(nombre_producto);
+			$('#FormSeleccionarAlmacen input[name=producto]').val(producto);
+			$('#FormSeleccionarAlmacen input[name=stock]').val(stock);
+			$('#FormSeleccionarAlmacen input[name=series]').val(series);
+			
+			$('#ModalSeleccionAlmacen').modal();
+			return
+		}
+
 		$.getJSON(path + 'administrador/reginventarioinicial/guardarStockInicial', { producto, almacen, stock, series }, function (json, textStatus) {
 			if (json.success) {
 				Swal.fire({
@@ -4680,6 +4710,37 @@ $(function () {
 				});
 			}
 		});
+	});
+
+
+	$('#FormSeleccionarAlmacen').validate({
+		ignore: [],
+		rules: {
+			stock: { required: true, number:true },
+			almacen: { required: true }
+		},
+		submitHandler: function () {
+
+			formData = $('#FormSeleccionarAlmacen').serializeObject();
+			$.getJSON(path + 'administrador/reginventarioinicial/guardarStockInicial',formData, function (json, textStatus) {
+				$('#ModalSeleccionAlmacen').modal('hide');
+				if (json.success) {
+					Swal.fire({
+						title: "Buen trabajo",
+						text: "Se agrego el stock inicial.",
+						type: "success"
+					});
+					$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
+				} else {
+	
+					Swal.fire({
+						title: "Error",
+						text: "Ocurrio un error, vuelva a intentarlo.",
+						type: "error"
+					});
+				}
+			});
+		}
 	});
 
 	$('#TableAlmacenInventarioInicial tbody').on('click', '.agregar-series', function (event) {
@@ -4837,8 +4898,16 @@ $(function () {
 
 
 	$('#TableAlmacenInventarioInicial tbody').on('click', '.fechas-producto', function (event) {
+		let _this = $(this);
 		let producto = $(this).data('producto');
 		let almacen = $(this).data('almacen');
+		if(almacen == '' || almacen == null){
+			let nombre_producto = _this.parent().parent().parent().parent().parent().find('td').eq(0).html();
+			$('#FormSeleccionarAlmacenParaFechaVencimiento input[name=nombre_producto]').val(nombre_producto);
+			$('#FormSeleccionarAlmacenParaFechaVencimiento input[name=producto]').val(producto);
+			$('#ModalSeleccionAlmacenParaFechaVencimiento').modal();
+			return;
+		}
 		$('#FormProductoFecha input[name=producto]').val(producto);
 		$('#FormProductoFecha input[name=almacen]').val(almacen);
 		loadProductoFecha(producto, almacen);
@@ -4871,6 +4940,23 @@ $(function () {
 			}
 		});
 	}
+
+	$('#FormSeleccionarAlmacenParaFechaVencimiento').validate({
+		ignore: [],
+		rules: {
+			almacen: { required: true }
+		},
+		submitHandler: function (form) {
+			let producto = $('#FormSeleccionarAlmacenParaFechaVencimiento input[name=producto]').val();
+			let almacen = $('#FormSeleccionarAlmacenParaFechaVencimiento input[name=almacen]').val();
+			$('#FormProductoFecha input[name=producto]').val(producto);
+			$('#FormProductoFecha input[name=almacen]').val(almacen);
+			$('#ModalSeleccionAlmacenParaFechaVencimiento').modal('hide');
+			loadProductoFecha(producto, almacen);
+		}
+	});
+
+
 	$('#TableFechasProductos tbody').on('click', '.eliminar-producto-fecha', function () {
 		var fila = $(this).parent().parent();
 		var id = $(this).data('id');
