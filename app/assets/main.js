@@ -4948,7 +4948,7 @@ $(function () {
 		},
 		submitHandler: function (form) {
 			let producto = $('#FormSeleccionarAlmacenParaFechaVencimiento input[name=producto]').val();
-			let almacen = $('#FormSeleccionarAlmacenParaFechaVencimiento input[name=almacen]').val();
+			let almacen = $('#FormSeleccionarAlmacenParaFechaVencimiento select[name=almacen]').val();
 			$('#FormProductoFecha input[name=producto]').val(producto);
 			$('#FormProductoFecha input[name=almacen]').val(almacen);
 			$('#ModalSeleccionAlmacenParaFechaVencimiento').modal('hide');
