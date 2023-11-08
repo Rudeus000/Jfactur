@@ -149,14 +149,14 @@ class Inventarioinicial_model extends CI_Model {
       $data = ' data-producto="'.$producto.'" data-almacen="'.$almacen.'"';
       if($query->row('numero') != null){
         if($query->row('numero') == $stock){
-          $resultado = '<button class="btn btn-success fechas-producto" disabled '.$data.'>'.$query->row('numero').' <i class="fa fa-check"></i></button>';
+          $resultado = '<button class="btn btn-success fechas-producto" disabled '.$data.' data-stock="'.$stock.'">'.$query->row('numero').' <i class="fa fa-check"></i></button>';
         }else if($query->row('numero') > $stock){
-          $resultado = '<button class="btn btn-danger fechas-producto" '.$data.'>'.$query->row('numero').'</button>';
+          $resultado = '<button class="btn btn-danger fechas-producto" '.$data.' data-stock="'.$stock.'">'.$query->row('numero').'</button>';
         }else{
-          $resultado = '<button class="btn btn-warning fechas-producto" '.$data.'>'.$query->row('numero').'</button>';
+          $resultado = '<button class="btn btn-warning fechas-producto" '.$data.' data-stock="'.$stock.'">'.$query->row('numero').'</button>';
         }
       }else{
-        $resultado = '<button class="btn btn-danger fechas-producto" '.$data.'>0</button>';
+        $resultado = '<button class="btn btn-danger fechas-producto" data-stock="'.$stock.'"'.$data.'>0</button>';
       }
 
 

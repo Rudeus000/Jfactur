@@ -4898,6 +4898,16 @@ $(function () {
 
 
 	$('#TableAlmacenInventarioInicial tbody').on('click', '.fechas-producto', function (event) {
+		let stock = $(this).data('stock');
+		let numero = parseInt(stock, 10);
+		if(isNaN(numero)){
+			Swal.fire({
+				title: "Error",
+				text: "Para agregar fechas de vencimiento es necesario contar con stock inicial",
+				type: "error"
+			});
+			return;
+		}
 		let _this = $(this);
 		let producto = $(this).data('producto');
 		let almacen = $(this).data('almacen');
@@ -4911,6 +4921,7 @@ $(function () {
 		$('#FormProductoFecha input[name=producto]').val(producto);
 		$('#FormProductoFecha input[name=almacen]').val(almacen);
 		loadProductoFecha(producto, almacen);
+		$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
 	});
 
 
