@@ -32,6 +32,9 @@ class Compras_model extends CI_Model {
    if ($data['almacen']!='') {
      $this->db->where('tb_compra.cod_almacen',$data['almacen']);
    }
+   if ($data['cod_compra']!='') {
+    $this->db->where('tb_compra.cod_comp',$data['cod_compra']);
+  }
    if ($data['length']!=-1) {
      $this->db->limit($data['length'],$data['start']);
    }

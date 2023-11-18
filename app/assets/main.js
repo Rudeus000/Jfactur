@@ -5027,6 +5027,7 @@ $(function () {
 				d.almacen = $("select[name=almacen]").val();
 				d.proveedor = $("input[name=proveedor]").val();
 				d.estado = $("select[name=estado]").val();
+				d.cod_compra = $("input[name=cod_compra]").val();
 			}
 		},
 		"columns": [

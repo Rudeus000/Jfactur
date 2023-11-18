@@ -11,7 +11,7 @@ if ($tipo_doc == "2") {
         $documento = trim($documento);
     }
     // API URL
-    $url = "https://bfacturas.com/api/dni/{$documento}/token/{$token}";
+    $url = "https://api.bfacturas.pro/dni/{$documento}/token/{$token}";
 
     // Initialize cURL session
     $ch = curl_init();

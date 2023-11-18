@@ -61,13 +61,19 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Proveedor</label>
                           <input type="text" name="proveedor" class="form-control">
                         </div>
                       </div>
                       <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Cod. compra</label>
+                          <input type="text" name="cod_compra" class="form-control">
+                        </div>
+                      </div> 
+                      <div class="col-md-1">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
                           <select name="estado" class="form-control">

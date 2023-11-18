@@ -45,7 +45,7 @@ class Regcompras extends CI_Controller
 		$data['almacen'] = $this->input->get_post('almacen');
 		$data['proveedor'] = $this->input->get_post('proveedor');
 		$data['estado'] = $this->input->get_post('estado');
-
+		$data['cod_compra'] = $this->input->get_post('cod_compra');
 		$datos = $this->compras_model->getCompras($data);
 		header('content-type: application/json; charset=utf-8');
 		echo json_encode($datos);
