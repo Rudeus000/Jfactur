@@ -2,7 +2,7 @@
 // Variables
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzAwODMxOTkyfQ.hIO7Lrcr42AgL1PdHI-pAQz4KKNPShMtoBXsb5VR_mk';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzAzMDg2NjIwfQ.gKaT7_wGN5PGq-78TRmD4OXwm1BK5Wzy8jXaw52WMo4';
 
 
 if ($tipo_doc == "2") {
@@ -49,13 +49,13 @@ if ($tipo_doc == "2") {
             }
         } else {
             $datos = array(
-                0 => $data['Dni'],
-                1 => $data['Appaterno'],
-                2 => $data['Apmaterno'],
-                3 => $data['Nombres'],
-                4 => $data['Direccion'],
-                5 => $data['Nombrecompleto'],
-                6 => date('Y-m-d', strtotime($data['Fnacimiento'])),
+                0 => isset($data['Dni']) ? $data['Dni'] : null,
+                1 => isset($data['Appaterno']) ? $data['Appaterno'] : null,
+                2 => isset($data['Apmaterno']) ? $data['Apmaterno'] : null,
+                3 => isset($data['Nombres']) ? $data['Nombres'] : null,
+                4 => isset($data['Direccion']) ? $data['Direccion'] : null,
+                5 => isset($data['Nombrecompleto']) ? $data['Nombrecompleto'] : null,
+                6 => isset($data['Fnacimiento']) ? date('Y-m-d', strtotime($data['Fnacimiento'])) : '1969-12-31',
             );
         }
 
