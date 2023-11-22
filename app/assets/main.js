@@ -4687,7 +4687,8 @@ $(function () {
 			$('#FormSeleccionarAlmacen input[name=nombre_producto]').val(nombre_producto);
 			$('#FormSeleccionarAlmacen input[name=producto]').val(producto);
 			$('#FormSeleccionarAlmacen input[name=stock]').val(stock);
-			$('#FormSeleccionarAlmacen input[name=series]').val(series);
+			var string_series = JSON.stringify(series);
+			$('#FormSeleccionarAlmacen input[name=series]').val(string_series);
 			
 			$('#ModalSeleccionAlmacen').modal();
 			return
@@ -4722,6 +4723,7 @@ $(function () {
 		submitHandler: function () {
 
 			formData = $('#FormSeleccionarAlmacen').serializeObject();
+			formData.series = JSON.parse($("#FormSeleccionarAlmacen input[name=series]").val());
 			$.getJSON(path + 'administrador/reginventarioinicial/guardarStockInicial',formData, function (json, textStatus) {
 				$('#ModalSeleccionAlmacen').modal('hide');
 				if (json.success) {
