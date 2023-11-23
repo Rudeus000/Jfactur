@@ -122,7 +122,7 @@ class Inventarioinicial_model extends CI_Model {
       $query = $this->db->from('tb_producto_serie')
       ->where('cod_producto',$producto)
       ->where('cod_almacen',$almacen)
-      ->where('cod_comp IS NULL')
+      //->where('cod_comp IS NULL')
       ->get();
       
       if($query->num_rows()>0){

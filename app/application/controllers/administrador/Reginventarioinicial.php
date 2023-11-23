@@ -84,7 +84,7 @@ class Reginventarioinicial extends CI_Controller
 				$data['cod_almacen'] = $almacenCentral->cod_almacen;
 			} else {
 				// Handle the case where "almacen central" is not found
-				$data['cod_almacen'] = 1;
+				$data['cod_almacen'] = 7;
 			}
 		} else {
 			$data['cod_almacen'] = $selectedAlmacen;
@@ -95,10 +95,36 @@ class Reginventarioinicial extends CI_Controller
 
 		$insert = $this->modelgeneral->insertRegist('tb_producto_stock', $data);
 
-		if (isset($_GET['series']) && is_array($_GET['series'])) {
-			$this->guardarSeries($this->input->get('series')['producto-' . $producto], $data['cod_producto'], $data['cod_almacen']);
+
+		$seriesJSON = $this->input->get('series');
+		$seriesData = json_decode($seriesJSON, true);
+
+		// Extract series for the specific product
+		$productoID = $this->input->get('producto');
+		$series = [];
+
+		if (isset($seriesData['producto-' . $productoID])) {
+			// If it's an array of series, use it directly
+			if (is_array($seriesData['producto-' . $productoID])) {
+				$series = $seriesData['producto-' . $productoID];
+			} else {
+				// If it's a single serie, convert it to an array
+				$series = [$seriesData['producto-' . $productoID]];
+			}
 		}
 
+		if (!empty($series)) {
+			foreach ($series as $serie) {
+				// Here, you can process each serie and save it accordingly
+				// For example:
+				$dataSerie = array(
+					'serie_descripcion' => $serie,
+					'cod_producto' => $data['cod_producto'],
+					'cod_almacen' => $data['cod_almacen']
+				);
+				$this->modelgeneral->insertRegist('tb_producto_serie', $dataSerie);
+			}
+		}
 		$resp = [];
 		if (!is_null($insert)) {
 			$resp['success'] = true;
@@ -231,6 +257,28 @@ class Reginventarioinicial extends CI_Controller
 		echo json_encode($query);
 	}
 
+	public function actualizarSerieInventario()
+	{
+		// Obtener los datos enviados desde la solicitud AJAX
+		$serieId = $this->input->post('serie_id');
+		$nuevaDescripcion = $this->input->post('nueva_descripcion');
+		$nuevoEstado = $this->input->post('nuevo_estado');
+
+		// Realizar la actualización en la base de datos
+		$datosActualizar = array(
+			'serie_descripcion' => $nuevaDescripcion,
+			'serie_estado' => $nuevoEstado
+		);
+
+		$this->db->where('serie_id', $serieId);
+		$this->db->update('tb_producto_serie', $datosActualizar);
+
+		// Devolver la respuesta al cliente (puede ser un mensaje de éxito/error)
+		$respuesta = array('mensaje' => 'Actualización exitosa');
+		header('Content-Type: application/json');
+		echo json_encode($respuesta);
+	}
+
 
 
 
@@ -250,30 +298,30 @@ class Reginventarioinicial extends CI_Controller
 		$this->db->join('tb_producto_serie', 'tb_producto.cod_producto = tb_producto_serie.cod_producto');
 		$this->db->join('tb_almacen', 'tb_producto_serie.cod_almacen = tb_almacen.cod_almacen');
 		$this->db->join('tb_producto_stock', 'tb_producto.cod_producto = tb_producto_stock.cod_producto AND tb_producto_serie.cod_almacen = tb_producto_stock.cod_almacen', 'left');
-		
+
 		if ($this->input->get('producto') != '') {
 			$this->db->like('nomb_product', $this->input->get('producto'));
 		}
-		
+
 		if ($this->input->get('categoria') != '') {
 			$this->db->where('tb_categoria.cod_categoria', $this->input->get('categoria'));
 		}
-		
+
 		if ($this->input->get('marca') != '') {
 			$this->db->where('tb_marca.cod_marca', $this->input->get('marca'));
 		}
-		
-			// Filtrar por almacén si se ha seleccionado uno
+
+		// Filtrar por almacén si se ha seleccionado uno
 		$almacen = $this->input->get('almacen');
 		if ($almacen !== null) {
 			$this->db->like('tb_producto_stock.cod_almacen', $almacen);
 		}
-		
+
 		$this->db->distinct();
-		
+
 		return $this->db->get()->result();
 	}
-	
+
 
 
 	public function getFechasProducto()

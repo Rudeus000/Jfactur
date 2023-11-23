@@ -4687,13 +4687,13 @@ $(function () {
 			$('#FormSeleccionarAlmacen input[name=nombre_producto]').val(nombre_producto);
 			$('#FormSeleccionarAlmacen input[name=producto]').val(producto);
 			$('#FormSeleccionarAlmacen input[name=stock]').val(stock);
-			$('#FormSeleccionarAlmacen input[name=series]').val(series);
+			$('#FormSeleccionarAlmacen input[name=series]').val(JSON.stringify(series));
 			
 			$('#ModalSeleccionAlmacen').modal();
 			return
 		}
 
-		$.getJSON(path + 'administrador/reginventarioinicial/guardarStockInicial', { producto, almacen, stock, series }, function (json, textStatus) {
+		$.getJSON(path + 'administrador/reginventarioinicial/guardarStockInicial', { producto, almacen, stock, series: seriesJSON }, function (json, textStatus) {
 			if (json.success) {
 				Swal.fire({
 					title: "Buen trabajo",
@@ -4832,25 +4832,118 @@ $(function () {
 		$('#cantidad-producto-' + producto).val(cant);
 	});
 
+	var inventarioSeriesTable;
+
+	var inventarioSeriesTable;
+
+// Función para inicializar la tabla DataTables
+function inicializarTabla() {
+    if (!inventarioSeriesTable) {
+        inventarioSeriesTable = $('#TableInventarioSeries').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            },
+            "paging": true,
+            "pageLength": 10
+        });
+    }
+}
+
+$('#ModalInventarioSeries').on('hidden.bs.modal', function (e) {
+    // Destruir la tabla DataTables al cerrar el modal
+    if (inventarioSeriesTable) {
+        inventarioSeriesTable.destroy();
+        inventarioSeriesTable = null;
+    }
+});
+
 	$('#TableAlmacenInventarioInicial tbody').on('click', '.obtener-series', function (event) {
 		var producto = $(this).data('producto');
 		var almacen = $(this).data('almacen');
 		$('#ModalInventarioSeries').modal();
-		$('#TableInventarioSeries tbody').html('');
+		$('#TableInventarioSeries tbody').html('');		
 		$.getJSON(path + "administrador/reginventarioinicial/getSeriesInventario", { producto, almacen },
-			function (data, textStatus, jqXHR) {
-				var tr = '';
-				$.each(data, function (index, value) {
-					tr += `
-						<tr>
-							<td>${value.serie_descripcion}</td>
-							<td>${(value.serie_estado == 'D') ? 'Disponible' : 'Vendido'}</td>
-						</tr>
-					`;
-				});
-				$('#TableInventarioSeries tbody').html(tr);
-			}
-		);
+        function (data, textStatus, jqXHR) {
+            var tr = '';
+            $.each(data, function (index, value) {
+                var estado = (value.serie_estado == 'D') ? 'Disponible' : 'Vendido';
+                tr += `
+                    <tr data-serie-id="${value.serie_id}">
+                        <td class="serie-descripcion">${value.serie_descripcion}</td>
+                        <td class="serie-estado">${estado}</td>
+                        <td>
+                            <button class="btn-success  editar-serie"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn-primary guardar-serie" style="display: none;"><i class="fa fa-save"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            $('#TableInventarioSeries tbody').html(tr);
+			 
+			// Inicializar la tabla DataTables
+            inicializarTabla();
+            // Evento de clic para el botón de editar
+            $('.editar-serie').on('click', function () {
+				var $fila = $(this).closest('tr');
+			
+				// Obtener el contenido actual de las celdas
+				var descripcionActual = $fila.find('.serie-descripcion').text();
+				var estadoActual = $fila.find('.serie-estado').text();
+			
+				// Reemplazar el contenido con inputs editables
+				$fila.find('.serie-descripcion').html(`<input class="input-descripcion form-control input-block" type="text" value="${descripcionActual}" />`);
+				$fila.find('.serie-estado').html(`
+					<select class="select-estado form-control select2">
+						<option value="D" ${estadoActual === 'Disponible' ? 'selected' : ''}>Disponible</option>
+						<option value="N" ${estadoActual === 'Vendido' ? 'selected' : ''}>Vendido</option>
+					</select>
+				`);
+			
+				$(this).hide();
+				$fila.find('.guardar-serie').show();
+			
+				// Establecer el foco en el input de descripción al activar la edición
+				$fila.find('.input-descripcion').focus();
+			});
+			
+
+			$('.guardar-serie').on('click', function () {
+				var $fila = $(this).closest('tr');
+				var serieId = $fila.data('serie-id');
+				var nuevaDescripcion = $fila.find('.input-descripcion').val();
+				var nuevoEstado = $fila.find('.select-estado').val();
+			
+				// Realizar la solicitud AJAX para actualizar la serie
+				$.post(
+					'reginventarioinicial/actualizarSerieInventario', // Ruta a tu controlador y función
+					{
+						serie_id: serieId,
+						nueva_descripcion: nuevaDescripcion,
+						nuevo_estado: nuevoEstado
+					},
+					function (data, textStatus, jqXHR) {
+						// Aquí puedes manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito/error.
+						console.log('Respuesta del servidor:', data);
+						
+						// Actualizar el contenido de la tabla con los nuevos valores
+						$fila.find('.serie-descripcion').text(nuevaDescripcion);
+						$fila.find('.serie-estado').text(nuevoEstado === 'D' ? 'Disponible' : 'Vendido');
+
+						// Cambiar el botón "Guardar" a "Editar"
+						$fila.find('.guardar-serie').hide();
+						$fila.find('.editar-serie').show();
+			
+						// Quitar el foco del input
+						$fila.find('.input-descripcion').blur();
+			
+						// Puedes realizar acciones adicionales si la actualización fue exitosa.
+						// ...
+					}
+				);
+			});
+			
+        }
+    );
 	});
 
 	$('#FormAlmacenInventarioInicialFiltro').validate({
