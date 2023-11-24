@@ -4686,10 +4686,9 @@ $(function () {
 			let nombre_producto = _this.parent().parent().parent().parent().parent().find('td').eq(0).html();
 			$('#FormSeleccionarAlmacen input[name=nombre_producto]').val(nombre_producto);
 			$('#FormSeleccionarAlmacen input[name=producto]').val(producto);
-			$('#FormSeleccionarAlmacen input[name=stock]').val(stock);
-			var string_series = JSON.stringify(series);
-			$('#FormSeleccionarAlmacen input[name=series]').val(JSON.stringify(string_series));
-			
+			$('#FormSeleccionarAlmacen input[name=stock]').val(stock);			
+			$('#FormSeleccionarAlmacen input[name=series]').val(series);
+			var seriesJSON = JSON.stringify(series);
 			$('#ModalSeleccionAlmacen').modal();
 			return
 		}
