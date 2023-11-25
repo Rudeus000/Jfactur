@@ -84,7 +84,7 @@ class Reginventarioinicial extends CI_Controller
 				$data['cod_almacen'] = $almacenCentral->cod_almacen;
 			} else {
 				// Handle the case where "almacen central" is not found
-				$data['cod_almacen'] = 7;
+				$data['cod_almacen'] = 1;
 			}
 		} else {
 			$data['cod_almacen'] = $selectedAlmacen;
