@@ -104,7 +104,7 @@
 
                                     <div class="form-group">
                                         <!-- <button class="btn-md btn-block btnRegister waves-effect waves-light" type="submit">Ingresar</button> -->
-                                        <button class="g-recaptcha btnRegister waves-effect waves-light" data-sitekey="6LejkR8pAAAAAK-_jKSsr4xPFr65xM-rWxw7Af-g" data-callback='onSubmit' data-action='submit'>Ingresar</button>
+                                        <button class="g-recaptcha btnRegister waves-effect waves-light" data-sitekey="6LeC4CgpAAAAAMh1A_t0iiTP2spx2vj167P5mZX-" data-callback='onSubmit' data-action='submit'>Ingresar</button>
                                     </div>
                                 </div>
                             </div>
