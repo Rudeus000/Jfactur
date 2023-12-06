@@ -12835,6 +12835,18 @@ $('#ModalInventarioSeries').on('hidden.bs.modal', function (e) {
 		}
 	});
 
+	$('#FormEmpresasorteo').validate({
+		ignore: [],
+		rules: {
+			sosrteo: { required: true },
+		},
+		submitHandler: function () {
+			enviarFormulario('#FormEmpresasorteo', function (json) {
+
+			})
+		}
+	});
+
 	$('#FormEmpresaApi').validate({
 		ignore: [],
 		rules: {

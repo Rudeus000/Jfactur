@@ -30,3 +30,56 @@ jQuery(document).ready(function() {
     
     
 });
+
+$('#FormRegistronewuser').validate({
+    rules: {
+        // ... tus reglas de validación
+    },
+    submitHandler: function () {        
+        enviarFormulario('#FormRegistronewuser', function (json) {
+            if (json.success) {                
+                $('#FormRegistronewuser input[name=newapellido]').val('');
+                $('#FormRegistronewuser input[name=newnombre]').val('');
+                // ... Limpiar otros campos si es necesario
+                
+                // Mostrar mensaje de SweetAlert para éxito
+                Swal.fire({
+                    title: '¡Usuario registrado!',
+                    text: json.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar o realizar otras acciones si es necesario
+                        window.location.href = 'tu_pagina_destino.html';
+                    }
+                });
+            } else {
+                // Mostrar mensaje de SweetAlert para error
+                Swal.fire({
+                    title: 'Error',
+                    text: json.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    }
+});
+
+// Función enviarFormulario para realizar la solicitud AJAX
+function enviarFormulario(formId, callback) {
+    $.ajax({
+        type: 'POST',
+        url: 'auth/registrarnewusuario', // Reemplaza con tu URL
+        data: $(formId).serialize(),
+        dataType: 'json', // Especifica que esperamos una respuesta JSON
+        success: function(response) {
+            callback(response); // Llama a la función de callback con la respuesta JSON
+        },
+        error: function() {
+            console.error('Error al enviar la solicitud');
+        }
+    });
+}
+

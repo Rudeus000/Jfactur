@@ -32,6 +32,11 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="#profile2" data-toggle="tab" aria-expanded="true" class="nav-link ">
+								Configuracion para del ticket para el sorteo
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="#messages1" data-toggle="tab" aria-expanded="false" class="nav-link">
 								Configuracion de mensaje whatsapp
 							</a>
@@ -282,6 +287,33 @@
 									<label>Agregar mensaje</label>
 									<div>
 										<textarea required class="form-control" name="anuncio" value="<?= $empresa->anuncio ?>"></textarea>
+									</div>
+								</div>
+								<div class="form-group mb-0">
+									<div>
+										<button type="submit" class="btn btn-primary waves-effect waves-light">
+											Guardar
+										</button>
+										<button type="reset" class="btn btn-secondary waves-effect ml-1">
+											Cancel
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="tab-pane show " id="profile2">
+							<form id="FormEmpresasorteo" action="<?= base_url('empresa/Regempresa/sorteo') ?>" enctype="multipart/form-data" method="POST">
+								<div class="form-group">
+									<div class="alert alert-icon alert-info alert-dismissible fade show" role="alert">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<i class="mdi mdi-information"></i>
+										<strong>Mensaje actual!</strong> <?= $empresa->sorteo ?>
+									</div>
+									<label>Agregar mensaje</label>
+									<div>
+										<textarea required class="form-control" name="sorteo" value="<?= $empresa->sorteo ?>"></textarea>
 									</div>
 								</div>
 								<div class="form-group mb-0">

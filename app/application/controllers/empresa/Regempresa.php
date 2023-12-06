@@ -193,6 +193,23 @@ class Regempresa extends CI_Controller {
 		
 		echo json_encode($resp);
 	}
+	function sorteo(){		
+		// $data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
+		$data['sorteo'] = $this->input->post('sorteo');		
+		$where['cod_empresa '] = 1;
+		$edit = $this->modelgeneral->editRegist('tb_empresa',$where,$data);
+		$resp =[];
+		if(!is_null($edit)){
+				$resp['success'] = true;
+				$resp['empresa'] = $this->modelgeneral->getTableWhereRow('tb_empresa',['cod_empresa'=>1]);
+		}else{
+				$resp['success'] = false;
+		}
+
+		
+		
+		echo json_encode($resp);
+	}
 
 	function cumpleano(){		
 		$data['cumpleano_clin'] = $this->input->post('cumpleano_clin');

@@ -43,7 +43,7 @@
 	</div>
 	<div class="w40">
 		<p><b style="font-size: 11px;">Moneda:</b> &nbsp;&nbsp;SOLES</p>
-		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $nota->fecha_vent ?></p>
+		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $nota->fecha_nota ?></p>
 		<!-- <p><b>Fecha de Vencimiento:</b> <?= $compras->fecvenc_comp?></p>
 		<p><b>N° Dias Pago:</b> <?= $compras->dias_comp?></p> -->
 	</div>
