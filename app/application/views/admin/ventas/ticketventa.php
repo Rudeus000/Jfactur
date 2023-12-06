@@ -176,14 +176,13 @@
 		<b style="font-size:14px"><?= $empresa->anuncio ?></b>
 	</div>
 	<br>
-	<br>
+	
 <?php endif ?>
 <?php if (!is_null($empresa->sorteo) and $empresa->sorteo != '') : ?>
 	<div>
 		----------------------------------------------------------------------------------
 	</div>
-	<br>
-	<br>
+	<br>	
 	<div class="w100 text-center" style="border:1px dotted black;padding:2px">
 		<div style="font-size:14px"><?= $empresa->sorteo ?></div>
 
@@ -196,5 +195,5 @@
 
 	</div>
 	<br>
-	<br>
+	
 <?php endif ?>
