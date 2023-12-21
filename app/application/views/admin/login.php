@@ -34,12 +34,6 @@
             document.getElementById("demo-form").submit();
         }
     </script>
-
-
-
-
-
-
 </head>
 
 
@@ -58,8 +52,14 @@
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Ingresar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Registrar</a>
+                        <?php $empresa = getDatosEmpresa(); ?>
+                        <?php if ($empresa['empresa']->company_status == 0) : ?>
+                            <a class="nav-link" id="cpe-tab" data-toggle="tab" href="#demo" role="tab" aria-controls="cpe" aria-selected="false">Registrar</a>
+                        <?php else : ?>
+                            <a class="nav-link" id="demo-tab" data-toggle="tab" href="#cpe" role="tab" aria-controls="demo" aria-selected="false">CPE</a>
+                        <?php endif; ?>
                     </li>
+
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -110,10 +110,10 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <form role="form" id="FormRegistronewuser" class="form-horizontal" action="<?= base_url('auth/registrarnewusuario') ?>" method="post" autocomplete="off">
-                            <h3 class="">Registrar mi empresa gratis</h3>
-                            <div class="row ">
+                    <div class="tab-pane fade show" id="demo" role="tabpanel" aria-labelledby="demo-tab">
+                        <form role="form" id="FormRegistronewuser" class="form-horizontal needs-validation" novalidate action="<?= base_url('auth/registrarnewusuario') ?>" method="post" autocomplete="off">
+                            <h3 class="register-heading">Registrar mi empresa gratis</h3>
+                            <div class="row register-form ">
 
                                 <div class="col-md-6">
                                     <label>Nombres</label>
@@ -123,10 +123,7 @@
                                         </div>
                                         <input type="text" class="form-control" placeholder="Usuario *" value="" name="newnombre">
                                     </div>
-                                    <!-- <div class="form-group"> -->
-                                    <!-- <input type="submit" class="btnRegister" value="Descargar"> -->
-                                    <!-- <a href="<?= base_url('administrador/regcomprobante') ?>" class="btn btn-success btn-rounded w-md waves-effect waves-light btnRegister" role="button">Ingresar al portal</a>                                      
-                                    </div> -->
+
                                 </div>
                                 <div class="col-md-6">
                                     <label>Apellidos</label>
@@ -161,16 +158,17 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1"><i class="ion ion-ios-business"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="ingrese numero de ruc *" value="" name="newruc" required="">
+                                        <input type="text" class="form-control" placeholder="ingrese numero de ruc *" value="" name="newruc" id="newruc" required="">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button">Sunat</button>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="buscar();">Sunat</button>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Razon social:</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Razon social *" value="" name="newrsocial" readonly>
+                                        <input type="text" class="form-control" placeholder="Razon social *" value="" name="newrsocial" id="newrsocial" readonly required="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -186,7 +184,7 @@
                                 <div class="col-md-6">
 
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck" name="terms" required>
                                         <label class="form-check-label" for="autoSizingCheck">
                                             He leído y acepto los términos y condiciones y la política de privacidad.
                                         </label>
@@ -198,6 +196,22 @@
                                 </div>
                             </div>
                         </form>
+                    </div>
+
+                    <div class="tab-pane fade show" id="cpe" role="tabpanel" aria-labelledby="cpe-tab">
+
+                        <h3 class="register-heading">Descargar mis comprobantes</h3>
+                        <div class="row register-form ">
+
+                            <div class="col-md-6">
+                                <label>Haga click en boton <b>ingresar al portal</b> para descargar los CPE</label>
+
+                                <!-- <div class="form-group"> -->
+                                <!-- <input type="submit" class="btnRegister" value="Descargar"> -->
+                                <a href="<?= base_url('administrador/regcomprobante') ?>" class="btn btn-success btn-rounded w-md waves-effect waves-light btnRegister" role="button">Ingresar al portal</a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -7318,7 +7318,7 @@ $('#ModalInventarioSeries').on('hidden.bs.modal', function (e) {
 				if (d.vendedor = $('select[name=vendedor]').val()) {
 					d.vendedor = $('select[name=vendedor]').val();
 				} else {
-					d.vendedorcod = $('input[name=vendedocod]').val();
+					d.vendedor = $('input[name=vendedor]').val();
 				}
 				d.punto = $('select[name=punto]').val();
 				d.estado = $('select[name=estado]').val();

@@ -49,13 +49,22 @@ class Regventas extends CI_Controller
 		$data['desde'] = $this->input->get_post('desde');
 		$data['hasta'] = $this->input->get_post('hasta');
 		$cliente = $this->input->get_post('cliente');
+		$vendedor = $this->input->get_post('vendedor');
+		$punto = $this->input->get_post('punto');
+		$estado = $this->input->get_post('estado');
 
 		// if ($cliente!='') {
-		$data['cliente'] = $cliente;
+		// $data['cliente'] = $cliente;
 		// }
-		$data['vendedor'] = $this->input->get_post('vendedor');
-		$data['punto'] = $this->input->get_post('punto');
-		$data['estado'] = $this->input->get_post('estado');
+		// $data['vendedor'] = $this->input->get_post('vendedor');
+		// $data['punto'] = $this->input->get_post('punto');
+		// $data['estado'] = $this->input->get_post('estado');
+
+		
+		$data['cliente'] = $cliente;
+		$data['vendedor'] = $vendedor;
+		$data['punto'] = $punto;
+		$data['estado'] = $estado;
 
 		$datos = $this->ventas_model->getVentas($data);
 		header('content-type: application/json; charset=utf-8');

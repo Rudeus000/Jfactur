@@ -2,7 +2,7 @@
 // Variables
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzAzMDg2NjIwfQ.gKaT7_wGN5PGq-78TRmD4OXwm1BK5Wzy8jXaw52WMo4';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzA1NjE1ODM5fQ.dpU839xNnr24blIYNlID99xk78F8SVDFRRqquv9poj8';
 
 
 if ($tipo_doc == "2") {

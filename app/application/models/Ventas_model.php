@@ -60,7 +60,7 @@ class Ventas_model extends CI_Model
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryLike->num_rows();
     $result['iTotalDisplayRecords'] = $queryLike->num_rows();
-$cobros="";
+    $cobros = "";
     $row = [];
     foreach ($query->result() as $q) {
       $cobros = $this->getCobros($q->cod_vent);
@@ -82,6 +82,24 @@ $cobros="";
         $archivoxml = $q->noxml_vent;
       }
 
+      $cod_usu = $this->session->userdata('cod_usu');
+      $query = $this->db->select('cod_perfil')
+        ->from('tb_usuario')
+        ->where('cod_usu', $cod_usu)
+        ->get();
+
+      // Verificar si se encontraron resultados
+      if ($query->num_rows() > 0) {
+        $usuario = $query->row();
+        $perfil_usuario = $usuario->cod_perfil;
+      }
+      // $cod_perfil = $q->cod_perfil;
+      $buttonAnular = '';
+
+      // Verifica si cod_perfil es igual a 1 para mostrar el botón "Anular Venta"
+      if ($perfil_usuario == 1) {
+        $buttonAnular = '<button data-id="' . $q->cod_vent . '" class="anular btn btn-dafault" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash text-danger"></i></button>&nbsp';
+      }
       $buttons = '
       <div class="btn-group">
 
@@ -92,7 +110,7 @@ $cobros="";
 
       <a href="' . base_url('administrador/regventas/editar/' . $q->cod_vent) . '" class="btn btn-xs " data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye text-info"></i></a>&nbsp
 
-      <button data-id="' . $q->cod_vent . '" class="anular btn btn-dafault" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash text-danger"></i></button>&nbsp
+     ' . $buttonAnular . '
       
       ' . $xml . '
       
@@ -270,7 +288,7 @@ $cobros="";
   function getDocumentosCliente()
   {
     return $this->db->from('tb_tipodocumentocliente')
-      ->where_in('codsunat_tipdocucli', ['1', '6','4','7'])
+      ->where_in('codsunat_tipdocucli', ['1', '6', '4', '7'])
       ->get()
       ->result();
   }
