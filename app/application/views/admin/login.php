@@ -247,4 +247,92 @@
             });
         </script>
 
+        <script>
+            function buscar() {
+
+                tipo_doc = 1;
+
+                if (tipo_doc == "") {
+
+                    alert("Debes seleccionar un tipo de documento.");
+
+                } else {
+
+                    $('#capa_load').html('<img src="<?= base_url_app() ?>assets/images/loading.gif" alt="" style="position: absolute;top: 10px;left: 46%;">');
+
+                    $.post('<?= base_url() ?>Validardatos/validarDocumento', {
+                        dni: $('#newruc').val(),
+                        tipo_doc: tipo_doc
+                    }, function(data) {
+
+
+
+                        if (tipo_doc == "2") {
+
+                            var datos = eval(data);
+
+                            if (datos == ",,,") {
+
+                                alert("No existe este DNI.");
+
+                                $('#capa_load').html("");
+
+                                $("#FormVentaAgregarCliente")[0].reset();
+
+                            } else {
+
+                                $('#txt_documento').val(datos[0]);
+
+                                $('#txt_nombre').val(datos[5]);
+
+                                $('#txt_direccion').val(datos[4]);
+
+                                $('#fnacimiento').val(datos[6]);
+
+
+                                $('#capa_load').html("");
+
+                            }
+
+                        } else {
+
+                            var datos = eval(data);
+
+                            var nada = 'nada';
+
+                            doc = $('#newruc').val();
+
+                            if (doc.length < 11) {
+                                alert("ingrese ruc valido");
+
+                            }
+
+                            if (datos[0] == nada) {
+
+                                alert('RUC no válido o no registrado');
+
+                                $('#capa_load').html("");
+
+                                $("#FormVentaAgregarCliente")[0].reset();
+
+                            } else {
+
+                                $('#newruc').val(datos[0]);
+                                $('#newrsocial').val(datos[1]);
+
+                            }
+
+                            $('#capa_load').html("");
+
+                        }
+
+
+
+                    });
+
+                }
+
+            }
+        </script>
+
 </body>

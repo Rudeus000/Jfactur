@@ -119,10 +119,10 @@ class Ventas_model extends CI_Model
       <a href="' . base_url('administrador/regventas/imprimirticketVenta/' . $archivoxml) . '" target="_blank" class="btn" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt text-primary"></i></a>
       </div>
 
-      
+      <button title="Firmar" class="btn btn-default firmar" data-id="'.$q->cod_vent.'">FIR</button>
 
        ';
-      //  <button title="Firmar" class="btn btn-default firmar" data-id="'.$q->cod_vent.'">FIR</button>
+      
 
       $boton_detalle = '<button class="btn btn-icon waves-effect waves-light btn-success" ><span class="fa fa-caret-right"></span></button>';
       $row[] = [$boton_detalle, $q->nom_tipdocumento . '-' . $q->serie . '-' . $q->numero_vent, $q->fecha_vent, $q->nomb_cliente, $q->doc_cliente, $q->moneda_vent == 'S' ? 'Soles' : 'Dolares', $q->total_vent, $estado, $cobros, $q->pendiente_vent, $buttons, json_encode($detalle)];

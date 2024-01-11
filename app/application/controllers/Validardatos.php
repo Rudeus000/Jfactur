@@ -1,5 +1,17 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Validardatos extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        // Carga el modelo dentro del constructor si no lo has hecho ya
+        $this->load->model('Modelgeneral');
+    }
 // Variables
+public function validarDocumento()
+    {
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
 $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzA1NjE1ODM5fQ.dpU839xNnr24blIYNlID99xk78F8SVDFRRqquv9poj8';
@@ -11,7 +23,7 @@ if ($tipo_doc == "2") {
         $documento = trim($documento);
     }
     // API URL
-    $url = "https://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
+    $url = "https://api.apis.net.pe/v1/dni?numero=".$documento;
 
     // Initialize cURL session
     $ch = curl_init();
@@ -19,12 +31,13 @@ if ($tipo_doc == "2") {
     // Set cURL options
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($ch, CURLOPT_ENCODING, '');
-    curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
     curl_setopt($ch, CURLOPT_TIMEOUT, 0);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,'POST');
+    // curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,'GET');
 
     // Execute cURL session
     $response = curl_exec($ch);
@@ -54,7 +67,7 @@ if ($tipo_doc == "2") {
                 2 => isset($data['Apmaterno']) ? $data['Apmaterno'] : null,
                 3 => isset($data['Nombres']) ? $data['Nombres'] : null,
                 4 => isset($data['Direccion']) ? $data['Direccion'] : null,
-                5 => isset($data['Nombrecompleto']) ? $data['Nombrecompleto'] : null,
+                5 => isset($data['nombre']) ? $data['nombre'] : null,
                 6 => isset($data['Fnacimiento']) ? date('Y-m-d', strtotime($data['Fnacimiento'])) : '1969-12-31',
             );
         }
@@ -96,4 +109,6 @@ if ($tipo_doc == "2") {
 
     );
     echo json_encode($datos);
+}
+}
 }
