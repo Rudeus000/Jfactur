@@ -284,27 +284,34 @@
                   <fieldset>
                     <legend>Agregar Producto</legend>
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="servicioCheck" name="servicioCheck" />
                         <label for="servicioCheck">Servicio/producto</label>
                         <!-- </div> -->
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck" />
-                        <label for="servicioChecked">Observaciones</label>
+                        <label for="observacionChecked">Observaciones</label>
                         <!-- </div> -->
                       </div>
 
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
                         <label for="detraccion-check">Detracción</label>
+                        <!-- </div> -->
+                      </div>
+                      <div class="col-md-3">
+                        <!-- <div class="switchery-demo"> -->
+                        <!-- <input type="checkbox" class="custom-control-input" > -->
+                        <input type="checkbox" data-plugin="switchery" data-color="#FC0B00 " data-size="small" id="retencion-check" name="retencion-check" />
+                        <label for="retencion-check">Retencion</label>
                         <!-- </div> -->
                       </div>
 
@@ -583,6 +590,41 @@
                               <div class="text-info text-size-small"><i class="fa fa-info text-info hover-q font-italic"> </i> <em>&nbsp;Operacion Sujeta a Detracción: Debe existir al menos un artículo sujeto a detracción. Si existe más de uno, el facturador tomara el mayor porcentaje por una interpretación conservadora Resolución 183-204 SUNAT/15.08.2004.</em></div>
                             </div>
                           </div>
+
+                        </fieldset>
+                      </div>
+                      <div id="content-detalles-retencion" class="col-md-12" style="display:none">
+                        <fieldset class="scheduler-border">
+                          <legend class="scheduler-border">Informacion de la retencion</legend>
+                          <div class="row">                            
+                            <div class="col-md-4">
+                              <label class="control-label">Base imponible: </label>
+                              <div class="input-group">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">S/.</span>
+                                </div>
+                                <input type="text" name="base_monto" class="form-control" value="0.00" readonly>
+                              </div>
+                            </div>                      
+                            
+                            <div class="col-md-4">
+                              <label class="control-label">Porcentaje: </label>
+                              <div class="input-group">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                                <input type="text" name="retencion_porcentaje" class="form-control" value="3" readonly>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <label class="control-label">Monto retencion: </label>
+                              <div class="input-group">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">S/.</span>
+                                </div>
+                                <input type="text" name="retencion_monto" class="form-control" value="0.00" readonly>
+                              </div>
+                            </div>                          
 
                         </fieldset>
                       </div>

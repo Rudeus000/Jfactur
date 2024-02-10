@@ -66,6 +66,7 @@
 	
 	function get_array_cabecera($data, $emisor) {
 		$cabecera = array(
+			'RETENCION' => (isset($data['retencion'])) ? $data['retencion'] : "",
 			'DETRACCION' => (isset($data['detraccion'])) ? $data['detraccion'] : "",
 			'TIPO_OPERACION' => (isset($data['tipo_operacion'])) ? $data['tipo_operacion'] : "", //pag. 28
 	        'TOTAL_GRAVADAS' => (isset($data['total_gravadas'])) ? $data['total_gravadas'] : "0",
@@ -80,6 +81,7 @@
 	        'TOTAL_ISC' => (isset($data['total_isc'])) ? $data['total_isc'] : "0",
 	        'TOTAL_OTR_IMP' => (isset($data['total_otr_imp'])) ? $data['total_otr_imp'] : "0",
 	        'TOTAL' => (isset($data['total'])) ? $data['total'] : "0",
+			'TOTAL_RETENCION_CUOT' => (isset($data['total_retencion_cuot'])) ? $data['total_retencion_cuot'] : "0",
 			'TOTAL_LETRAS' => $data['total_letras'],
 			
 	        //==============================================

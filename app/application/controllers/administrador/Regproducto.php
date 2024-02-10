@@ -115,7 +115,7 @@ class Regproducto extends CI_Controller
 
             (empty($this->input->post('productAssignment'))) ? $data['typeAssignmentProduct'] = 'N' : $data['typeAssignmentProduct'] = $this->input->post('productAssignment');
             (empty($this->input->post('selectAssignmentDad'))) ? $data['idTypeAssignmentProduct'] = null : $data['idTypeAssignmentProduct'] = $this->input->post('selectAssignmentDad');
-
+            $data['typeAssignmentProducto'] = $this->input->post('productoConasignacion');
             $data['cod_tiparticulo'] = $this->input->post('tipoarticulo');
             $data['nomb_product'] = $this->input->post('nombre');
             $data['cod_marca'] = $this->input->post('marca');
@@ -131,6 +131,7 @@ class Regproducto extends CI_Controller
             $data['prec_mayor_venta'] = $this->input->post('precioventa_mayor');
             $data['prec_especial_venta'] = $this->input->post('precioventa_especial');
             $data['stockmin_product'] =  $this->input->post('stock');
+            $data['comision_product'] =  $this->input->post('comision');
             $data['fecha_registro'] = date("Y-m-d H:i:s");
             $data['fecha_modificacion'] = date("Y-m-d H:i:s");
             $data['dispo_venta'] = $this->input->post('dispventa');
@@ -185,17 +186,26 @@ class Regproducto extends CI_Controller
 
             $objectCheckedDad = $this->input->post('editproductAssignmentDad');
             $objectCheckedSon = $this->input->post('editproductAssignmentSon');
+            $objectCheckedGson = $this->input->post('editproductAssignmentGson');
 
-            if ($objectCheckedDad == null && $objectCheckedSon == null) {
+            if ($objectCheckedDad == null && $objectCheckedSon == null && $objectCheckedGson==null) {
                 $data['typeAssignmentProduct'] = 'N';
+                $data['typeAssignmentProducto'] = 'N';
                 $data['idTypeAssignmentProduct'] = null;
-            } else if ($objectCheckedDad == null && $objectCheckedSon !== null) {
+            } else if ($objectCheckedDad == null && $objectCheckedSon !== null && $objectCheckedGson==null) {
                 $data['idTypeAssignmentProduct'] = $this->input->post('editselectAssignmentDad');
                 $data['typeAssignmentProduct'] = 'H';
-            } else if ($objectCheckedDad !== null && $objectCheckedSon == null) {
+                $data['typeAssignmentProducto'] = 'H';
+            } else if ($objectCheckedDad !== null && $objectCheckedSon == null&& $objectCheckedGson==null) {
                 $data['idTypeAssignmentProduct'] = null;
                 $data['typeAssignmentProduct'] = 'P';
+                $data['typeAssignmentProducto'] = 'P';
             }
+         else if ($objectCheckedDad == null && $objectCheckedSon !== null&& $objectCheckedGson!==null) {
+            $data['idTypeAssignmentProduct'] = $this->input->post('editselectAssignmentDad');
+            $data['typeAssignmentProduct'] = 'H';
+            $data['typeAssignmentProducto'] = 'G';
+        }
 
             $data['cod_marca'] = $this->input->post('marca');
             $data['cod_categoria'] = $this->input->post('categoria');
@@ -210,6 +220,7 @@ class Regproducto extends CI_Controller
             $data['prec_mayor_venta'] = $this->input->post('precioventa_mayor');
             $data['prec_especial_venta'] = $this->input->post('precioventa_especial');
             $data['stockmin_product'] =  $this->input->post('stock');
+            $data['comision_product'] =  $this->input->post('comision');
             $data['fecha_modificacion'] = date("Y-m-d H:i:s");
             $data['dispo_venta'] = $this->input->post('dispventa');
             $data['dispo_compra'] = $this->input->post('dispcompra');

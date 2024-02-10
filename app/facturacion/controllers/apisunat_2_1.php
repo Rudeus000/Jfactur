@@ -1,50 +1,66 @@
 <?php
-class Apisunat {
-    public function crear_xml_factura($cabecera, $detalle, $ruta) {
+class Apisunat
+{
+    public function crear_xml_factura($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
         $doc->preserveWhiteSpace = TRUE;
         //$doc->encoding = 'ISO-8859-1';
-		$doc->encoding = 'utf-8';
+        $doc->encoding = 'utf-8';
+
+        // RETENCION
+        if ($cabecera['RETENCION']['activo'] == TRUE) {
+
+            $retencion = '
+            <cac:AllowanceCharge> 
+                <cbc:ChargeIndicator>false</cbc:ChargeIndicator> 
+                <cbc:AllowanceChargeReasonCode listAgencyName="PE:SUNAT" listName="Cargo/descuento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">62</cbc:AllowanceChargeReasonCode> 
+                <cbc:MultiplierFactorNumeric>' . $cabecera['RETENCION']['retencion_porcentaje'] . '</cbc:MultiplierFactorNumeric>
+                <cbc:Amount currencyID="PEN">' . $cabecera['RETENCION']['retencion_monto'] . '</cbc:Amount> 
+                <cbc:BaseAmount currencyID="PEN">' . $cabecera['RETENCION']['retencion_base_imp'] . '</cbc:BaseAmount>  
+            </cac:AllowanceCharge>';
+        }
+        // FIN RETENCION
 
         if ($cabecera['DETRACCION']['activo'] == TRUE) {
 
             $detraccion = '
             <cac:PaymentMeans>
                 <cbc:ID>Detraccion</cbc:ID>
-                <cbc:PaymentMeansCode>'. $cabecera['DETRACCION']['id_mediopago'] .'</cbc:PaymentMeansCode>
+                <cbc:PaymentMeansCode>' . $cabecera['DETRACCION']['id_mediopago'] . '</cbc:PaymentMeansCode>
                 <cac:PayeeFinancialAccount>
-                <cbc:ID>'. $cabecera['DETRACCION']['cuenta'] .'</cbc:ID>
+                <cbc:ID>' . $cabecera['DETRACCION']['cuenta'] . '</cbc:ID>
             </cac:PayeeFinancialAccount>
             </cac:PaymentMeans>
                 <cac:PaymentTerms>
                 <cbc:ID>Detraccion</cbc:ID>
-                <cbc:PaymentMeansID>'. $cabecera['DETRACCION']['iddetraccion'] .'</cbc:PaymentMeansID>
-                <cbc:PaymentPercent>'. (float)$cabecera['DETRACCION']['porcentaje'] .'</cbc:PaymentPercent>
-                <cbc:Amount currencyID="PEN">'. $cabecera['DETRACCION']['monto'] .'</cbc:Amount>
+                <cbc:PaymentMeansID>' . $cabecera['DETRACCION']['iddetraccion'] . '</cbc:PaymentMeansID>
+                <cbc:PaymentPercent>' . (float)$cabecera['DETRACCION']['porcentaje'] . '</cbc:PaymentPercent>
+                <cbc:Amount currencyID="PEN">' . $cabecera['DETRACCION']['monto'] . '</cbc:Amount>
             </cac:PaymentTerms>';
         }
-            
 
-        if(is_null($cabecera['CUOTAS'])){
+
+        if (is_null($cabecera['CUOTAS'])) {
             $formaPago = '
             <cac:PaymentTerms>
                 <cbc:ID>FormaPago</cbc:ID>
                 <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
             </cac:PaymentTerms>';
-        }else{
+        } else {
             $formaPago = '<cac:PaymentTerms>
                             <cbc:ID>FormaPago</cbc:ID>
                             <cbc:PaymentMeansID>Credito</cbc:PaymentMeansID>
-                            <cbc:Amount currencyID="PEN">'.$cabecera["TOTAL"].'</cbc:Amount>
+                            <cbc:Amount currencyID="PEN">'.$cabecera['TOTAL_RETENCION_CUOT'].'</cbc:Amount>
                         </cac:PaymentTerms>';
             foreach ($cabecera['CUOTAS'] as $key => $value) {
                 $formaPago .= '<cac:PaymentTerms>
                                     <cbc:ID>FormaPago</cbc:ID>
-                                    <cbc:PaymentMeansID>Cuota00'.($key+1).'</cbc:PaymentMeansID>
-                                    <cbc:Amount currencyID="PEN">'.strval($value['monto_ventcuo']).'</cbc:Amount>
-                                    <cbc:PaymentDueDate>'.$value['fecha_ventcuo'].'</cbc:PaymentDueDate>
+                                    <cbc:PaymentMeansID>Cuota00' . ($key + 1) . '</cbc:PaymentMeansID>
+                                    <cbc:Amount currencyID="PEN">' . strval($value['monto_ventcuo']) . '</cbc:Amount>
+                                    <cbc:PaymentDueDate>' . $value['fecha_ventcuo'] . '</cbc:PaymentDueDate>
                                 </cac:PaymentTerms>';
             }
         }
@@ -64,28 +80,28 @@ class Apisunat {
 	<cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
 	<cbc:IssueTime>00:00:00</cbc:IssueTime>
 	<cbc:DueDate>' . $cabecera["FECHA_VTO"] . '</cbc:DueDate>
-	<cbc:InvoiceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Documento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01" listID="'.$cabecera["TIPO_OPERACION"].'" name="Tipo de Operacion" listSchemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">' . $cabecera["COD_TIPO_DOCUMENTO"] . '</cbc:InvoiceTypeCode>';
-	if ($cabecera["TOTAL_LETRAS"] <> "") {
+	<cbc:InvoiceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Documento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01" listID="' . $cabecera["TIPO_OPERACION"] . '" name="Tipo de Operacion" listSchemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51">' . $cabecera["COD_TIPO_DOCUMENTO"] . '</cbc:InvoiceTypeCode>';
+        if ($cabecera["TOTAL_LETRAS"] <> "") {
             $xmlCPE = $xmlCPE .
                 '<cbc:Note languageLocaleID="1000">' . $cabecera["TOTAL_LETRAS"] . '</cbc:Note>';
         }
 
-        if($cabecera['DETRACCION']['activo'] == TRUE){
+        if ($cabecera['DETRACCION']['activo'] == TRUE) {
             $xmlCPE = $xmlCPE .
                 '<cbc:Note languageLocaleID="2006"><![CDATA[Operación sujeta a Detracción]]></cbc:Note>';
         }
 
         $xmlCPE = $xmlCPE .
-                '<cbc:DocumentCurrencyCode listID="ISO 4217 Alpha" listName="Currency" listAgencyName="United Nations Economic Commission for Europe">' . $cabecera["COD_MONEDA"] . '</cbc:DocumentCurrencyCode>
+            '<cbc:DocumentCurrencyCode listID="ISO 4217 Alpha" listName="Currency" listAgencyName="United Nations Economic Commission for Europe">' . $cabecera["COD_MONEDA"] . '</cbc:DocumentCurrencyCode>
             <cbc:LineCountNumeric>' . count($detalle) . '</cbc:LineCountNumeric>';
         if ($cabecera["NRO_OTR_COMPROBANTE"] <> "") {
             $xmlCPE = $xmlCPE .
-                    '<cac:OrderReference>
+                '<cac:OrderReference>
                     <cbc:ID>' . $cabecera["NRO_OTR_COMPROBANTE"] . '</cbc:ID>
             </cac:OrderReference>';
         }
         if ($cabecera["NRO_GUIA_REMISION"] <> "") {
-        $xmlCPE = $xmlCPE .
+            $xmlCPE = $xmlCPE .
                 '<cac:DespatchDocumentReference>
 		<cbc:ID>' . $cabecera["NRO_GUIA_REMISION"] . '</cbc:ID>
 		<cbc:IssueDate>' . $cabecera["FECHA_GUIA_REMISION"] . '</cbc:IssueDate>
@@ -128,7 +144,7 @@ class Apisunat {
 				<cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:RegistrationName>
 				<cac:RegistrationAddress>
 					<cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">' . $cabecera["CODIGO_UBIGEO_EMPRESA"] . '</cbc:ID>
-					<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">' .$cabecera['CODIGO_SUNAT']. '</cbc:AddressTypeCode>
+					<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">' . $cabecera['CODIGO_SUNAT'] . '</cbc:AddressTypeCode>
 					<cbc:CityName><![CDATA[' . $cabecera["DEPARTAMENTO_EMPRESA"] . ']]></cbc:CityName>
 					<cbc:CountrySubentity><![CDATA[' . $cabecera["PROVINCIA_EMPRESA"] . ']]></cbc:CountrySubentity>
 					<cbc:District><![CDATA[' . $cabecera["DISTRITO_EMPRESA"] . ']]></cbc:District>
@@ -177,7 +193,7 @@ class Apisunat {
 			</cac:PartyLegalEntity>
 		</cac:Party>
 	</cac:AccountingCustomerParty>
-	'. $detraccion . $formaPago .'
+	' . $detraccion . $formaPago . $retencion . '
 	
 	<cac:TaxTotal>
 		<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
@@ -194,7 +210,7 @@ class Apisunat {
 			</cac:TaxCategory>
 		</cac:TaxSubtotal>
         <cac:TaxSubtotal>
-			<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">'.$cabecera["TOTAL_EXONERADAS"].'</cbc:TaxableAmount>
+			<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_EXONERADAS"] . '</cbc:TaxableAmount>
 			<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">0.00</cbc:TaxAmount>
 			<cac:TaxCategory>
 				<cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
@@ -205,11 +221,11 @@ class Apisunat {
 				</cac:TaxScheme>
 			</cac:TaxCategory>
 		</cac:TaxSubtotal>';
-                //TOTAL=GRAVADA+IGV+EXONERADA
-                //NO ENTRA GRATUITA(INAFECTA) NI DESCUENTO
-                //SUB_TOTAL=PRECIO(SIN IGV) * CANTIDAD
-	$xmlCPE = $xmlCPE .
-       '</cac:TaxTotal>
+        //TOTAL=GRAVADA+IGV+EXONERADA
+        //NO ENTRA GRATUITA(INAFECTA) NI DESCUENTO
+        //SUB_TOTAL=PRECIO(SIN IGV) * CANTIDAD
+        $xmlCPE = $xmlCPE .
+            '</cac:TaxTotal>
 	<cac:LegalMonetaryTotal>
 		<cbc:LineExtensionAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["SUB_TOTAL"] . '</cbc:LineExtensionAmount>
 		<cbc:TaxInclusiveAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL"] . '</cbc:TaxInclusiveAmount>
@@ -217,8 +233,8 @@ class Apisunat {
 		<cbc:ChargeTotalAmount currencyID="' . $cabecera["COD_MONEDA"] . '">0.00</cbc:ChargeTotalAmount>
 		<cbc:PayableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL"] . '</cbc:PayableAmount>
 	</cac:LegalMonetaryTotal>';
-    for ($i = 0; $i < count($detalle); $i++) {
-        $xmlCPE = $xmlCPE . '<cac:InvoiceLine>
+        for ($i = 0; $i < count($detalle); $i++) {
+            $xmlCPE = $xmlCPE . '<cac:InvoiceLine>
 		<cbc:ID>' . $detalle[$i]["txtITEM"] . '</cbc:ID>
 		<cbc:InvoicedQuantity unitCode="' . $detalle[$i]["txtUNIDAD_MEDIDA_DET"] . '" unitCodeListID="UN/ECE rec 20" unitCodeListAgencyName="United Nations Economic Commission for Europe">' . $detalle[$i]["txtCANTIDAD_DET"] . '</cbc:InvoicedQuantity>
 		<cbc:LineExtensionAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIMPORTE_DET"] . '</cbc:LineExtensionAmount>
@@ -238,8 +254,8 @@ class Apisunat {
 					<cbc:Percent>' . $detalle[$i]["MONTO_IGV"] . '</cbc:Percent>
 					<cbc:TaxExemptionReasonCode listName="Afectacion del IGV" listAgencyName="PE:SUNAT" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07">' . $detalle[$i]["txtCOD_TIPO_OPERACION"] . '</cbc:TaxExemptionReasonCode>
 					<cac:TaxScheme>
-						<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">'.$detalle[$i]['TIPO_IGV'].'</cbc:ID>
-						<cbc:Name>'.$detalle[$i]['IGV_EXO'].'</cbc:Name>
+						<cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">' . $detalle[$i]['TIPO_IGV'] . '</cbc:ID>
+						<cbc:Name>' . $detalle[$i]['IGV_EXO'] . '</cbc:Name>
 						<cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
 					</cac:TaxScheme>
 				</cac:TaxCategory>
@@ -252,7 +268,7 @@ class Apisunat {
 			</cac:SellersItemIdentification>
 
 			<cac:CommodityClassification>
-				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">'.$detalle[$i]['txtCODIGO_PROD_SUNAT'].'</cbc:ItemClassificationCode>
+				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">' . $detalle[$i]['txtCODIGO_PROD_SUNAT'] . '</cbc:ItemClassificationCode>
 			</cac:CommodityClassification>
 
 		</cac:Item>
@@ -260,25 +276,26 @@ class Apisunat {
 			<cbc:PriceAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtPRECIO_SIN_IGV_DET"] . '</cbc:PriceAmount>
 		</cac:Price>
 	</cac:InvoiceLine>';
-    }
+        }
 
         $xmlCPE = $xmlCPE . '</Invoice>';
         $doc->loadXML($xmlCPE);
         $doc->save($ruta . '.XML');
         $resp['respuesta'] = 'ok';
-		$resp['url_xml'] = $ruta . '.XML';
+        $resp['url_xml'] = $ruta . '.XML';
         return $resp;
-	}
+    }
 
-	public function crear_xml_nota_credito($cabecera, $detalle, $ruta) {
+    public function crear_xml_nota_credito($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
         $doc->preserveWhiteSpace = TRUE;
-		//$doc->encoding = 'ISO-8859-1';
-		$doc->encoding = 'utf-8';
-        
-		$xmlCPE = '<?xml version="1.0" encoding="UTF-8"?>
+        //$doc->encoding = 'ISO-8859-1';
+        $doc->encoding = 'utf-8';
+
+        $xmlCPE = '<?xml version="1.0" encoding="UTF-8"?>
 <CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ext:UBLExtensions>
         <ext:UBLExtension>
@@ -288,19 +305,19 @@ class Apisunat {
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <cbc:CustomizationID>2.0</cbc:CustomizationID>
-    <cbc:ID>'.$cabecera["NRO_COMPROBANTE"].'</cbc:ID>
-    <cbc:IssueDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:IssueDate>
+    <cbc:ID>' . $cabecera["NRO_COMPROBANTE"] . '</cbc:ID>
+    <cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
     <cbc:IssueTime>00:00:00</cbc:IssueTime>
-    <cbc:DocumentCurrencyCode>'.$cabecera["COD_MONEDA"].'</cbc:DocumentCurrencyCode>
+    <cbc:DocumentCurrencyCode>' . $cabecera["COD_MONEDA"] . '</cbc:DocumentCurrencyCode>
     <cac:DiscrepancyResponse>
-        <cbc:ReferenceID>'.$cabecera["NRO_DOCUMENTO_MODIFICA"].'</cbc:ReferenceID>
-        <cbc:ResponseCode>'.$cabecera["COD_TIPO_MOTIVO"].'</cbc:ResponseCode>
-        <cbc:Description><![CDATA['.$cabecera["DESCRIPCION_MOTIVO"].']]></cbc:Description>
+        <cbc:ReferenceID>' . $cabecera["NRO_DOCUMENTO_MODIFICA"] . '</cbc:ReferenceID>
+        <cbc:ResponseCode>' . $cabecera["COD_TIPO_MOTIVO"] . '</cbc:ResponseCode>
+        <cbc:Description><![CDATA[' . $cabecera["DESCRIPCION_MOTIVO"] . ']]></cbc:Description>
     </cac:DiscrepancyResponse>
     <cac:BillingReference>
         <cac:InvoiceDocumentReference>
-            <cbc:ID>'.$cabecera["NRO_DOCUMENTO_MODIFICA"].'</cbc:ID>
-            <cbc:DocumentTypeCode>'.$cabecera["TIPO_COMPROBANTE_MODIFICA"].'</cbc:DocumentTypeCode>
+            <cbc:ID>' . $cabecera["NRO_DOCUMENTO_MODIFICA"] . '</cbc:ID>
+            <cbc:DocumentTypeCode>' . $cabecera["TIPO_COMPROBANTE_MODIFICA"] . '</cbc:DocumentTypeCode>
         </cac:InvoiceDocumentReference>
     </cac:BillingReference>
     <cac:Signature>
@@ -322,16 +339,16 @@ class Apisunat {
     <cac:AccountingSupplierParty>
         <cac:Party>
             <cac:PartyIdentification>
-                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:ID>
+                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
                 <cbc:Name><![CDATA[' . $cabecera["NOMBRE_COMERCIAL_EMPRESA"] . ']]></cbc:Name>
             </cac:PartyName>
             <cac:PartyLegalEntity>
-<cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
+<cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
                 <cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">' . $cabecera["CODIGO_UBIGEO_EMPRESA"] . '</cbc:ID>
-                <cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">' .$cabecera['CODIGO_SUNAT']. '</cbc:AddressTypeCode>
+                <cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">' . $cabecera['CODIGO_SUNAT'] . '</cbc:AddressTypeCode>
                 <cac:AddressLine>
                     <cbc:Line><![CDATA[' . $cabecera["DIRECCION_EMPRESA"] . ']]></cbc:Line>
                 </cac:AddressLine>
@@ -354,10 +371,10 @@ class Apisunat {
         </cac:Party>
     </cac:AccountingCustomerParty>
   <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_IGV"].'</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
         <cac:TaxSubtotal>
-<cbc:TaxableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_GRAVADAS"].'</cbc:TaxableAmount>
-<cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_IGV"].'</cbc:TaxAmount>
+<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_GRAVADAS"] . '</cbc:TaxableAmount>
+<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
             <cac:TaxCategory>
             <cbc:ID schemeAgencyName="United Nations Economic Commission for Europe" schemeName="Tax Category Identifier" schemeID="UN/ECE 5305">S</cbc:ID>
                 <cac:TaxScheme>
@@ -369,31 +386,31 @@ class Apisunat {
         </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
-        <cbc:PayableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL"].'</cbc:PayableAmount>
+        <cbc:PayableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL"] . '</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>';
-	
-    
 
-for ($i = 0; $i < count($detalle); $i++) {
-		
-$xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
-        <cbc:ID>'.$detalle[$i]["txtITEM"].'</cbc:ID>
+
+
+        for ($i = 0; $i < count($detalle); $i++) {
+
+            $xmlCPE = $xmlCPE . '<cac:CreditNoteLine>
+        <cbc:ID>' . $detalle[$i]["txtITEM"] . '</cbc:ID>
 <cbc:CreditedQuantity unitCode="' . $detalle[$i]["txtUNIDAD_MEDIDA_DET"] . '">' . $detalle[$i]["txtCANTIDAD_DET"] . '</cbc:CreditedQuantity>
-<cbc:LineExtensionAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIMPORTE_DET"].'</cbc:LineExtensionAmount>
+<cbc:LineExtensionAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIMPORTE_DET"] . '</cbc:LineExtensionAmount>
         <cac:PricingReference>
             <cac:AlternativeConditionPrice>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_DET"].'</cbc:PriceAmount>
-                <cbc:PriceTypeCode>'.$detalle[$i]["txtPRECIO_TIPO_CODIGO"].'</cbc:PriceTypeCode>
+<cbc:PriceAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtPRECIO_DET"] . '</cbc:PriceAmount>
+                <cbc:PriceTypeCode>' . $detalle[$i]["txtPRECIO_TIPO_CODIGO"] . '</cbc:PriceTypeCode>
             </cac:AlternativeConditionPrice>
         </cac:PricingReference>
         <cac:TaxTotal>
-<cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIGV"].'</cbc:TaxAmount>
+<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIGV"] . '</cbc:TaxAmount>
             <cac:TaxSubtotal>
-<cbc:TaxableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIMPORTE_DET"].'</cbc:TaxableAmount>
-<cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIGV"].'</cbc:TaxAmount>
+<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIMPORTE_DET"] . '</cbc:TaxableAmount>
+<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIGV"] . '</cbc:TaxAmount>
                 <cac:TaxCategory>
-                    <cbc:Percent>'.$cabecera["POR_IGV"].'</cbc:Percent>
-<cbc:TaxExemptionReasonCode>'.$detalle[$i]["txtCOD_TIPO_OPERACION"].'</cbc:TaxExemptionReasonCode>
+                    <cbc:Percent>' . $cabecera["POR_IGV"] . '</cbc:Percent>
+<cbc:TaxExemptionReasonCode>' . $detalle[$i]["txtCOD_TIPO_OPERACION"] . '</cbc:TaxExemptionReasonCode>
                     <cac:TaxScheme>
                     <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
                         <cbc:Name>IGV</cbc:Name>
@@ -403,20 +420,19 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
             </cac:TaxSubtotal>
         </cac:TaxTotal>
         <cac:Item>
-<cbc:Description><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtDESCRIPCION_DET"]))?$detalle[$i]["txtDESCRIPCION_DET"]:"") . ']]></cbc:Description>
+<cbc:Description><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtDESCRIPCION_DET"])) ? $detalle[$i]["txtDESCRIPCION_DET"] : "") . ']]></cbc:Description>
             <cac:SellersItemIdentification>
-                <cbc:ID><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtCODIGO_DET"]))?$detalle[$i]["txtCODIGO_DET"]:"") . ']]></cbc:ID>
+                <cbc:ID><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtCODIGO_DET"])) ? $detalle[$i]["txtCODIGO_DET"] : "") . ']]></cbc:ID>
             </cac:SellersItemIdentification>
             <cac:CommodityClassification>
-				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">'.$detalle[$i]['txtCODIGO_PROD_SUNAT'].'</cbc:ItemClassificationCode>
+				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">' . $detalle[$i]['txtCODIGO_PROD_SUNAT'] . '</cbc:ItemClassificationCode>
 			</cac:CommodityClassification>
         </cac:Item>
         <cac:Price>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_SIN_IGV_DET"].'</cbc:PriceAmount>
+<cbc:PriceAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtPRECIO_SIN_IGV_DET"] . '</cbc:PriceAmount>
         </cac:Price>
     </cac:CreditNoteLine>';
-		
-}
+        }
 
         $xmlCPE = $xmlCPE . '</CreditNote>';
         $doc->loadXML($xmlCPE);
@@ -427,15 +443,16 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
         return $resp;
     }
 
-    public function crear_xml_nota_debito($cabecera, $detalle, $ruta) {
+    public function crear_xml_nota_debito($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
         $doc->preserveWhiteSpace = TRUE;
         //$doc->encoding = 'ISO-8859-1';
-		$doc->encoding = 'utf-8';
-		
-		$xmlCPE = '<?xml version="1.0" encoding="UTF-8"?>
+        $doc->encoding = 'utf-8';
+
+        $xmlCPE = '<?xml version="1.0" encoding="UTF-8"?>
 <DebitNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ext:UBLExtensions>
         <ext:UBLExtension>
@@ -445,29 +462,29 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <cbc:CustomizationID>2.0</cbc:CustomizationID>
-    <cbc:ID>'.$cabecera["NRO_COMPROBANTE"].'</cbc:ID>
-    <cbc:IssueDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:IssueDate>
+    <cbc:ID>' . $cabecera["NRO_COMPROBANTE"] . '</cbc:ID>
+    <cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
     <cbc:IssueTime>00:00:00</cbc:IssueTime>
-    <cbc:DocumentCurrencyCode>'.$cabecera["COD_MONEDA"].'</cbc:DocumentCurrencyCode>
+    <cbc:DocumentCurrencyCode>' . $cabecera["COD_MONEDA"] . '</cbc:DocumentCurrencyCode>
     <cac:DiscrepancyResponse>
-        <cbc:ReferenceID>'.$cabecera["NRO_DOCUMENTO_MODIFICA"].'</cbc:ReferenceID>
-        <cbc:ResponseCode>'.$cabecera["COD_TIPO_MOTIVO"].'</cbc:ResponseCode>
-        <cbc:Description><![CDATA['.$cabecera["DESCRIPCION_MOTIVO"].']]></cbc:Description>
+        <cbc:ReferenceID>' . $cabecera["NRO_DOCUMENTO_MODIFICA"] . '</cbc:ReferenceID>
+        <cbc:ResponseCode>' . $cabecera["COD_TIPO_MOTIVO"] . '</cbc:ResponseCode>
+        <cbc:Description><![CDATA[' . $cabecera["DESCRIPCION_MOTIVO"] . ']]></cbc:Description>
     </cac:DiscrepancyResponse>
     <cac:BillingReference>
         <cac:InvoiceDocumentReference>
-            <cbc:ID>'.$cabecera["NRO_DOCUMENTO_MODIFICA"].'</cbc:ID>
-            <cbc:DocumentTypeCode>'.$cabecera["TIPO_COMPROBANTE_MODIFICA"].'</cbc:DocumentTypeCode>
+            <cbc:ID>' . $cabecera["NRO_DOCUMENTO_MODIFICA"] . '</cbc:ID>
+            <cbc:DocumentTypeCode>' . $cabecera["TIPO_COMPROBANTE_MODIFICA"] . '</cbc:DocumentTypeCode>
         </cac:InvoiceDocumentReference>
     </cac:BillingReference>
     <cac:Signature>
         <cbc:ID>IDSignST</cbc:ID>
         <cac:SignatoryParty>
             <cac:PartyIdentification>
-                <cbc:ID>'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:ID>
+                <cbc:ID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:Name>
+                <cbc:Name><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>
@@ -479,13 +496,13 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
     <cac:AccountingSupplierParty>
         <cac:Party>
             <cac:PartyIdentification>
-                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:ID>
+                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
                 <cbc:Name><![CDATA[' . $cabecera["NOMBRE_COMERCIAL_EMPRESA"] . ']]></cbc:Name>
             </cac:PartyName>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:RegistrationName>
                 <cac:RegistrationAddress>
                     <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                 </cac:RegistrationAddress>
@@ -495,18 +512,18 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
     <cac:AccountingCustomerParty>
         <cac:Party>
             <cac:PartyIdentification>
-                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_CLIENTE"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">'.$cabecera["NRO_DOCUMENTO_CLIENTE"].'</cbc:ID>
+                <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_CLIENTE"] . '" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">' . $cabecera["NRO_DOCUMENTO_CLIENTE"] . '</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyLegalEntity>
-<cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_CLIENTE"].']]></cbc:RegistrationName>
+<cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_CLIENTE"] . ']]></cbc:RegistrationName>
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingCustomerParty>
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_IGV"].'</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
         <cac:TaxSubtotal>
-<cbc:TaxableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_GRAVADAS"].'</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL_IGV"].'</cbc:TaxAmount>
+<cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_GRAVADAS"] . '</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL_IGV"] . '</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
                     <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">1000</cbc:ID>
@@ -517,29 +534,29 @@ $xmlCPE = $xmlCPE .'<cac:CreditNoteLine>
         </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:RequestedMonetaryTotal>
-<cbc:PayableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$cabecera["TOTAL"].'</cbc:PayableAmount>
+<cbc:PayableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $cabecera["TOTAL"] . '</cbc:PayableAmount>
     </cac:RequestedMonetaryTotal>';
-	
-for ($i = 0; $i < count($detalle); $i++) {
-        $xmlCPE = $xmlCPE . '
+
+        for ($i = 0; $i < count($detalle); $i++) {
+            $xmlCPE = $xmlCPE . '
     <cac:DebitNoteLine>
-        <cbc:ID>'.$detalle[$i]["txtITEM"].'</cbc:ID>
-<cbc:DebitedQuantity unitCode="' . $detalle[$i]["txtUNIDAD_MEDIDA_DET"] . '">'.$detalle[$i]["txtCANTIDAD_DET"].'</cbc:DebitedQuantity>
-<cbc:LineExtensionAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIMPORTE_DET"].'</cbc:LineExtensionAmount>
+        <cbc:ID>' . $detalle[$i]["txtITEM"] . '</cbc:ID>
+<cbc:DebitedQuantity unitCode="' . $detalle[$i]["txtUNIDAD_MEDIDA_DET"] . '">' . $detalle[$i]["txtCANTIDAD_DET"] . '</cbc:DebitedQuantity>
+<cbc:LineExtensionAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIMPORTE_DET"] . '</cbc:LineExtensionAmount>
         <cac:PricingReference>
             <cac:AlternativeConditionPrice>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_DET"].'</cbc:PriceAmount>
-<cbc:PriceTypeCode>'.$detalle[$i]["txtPRECIO_TIPO_CODIGO"].'</cbc:PriceTypeCode>
+<cbc:PriceAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtPRECIO_DET"] . '</cbc:PriceAmount>
+<cbc:PriceTypeCode>' . $detalle[$i]["txtPRECIO_TIPO_CODIGO"] . '</cbc:PriceTypeCode>
             </cac:AlternativeConditionPrice>
         </cac:PricingReference>
         <cac:TaxTotal>		
-<cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIGV"].'</cbc:TaxAmount>
+<cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIGV"] . '</cbc:TaxAmount>
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIMPORTE_DET"].'</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtIGV"].'</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIMPORTE_DET"] . '</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtIGV"] . '</cbc:TaxAmount>
                 <cac:TaxCategory>
-                    <cbc:Percent>'.$cabecera["POR_IGV"].'</cbc:Percent>
-<cbc:TaxExemptionReasonCode>'.$detalle[$i]["txtCOD_TIPO_OPERACION"].'</cbc:TaxExemptionReasonCode>
+                    <cbc:Percent>' . $cabecera["POR_IGV"] . '</cbc:Percent>
+<cbc:TaxExemptionReasonCode>' . $detalle[$i]["txtCOD_TIPO_OPERACION"] . '</cbc:TaxExemptionReasonCode>
                     <cac:TaxScheme>
                         <cbc:ID>1000</cbc:ID>
                         <cbc:Name>IGV</cbc:Name>
@@ -550,20 +567,20 @@ for ($i = 0; $i < count($detalle); $i++) {
         </cac:TaxTotal>
 		
 <cac:Item>
-<cbc:Description><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtDESCRIPCION_DET"]))?$detalle[$i]["txtDESCRIPCION_DET"]:"") . ']]></cbc:Description>
+<cbc:Description><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtDESCRIPCION_DET"])) ? $detalle[$i]["txtDESCRIPCION_DET"] : "") . ']]></cbc:Description>
             <cac:SellersItemIdentification>
-                <cbc:ID><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtCODIGO_DET"]))?$detalle[$i]["txtCODIGO_DET"]:"") . ']]></cbc:ID>
+                <cbc:ID><![CDATA[' . $validacion->replace_invalid_caracters((isset($detalle[$i]["txtCODIGO_DET"])) ? $detalle[$i]["txtCODIGO_DET"] : "") . ']]></cbc:ID>
             </cac:SellersItemIdentification>
             <cac:CommodityClassification>
-				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">'.$detalle[$i]['txtCODIGO_PROD_SUNAT'].'</cbc:ItemClassificationCode>
+				<cbc:ItemClassificationCode listID="UNSPSC" listAgencyName="GS1 US" listName="Item Classification">' . $detalle[$i]['txtCODIGO_PROD_SUNAT'] . '</cbc:ItemClassificationCode>
 			</cac:CommodityClassification>
         </cac:Item>
 <cac:Price>
-<cbc:PriceAmount currencyID="'.$cabecera["COD_MONEDA"].'">'.$detalle[$i]["txtPRECIO_SIN_IGV_DET"].'</cbc:PriceAmount>
+<cbc:PriceAmount currencyID="' . $cabecera["COD_MONEDA"] . '">' . $detalle[$i]["txtPRECIO_SIN_IGV_DET"] . '</cbc:PriceAmount>
 </cac:Price>
     </cac:DebitNoteLine>';
-}
-        
+        }
+
         $xmlCPE = $xmlCPE . '</DebitNote>';
 
         $doc->loadXML($xmlCPE);
@@ -574,7 +591,8 @@ for ($i = 0; $i < count($detalle); $i++) {
         return $resp;
     }
 
-    public function crear_xml_resumen_documentos($cabecera, $detalle, $ruta){
+    public function crear_xml_resumen_documentos($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
@@ -598,9 +616,9 @@ for ($i = 0; $i < count($detalle); $i++) {
         </ext:UBLExtensions>
         <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
         <cbc:CustomizationID>1.1</cbc:CustomizationID>
-        <cbc:ID>'.$cabecera["CODIGO"].'-'.$cabecera["SERIE"].'-'.$cabecera["SECUENCIA"].'</cbc:ID>
-        <cbc:ReferenceDate>'.$cabecera["FECHA_REFERENCIA"].'</cbc:ReferenceDate>
-        <cbc:IssueDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:IssueDate>
+        <cbc:ID>' . $cabecera["CODIGO"] . '-' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:ID>
+        <cbc:ReferenceDate>' . $cabecera["FECHA_REFERENCIA"] . '</cbc:ReferenceDate>
+        <cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
         <cac:Signature>
             <cbc:ID>' . $cabecera["CODIGO"] . '-' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:ID>
             <cac:SignatoryParty>
@@ -635,14 +653,14 @@ for ($i = 0; $i < count($detalle); $i++) {
                 <cbc:CustomerAssignedAccountID>' . $detalle[$i]["NRO_DOCUMENTO"] . '</cbc:CustomerAssignedAccountID>
                 <cbc:AdditionalAccountID>' . $detalle[$i]["TIPO_DOCUMENTO"] . '</cbc:AdditionalAccountID>
             </cac:AccountingCustomerParty>';
-                    if ($detalle[$i]["TIPO_COMPROBANTE"]=="07"||$detalle[$i]["TIPO_COMPROBANTE"]=="08"){
-             $xmlCPE = $xmlCPE . '<cac:BillingReference>
+            if ($detalle[$i]["TIPO_COMPROBANTE"] == "07" || $detalle[$i]["TIPO_COMPROBANTE"] == "08") {
+                $xmlCPE = $xmlCPE . '<cac:BillingReference>
                 <cac:InvoiceDocumentReference>
                     <cbc:ID>' . $detalle[$i]["NRO_COMPROBANTE_REF"] . '</cbc:ID>
                     <cbc:DocumentTypeCode>' . $detalle[$i]["TIPO_COMPROBANTE_REF"] . '</cbc:DocumentTypeCode>
                 </cac:InvoiceDocumentReference>
             </cac:BillingReference>';
-                    }
+            }
             $xmlCPE = $xmlCPE . '<cac:Status>
                 <cbc:ConditionCode>' . $detalle[$i]["STATUS"] . '</cbc:ConditionCode>
             </cac:Status>                
@@ -652,47 +670,47 @@ for ($i = 0; $i < count($detalle); $i++) {
                 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRAVADA"] . '</cbc:PaidAmount>
                 <cbc:InstructionID>01</cbc:InstructionID>
             </sac:BillingPayment>';
-                    
-                    if (intval($detalle[$i]["EXONERADO"]) > 0) {
-                    $xmlCPE = $xmlCPE . '<sac:BillingPayment>
+
+            if (intval($detalle[$i]["EXONERADO"]) > 0) {
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
                 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXONERADO"] . '</cbc:PaidAmount>
                 <cbc:InstructionID>02</cbc:InstructionID>
             </sac:BillingPayment>';
-                    }
-                    
-                    if (intval($detalle[$i]["INAFECTO"]) > 0) {
-                    $xmlCPE = $xmlCPE . '<sac:BillingPayment>
+            }
+
+            if (intval($detalle[$i]["INAFECTO"]) > 0) {
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
                 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["INAFECTO"] . '</cbc:PaidAmount>
                 <cbc:InstructionID>03</cbc:InstructionID>
             </sac:BillingPayment>';
-                    }
-                    
-                    if (intval($detalle[$i]["EXPORTACION"]) > 0) {
-                    $xmlCPE = $xmlCPE . '<sac:BillingPayment>
+            }
+
+            if (intval($detalle[$i]["EXPORTACION"]) > 0) {
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
                 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXPORTACION"] . '</cbc:PaidAmount>
                 <cbc:InstructionID>04</cbc:InstructionID>
             </sac:BillingPayment>';
-                    }
-                    
-                    if (intval($detalle[$i]["GRATUITAS"]) > 0) {
-                    $xmlCPE = $xmlCPE . '<sac:BillingPayment>
+            }
+
+            if (intval($detalle[$i]["GRATUITAS"]) > 0) {
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
                 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRATUITAS"] . '</cbc:PaidAmount>
                 <cbc:InstructionID>05</cbc:InstructionID>
             </sac:BillingPayment>';
-                    }
-                    
-                    if (intval($detalle[$i]["MONTO_CARGO_X_ASIG"]) > 0) {
-                        $xmlCPE = $xmlCPE . '<cac:AllowanceCharge>';
-                        if ($detalle[$i]["CARGO_X_ASIGNACION"] == 1) {
-                            $xmlCPE = $xmlCPE . '<cbc:ChargeIndicator>true</cbc:ChargeIndicator>';
-                        }else{
-                            $xmlCPE = $xmlCPE . '<cbc:ChargeIndicator>false</cbc:ChargeIndicator>';
-                        }
-                        $xmlCPE = $xmlCPE . '<cbc:Amount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["MONTO_CARGO_X_ASIG"] . '</cbc:Amount>
+            }
+
+            if (intval($detalle[$i]["MONTO_CARGO_X_ASIG"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:AllowanceCharge>';
+                if ($detalle[$i]["CARGO_X_ASIGNACION"] == 1) {
+                    $xmlCPE = $xmlCPE . '<cbc:ChargeIndicator>true</cbc:ChargeIndicator>';
+                } else {
+                    $xmlCPE = $xmlCPE . '<cbc:ChargeIndicator>false</cbc:ChargeIndicator>';
+                }
+                $xmlCPE = $xmlCPE . '<cbc:Amount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["MONTO_CARGO_X_ASIG"] . '</cbc:Amount>
                         </cac:AllowanceCharge>';
-                    }
-                    if(intval($detalle[$i]["ISC"]) > 0){
-            $xmlCPE = $xmlCPE . '            
+            }
+            if (intval($detalle[$i]["ISC"]) > 0) {
+                $xmlCPE = $xmlCPE . '            
             <cac:TaxTotal>
                 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["ISC"] . '</cbc:TaxAmount>
                 <cac:TaxSubtotal>
@@ -706,8 +724,8 @@ for ($i = 0; $i < count($detalle); $i++) {
                     </cac:TaxCategory>
                 </cac:TaxSubtotal>
             </cac:TaxTotal>';
-                    }
-                    $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+            }
+            $xmlCPE = $xmlCPE . '<cac:TaxTotal>
                 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
                 <cac:TaxSubtotal>
                     <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
@@ -720,9 +738,9 @@ for ($i = 0; $i < count($detalle); $i++) {
                     </cac:TaxCategory>
                 </cac:TaxSubtotal>
             </cac:TaxTotal>';
-                    
-                    if(intval($detalle[$i]["OTROS"]) > 0){
-                    $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+
+            if (intval($detalle[$i]["OTROS"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
                 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["OTROS"] . '</cbc:TaxAmount>
                 <cac:TaxSubtotal>
                     <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["OTROS"] . '</cbc:TaxAmount>
@@ -735,19 +753,20 @@ for ($i = 0; $i < count($detalle); $i++) {
                     </cac:TaxCategory>
                 </cac:TaxSubtotal>
             </cac:TaxTotal>';
-                    }
-        $xmlCPE = $xmlCPE . '</sac:SummaryDocumentsLine>';
+            }
+            $xmlCPE = $xmlCPE . '</sac:SummaryDocumentsLine>';
         }
         $xmlCPE = $xmlCPE . '</SummaryDocuments>';
-    
+
         $doc->loadXML($xmlCPE);
         $doc->save($ruta . '.XML');
         $resp['respuesta'] = 'ok';
         $resp['url_xml'] = $ruta . '.XML';
         return $resp;
     }
-	
-	public function enviar_documento($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws) {
+
+    public function enviar_documento($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws)
+    {
         //=================ZIPEAR ================
         $zip = new ZipArchive();
         $filenameXMLCPE = $ruta_archivo . '.ZIP';
@@ -805,7 +824,7 @@ for ($i = 0; $i < count($detalle); $i++) {
         $response = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
+
         if ($httpcode == 200) {
             $doc = new DOMDocument();
             $doc->loadXML($response);
@@ -852,23 +871,24 @@ for ($i = 0; $i < count($detalle); $i++) {
 
 
     //require_once('decode_64.php');
-    public function enviar_documento_prueba($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws) {
-    try {
-    //=================ZIPEAR ================
-    $zip = new ZipArchive();
-    $filenameXMLCPE = $ruta_archivo . '.ZIP';
+    public function enviar_documento_prueba($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws)
+    {
+        try {
+            //=================ZIPEAR ================
+            $zip = new ZipArchive();
+            $filenameXMLCPE = $ruta_archivo . '.ZIP';
 
-    if ($zip->open($filenameXMLCPE, ZIPARCHIVE::CREATE) === true) {
-        $zip->addFile($ruta_archivo . '.XML', $archivo . '.XML'); //ORIGEN, DESTINO
-        $zip->close();
-    }
+            if ($zip->open($filenameXMLCPE, ZIPARCHIVE::CREATE) === true) {
+                $zip->addFile($ruta_archivo . '.XML', $archivo . '.XML'); //ORIGEN, DESTINO
+                $zip->close();
+            }
 
-    //===================ENVIO FACTURACION=====================
-    $soapUrl = $ruta_ws; //"https://e-beta.sunat.gob.pe:443/ol-ti-itcpfegem-beta/billService"; // asmx URL of WSDL
-    $soapUser = "";  //  username
-    $soapPassword = ""; // password
-    // xml post structure
-    $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+            //===================ENVIO FACTURACION=====================
+            $soapUrl = $ruta_ws; //"https://e-beta.sunat.gob.pe:443/ol-ti-itcpfegem-beta/billService"; // asmx URL of WSDL
+            $soapUser = "";  //  username
+            $soapPassword = ""; // password
+            // xml post structure
+            $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
     xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" 
     xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
     <soapenv:Header>
@@ -887,87 +907,87 @@ for ($i = 0; $i < count($detalle); $i++) {
     </soapenv:Body>
     </soapenv:Envelope>';
 
-    $headers = array(
-        "Content-type: text/xml;charset=\"utf-8\"",
-        "Accept: text/xml",
-        "Cache-Control: no-cache",
-        "Pragma: no-cache",
-        "SOAPAction: ",
-        "Content-length: " . strlen($xml_post_string),
-    ); //SOAPAction: your op URL
+            $headers = array(
+                "Content-type: text/xml;charset=\"utf-8\"",
+                "Accept: text/xml",
+                "Cache-Control: no-cache",
+                "Pragma: no-cache",
+                "SOAPAction: ",
+                "Content-length: " . strlen($xml_post_string),
+            ); //SOAPAction: your op URL
 
-    $url = $soapUrl;
-    
-    //echo $xml_post_string;
+            $url = $soapUrl;
 
-    // PHP cURL  for https connection with auth
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //curl_setopt($ch, CURLOPT_USERPWD, $soapUser.":".$soapPassword); // username and password - declared at the top of the doc
-    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            //echo $xml_post_string;
 
-    // converting
-    $response = curl_exec($ch);
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    
-    //echo $httpcode;
-    //echo $response;
-    //if ($httpcode == 200) {//======LA PAGINA SI RESPONDE
-        //echo $httpcode.'----'.$response;
-        //convertimos de base 64 a archivo fisico
-        $doc = new DOMDocument();
-        $doc->loadXML($response);
+            // PHP cURL  for https connection with auth
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //curl_setopt($ch, CURLOPT_USERPWD, $soapUser.":".$soapPassword); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // converting
+            $response = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            //echo $httpcode;
+            //echo $response;
+            //if ($httpcode == 200) {//======LA PAGINA SI RESPONDE
+            //echo $httpcode.'----'.$response;
+            //convertimos de base 64 a archivo fisico
+            $doc = new DOMDocument();
+            $doc->loadXML($response);
 
 
 
-        //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
-        if (isset($doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue)) {
-            $xmlCDR = $doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue;
-            file_put_contents($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP', base64_decode($xmlCDR));
+            //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
+            if (isset($doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue)) {
+                $xmlCDR = $doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue;
+                file_put_contents($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP', base64_decode($xmlCDR));
 
-            //extraemos archivo zip a xml
-            $zip = new ZipArchive;
-            if ($zip->open($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP') === TRUE) {
-                $zip->extractTo($ruta_archivo_cdr, 'R-' . $archivo . '.XML');
-                $zip->close();
+                //extraemos archivo zip a xml
+                $zip = new ZipArchive;
+                if ($zip->open($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP') === TRUE) {
+                    $zip->extractTo($ruta_archivo_cdr, 'R-' . $archivo . '.XML');
+                    $zip->close();
+                }
+
+                //eliminamos los archivos Zipeados
+                unlink($ruta_archivo . '.ZIP');
+                unlink($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP');
+
+                //=============hash CDR=================
+                $doc_cdr = new DOMDocument();
+                $doc_cdr->load(dirname(__FILE__) . '/' . $ruta_archivo_cdr . 'R-' . $archivo . '.XML');
+
+                $mensaje['cod_sunat'] = $doc_cdr->getElementsByTagName('ResponseCode')->item(0)->nodeValue;
+                $mensaje['msj_sunat'] = $doc_cdr->getElementsByTagName('Description')->item(0)->nodeValue;
+                $mensaje['hash_cdr'] = $doc_cdr->getElementsByTagName('DigestValue')->item(0)->nodeValue;
+            } else {
+                //$mensaje['cod_sunat'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue;
+                //$mensaje['msj_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
+                //$mensaje['hash_cdr'] = "";
+
+                $mensaje['cod_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
+                $mensaje['msj_sunat'] = $doc->getElementsByTagName('message')->item(0)->nodeValue;
+                $mensaje['hash_cdr'] = "";
             }
-
-            //eliminamos los archivos Zipeados
-            unlink($ruta_archivo . '.ZIP');
-            unlink($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP');
-
-            //=============hash CDR=================
-            $doc_cdr = new DOMDocument();
-            $doc_cdr->load(dirname(__FILE__) . '/' . $ruta_archivo_cdr . 'R-' . $archivo . '.XML');
-
-            $mensaje['cod_sunat'] = $doc_cdr->getElementsByTagName('ResponseCode')->item(0)->nodeValue;
-            $mensaje['msj_sunat'] = $doc_cdr->getElementsByTagName('Description')->item(0)->nodeValue;
-            $mensaje['hash_cdr'] = $doc_cdr->getElementsByTagName('DigestValue')->item(0)->nodeValue;
-        } else {
-            //$mensaje['cod_sunat'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue;
-            //$mensaje['msj_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
-            //$mensaje['hash_cdr'] = "";
-			
-			$mensaje['cod_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
-            $mensaje['msj_sunat'] = $doc->getElementsByTagName('message')->item(0)->nodeValue;
+        } catch (Exception $e) {
+            $mensaje['cod_sunat'] = "0000";
+            $mensaje['msj_sunat'] = "SUNAT ESTA FUERA SERVICIO: " . $e->getMessage();
             $mensaje['hash_cdr'] = "";
         }
-     } catch (Exception $e) {
-        $mensaje['cod_sunat']="0000";
-        $mensaje['msj_sunat']="SUNAT ESTA FUERA SERVICIO: ".$e->getMessage();
-        $mensaje['hash_cdr'] = "";
+        //print_r($mensaje); 
+        return $mensaje;
+        //$xmlCDR = $doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue;
     }
-    //print_r($mensaje); 
-    return $mensaje;
-    //$xmlCDR = $doc->getElementsByTagName('applicationResponse')->item(0)->nodeValue;
-}
 
 
 
@@ -980,13 +1000,14 @@ for ($i = 0; $i < count($detalle); $i++) {
 
 
 
-    public function crear_xml_guia_remision($cabecera, $detalle, $ruta) {
+    public function crear_xml_guia_remision($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
         $doc->preserveWhiteSpace = TRUE;
         $doc->encoding = 'ISO-8859-1';
-    $xmlCPE = '<?xml version="1.0" encoding="iso-8859-1"?>
+        $xmlCPE = '<?xml version="1.0" encoding="iso-8859-1"?>
     <DespatchAdvice xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
         <ext:UBLExtensions>
             <ext:UBLExtension>
@@ -996,98 +1017,99 @@ for ($i = 0; $i < count($detalle); $i++) {
         </ext:UBLExtensions>
         <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
         <cbc:CustomizationID>1.0</cbc:CustomizationID>
-    <cbc:ID>'.$cabecera["SERIE"].'-'.$cabecera["SECUENCIA"].'</cbc:ID>
-    <cbc:IssueDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:IssueDate>
-    <cbc:DespatchAdviceTypeCode>'.$cabecera["CODIGO"].'</cbc:DespatchAdviceTypeCode>
-    <cbc:Note>'.$cabecera["NOTA"].'</cbc:Note>
+    <cbc:ID>' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:ID>
+    <cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
+    <cbc:DespatchAdviceTypeCode>' . $cabecera["CODIGO"] . '</cbc:DespatchAdviceTypeCode>
+    <cbc:Note>' . $cabecera["NOTA"] . '</cbc:Note>
     
     <cac:DespatchSupplierParty>
-            <cbc:CustomerAssignedAccountID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '">'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:CustomerAssignedAccountID>
+            <cbc:CustomerAssignedAccountID schemeID="' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '">' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:CustomerAssignedAccountID>
             <cac:Party>
                 <cac:PartyLegalEntity>
-    <cbc:RegistrationName><![CDATA['.$validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]).']]></cbc:RegistrationName>
+    <cbc:RegistrationName><![CDATA[' . $validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]) . ']]></cbc:RegistrationName>
                 </cac:PartyLegalEntity>
             </cac:Party>
         </cac:DespatchSupplierParty>
     
     <cac:DeliveryCustomerParty>
-    <cbc:CustomerAssignedAccountID schemeID="' . $cabecera["TIPO_DOCUMENTO_CLIENTE"] . '">'.$cabecera["NRO_DOCUMENTO_CLIENTE"].'</cbc:CustomerAssignedAccountID>
+    <cbc:CustomerAssignedAccountID schemeID="' . $cabecera["TIPO_DOCUMENTO_CLIENTE"] . '">' . $cabecera["NRO_DOCUMENTO_CLIENTE"] . '</cbc:CustomerAssignedAccountID>
             <cac:Party>
                 <cac:PartyLegalEntity>
-    <cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_CLIENTE"].']]></cbc:RegistrationName>
+    <cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_CLIENTE"] . ']]></cbc:RegistrationName>
                 </cac:PartyLegalEntity>
             </cac:Party>
         </cac:DeliveryCustomerParty>
     
     <cac:Shipment>
             <cbc:ID>1</cbc:ID>
-            <cbc:HandlingCode>'.$cabecera["CODMOTIVO_TRASLADO"].'</cbc:HandlingCode>
-            <cbc:Information>'.$cabecera["MOTIVO_TRASLADO"].'</cbc:Information>
-            <cbc:GrossWeightMeasure unitCode="KGM">'.$cabecera["PESO"].'</cbc:GrossWeightMeasure>
-    <cbc:TotalTransportHandlingUnitQuantity>'.$cabecera["NUMERO_PAQUETES"].'</cbc:TotalTransportHandlingUnitQuantity>
+            <cbc:HandlingCode>' . $cabecera["CODMOTIVO_TRASLADO"] . '</cbc:HandlingCode>
+            <cbc:Information>' . $cabecera["MOTIVO_TRASLADO"] . '</cbc:Information>
+            <cbc:GrossWeightMeasure unitCode="KGM">' . $cabecera["PESO"] . '</cbc:GrossWeightMeasure>
+    <cbc:TotalTransportHandlingUnitQuantity>' . $cabecera["NUMERO_PAQUETES"] . '</cbc:TotalTransportHandlingUnitQuantity>
     
             <cac:ShipmentStage>
-                <cbc:TransportModeCode>'.$cabecera["CODTIPO_TRANSPORTISTA"].'</cbc:TransportModeCode>
+                <cbc:TransportModeCode>' . $cabecera["CODTIPO_TRANSPORTISTA"] . '</cbc:TransportModeCode>
                 <cac:TransitPeriod>
-                    <cbc:StartDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:StartDate>
+                    <cbc:StartDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:StartDate>
                 </cac:TransitPeriod>
                 <cac:CarrierParty>
                     <cac:PartyIdentification>
-    <cbc:ID schemeID="'.$cabecera["TIPO_DOCUMENTO_TRANSPORTE"].'">'.$cabecera["NRO_DOCUMENTO_TRANSPORTE"].'</cbc:ID>
+    <cbc:ID schemeID="' . $cabecera["TIPO_DOCUMENTO_TRANSPORTE"] . '">' . $cabecera["NRO_DOCUMENTO_TRANSPORTE"] . '</cbc:ID>
                     </cac:PartyIdentification>
                     <cac:PartyName>
-                        <cbc:Name><![CDATA['.$cabecera["RAZON_SOCIAL_TRANSPORTE"].']]></cbc:Name>
+                        <cbc:Name><![CDATA[' . $cabecera["RAZON_SOCIAL_TRANSPORTE"] . ']]></cbc:Name>
                     </cac:PartyName>
                 </cac:CarrierParty>
             </cac:ShipmentStage>
             
     <cac:Delivery>
                 <cac:DeliveryAddress>
-                    <cbc:ID>'.$cabecera["UBIGEO_DESTINO"].'</cbc:ID>
-                    <cbc:StreetName>'.$cabecera["DIR_DESTINO"].'</cbc:StreetName>
+                    <cbc:ID>' . $cabecera["UBIGEO_DESTINO"] . '</cbc:ID>
+                    <cbc:StreetName>' . $cabecera["DIR_DESTINO"] . '</cbc:StreetName>
                 </cac:DeliveryAddress>
             </cac:Delivery>
             
     <cac:OriginAddress>
-                <cbc:ID>'.$cabecera["UBIGEO_PARTIDA"].'</cbc:ID>
-                <cbc:StreetName>'.$cabecera["DIR_PARTIDA"].'</cbc:StreetName>
+                <cbc:ID>' . $cabecera["UBIGEO_PARTIDA"] . '</cbc:ID>
+                <cbc:StreetName>' . $cabecera["DIR_PARTIDA"] . '</cbc:StreetName>
     </cac:OriginAddress>
         </cac:Shipment>
         
         ';
-    
-    for ($i = 0; $i < count($detalle); $i++) {
-    $xmlCPE = $xmlCPE . '<cac:DespatchLine>
-            <cbc:ID>'.$detalle[$i]["ITEM"].'</cbc:ID>
-    <cbc:DeliveredQuantity unitCode="NIU">'.$detalle[$i]["PESO"].'</cbc:DeliveredQuantity>
+
+        for ($i = 0; $i < count($detalle); $i++) {
+            $xmlCPE = $xmlCPE . '<cac:DespatchLine>
+            <cbc:ID>' . $detalle[$i]["ITEM"] . '</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="NIU">' . $detalle[$i]["PESO"] . '</cbc:DeliveredQuantity>
     <cac:OrderLineReference>
-    <cbc:LineID>'.$detalle[$i]["NUMERO_ORDEN"].'</cbc:LineID>
+    <cbc:LineID>' . $detalle[$i]["NUMERO_ORDEN"] . '</cbc:LineID>
     </cac:OrderLineReference>
     
     <cac:Item>
-                <cbc:Name><![CDATA['.$validacion->replace_invalid_caracters($detalle[$i]["DESCRIPCION"]).']]></cbc:Name>
+                <cbc:Name><![CDATA[' . $validacion->replace_invalid_caracters($detalle[$i]["DESCRIPCION"]) . ']]></cbc:Name>
                 <cac:SellersItemIdentification>
-                    <cbc:ID>'.$detalle[$i]["CODIGO_PRODUCTO"].'</cbc:ID>
+                    <cbc:ID>' . $detalle[$i]["CODIGO_PRODUCTO"] . '</cbc:ID>
                 </cac:SellersItemIdentification>
             </cac:Item>
         </cac:DespatchLine>';
-    }
-    $xmlCPE = $xmlCPE . '</DespatchAdvice>';
+        }
+        $xmlCPE = $xmlCPE . '</DespatchAdvice>';
 
-    /*
+        /*
     echo $xmlCPE;
     exit();
     */
-    
-    $doc->loadXML($xmlCPE);
-    $doc->save($ruta . '.XML');
-    $resp['respuesta'] = 'ok';
-    $resp['url_xml'] = $ruta . '.XML';
-    return $resp;
+
+        $doc->loadXML($xmlCPE);
+        $doc->save($ruta . '.XML');
+        $resp['respuesta'] = 'ok';
+        $resp['url_xml'] = $ruta . '.XML';
+        return $resp;
     }
 
 
-    public function crear_xml_baja_sunat($cabecera, $detalle, $ruta) {
+    public function crear_xml_baja_sunat($cabecera, $detalle, $ruta)
+    {
         $validacion = new validaciondedatos();
         $doc = new DOMDocument();
         $doc->formatOutput = FALSE;
@@ -1102,68 +1124,69 @@ for ($i = 0; $i < count($detalle); $i++) {
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
     <cbc:CustomizationID>1.0</cbc:CustomizationID>
-    <cbc:ID>'.$cabecera["CODIGO"].'-'.$cabecera["SERIE"].'-'.$cabecera["SECUENCIA"].'</cbc:ID>
-    <cbc:ReferenceDate>'.$cabecera["FECHA_DOCUMENTO"].'</cbc:ReferenceDate>
-    <cbc:IssueDate>'.$cabecera["FECHA_BAJA"].'</cbc:IssueDate>
+    <cbc:ID>' . $cabecera["CODIGO"] . '-' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:ID>
+    <cbc:ReferenceDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:ReferenceDate>
+    <cbc:IssueDate>' . $cabecera["FECHA_BAJA"] . '</cbc:IssueDate>
     <cac:Signature>
     <cbc:ID>IDSignKG</cbc:ID>
     <cac:SignatoryParty>
     <cac:PartyIdentification>
-    <cbc:ID>'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:ID>
+    <cbc:ID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
     </cac:PartyIdentification>
     <cac:PartyName>
-    <cbc:Name>'.$validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]).'</cbc:Name>
+    <cbc:Name>' . $validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]) . '</cbc:Name>
     </cac:PartyName>
     </cac:SignatoryParty>
     <cac:DigitalSignatureAttachment>
     <cac:ExternalReference>
-    <cbc:URI>#'.$cabecera["SERIE"].'-'.$cabecera["SECUENCIA"].'</cbc:URI>
+    <cbc:URI>#' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:URI>
     </cac:ExternalReference>
     </cac:DigitalSignatureAttachment>
     </cac:Signature>
     <cac:AccountingSupplierParty>
-    <cbc:CustomerAssignedAccountID>'.$cabecera["NRO_DOCUMENTO_EMPRESA"].'</cbc:CustomerAssignedAccountID>
-    <cbc:AdditionalAccountID>'.$cabecera["TIPO_DOCUMENTO_EMPRESA"].'</cbc:AdditionalAccountID>
+    <cbc:CustomerAssignedAccountID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:CustomerAssignedAccountID>
+    <cbc:AdditionalAccountID>' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '</cbc:AdditionalAccountID>
     <cac:Party>
     <cac:PartyLegalEntity>
-    <cbc:RegistrationName><![CDATA['.$validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]).']]></cbc:RegistrationName>
+    <cbc:RegistrationName><![CDATA[' . $validacion->replace_invalid_caracters($cabecera["RAZON_SOCIAL_EMPRESA"]) . ']]></cbc:RegistrationName>
     </cac:PartyLegalEntity>
     </cac:Party>
     </cac:AccountingSupplierParty>';
-    
-    for ($i = 0; $i < count($detalle); $i++) {
-    $xmlCPE = $xmlCPE . '<sac:VoidedDocumentsLine>
-    <cbc:LineID>'.$detalle[$i]["ITEM"].'</cbc:LineID>
-    <cbc:DocumentTypeCode>'.$detalle[$i]["TIPO_COMPROBANTE"].'</cbc:DocumentTypeCode>
-    <sac:DocumentSerialID>'.$detalle[$i]["SERIE"].'</sac:DocumentSerialID>
-    <sac:DocumentNumberID>'.$detalle[$i]["NUMERO"].'</sac:DocumentNumberID>
-    <sac:VoidReasonDescription><![CDATA['.$validacion->replace_invalid_caracters($detalle[$i]["MOTIVO"]).']]></sac:VoidReasonDescription>
-    </sac:VoidedDocumentsLine>';
-    }
-    $xmlCPE = $xmlCPE . '</VoidedDocuments>';
 
-    $doc->loadXML($xmlCPE);
-    $doc->save($ruta . '.XML');
-    $resp['respuesta'] = 'ok';
-    $resp['url_xml'] = $ruta . '.XML';
-    return $resp;
+        for ($i = 0; $i < count($detalle); $i++) {
+            $xmlCPE = $xmlCPE . '<sac:VoidedDocumentsLine>
+    <cbc:LineID>' . $detalle[$i]["ITEM"] . '</cbc:LineID>
+    <cbc:DocumentTypeCode>' . $detalle[$i]["TIPO_COMPROBANTE"] . '</cbc:DocumentTypeCode>
+    <sac:DocumentSerialID>' . $detalle[$i]["SERIE"] . '</sac:DocumentSerialID>
+    <sac:DocumentNumberID>' . $detalle[$i]["NUMERO"] . '</sac:DocumentNumberID>
+    <sac:VoidReasonDescription><![CDATA[' . $validacion->replace_invalid_caracters($detalle[$i]["MOTIVO"]) . ']]></sac:VoidReasonDescription>
+    </sac:VoidedDocumentsLine>';
+        }
+        $xmlCPE = $xmlCPE . '</VoidedDocuments>';
+
+        $doc->loadXML($xmlCPE);
+        $doc->save($ruta . '.XML');
+        $resp['respuesta'] = 'ok';
+        $resp['url_xml'] = $ruta . '.XML';
+        return $resp;
     }
-    
-    public function enviar_documento_para_baja($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws) {
+
+    public function enviar_documento_para_baja($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws)
+    {
         try {
             //=================ZIPEAR ================
             $zip = new ZipArchive();
             $filenameXMLCPE = $ruta_archivo . '.ZIP';
-        
+
             if ($zip->open($filenameXMLCPE, ZIPARCHIVE::CREATE) === true) {
                 $zip->addFile($ruta_archivo . '.XML', $archivo . '.XML'); //ORIGEN, DESTINO
                 $zip->close();
             }
-        
+
             //===================ENVIO FACTURACION=====================
-            $soapUrl = $ruta_ws; 
-            $soapUser = "";  
-            $soapPassword = ""; 
+            $soapUrl = $ruta_ws;
+            $soapUser = "";
+            $soapPassword = "";
             // xml post structure
             $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
             xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" 
@@ -1183,7 +1206,7 @@ for ($i = 0; $i < count($detalle); $i++) {
                 </ser:sendSummary>
             </soapenv:Body>
             </soapenv:Envelope>';
-        
+
             $headers = array(
                 "Content-type: text/xml;charset=\"utf-8\"",
                 "Accept: text/xml",
@@ -1192,9 +1215,9 @@ for ($i = 0; $i < count($detalle); $i++) {
                 "SOAPAction: ",
                 "Content-length: " . strlen($xml_post_string),
             ); //SOAPAction: your op URL
-        
+
             $url = $soapUrl;
-        
+
             // PHP cURL  for https connection with auth
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -1206,7 +1229,7 @@ for ($i = 0; $i < count($detalle); $i++) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        
+
             // converting
             $response = curl_exec($ch);
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -1215,45 +1238,45 @@ for ($i = 0; $i < count($detalle); $i++) {
             //convertimos de base 64 a archivo fisico
             $doc = new DOMDocument();
             $doc->loadXML($response);
-    
+
             //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
             if (isset($doc->getElementsByTagName('ticket')->item(0)->nodeValue)) {
                 $ticket = $doc->getElementsByTagName('ticket')->item(0)->nodeValue;
-                
+
                 unlink($ruta_archivo . '.ZIP');
                 $mensaje['respuesta'] = 'ok';
                 $mensaje['cod_ticket'] = $ticket;
-                $mensaje['extra'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue.' - '.$doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
+                $mensaje['extra'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue . ' - ' . $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
             } else {
                 $mensaje['respuesta'] = 'error';
                 $mensaje['cod_sunat'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue;
                 $mensaje['mensaje'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
                 $mensaje['hash_cdr'] = "";
             }
-
         } catch (Exception $e) {
             $mensaje['respuesta'] = 'error';
-            $mensaje['cod_sunat']="0000";
-            $mensaje['mensaje']="SUNAT ESTA FUERA SERVICIO: ".$e->getMessage();
+            $mensaje['cod_sunat'] = "0000";
+            $mensaje['mensaje'] = "SUNAT ESTA FUERA SERVICIO: " . $e->getMessage();
             $mensaje['hash_cdr'] = "";
         }
         return $mensaje;
     }
 
-    public function enviar_resumen_boletas($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws) {
+    public function enviar_resumen_boletas($ruc, $usuario_sol, $pass_sol, $ruta_archivo, $ruta_archivo_cdr, $archivo, $ruta_ws)
+    {
         //=================ZIPEAR ================
         $zip = new ZipArchive();
         $filenameXMLCPE = $ruta_archivo . '.ZIP';
-    
+
         if ($zip->open($filenameXMLCPE, ZIPARCHIVE::CREATE) === true) {
             $zip->addFile($ruta_archivo . '.XML', $archivo . '.XML'); //ORIGEN, DESTINO
             $zip->close();
         }
-    
+
         //===================ENVIO FACTURACION=====================
-        $soapUrl = $ruta_ws; 
-        $soapUser = "";  
-        $soapPassword = ""; 
+        $soapUrl = $ruta_ws;
+        $soapUser = "";
+        $soapPassword = "";
         // xml post structure
         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
         xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" 
@@ -1273,7 +1296,7 @@ for ($i = 0; $i < count($detalle); $i++) {
             </ser:sendSummary>
         </soapenv:Body>
         </soapenv:Envelope>';
-    
+
         $headers = array(
             "Content-type: text/xml;charset=\"utf-8\"",
             "Accept: text/xml",
@@ -1282,9 +1305,9 @@ for ($i = 0; $i < count($detalle); $i++) {
             "SOAPAction: ",
             "Content-length: " . strlen($xml_post_string),
         ); //SOAPAction: your op URL
-    
+
         $url = $soapUrl;
-    
+
         // PHP cURL  for https connection with auth
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -1296,27 +1319,26 @@ for ($i = 0; $i < count($detalle); $i++) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    
+
         // converting
         $response = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($httpcode == 200) {//======LA PAGINA SI RESPONDE
+        if ($httpcode == 200) { //======LA PAGINA SI RESPONDE
 
             //convertimos de base 64 a archivo fisico
             $doc = new DOMDocument();
             $doc->loadXML($response);
-            
+
             //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
             if (isset($doc->getElementsByTagName('ticket')->item(0)->nodeValue)) {
                 $ticket = $doc->getElementsByTagName('ticket')->item(0)->nodeValue;
-                
+
                 unlink($ruta_archivo . '.ZIP');
                 $mensaje['respuesta'] = 'ok';
                 $mensaje['cod_ticket'] = $ticket;
-                $mensaje['extra'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue.' - '.$doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
-
+                $mensaje['extra'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue . ' - ' . $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
             } else {
 
                 $mensaje['respuesta'] = 'error';
@@ -1324,18 +1346,17 @@ for ($i = 0; $i < count($detalle); $i++) {
                 $mensaje['mensaje'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
                 $mensaje['hash_cdr'] = "";
             }
-            
         } else {
             //echo "no responde web";
             $mensaje['respuesta'] = 'error';
-            $mensaje['cod_sunat']="0000";
-            $mensaje['mensaje']="SUNAT ESTA FUERA SERVICIO: ".$e->getMessage();
+            $mensaje['cod_sunat'] = "0000";
+            $mensaje['mensaje'] = "SUNAT ESTA FUERA SERVICIO: " . $e->getMessage();
             $mensaje['hash_cdr'] = "";
         }
         return $mensaje;
     }
-    function consultar_envio_ticket($ruc, $usuario_sol, $pass_sol, $ticket, $archivo, $ruta_archivo_cdr, $ruta_ws) 
-    {    
+    function consultar_envio_ticket($ruc, $usuario_sol, $pass_sol, $ticket, $archivo, $ruta_archivo_cdr, $ruta_ws)
+    {
         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
         <soapenv:Header>
         <wsse:Security>
@@ -1351,7 +1372,7 @@ for ($i = 0; $i < count($detalle); $i++) {
         </ser:getStatus>
         </soapenv:Body>
         </soapenv:Envelope>';
-    
+
         $headers = array(
             "Content-type: text/xml;charset=\"utf-8\"",
             "Accept: text/xml",
@@ -1361,7 +1382,7 @@ for ($i = 0; $i < count($detalle); $i++) {
             "Content-length: " . strlen($xml_post_string),
         ); //SOAPAction: your op URL
 
-        
+
         // PHP cURL  for https connection with auth
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -1373,46 +1394,46 @@ for ($i = 0; $i < count($detalle); $i++) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    
+
         // converting
         $response = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if ($httpcode == 200) {//======LA PAGINA SI RESPONDE
+        if ($httpcode == 200) { //======LA PAGINA SI RESPONDE
             //echo $httpcode.'----'.$response;
             //convertimos de base 64 a archivo fisico
             $doc = new DOMDocument();
             $doc->loadXML($response);
-    
-    
-    
+
+
+
             //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
             if (isset($doc->getElementsByTagName('content')->item(0)->nodeValue)) {
                 $xmlCDR = $doc->getElementsByTagName('content')->item(0)->nodeValue;
                 file_put_contents($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP', base64_decode($xmlCDR));
-    
+
                 //extraemos archivo zip a xml
                 $zip = new ZipArchive;
                 if ($zip->open($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP') === TRUE) {
                     $zip->extractTo($ruta_archivo_cdr, 'R-' . $archivo . '.XML');
                     $zip->close();
                 }
-    
+
                 //eliminamos los archivos Zipeados
                 //unlink($ruta_archivo . '.ZIP');
                 unlink($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP');
-    
+
                 //=============hash CDR=================
                 $doc_cdr = new DOMDocument();
                 $doc_cdr->load(dirname(__FILE__) . '/' . $ruta_archivo_cdr . 'R-' . $archivo . '.XML');
-                
+
                 $mensaje['respuesta'] = 'ok';
                 $mensaje['cod_sunat'] = $doc_cdr->getElementsByTagName('ResponseCode')->item(0)->nodeValue;
                 $mensaje['msj_sunat'] = $doc_cdr->getElementsByTagName('Description')->item(0)->nodeValue;
                 $mensaje['mensaje'] = $doc_cdr->getElementsByTagName('Description')->item(0)->nodeValue;
                 $mensaje['hash_cdr'] =  $doc_cdr->getElementsByTagName('DigestValue')->item(0)->nodeValue;
                 //$mensaje['id_ticket'] =  $doc_cdr->getElementsByTagName('ID')->item(0)->nodeValue;
-				$mensaje['ruta_cdr'] =str_replace("..","",$ruta_archivo_cdr) . 'R-' . $archivo . '.XML';
+                $mensaje['ruta_cdr'] = str_replace("..", "", $ruta_archivo_cdr) . 'R-' . $archivo . '.XML';
             } else {
                 $mensaje['cod_sunat'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue;
                 $mensaje['msj_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
@@ -1421,19 +1442,19 @@ for ($i = 0; $i < count($detalle); $i++) {
                 $mensaje['respuesta'] = 'error';
                 //$mensaje['cod_sunat'] = $doc->getElementsByTagName('faultcode')->item(0)->nodeValue;
                 $mensaje['mensaje'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
-                
+
                 //$mensaje['msj_sunat'] = $doc->getElementsByTagName('faultstring')->item(0)->nodeValue;
-                $mensaje['ruta_cdr'] ='';
-                $mensaje['usu'] =$ruc."---". $usuario_sol."---". $pass_sol;
+                $mensaje['ruta_cdr'] = '';
+                $mensaje['usu'] = $ruc . "---" . $usuario_sol . "---" . $pass_sol;
             }
         } else {
             //echo "no responde web";
             $mensaje['respuesta'] = 'error';
-            $mensaje['cod_sunat']="";
-            $mensaje['mensaje']="SUNAT ESTA FUERA SERVICIO: ";
+            $mensaje['cod_sunat'] = "";
+            $mensaje['mensaje'] = "SUNAT ESTA FUERA SERVICIO: ";
             $mensaje['hash_cdr'] = "";
-			$mensaje['ruta_cdr'] ='';
-			$mensaje['msj_sunat'] ='';
+            $mensaje['ruta_cdr'] = '';
+            $mensaje['msj_sunat'] = '';
         }
         return $mensaje;
     }
@@ -1454,7 +1475,7 @@ for ($i = 0; $i < count($detalle); $i++) {
     //     </ser:getStatus>
     //     </soapenv:Body>
     //     </soapenv:Envelope>';
-    
+
     //     $headers = array(
     //         "Content-type: text/xml;charset=\"utf-8\"",
     //         "Accept: text/xml",
@@ -1463,7 +1484,7 @@ for ($i = 0; $i < count($detalle); $i++) {
     //         "SOAPAction: ",
     //         "Content-length: " . strlen($xml_post_string),
     //     ); //SOAPAction: your op URL
-        
+
     //     // PHP cURL  for https connection with auth
     //     $ch = curl_init();
     //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -1475,7 +1496,7 @@ for ($i = 0; $i < count($detalle); $i++) {
     //     curl_setopt($ch, CURLOPT_POST, true);
     //     curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
     //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    
+
     //     // converting
     //     $response = curl_exec($ch);
     //     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -1485,29 +1506,29 @@ for ($i = 0; $i < count($detalle); $i++) {
     //         //convertimos de base 64 a archivo fisico
     //         $doc = new DOMDocument();
     //         $doc->loadXML($response);
-    
-    
-    
+
+
+
     //         //===================VERIFICAMOS SI HA ENVIADO CORRECTAMENTE EL COMPROBANTE=====================
     //         if (isset($doc->getElementsByTagName('content')->item(0)->nodeValue)) {
     //             $xmlCDR = $doc->getElementsByTagName('content')->item(0)->nodeValue;
     //             file_put_contents($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP', base64_decode($xmlCDR));
-    
+
     //             //extraemos archivo zip a xml
     //             $zip = new ZipArchive;
     //             if ($zip->open($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP') === TRUE) {
     //                 $zip->extractTo($ruta_archivo_cdr, 'R-' . $archivo . '.XML');
     //                 $zip->close();
     //             }
-    
+
     //             //eliminamos los archivos Zipeados
     //             //unlink($ruta_archivo . '.ZIP');
     //             unlink($ruta_archivo_cdr . 'R-' . $archivo . '.ZIP');
-    
+
     //             //=============hash CDR=================
     //             $doc_cdr = new DOMDocument();
     //             $doc_cdr->load(dirname(__FILE__) . '/' . $ruta_archivo_cdr . 'R-' . $archivo . '.XML');
-                
+
     //             $mensaje['respuesta'] = 'ok';
     //             $mensaje['cod_sunat'] = $doc_cdr->getElementsByTagName('ResponseCode')->item(0)->nodeValue;
     //             $mensaje['msj_sunat'] = $doc_cdr->getElementsByTagName('Description')->item(0)->nodeValue;
@@ -1539,4 +1560,3 @@ for ($i = 0; $i < count($detalle); $i++) {
     //     return $mensaje;
     // }
 }
-?>

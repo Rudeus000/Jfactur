@@ -242,6 +242,10 @@
                                     <input class="form-check-input" type="checkbox" name="productAssignment" id="productAssignmentSon" value="H">
                                     <label class="form-check-label" for="productAssignmentSon">H</label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="productoConasignacion" id="productAssignmentGson" value="G">
+                                    <label class="form-check-label" for="productAssignmentGson">G</label>
+                                </div>
 
                                 <input type="text" name="nombre" class="form-control">
                             </div>
@@ -287,7 +291,7 @@
                             <div class="form-group">
                                 <label class="control-label">Linea:<span class="text-danger"> *</label>
                                 <select class="form-control select2 select2-hidden-accessible input-sm" name="linea">
-                                    <option value="">--Selecciona--</option>
+                                    <!-- <option value="">--Selecciona--</option> -->
                                     <?php foreach ($linea as $li) : ?>
                                         <option value="<?= $li->cod_linea ?>"><?= $li->nomb_linea ?></option>
                                     <?php endforeach ?>
@@ -299,7 +303,7 @@
                             <div class="form-group">
                                 <label class="control-label">Sub Linea:<span class="text-danger"> *</label>
                                 <select class="form-control select2 select2-hidden-accessible input-sm" name="sublinea">
-                                    <option value="">--Selecciona--</option>
+                                    <!-- <option value="">--Selecciona--</option> -->
                                     <?php foreach ($sublinea as $sb) : ?>
                                         <option value="<?= $sb->cod_sublinea ?>"><?= $sb->nomb_sublinea ?></option>
                                     <?php endforeach ?>
@@ -324,7 +328,7 @@
                             <div class="form-group">
                                 <label class="control-label">Talla:<span class="text-danger"> *</label>
                                 <select class="form-control select2 select2-hidden-accessible input-sm" name="talla">
-                                    <option value="">--Selecciona--</option>
+                                    <!-- <option value="">--Selecciona--</option> -->
                                     <?php foreach ($talla as $tl) : ?>
                                         <option value="<?= $tl->cod_talla ?>"><?= $tl->nomb_talla  ?></option>
                                     <?php endforeach ?>
@@ -379,6 +383,13 @@
                                 <input type="text" name="stock" class="form-control" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Comision:<span class="text-danger"> *</label>
+                                <input type="text" name="comision" class="form-control">
+                            </div>
+                        </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -412,7 +423,7 @@
                             <div class="form-group">
                                 <label class="control-label">Presentacion:<span class="text-danger"> *</label>
                                 <select class="form-control select2 select2-hidden-accessible input-sm" name="presentacion">
-                                    <option value="">--Selecciona--</option>
+                                    <!-- <option value="">--Selecciona--</option> -->
                                     <?php foreach ($presentacion as $pres) : ?>
                                         <option value="<?= $pres->cod_present ?>"><?= $pres->nomb_present ?></option>
                                     <?php endforeach ?>
@@ -499,6 +510,10 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" name="editproductAssignmentSon" id="editproductAssignmentSon" value="H">
                                     <label class="form-check-label" for="editproductAssignmentSon">H</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="editproductAssignmentGson" id="editproductAssignmentGson" value="G">
+                                    <label class="form-check-label" for="editproductAssignmentGson">G</label>
                                 </div>
 
                                 <input type="text" name="nombre" class="form-control">
@@ -608,28 +623,28 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Precio compra:<span class="text-danger"> *</label>
                                 <input type="text" name="preciocosto" class="form-control" value="0.00">
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Precio venta:<span class="text-danger"> *</label>
                                 <input type="text" name="precioventa" class="form-control" value="0.00">
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Precio x Mayor:<span class="text-danger"> *</label>
                                 <input type="text" name="precioventa_mayor" class="form-control">
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Precio Especial:<span class="text-danger"> *</label>
                                 <input type="text" name="precioventa_especial" class="form-control">
@@ -641,6 +656,12 @@
                             <div class="form-group">
                                 <label class="control-label">Stock minimo:<span class="text-danger"> *</label>
                                 <input type="text" name="stock" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Comision:<span class="text-danger"> *</label>
+                                <input type="text" name="comision" class="form-control">
                             </div>
                         </div>
 

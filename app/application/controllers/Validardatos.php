@@ -6,6 +6,9 @@ class Validardatos extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+    //     if(!$this->session->userdata("login")){
+    //         redirect(base_url());
+    // }
         // Carga el modelo dentro del constructor si no lo has hecho ya
         $this->load->model('Modelgeneral');
     }
@@ -14,7 +17,7 @@ public function validarDocumento()
     {
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzA1NjE1ODM5fQ.dpU839xNnr24blIYNlID99xk78F8SVDFRRqquv9poj8';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE0Njg2Njc1fQ.-dY1jGmysRafLSg-mYv68HFBxP-aP2t_vjpz8UTJR2U';
 
 
 if ($tipo_doc == "2") {
@@ -23,7 +26,7 @@ if ($tipo_doc == "2") {
         $documento = trim($documento);
     }
     // API URL
-    $url = "https://api.apis.net.pe/v1/dni?numero=".$documento;
+    $url = "https://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
 
     // Initialize cURL session
     $ch = curl_init();
@@ -67,7 +70,7 @@ if ($tipo_doc == "2") {
                 2 => isset($data['Apmaterno']) ? $data['Apmaterno'] : null,
                 3 => isset($data['Nombres']) ? $data['Nombres'] : null,
                 4 => isset($data['Direccion']) ? $data['Direccion'] : null,
-                5 => isset($data['nombre']) ? $data['nombre'] : null,
+                5 => isset($data['Nombrecompleto']) ? $data['Nombrecompleto'] : null,
                 6 => isset($data['Fnacimiento']) ? date('Y-m-d', strtotime($data['Fnacimiento'])) : '1969-12-31',
             );
         }

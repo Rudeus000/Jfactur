@@ -22,7 +22,7 @@
 				<p>
 				<div class="Com-Datos" style="font-size: 15px; background: #03A6BF"><b><?= $ventas->nom_tipdocumento ?></b></div>
 				<br>
-				<b style="font-size: 15px;"><?= $ventas->serie ?>-<?= str_pad($ventas->numero_vent,7,"0",STR_PAD_LEFT); ?></b>
+				<b style="font-size: 15px;"><?= $ventas->serie ?>-<?= str_pad($ventas->numero_vent, 7, "0", STR_PAD_LEFT); ?></b>
 
 	</div>
 </div>
@@ -150,60 +150,103 @@
 	<br>
 <?php endif ?>
 
-<?php if($ventas->id_cod_detraccion != null AND $ventas->id_mediopago != null): ?>
+<?php if ($ventas->id_cod_detraccion != null and $ventas->id_mediopago != null) : ?>
 
-<div class="w100">
+	<div class="w100">
 		<div class="w100" style=" padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
-		<div class="w100">
-			<div class="w100"><b style="font-size:13px">Informacion de la detraccion:</b></div>
-			
-		</div>
-		<div class="w60">
-			<div class="w40"><b>Tipo Operación:</b></div>
-			<div class="w40" style="text-align:left">1001 Operación Sujeta a Detracción</div>
-		</div>
-		<div class="w60">
-			<div class="w40"><b>Bien o servicio</b></div>
-			<div class="w40" style="text-align:left"><?= $ventas->id_cod_detraccion. ' ' .$ventas->detraccion_bien_descripcion ?></div>
-		</div>
-		<div class="w60">
-			<div class="w40"><b>Medio de pago</b></div>
-			<div class="w40" style="text-align:left"><?= $ventas->id_mediopago. ' '.$ventas->detraccion_medio_descripcion ?></div>
-		</div>
-		<div class="w60">
-			<div class="w40"><b>Nro. Cta. Banco de la Nación:</b></div>
-			<div class="w40" style="text-align:left"><?= $ventas->detraccion_cuenta ?></div>
-		</div>
-		
-		<div class="w60">
-			<div class="w40"><b>Porcentaje de detracción: </b></div>
-			<div class="w40" style="text-align:left"><?= $ventas->detraccion_porcentaje ?></div>
-		</div>
-		<div class="w40">
-			<div class="w40"><b>Monto detracción: </b></div>
-			<div class="w40" style="text-align:right"><?= $ventas->detraccion_monto ?></div>
+			<div class="w100">
+				<div class="w100"><b style="font-size:13px">Informacion de la detraccion:</b></div>
+
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Tipo Operación:</b></div>
+				<div class="w40" style="text-align:left">1001 Operación Sujeta a Detracción</div>
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Bien o servicio</b></div>
+				<div class="w40" style="text-align:left"><?= $ventas->id_cod_detraccion . ' ' . $ventas->detraccion_bien_descripcion ?></div>
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Medio de pago</b></div>
+				<div class="w40" style="text-align:left"><?= $ventas->id_mediopago . ' ' . $ventas->detraccion_medio_descripcion ?></div>
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Nro. Cta. Banco de la Nación:</b></div>
+				<div class="w40" style="text-align:left"><?= $ventas->detraccion_cuenta ?></div>
+			</div>
+
+			<div class="w60">
+				<div class="w40"><b>Porcentaje de detracción: </b></div>
+				<div class="w40" style="text-align:left"><?= $ventas->detraccion_porcentaje ?></div>
+			</div>
+			<div class="w40">
+				<div class="w40"><b>Monto detracción: </b></div>
+				<div class="w40" style="text-align:right"><?= $ventas->detraccion_monto ?></div>
+			</div>
 		</div>
 	</div>
-</div>	
-<br>
-<br>
+	<br>
+	<br>
 <?php endif ?>
 
-	<?php if (!is_null($ventas->cuotas)) : ?>
-		<div class="w100">
-			<p style="font-size: 12px; padding-top: -10px;"><b>CONDICIÓN DE PAGO: Crédito Cuotas</b></p>
-			<?php foreach ($ventas->cuotas as $key => $value) : ?>
-				<p style="font-size: 12px; padding-top: -10px;">• Cuota #<?= $key + 1 ?> / Fecha: <?= $value->fecha_ventcuo ?> / Monto: <?= $value->monto_ventcuo ?></p>
-			<?php endforeach ?>
+<?php if ($ventas->retencion_base_imp != null and $ventas->retencion_porcentaje != null) : ?>
+	<?php
+	$porcentaje = $ventas->retencion_porcentaje * 100;
+	?>
+
+	<div class="w100">
+		<div class="w100" style=" padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
+			<div class="w100">
+				<div class="w100"><b style="font-size:13px">Informacion de la retencion:</b></div>
+
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Base imponible de la retencion:</b></div>
+				<div class="w40" style="text-align:left"><?= $ventas->retencion_base_imp ?></div>
+			</div>
+			<div class="w60">
+				<div class="w40"><b>Porcentaje de retencion</b></div>
+				<div class="w40" style="text-align:left"><?= number_format($porcentaje, 2) ?> %</div>
+			</div>
+			<div class="w40">
+				<div class="w40"><b>Monto de la retencion: </b></div>
+				<div class="w40" style="text-align:right"><?= $ventas->retencion_monto ?></div>
+			</div>
 		</div>
-		<br>
-	<?php endif ?>
-	<!-- <div class="w100" style="border:1px solid #03A6BF; padding:2px; border-radius: 10px;">
+	</div>
+	<br>
+	<br>
+<?php endif ?>
+
+<?php
+if (!is_null($ventas->retencion_monto) and !is_null($ventas->cuotas)) {
+	foreach ($ventas->cuotas as $key => $value);
+	$monto_deuda = $value->monto_ventcuo - $ventas->retencion_monto;
+}
+
+?>
+
+<?php if (!is_null($ventas->cuotas)) : ?>
+	<div class="w100">
+		<p style="font-size: 12px; padding-top: -10px;"><b>CONDICIÓN DE PAGO: Crédito Cuotas</b></p>
+		<?php foreach ($ventas->cuotas as $key => $value) : ?>
+			<p style="font-size: 12px; padding-top: -10px;">• Cuota #<?= $key + 1 ?> / Fecha: <?= $value->fecha_ventcuo ?>
+				<?php if (!is_null($ventas->retencion_monto)) : ?>
+					/ Monto deuda: <?= $value->monto_ventcuo ?></p>
+
+		<?php else : ?>
+			/ Monto: <?= $value->monto_ventcuo ?></p>
+		<?php endif ?>
+	<?php endforeach ?>
+	</div>
+	<br>
+<?php endif ?>
+<!-- <div class="w100" style="border:1px solid #03A6BF; padding:2px; border-radius: 10px;">
 		<b style="font-size:13px">Observaciones SUNAT</b><br>
 		<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"> <?= $ventas->serie ?>-<?= $ventas->numero_vent ?></b>, ha sido aceptada.
 	</div> -->
 
-	<!-- <table class="table table-bordered" style="width:70%;margin-top:10px">
+<!-- <table class="table table-bordered" style="width:70%;margin-top:10px">
 	<tr>
 		<td style="border:1px solid #070707"><b>1</b></td>
 		<td style="border:1px solid #070707">Detracciones: NÚMERO DE CUENTA EN BN</td>
@@ -217,16 +260,16 @@
 </table> -->
 
 
-	<br>
-	<br>
-	<br>
-	<div class="w100">
-		<p style="font-size: 12px; padding-top: -10px;">Autorizado a ser emisor electrónico mediante <b>R.I. N° 182 - 2016 SUNAT</b></p>
-		<p style="font-size: 12px; padding-top: -10px;">Representacion impresa de su Factura electronica, este puede ser consultado en <b><?= WEBSITE ?></b></p>
+<br>
+<br>
+<br>
+<div class="w100">
+	<p style="font-size: 12px; padding-top: -10px;">Autorizado a ser emisor electrónico mediante <b>R.I. N° 182 - 2016 SUNAT</b></p>
+	<p style="font-size: 12px; padding-top: -10px;">Representacion impresa de su Factura electronica, este puede ser consultado en <b><?= WEBSITE ?></b></p>
 
-		<p>Codigo de seguridad (Hash): <?= $ventas->hash_vent ?></p>
-	</div>
+	<p>Codigo de seguridad (Hash): <?= $ventas->hash_vent ?></p>
+</div>
 
-	<div class="w100">
-		<barcode code="<?= $qr ?>" type="QR" class="barcode" size="1.5" error="M" disableborder="1" />
-	</div>
+<div class="w100">
+	<barcode code="<?= $qr ?>" type="QR" class="barcode" size="1.5" error="M" disableborder="1" />
+</div>

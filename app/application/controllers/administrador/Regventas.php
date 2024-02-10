@@ -60,7 +60,7 @@ class Regventas extends CI_Controller
 		// $data['punto'] = $this->input->get_post('punto');
 		// $data['estado'] = $this->input->get_post('estado');
 
-		
+
 		$data['cliente'] = $cliente;
 		$data['vendedor'] = $vendedor;
 		$data['punto'] = $punto;
@@ -406,6 +406,7 @@ class Regventas extends CI_Controller
 		$peridiocidad = $this->input->post('periodo');
 		$numero = $this->input->post('numero');
 		$total = $this->input->post('total');
+		$retencion_deuda = $this->input->post('retencion_mont');
 
 		if ($peridiocidad == 'Semanal') {
 			$periodo = '+7 day';
@@ -415,7 +416,9 @@ class Regventas extends CI_Controller
 			$periodo = '+28 day';
 		}
 
-		$monto = $total / $numero;
+		$montos = $total - $retencion_deuda;
+		$monto = $montos / $numero;
+
 		$cuotas = [];
 		$fecha = date('Y-m-d');
 		for ($i = 1; $i <= $numero; $i++) {
@@ -489,6 +492,14 @@ class Regventas extends CI_Controller
 			$data['detraccion_porcentaje'] = $this->input->post('detraccion_porcentaje');
 			$data['detraccion_monto'] = $this->input->post('detraccion_monto');
 			$data['detraccion_texto'] = $this->input->post('detraccion_informacion');
+		}
+
+		//RETENCION
+		if ($this->input->post('retencion-check') == 'on') {
+			$retencion_porcent = ($this->input->post('retencion_porcentaje') / 100);
+			$data['retencion_base_imp'] = $this->input->post('base_monto');
+			$data['retencion_porcentaje'] = $retencion_porcent;
+			$data['retencion_monto'] = $this->input->post('retencion_monto');;
 		}
 
 		$insert = $this->modelgeneral->insertRegist('tb_venta', $data);
@@ -655,7 +666,7 @@ class Regventas extends CI_Controller
 
 						//DESCONTAR FECHAS DE VENCIMIENTO
 						if (isset($_POST['producto_fecha'][$codigo_producto]) && $_POST['producto_fecha'][$codigo_producto] != '') {
-						// if ($_POST['producto_fecha'][$codigo_producto] != '') {
+							// if ($_POST['producto_fecha'][$codigo_producto] != '') {
 							$producto_fecha = $this->db->from('tb_producto_fecha')
 								->where('cod_prodfec', $_POST['producto_fecha'][$codigo_producto])
 								->get()->row();
@@ -892,16 +903,37 @@ class Regventas extends CI_Controller
 	}
 
 	// private function descontarDeAlmacen($data,$almacen)
+	// private function descontarDeAlmacen($data, $almacen, $idTypeAssignmentProduct)
+	// {
+	// 	//RESTAR DE ALMACEN
+	// 	// $this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$data['cant_ventdet']." WHERE cod_almacen = ".$almacen." AND cod_producto = ".$data['cod_producto']);
+	// 	if ($idTypeAssignmentProduct !== "null") {
+	// 		$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+	// 	} else {
+	// 		$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+	// 	}
+	// }
 	private function descontarDeAlmacen($data, $almacen, $idTypeAssignmentProduct)
 	{
-		//RESTAR DE ALMACEN
-		// $this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$data['cant_ventdet']." WHERE cod_almacen = ".$almacen." AND cod_producto = ".$data['cod_producto']);
+		// Obtén información del producto
+		$productoInfo = $this->db->query("SELECT * FROM tb_producto WHERE cod_producto = " . $data['cod_producto'])->row_array();
+		$typeAssignment = $productoInfo['typeAssignmentProducto'];
+		// Verificar si $idTypeAssignmentProduct no es nulo
 		if ($idTypeAssignmentProduct !== "null") {
-			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+
+			// Restar de almacen
+			if ($typeAssignment == 'G') {
+				// Si el tipo de asignación es "G", realizar descuento de stock basado en el costo
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+			} else {
+				// De lo contrario, realizar descuento de stock como antes
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+			}
 		} else {
 			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
 		}
 	}
+
 
 	public function deudasCliente()
 	{
@@ -983,8 +1015,8 @@ class Regventas extends CI_Controller
 		$this->form_validation->set_rules('nombre', '', 'required');
 		$this->form_validation->set_rules('documento', '', 'required');
 		// $this->form_validation->set_rules('telefono','','required');
-		 // Validación del documento
-		 if ($this->form_validation->run() == TRUE) {
+		// Validación del documento
+		if ($this->form_validation->run() == TRUE) {
 			$tipo = $this->input->post('tipo');
 			$nombre = $this->input->post('nombre');
 			$documento = trim($this->input->post('documento'));
@@ -996,7 +1028,7 @@ class Regventas extends CI_Controller
 				echo json_encode($resp);
 				return;
 			}
-	
+
 			// Realizar la validación aquí según el tipo de documento seleccionado
 			if ($tipo === "2" && !preg_match('/^\d{8}$/', $documento)) {
 				$resp['success'] = false;
@@ -1269,6 +1301,16 @@ class Regventas extends CI_Controller
 		//se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
 		$tipo_proceso = getTipoProceso();
 
+
+		$retencion = array();
+		$retencion['activo'] = false;
+
+		if ($res->retencion_base_imp != '' and $res->retencion_porcentaje != '') {
+			$retencion['activo'] = true;
+			$retencion['retencion_base_imp'] = round($res->retencion_base_imp,2);
+			$retencion['retencion_porcentaje'] = $res->retencion_porcentaje;
+			$retencion['retencion_monto'] = round($res->retencion_monto,2);
+		}
 		$detraccion = array();
 		$detraccion['activo'] = false;
 
@@ -1282,8 +1324,11 @@ class Regventas extends CI_Controller
 			$detraccion['texto'] = $res->detraccion_texto;
 		}
 
+		$total_reten_cuot = $res->total_vent - $res->retencion_monto;
 		$data = array(
 
+			// RETENCION
+			"retencion" => $retencion,
 			//DETRACION
 			"detraccion" => $detraccion,
 			//Cabecera del documento
@@ -1300,6 +1345,7 @@ class Regventas extends CI_Controller
 			"total_igv"                     => strval($res->igv_vent),
 			"total_isc"                   	=> "0",
 			"total_otr_imp"                 => "0",
+			"total_retencion_cuot"	=> $total_reten_cuot,
 			"total"                  		=> strval($res->total_vent),
 			"total_letras"              	=> 'SON ' . strtoupper(convertir(intval($res->total_vent))),
 			"nro_guia_remision"             => "",
@@ -1817,5 +1863,4 @@ class Regventas extends CI_Controller
 				->update('tb_venta');
 		}
 	}
-
 }

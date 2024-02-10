@@ -146,6 +146,7 @@
              <?php endif ?>
              <li><a href="<?= base_url('reportes/regreportventotal') ?>">Ventas Realizadas</a></li>
              <li><a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>">Ventas detalladas</a></li>
+             <li><a href="<?= base_url('reportes/regreportcomision') ?>">Comisiones</a></li>
              <?php if ($this->session->userdata('perfil') == 1) : ?>
                <li><a href="<?= base_url('reportes/regreportventpago') ?>">Ventas Formas de Pago</a></li>
                <li><a href="<?= base_url('reportes/regreportventdetalle') ?>">Ventas Pago</a></li>
