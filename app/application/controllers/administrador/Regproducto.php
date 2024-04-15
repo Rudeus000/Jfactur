@@ -89,16 +89,62 @@ class Regproducto extends CI_Controller
         header('content-type: application/json; charset=utf-8');
         echo json_encode($datos);
     }
+// AGREGAR MARCA 
+    function insertMarcaprod()
+    {
+     
+      $this->form_validation->set_rules('descripcion','','required|trim|is_unique[tb_marca.nomb_marca]');
+      if($this->form_validation->run() == TRUE){
+         
+          $data['nomb_marca'] = $this->input->post('descripcion');
+          $data['est_marca']=  1;
+          $insert = $this->modelgeneral->insertRegist('tb_marca',$data);
+          $resp =[];
+          if(!is_null($insert)){
+            // $insert = $this->modelgeneral->insertRegist('tb_usuario',$data);
+            $resp['marca'] = $this->modelgeneral->getTableWhereRow('tb_marca', ['cod_marca' => $insert]);
+              $resp['success'] = true;
+          }else{
+              $resp['success'] = false;
+          }
+         echo json_encode($resp);
+       
+       }
 
+    }
+// FIN DE AGREGAR MARCA
 
+// AGREGAR CATEGORIA 
+function insertCategoriaprod()
+{
+ 
+  $this->form_validation->set_rules('descripcion','','required|trim|is_unique[tb_categoria.nomb_categoria]');
+  if($this->form_validation->run() == TRUE){
+     
+      $data['nomb_categoria'] = $this->input->post('descripcion');
+      $data['est_categoria']=  1;
+      $insert = $this->modelgeneral->insertRegist('tb_categoria',$data);
+      $resp =[];
+      if(!is_null($insert)){
+        // $insert = $this->modelgeneral->insertRegist('tb_usuario',$data);
+        $resp['categoria'] = $this->modelgeneral->getTableWhereRow('tb_categoria', ['cod_categoria' => $insert]);
+          $resp['success'] = true;
+      }else{
+          $resp['success'] = false;
+      }
+     echo json_encode($resp);
+   
+   }
 
+}
+// FIN DE AGREGAR CATEGORIA
 
     function addProducto()
     {
         $this->form_validation->set_rules('tipoarticulo', '', 'required');
         $this->form_validation->set_rules('nombre', '', 'required');
-        $this->form_validation->set_rules('marca', '', 'required');
-        $this->form_validation->set_rules('categoria', '', 'required');
+        $this->form_validation->set_rules('marcas', '', 'required');
+        $this->form_validation->set_rules('categorias', '', 'required');
         $this->form_validation->set_rules('unidad', '', 'required');
         $this->form_validation->set_rules('linea', '', 'required');
         $this->form_validation->set_rules('sublinea', '', 'required');
@@ -118,8 +164,8 @@ class Regproducto extends CI_Controller
             $data['typeAssignmentProducto'] = $this->input->post('productoConasignacion');
             $data['cod_tiparticulo'] = $this->input->post('tipoarticulo');
             $data['nomb_product'] = $this->input->post('nombre');
-            $data['cod_marca'] = $this->input->post('marca');
-            $data['cod_categoria'] = $this->input->post('categoria');
+            $data['cod_marca'] = $this->input->post('marcas');
+            $data['cod_categoria'] = $this->input->post('categorias');
             $data['cod_unid'] = $this->input->post('unidad');
             $data['cod_linea'] = $this->input->post('linea');
             $data['cod_sublinea'] = $this->input->post('sublinea');
@@ -449,7 +495,7 @@ class Regproducto extends CI_Controller
 				/*FIN Poblamos el detalle para la boleta de ingreso */
 				/*Poblamos el detalle para la nota de ingreso */
 				$arr_detval[$value]['nund']=$value['stock']; 
-				$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; ; 
+				$arr_detval[$value]['ccod_undmed']=$undmed_prod->abreviatura_unid; 
 				$arr_detval[$value]['ccod_art']=$insert; 
 				$arr_detval[$value]['cdsc_art']=$producto->nomb_product; 
 				$arr_detval[$value]['ncosto']=$value['precio_compra']; 

@@ -46,7 +46,9 @@ class Ventas_model extends CI_Model
     if ($data['estado'] != '') {
       $this->db->where('tb_venta.estado_vent', $data['estado']);
     }
-
+    if ($data['cod_venta']!='') {
+      $this->db->where('tb_venta.cod_vent',$data['cod_venta']);
+    }
     if ($data['length'] != -1) {
       $this->db->limit($data['length'], $data['start']);
     }

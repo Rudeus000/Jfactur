@@ -113,25 +113,35 @@
 	<div class="w30" style="float: right; padding: 5px;border:2px solid #03A6BF; border-radius: 10px;">
 		<div class="w100">
 			<div class="w50"><b>Gravada</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($ventas->gravada_vent, 2) ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($ventas->gravada_vent, 2) ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>Gratuito</b></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($ventas->free_vent, 2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Exonerada</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($ventas->exonerada_vent, 2) ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($ventas->exonerada_vent, 2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Descuentos (-)</b></div>
-			<div class="w50" style="text-align:right"><?= number_format($descuentos, 2) ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($descuentos, 2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>IGV</b></div>
-			<div class="w50" style="text-align:right"><?= $ventas->igv_vent ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= $ventas->igv_vent ?></div>
 		</div>
 		<div class="w100" style="border-bottom:1px solid #03A6BF;margin:5px 0">
 		</div>
 		<div class="w100">
 			<div class="w50"><b>TOTAL</b></div>
-			<div class="w50" style="text-align:right"><?= $ventas->total_vent ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= $ventas->total_vent ?></div>
 		</div>
 	</div>
 </div>

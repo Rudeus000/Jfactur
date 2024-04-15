@@ -19,7 +19,7 @@ class Regcompras extends CI_Controller
 	public function index()
 	{
 		$data['permisos'] = $this->permisos;
-		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
+		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');		
 		$this->load->view('layouts/header');
 		$this->load->view('layouts/aside');
 		$this->load->view('admin/compras/listgetcompras', $data);
@@ -53,8 +53,19 @@ class Regcompras extends CI_Controller
 
 	public function agregar()
 	{
+		$data['categoria'] = $this->modelgeneral->getTable('tb_categoria');
+        $data['marca'] = $this->modelgeneral->getTable('tb_marca');
+        $data['articulo'] = $this->modelgeneral->getTable('tb_tiparticulo');
+        $data['linea'] = $this->modelgeneral->getTable('tb_linea');
+        $data['sublinea'] = $this->modelgeneral->getTable('tb_sublinea');
+        $data['talla'] = $this->modelgeneral->getTable('tb_talla');
+        $data['medida'] = $this->modelgeneral->getTable('tb_unidades');
 		$data['almacenes'] = $this->modelgeneral->getTable('tb_almacen');
 		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja', ['est_caja' => 1]);
+		$data['parametros'] = $this->modelgeneral->getTable('parametros');
+		$data['presentacion'] = $this->modelgeneral->getTable('tb_presentacion');
+        $data['producto'] = $this->modelgeneral->getTable('tb_producto');
+        $data['TypeproductAssignments'] = $this->modelgeneral->getTableWhere('tb_producto', ['typeAssignmentProduct' => 'P'], ['cod_producto', 'nomb_product']);
 		$this->load->view('layouts/header');
 		$this->load->view('layouts/aside');
 		$this->load->view('admin/compras/agregar', $data);
@@ -78,8 +89,9 @@ class Regcompras extends CI_Controller
 	{
 		$producto = $this->input->get('producto');
 		$result = $this->db->from('tb_producto')
-			->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad, fecha_vencimiento')
+			->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,nom_paramt as parametros, fecha_vencimiento')
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+			->join('parametros', 'tb_producto.cod_parametros = parametros.cod_parametros')
 			->where('est_product', 1)
 
 			->where_in('typeAssignmentProduct', array('P', 'N'))
@@ -195,7 +207,22 @@ class Regcompras extends CI_Controller
 		}
 	}
 
+	public function validaProductoUnico()
+	{
+		$nombre = $this->input->post('nombre');
+		$this->db->from('tb_producto');
+		$this->db->where('nomb_product', $nombre);
+		// if ($this->input->post('id') != '') {
+		// 	$this->db->where_not_in('cod_comp', [$this->input->post('id')]);
+		// }
+		$query = $this->db->get();
 
+		if ($query->num_rows() == 0) {
+			echo 'true';
+		} else {
+			echo 'false';
+		}
+	}
 	function agregarCompra()
 	{
 		$data['fecha_comp'] = $this->input->post('fecha');
@@ -225,7 +252,8 @@ class Regcompras extends CI_Controller
 		if (!is_null($insert)) {
 			$total = 0;
 			$datos_empresa = $this->modelgeneral->getTableWhereRow('tb_empresa', ['cod_empresa' => 1]);
-
+			$igv_acumula = 0;
+			$gravada_acumula = 0;
 			foreach ($_POST['id_prod'] as $key => $value) {
 				$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $value]);
 				if (!empty($datos_empresa)) {
@@ -241,7 +269,7 @@ class Regcompras extends CI_Controller
 						/*FIN Poblamos el detalle para la boleta de ingreso */
 						/*Poblamos el detalle para la nota de ingreso */
 						$arr_detval[$value]['nund'] = $_POST['cant_prod'][$key];
-						$arr_detval[$value]['ccod_undmed'] = $undmed_prod->abreviatura_unid;;
+						$arr_detval[$value]['ccod_undmed'] = $undmed_prod->abreviatura_unid;
 						$arr_detval[$value]['ccod_art'] = $value;
 						$arr_detval[$value]['cdsc_art'] = $producto->nomb_product;
 						$arr_detval[$value]['ncosto'] = $_POST['prec_prod'][$key];
@@ -254,9 +282,19 @@ class Regcompras extends CI_Controller
 				$detalle['cod_producto'] = $value;
 				$detalle['cant_compdet'] = $_POST['cant_prod'][$key];
 				$detalle['precunit_compdet'] = $precio_unit;
-				$detalle['igv_compdet'] = (($precio_unit * $_POST['cant_prod'][$key])  / 1.18) * 0.18;
-				$detalle['precventa_compdet'] = $precio_unit * $_POST['cant_prod'][$key] - $detalle['igv_compdet'];
+				// $detalle['igv_compdet'] = (($precio_unit * $_POST['cant_prod'][$key])  / 1.18) * 0.18;
 				$detalle['subtotal_compdet'] = $precio_unit * $detalle['cant_compdet'];
+				if ($_POST['tipo_igv'][$key] == '4') {
+					$detalle['igv_compdet'] = 0;
+				} elseif ($_POST['tipo_igv'][$key] == '5') {
+					$detalle['igv_compdet'] = 0;
+				} elseif ($_POST['tipo_igv'][$key] == '1') {
+					$detalle['igv_compdet'] = round((($detalle['subtotal_compdet'])  / 1.18) * 0.18, 2);
+					$igv_acumula += $detalle['igv_compdet'];
+					$gravada_acumula += $detalle['subtotal_compdet'];
+				}
+				$detalle['precventa_compdet'] = $precio_unit * $_POST['cant_prod'][$key] - $detalle['igv_compdet'];
+				// $detalle['subtotal_compdet'] = $precio_unit * $detalle['cant_compdet'];
 				$idCompraDetalle = $this->modelgeneral->insertRegist('tb_compra_detalle', $detalle);
 				$total += $detalle['subtotal_compdet'];
 
@@ -343,6 +381,7 @@ class Regcompras extends CI_Controller
 			$dataCompra['subtotal_comp'] = $total - $dataCompra['igv_comp'];
 			$dataCompra['pendiente_comp'] = $total - $data['efectivo_comp'];
 			$this->modelgeneral->editRegist('tb_compra', ['cod_comp' => $insert], $dataCompra);
+			// $this->calcularGravadaExoneradacompra($insert);
 			if (!empty($datos_empresa)) {
 				if ($datos_empresa->MovAlmacenAutomatico == "S") {
 					/*poblamos array para boleta de ingreso*/
@@ -601,6 +640,172 @@ class Regcompras extends CI_Controller
 		$this->mpdf->writeHTML($html, 2);
 		$this->mpdf->Output('assets/compras.pdf', 'I');
 	}
+	public function calcularGravadaExoneradaCompra($id)
+	{
+		$compra = $this->db->from('tb_compra')
+			->where('cod_comp', $id)
+			->get()->row();
+
+
+		$compra->detalle = $this->db->from('tb_compra_detalle')
+			->where('cod_comp', $id)
+			->get()
+			->result();
+
+
+		$acumula_gravada = 0;
+		$acumula_exonerada = 0;
+		$acumula_free = 0;
+
+		foreach ($compra->detalle as $detalle) {
+			$id_prod = $detalle->cod_producto;
+
+			// Verificar si hay un tipo de IGV definido para este producto
+			if (isset($_POST['tipo_igv'][$id_prod]) && is_array($_POST['tipo_igv'])) {
+				$tipo_igv = $_POST['tipo_igv'][$id_prod];
+
+				switch ($tipo_igv) {
+					case '1':
+						$acumula_gravada += $detalle->subtotal_compdet;
+						break;
+					case '4':
+						$acumula_exonerada += $detalle->subtotal_compdet;
+						break;
+					case '5':
+						$acumula_free += $detalle->subtotal_compdet;
+						break;
+					default:
+						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
+						break;
+				}
+			}
+		}
+
+
+		$acumula_gravada -= $compra->igv_comp;
+		$this->db->set('ip_exonerada_comp', $acumula_exonerada)
+			->set('ip_gravada_comp', $acumula_gravada)
+			->set('ip_free_comp', $acumula_free)
+			->where('cod_comp', $compra->cod_comp)
+			->update('tb_compra');
+	}
+
+	// AGREGAR MARCA 
+    function insertMarcaprod()
+    {
+     
+      $this->form_validation->set_rules('descripcion','','required|trim|is_unique[tb_marca.nomb_marca]');
+      if($this->form_validation->run() == TRUE){
+         
+          $data['nomb_marca'] = $this->input->post('descripcion');
+          $data['est_marca']=  1;
+          $insert = $this->modelgeneral->insertRegist('tb_marca',$data);
+          $resp =[];
+          if(!is_null($insert)){
+            // $insert = $this->modelgeneral->insertRegist('tb_usuario',$data);
+            $resp['marca'] = $this->modelgeneral->getTableWhereRow('tb_marca', ['cod_marca' => $insert]);
+              $resp['success'] = true;
+          }else{
+              $resp['success'] = false;
+          }
+         echo json_encode($resp);
+       
+       }
+
+    }
+// FIN DE AGREGAR MARCA
+
+// AGREGAR CATEGORIA 
+function insertCategoriaprod()
+{
+ 
+  $this->form_validation->set_rules('descripcion','','required|trim|is_unique[tb_categoria.nomb_categoria]');
+  if($this->form_validation->run() == TRUE){
+     
+      $data['nomb_categoria'] = $this->input->post('descripcion');
+      $data['est_categoria']=  1;
+      $insert = $this->modelgeneral->insertRegist('tb_categoria',$data);
+      $resp =[];
+      if(!is_null($insert)){
+        // $insert = $this->modelgeneral->insertRegist('tb_usuario',$data);
+        $resp['categoria'] = $this->modelgeneral->getTableWhereRow('tb_categoria', ['cod_categoria' => $insert]);
+          $resp['success'] = true;
+      }else{
+          $resp['success'] = false;
+      }
+     echo json_encode($resp);
+   
+   }
+
+}
+// FIN DE AGREGAR CATEGORIA
+
+// BUY ADD PRODUCT 
+	function addProducto()
+    {
+        $this->form_validation->set_rules('tipoarticulo', '', 'required');
+        $this->form_validation->set_rules('nombre', '', 'required');
+        $this->form_validation->set_rules('marcas', '', 'required');
+        $this->form_validation->set_rules('categorias', '', 'required');
+        $this->form_validation->set_rules('unidad', '', 'required');
+        $this->form_validation->set_rules('linea', '', 'required');
+        $this->form_validation->set_rules('sublinea', '', 'required');
+        $this->form_validation->set_rules('talla', '', 'required');
+        $this->form_validation->set_rules('presentacion', '', 'required');
+        $this->form_validation->set_rules('codigobarra', '', '');
+        $this->form_validation->set_rules('preciocosto', '', 'required');
+        $this->form_validation->set_rules('precioventa', '', 'required');
+        $this->form_validation->set_rules('stock', '', 'required');
+        $this->form_validation->set_rules('dispventa', '', 'required');
+        $this->form_validation->set_rules('dispcompra', '', 'required');
+        $this->form_validation->set_rules('parametros', '', 'required');
+        if ($this->form_validation->run() == TRUE) {
+
+            (empty($this->input->post('productAssignment'))) ? $data['typeAssignmentProduct'] = 'N' : $data['typeAssignmentProduct'] = $this->input->post('productAssignment');
+            (empty($this->input->post('selectAssignmentDad'))) ? $data['idTypeAssignmentProduct'] = null : $data['idTypeAssignmentProduct'] = $this->input->post('selectAssignmentDad');
+            $data['typeAssignmentProducto'] = $this->input->post('productoConasignacion');
+            $data['cod_tiparticulo'] = $this->input->post('tipoarticulo');
+            $data['nomb_product'] = $this->input->post('nombre');
+            $data['cod_marca'] = $this->input->post('marcas');
+            $data['cod_categoria'] = $this->input->post('categorias');
+            $data['cod_unid'] = $this->input->post('unidad');
+            $data['cod_linea'] = $this->input->post('linea');
+            $data['cod_sublinea'] = $this->input->post('sublinea');
+            $data['cod_talla'] =  $this->input->post('talla');
+            $data['cod_present'] = $this->input->post('presentacion');
+            $data['barra_product'] =  $this->input->post('codigobarra');
+            $data['prec_costo'] =  $this->input->post('preciocosto');
+            $data['prec_venta'] =  $this->input->post('precioventa');
+            $data['prec_mayor_venta'] = $this->input->post('precioventa_mayor');
+            $data['prec_especial_venta'] = $this->input->post('precioventa_especial');
+            $data['stockmin_product'] =  $this->input->post('stock');
+            $data['comision_product'] =  $this->input->post('comision');
+            $data['fecha_registro'] = date("Y-m-d H:i:s");
+            $data['fecha_modificacion'] = date("Y-m-d H:i:s");
+            $data['dispo_venta'] = $this->input->post('dispventa');
+            $data['dispo_compra'] = $this->input->post('dispcompra');
+            $data['cod_parametros'] = $this->input->post('parametros');
+            $data['fecha_vencimiento'] = $this->input->post('fecha_vencimiento');
+            $data['est_product'] =  1;
+            $insert = $this->modelgeneral->insertRegist('tb_producto', $data);
+            $resp = [];
+            if (!is_null($insert)) {
+				$resp['producto'] = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $insert]);
+                //  $insert = $this->modelgeneral->insertRegist('tb_usuario',$data);
+                $resp['success'] = true;
+            } else {
+                $resp['success'] = false;
+            }
+            echo json_encode($resp);
+        }
+    }
+
+    // function getProducto()
+    // {
+    //     $id = $this->input->get('id');
+    //     $producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $id]);
+    //     echo json_encode($producto);
+    // }
 }
 
 /* End of file Regcompras.php */

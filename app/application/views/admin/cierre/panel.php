@@ -81,14 +81,14 @@
                             </div>
                           <?php endif ?>
                           <div class="col-md-3">
-                        <div class="form-group">
-                          <label class="control-label">Fecha</label>
-                          <div class="input-group">
-                          <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                            <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                            <div class="form-group">
+                              <label class="control-label">Fecha</label>
+                              <div class="input-group">
+                                <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                                <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
                           <div class="col-md-2">
                             <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
                           </div>
@@ -106,7 +106,7 @@
                             <th>Caja Origen</th>
                             <th>Usuario</th>
                             <th>Caja Destino</th>
-                            <th>Observacion</th>                            
+                            <th>Observacion</th>
                             <th class="bg-danger">Egresos</th>
                             <th class="bg-primary">Efectivo</th>
                             <th class="bg-warning">Tarjeta</th>
@@ -246,35 +246,35 @@
                   </div>
                 </div>
                 <fieldset>
-                <legend>Registrar movimiento</legend>
-                <div class="row">
-                <div class="col-md-12">
-              <div class="form-group">
-                <label class="control-label">Tipo:<span class="text-danger">[-]<span class="text-primary">[+]<span class="text-danger"> *</label>
+                  <legend>Registrar movimiento</legend>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="control-label">Tipo:<span class="text-danger">[-]<span class="text-primary">[+]<span class="text-danger"> *</label>
 
-                <select name="tipmovement" class="form-control">
-                  <option value="E">Egresos(-)</option>
-                  <option value="I">Ingresos(+)</option>
-                </select>
+                        <select name="tipmovement" class="form-control">
+                          <option value="E">Egresos(-)</option>
+                          <option value="I">Ingresos(+)</option>
+                        </select>
 
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="control-label">Monto:<span class="text-danger"> *</label>
-                <input type="text" name="amountmovement" class="form-control">
-              </div>
-            </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="control-label">Monto:<span class="text-danger"> *</label>
+                        <input type="text" name="amountmovement" class="form-control">
+                      </div>
+                    </div>
 
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="control-label">Observacion:</label>
-                <textarea name="obsmovement" class="form-control"></textarea>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="control-label">Observacion:</label>
+                        <textarea name="obsmovement" class="form-control"></textarea>
 
-              </div>
-            </div>
-                </div>
-                </fieldset>          
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
 
               </div>
             </div>
@@ -362,20 +362,20 @@
               <div class="form-group">
                 <label class="control-label">Sucursal:</label>
                 <?php if ($this->session->userdata('perfil') == 1) : ?>
-                <select name="sucursal" class="form-control">
-                  <option value="">Seleccione</option>
-                  <?php foreach ($puntos as $p) : ?>
-                    <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
-                  <?php endforeach ?>
-                </select>
+                  <select name="sucursal" class="form-control">
+                    <option value="">Seleccione</option>
+                    <?php foreach ($puntos as $p) : ?>
+                      <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
+                    <?php endforeach ?>
+                  </select>
                 <?php endif  ?>
                 <?php if ($this->session->userdata('perfil') != 1) : ?>
-                <select name="sucursal" class="form-control" hidden>              
-                  <?php foreach ($puntos as $p) : ?>
-                    <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
-                  <?php endforeach ?>
-                </select>
-                <input type="text" name="sucursal" readonly class="form-control" value="<?= $p->nomb_puntoventa ?? ''?>">
+                  <select name="sucursal" class="form-control" hidden>
+                    <?php foreach ($puntos as $p) : ?>
+                      <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
+                    <?php endforeach ?>
+                  </select>
+                  <input type="text" name="sucursal" readonly class="form-control" value="<?= $p->nomb_puntoventa ?? '' ?>">
                 <?php endif  ?>
               </div>
             </div>

@@ -9,8 +9,8 @@
 
 	<div>Ruc:<?= $empresa->ruc_emp ?></div>
 	<div> Web: <?= WEBSITE ?> </div>
-	<div><b><?= $ventas->nom_tipdocumento ?> </b></div>
-	<div><?= $ventas->serie ?> - <?= str_pad($ventas->numero_vent, 7, "0", STR_PAD_LEFT); ?></div>
+	<div><b>PAGO </b></div>
+	<div>NO. OPE: <?= str_pad($ventas->numero_vent, 7, "0", STR_PAD_LEFT); ?></div>
 </div>
 <div class="w100" style="font-size:12px">
 	<div class="w30">
@@ -23,8 +23,8 @@
 	</div>
 	<div class="w70">: <?= character_limiter($ventas->nomb_cliente, 30, '...') ?></div>
 
-	<div class="w30"><b>Vendedor</b></div>
-	<div class="w70">: <?= character_limiter($ventas->nomb_usu . '***') ?></div>
+	<!-- <div class="w30"><b>Vendedor</b></div>
+	<div class="w70">: <?= character_limiter($ventas->nomb_usu . '***') ?></div> -->
 
 
 	<div class="w30"><b>Fecha</b></div>
@@ -44,9 +44,9 @@
 		<thead>
 			<tr>
 				<th class="text-left">Descripción</th>
-				<th class="text-center">Cant.</th>
-				<th class="text-right">P. Unit</th>
-				<th class="text-right">Desc.</th>
+				<!-- <th class="text-center">Cant.</th> -->
+				<!-- <th class="text-right">P. Unit</th>
+				<th class="text-right">Desc.</th> -->
 				<th class="text-right">Total</th>
 			</tr>
 		</thead>
@@ -67,9 +67,9 @@
 				?>
 				<tr>
 					<td><?= character_limiter($dt->producto_ventdet, 38, '...') ?> <?= $dt->producto_isdn ?><br><?= $dt->serie_ventdetserie ?></td>
-					<td class="text-center"><?= $dt->cantidad ?></td>
-					<td class="text-right"><?= $dt->precunit_ventdet ?></td>
-					<td class="text-right"><?= ($dt->tipo_ventdet == 'V' || $dt->tipo_ventdet == 'E') ? $dt->descuento_ventdet : '' ?></td>
+					<!-- <td class="text-center"><?= $dt->cantidad ?></td> -->
+					<!-- <td class="text-right"><?= $dt->precunit_ventdet ?></td> -->
+					<!-- <td class="text-right"><?= ($dt->tipo_ventdet == 'V' || $dt->tipo_ventdet == 'E') ? $dt->descuento_ventdet : '' ?></td> -->
 					<td class="text-right"><?= ($dt->tipo_ventdet == 'V' || $dt->tipo_ventdet == 'E') ? $dt->subtotal : '' ?></td>
 				</tr>
 			<?php endforeach ?>
@@ -85,15 +85,10 @@
 
 
 <div style="font-size:11px">
-	<div class="w100">
+	<!-- <div class="w100">
 		<div class="w1-3"><b>Gravada:</b></div>
 		<div class="w1-3 text-right">S/</div>
 		<div class="w1-3 text-right"><?= number_format($ventas->gravada_vent, 2) ?></div>
-	</div>
-	<div class="w100">
-		<div class="w1-3"><b>Gratuito:</b></div>
-		<div class="w1-3 text-right">S/</div>
-		<div class="w1-3 text-right"><?= number_format($ventas->free_vent, 2) ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>Exonerada:</b></div>
@@ -109,7 +104,7 @@
 		<div class="w1-3"><b>IGV:</b></div>
 		<div class="w1-3 text-right">S/</div>
 		<div class="w1-3 text-right"><?= $ventas->igv_vent ?></div>
-	</div>
+	</div> -->
 	<div class="w100">
 		<div class="w1-3"><b>Total:</b></div>
 		<div class="w1-3 text-right">S/</div>
@@ -117,7 +112,7 @@
 	</div>
 
 
-	<div class="w100">
+	<!-- <div class="w100">
 		<div class="w1-3"><b>Tipo de venta:</b></div>
 		<div class="w2-3 text-right"><?= ($ventas->tipopago == 'CREDITO') ? 'Crédito' : 'Contado' ?></div>
 	</div>
@@ -125,7 +120,7 @@
 		<div class="w1-3"><b>Monto a pagar:</b></div>
 		<div class="w1-3 text-right">S/</div>
 		<div class="w1-3 text-right"><?= $ventas->monto_vent ?></div>
-	</div>
+	</div> -->
 	<div class="w100">
 		<div class="w1-3"><b>Monto Recibido:</b></div>
 		<div class="w1-3 text-right">S/</div>
@@ -143,7 +138,7 @@
 	--------------------------------------------------------------------------------
 </div>
 
-<br>
+<!-- <br>
 
 <div class="w100 text-center" style="font-size:9px">
 	Autorizado a ser emisor electrónico
@@ -162,8 +157,8 @@
 	<barcode code="<?= $qr ?>" type="QR" class="barcode" size="0.8" error="M" disableborder="1" />
 
 
-</div>
-<br>
+</div> -->
+<!-- <br> -->
 <br>
 <?php if (!is_null($ventas->observacion_vent) and $ventas->observacion_vent != '') : ?>
 
@@ -171,7 +166,7 @@
 		<b style="font-size:13px">Observación</b><br>
 		<?= $ventas->nom_tipdocumento ?><b style="font-size:12px"></b>, <?= $ventas->observacion_vent ?>
 	</div>
-	<br>
+	<!-- <br> -->
 	<br>
 <?php endif ?>
 <?php if (!is_null($empresa->anuncio) and $empresa->anuncio != '') : ?>

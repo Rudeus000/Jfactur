@@ -107,7 +107,7 @@
 
 
 <div class="modal" id="ModalNotaDebito" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <form id="FormNotaDebito" action="<?= base_url('administrador/regdocumentoelectronico/debitoDocumento') ?>" method="post" autocomplete="off">
       <input type="hidden" name="id">

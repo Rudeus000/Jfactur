@@ -208,7 +208,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<input <?= $empresa->igv == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="igv" />
 											<label for="igv">IGV 10%</label>
 										</div>
@@ -219,6 +219,10 @@
 										<div class="col-md-2">
 											<input <?= $empresa->MovAlmacenAutomatico == 'S' ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="mov-almacen" />
 											<label for="mov-almacen">Movi. Almacén Automatico</label>
+										</div>
+										<div class="col-md-1">
+											<input <?= $empresa->emp_pos == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="emp_pos" />
+											<label for="emp_pos">POS</label>
 										</div>
 										<div class="col-md-2">
 											<input <?= $empresa->company_status == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="company-status" />

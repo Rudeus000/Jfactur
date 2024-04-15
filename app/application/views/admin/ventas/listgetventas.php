@@ -53,7 +53,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Clientes:</label>
                           <input type="text" name="cliente" class="form-control">
@@ -77,7 +77,7 @@
                         </div>
 
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Punto de venta:</label>
                           <select name="punto" class="form-control">
@@ -88,7 +88,7 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-1">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
                           <select name="estado" class="form-control">
@@ -97,8 +97,18 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
+                      <div class="col-md-1">
+                        <div class="form-group">
+                          <label class="control-label">Cod.Venta:</label>
+                          <input type="text" name="cod_venta" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="form-group">                          
+                          <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i></button>
+                        </div>
+                      </div>                     
+                      <div class="col-md-6">                      
 
                         <a id="VentasReportePdf" href="#" class="btn btn-danger" style="margin-top: 29px" target="_blank"><i class="far fa-file-pdf m-r-5"></i>Vista PDF</a>
                         <a id="VentasReporteExcel" href="#" class="btn btn-primary" style="margin-top: 29px" target="_blank"><i class="fas fa-angle-double-up m-r-5"></i> Vistas EXCEL</a>

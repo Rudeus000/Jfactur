@@ -107,8 +107,8 @@
                         <th style="text-align: center;">Proveedor</th>
                         <th style="text-align: center;">RUC/DNI</th>
                         <th style="text-align: center;">Almacen</th>
-                        <th style="text-align: center;">Subtotal</th>
-                        <th style="text-align: center;">IGV</th>
+                        <!-- <th style="text-align: center;">Subtotal</th> -->
+                        <!-- <th style="text-align: center;">IGV</th> -->
                         <th style="text-align: center;">Total</th>
                         <th style="text-align: center;">Pagos</th>
                         <th style="text-align: center;">Saldo</th>
