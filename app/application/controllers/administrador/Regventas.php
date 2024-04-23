@@ -991,11 +991,11 @@ class Regventas extends CI_Controller
 				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $diferencia . " WHERE cod_almacen = ". $almacen ." AND cod_producto = " . $idTypeAssignmentProduct);
 			} else {
 				// Si no cumple con ambas asignaciones o solo tiene la asignación 'G', realizar descuento de stock basado en el precio de venta como antes
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
 			}
 		} else {
 			// Si $idTypeAssignmentProduct es nulo, realizar descuento de stock basado en el precio de venta como antes
-			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . "  WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
 		}
 	}
 

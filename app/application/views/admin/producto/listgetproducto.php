@@ -512,7 +512,7 @@
                                                     <input type="text" name="bipay" id="" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" id="decuento_prod" style="display: none;">
+                                            <div class="col-md-4" id="decuento_prod">
                                                 <div class="form-group">
                                                     <label class="control-label">Descuento:<span class="text-danger"> *</label>
                                                     <input type="text" name="descuento" id="" class="form-control">

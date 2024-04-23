@@ -211,7 +211,7 @@ class Reportedetallado_model extends CI_Model {
 	function getVentas($data)
 	{
 		$this->db->from('tb_venta_detalle');
-		$this->db->select("fecha_vent,nom_tipopago,unidad_ventdet,nomb_almacen,nomb_puntoventa,doc_cliente,nomb_cliente,nom_tipdocucli,doc_cliente,nom_tipdocumento,serie,numero_vent,CONCAT(apell_usu, ' ', nomb_usu) as nombre_apellido,producto_ventdet,precunit_ventdet,descuento_ventdet,(precunit_ventdet - descuento_ventdet) as precunit_con_descuento,cant_ventdet,subtotal_ventdet,serie_ventdetserie,
+		$this->db->select("fecha_vent,nom_tipopago,unidad_ventdet,nomb_almacen,nomb_puntoventa,doc_cliente,nomb_cliente,nom_tipdocucli,doc_cliente,nom_tipdocumento,serie,numero_vent,CONCAT(apell_usu, ' ', nomb_usu) as nombre_apellido,producto_ventdet,precunit_ventdet,descuento_ventdet,(precunit_ventdet - descuento_ventdet) as precunit_con_descuento,cant_ventdet,subtotal_ventdet,serie_ventdetserie,free_vent,
 		CASE 
 			WHEN serie_ventdetserie IS NULL THEN cant_ventdet
 			WHEN serie_ventdetserie IS NOT NULL THEN '1'
@@ -255,9 +255,13 @@ class Reportedetallado_model extends CI_Model {
     // }
 		$queryLike = $this->db->get();
 		
-		$total = 0;
+		$totales = 0;
+		$total=0;
 		foreach ($queryLike->result() as $ql) {
-			$total += $ql->subtotal;
+			$totales += $ql->subtotal;
+			$total=$totales - $ql->free_vent;
+
+
 		}
 
 
@@ -269,8 +273,9 @@ class Reportedetallado_model extends CI_Model {
 		END as cantidad,
 		CASE 
 			WHEN serie_ventdetserie IS NULL THEN subtotal_ventdet
-			WHEN serie_ventdetserie IS NOT NULL THEN (precunit_ventdet - descuento_ventdet) 
+			WHEN serie_ventdetserie IS NOT NULL THEN ((precunit_ventdet - descuento_ventdet) -free_vent_det)
 		END as subtotal
+		
 		
 		",FALSE);
 		$this->db->join('tb_venta','tb_venta_detalle.cod_vent = tb_venta.cod_vent');

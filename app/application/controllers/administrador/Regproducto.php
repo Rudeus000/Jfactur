@@ -160,7 +160,7 @@ class Regproducto extends CI_Controller
             $data['typeAssignmentProducto'] = $this->input->post('productoConasignacion');
             $data['typeAssignmentProductoBipay'] = $this->input->post('productAssignmentDebit');
             $data['bipay'] = $this->input->post('bipay');
-            $data['descuento_prod'] = $this->input->post('descuento_prod');
+            $data['descuento_prod'] = $this->input->post('descuento');
             $data['cod_tiparticulo'] = $this->input->post('tipoarticulo');
             $data['nomb_product'] = $this->input->post('nombre');
             $data['cod_marca'] = $this->input->post('marcas');
