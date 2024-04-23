@@ -212,7 +212,7 @@ class Regventas extends CI_Controller
 		}
 
 		$resultProducto = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop,(CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -227,7 +227,7 @@ class Regventas extends CI_Controller
 
 		if (empty($resultProducto)) {
 			$resultProducto = $this->db->from('tb_producto')
-				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
+				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 				->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct')
 				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -244,7 +244,7 @@ class Regventas extends CI_Controller
 		$this->db->flush_cache();
 
 		$resultServicio = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, '1' as estado,peso_product,cod_tiparticulo,fecha_vencimiento", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop, '1' as estado,peso_product,cod_tiparticulo,fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 			->where('est_product', 1)
@@ -438,8 +438,14 @@ class Regventas extends CI_Controller
 	{
 		$apertura = $this->ventas_model->getCajaApertura();
 		if ($apertura == false) {
-			return false;
+			//$resp['success'] = false;
+			$resp['message'] = "Debes aperturar la caja, antes de continuar con la venta";
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($resp);
+			return false; // Terminar el proceso
+
 		}
+
 
 		$data['fecha_vent'] = $this->input->post('fecha');
 		$data['hora_vent'] = date('H:i:s');
@@ -471,6 +477,15 @@ class Regventas extends CI_Controller
 		$data['cod_caja'] = $apertura->cod_caja;
 		$data['cod_tipopago'] =   $this->input->post('tipoPago');
 		$data['operacion'] =  $this->input->post('operacion');
+
+		// Verificar si $printType está definido y no está vacío
+		if (!isset($printType) || empty($printType) || !isset($printType[0]->type_formt)) {
+			$resp['success'] = false;
+			$resp['message'] = "El CE selecionado no esta habilitado para este sucursal";
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($resp);
+			exit(); // Terminar el proceso
+		}
 		if (isset($_POST['tipoTarjeta'])) {
 			$data['cod_tarj'] =   $this->input->post('tipoTarjeta');
 		}
@@ -597,6 +612,21 @@ class Regventas extends CI_Controller
 				$detalle['peso_ventdet'] = $_POST['peso_prod'][$key];
 
 				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
+
+				// Recorrer los productos vendidos para actualizar la tabla tb_venta_detalle
+				foreach ($_POST['id_prod'] as $key => $value) {
+					// Obtener el producto vendido
+					$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $value]);
+					// Verificar si el producto tiene la asignación typeAssignmentProductoBipay=D					
+					if ($producto->typeAssignmentProductoBipay == 'D') {
+						// Calcular la diferencia entre el monto de venta y bipay
+						$diferencia = $_POST['prec_prod'][$key] - $producto->bipay;
+						// Actualizar la tabla tb_venta_detalle con la diferencia y la descripción
+
+						$detalle['return_bipay'] = $diferencia;
+						$detalle['descripcion_retorno_bipay'] = 'Retorno del proceso bipay';
+					}
+				}
 				$insertDetalle = $this->modelgeneral->insertRegist('tb_venta_detalle', $detalle);
 				if (!empty($producto)) {
 
@@ -834,6 +864,8 @@ class Regventas extends CI_Controller
 				} else {
 					$resp['xml']['archivo'] = $this->generarNoXml($insert);
 				}
+			} else {
+				$resp['success'] = false;
 			}
 		} else {
 			$resp['success'] = false;
@@ -940,21 +972,33 @@ class Regventas extends CI_Controller
 		// Obtén información del producto
 		$productoInfo = $this->db->query("SELECT * FROM tb_producto WHERE cod_producto = " . $data['cod_producto'])->row_array();
 		$typeAssignment = $productoInfo['typeAssignmentProducto'];
+		$typeAssignmentBipay = $productoInfo['typeAssignmentProductoBipay'];
+
 		// Verificar si $idTypeAssignmentProduct no es nulo
 		if ($idTypeAssignmentProduct !== "null") {
+			// Verificar si el producto tiene ambas asignaciones 'D' y 'G'
+			if ($typeAssignmentBipay === 'D' && $typeAssignment === 'G') {
+				// Obtener el valor de 'bipay'
+				$bipay = $productoInfo['bipay'];
 
-			// Restar de almacen
-			if ($typeAssignment == 'G') {
-				// Si el tipo de asignación es "G", realizar descuento de stock basado en el costo
+				// Calcular la diferencia entre el monto de venta y 'bipay'
+				$diferencia = $data['precunit_ventdet'] - $bipay;
+
+				// Restar la cantidad vendida del stock del almacén actual
 				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+
+				// Sumar la diferencia al stock del almacén con cod_almacen=8
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $diferencia . " WHERE cod_almacen = ". $almacen ." AND cod_producto = " . $idTypeAssignmentProduct);
 			} else {
-				// De lo contrario, realizar descuento de stock como antes
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+				// Si no cumple con ambas asignaciones o solo tiene la asignación 'G', realizar descuento de stock basado en el precio de venta como antes
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
 			}
 		} else {
-			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+			// Si $idTypeAssignmentProduct es nulo, realizar descuento de stock basado en el precio de venta como antes
+			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
 		}
 	}
+
 
 
 	public function deudasCliente()
@@ -989,53 +1033,53 @@ class Regventas extends CI_Controller
 	{
 		$data['estado_vent'] = 'A'; // ANULAR	
 		$venta_id = $this->input->get('id');
-	
+
 		// Obtener información de la venta y sus detalles
 		$venta = $this->modelgeneral->getTableWhereRow('tb_venta', ['cod_vent' => $venta_id]);
 		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', ['cod_vent' => $venta_id]);
-	
+
 		foreach ($detalle as $d) {
 			$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
 			$producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
-	
+
 			if ($producto->cod_tiparticulo == 1) { // Si es del tipo PRODUCTO
 				$whereStock['cod_producto'] = $d->cod_father_product;
 				$whereStock['cod_almacen'] = $venta->cod_almacen;
-	
+
 				$productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
-	
+
 				if ($producto_detalle->typeAssignmentProducto == 'G') {
 					// Si el producto tiene asignación 'G', devolver el stock basado en el costo
 					$nuevoStock = $productoStock->stock + $d->precunit_ventdet;
 				} else {
 					$nuevoStock = $productoStock->stock + $d->cant_ventdet;
 				}
-	
+
 				// Actualizar el stock del producto
 				$edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
-	
+
 				// REGRESAR DISPONIBILIDAD A SERIE
 				$this->db->where('cod_vent', $venta_id)
 					->set('serie_estado', 'D')
 					->set('cod_vent', null)
 					->update('tb_producto_serie');
-	
+
 				// Cambiar estado venta en la tabla cobros
 				$this->db->where('cod_vent', $venta_id)
 					->set('estado_vent', 'A')
 					->update('tb_cobro');
 			}
 		}
-	
+
 		// Cambiar estado de la venta
 		$edit = $this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $venta_id], $data);
-	
+
 		// Preparar respuesta JSON
 		$resp = ['where' => $whereStock];
 		$resp['success'] = $edit ? true : false;
 		echo json_encode($resp);
 	}
-	
+
 
 
 	function agregarCliente()

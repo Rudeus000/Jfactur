@@ -164,16 +164,16 @@ class Ventas_model extends CI_Model
   }
 
   function getTiposVentas()
-  {
+{
     return $this->db->from('tb_talonario')
-      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario,doccliex_talonario,docclipass_talonario')
+      ->select('cod_talonario, siglas_talonario, nom_tipdocumento, serie, docclidni_talonario, doccliruc_talonario, doccliex_talonario, docclipass_talonario')
       ->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
-      ->join('tb_usuario_documento', 'tb_tipodocumento.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND cod_usu = ' . $this->session->userdata('cod_usu'))
-      ->where('cod_puntoventa', $this->session->userdata('puntoventa'))
-      ->where_in('siglas_talonario', ['FC', 'TK'])
-      ->where('est_talonario', 1)
+      ->join('tb_usuario_documento', 'tb_talonario.serie = tb_usuario_documento.serie_usudoc AND tb_talonario.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND tb_usuario_documento.cod_usu = ' . $this->session->userdata('cod_usu'))
+      ->where('tb_talonario.cod_puntoventa', $this->session->userdata('puntoventa'))
+      ->where_in('tb_talonario.siglas_talonario', ['FC', 'TK'])
+      ->where('tb_talonario.est_talonario', 1)
       ->get()->result();
-  }
+}
 
   function getAlmacenesDisponibles()
   {

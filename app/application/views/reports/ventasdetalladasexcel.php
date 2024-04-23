@@ -26,6 +26,8 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(16)->setAutoSize(true
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(17)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(18)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(19)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(20)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(21)->setAutoSize(true);
 $styleNormal = [
 	'font' => [
 			'bold' => false,
@@ -135,8 +137,17 @@ $objPHPExcel->getActiveSheet()
 ->setCellValueByColumnAndRow(19,$row,'OBSERVACION')
 ->getStyleByColumnAndRow(19,$row)
 ->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(20,$row,'MONTO_RETORNO')
+->getStyleByColumnAndRow(20,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(21,$row,'MOTIVO_RETORNO')
+->getStyleByColumnAndRow(21,$row)
+->applyFromArray($styleBold);
 
 $total = 0;
+$retorno=0;
 $row++;
 foreach ($datos as $d) {
 	$objPHPExcel->getActiveSheet()
@@ -216,8 +227,17 @@ foreach ($datos as $d) {
 	->setCellValueByColumnAndRow(19,$row,$d->observacion_vent)
 	->getStyleByColumnAndRow(19,$row)
 	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(20,$row,$d->return_bipay)
+	->getStyleByColumnAndRow(20,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(21,$row,$d->descripcion_retorno_bipay)
+	->getStyleByColumnAndRow(21,$row)
+	->applyFromArray($styleNormal);
 	
 	$total += $d->subtotal;
+	$retorno+=$d->return_bipay;
 	$row++;
 }
 
@@ -230,8 +250,19 @@ $objPHPExcel->getActiveSheet()
 	->getStyleByColumnAndRow(17,$row)
 	->applyFromArray($styleNormal);
 
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(19,$row,'TOTAL_RETORNO')
+	->getStyleByColumnAndRow(19,$row)
+	->applyFromArray($styleBold);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(20,$row,$retorno)
+	->getStyleByColumnAndRow(20,$row)
+	->applyFromArray($styleNormal);
+
 
 if($this->session->userdata('movil_expert')=='0'){
+	$objPHPExcel->getActiveSheet()->removeColumnByIndex(21);
+	$objPHPExcel->getActiveSheet()->removeColumnByIndex(20);
 	$objPHPExcel->getActiveSheet()->removeColumnByIndex(10);
 }
 

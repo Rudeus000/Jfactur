@@ -270,6 +270,10 @@
                                                         <input class="form-check-input" type="checkbox" name="productoConasignacion" id="productAssignmentGson" value="G">
                                                         <label class="form-check-label" for="productAssignmentGson">G</label>
                                                     </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" name="productAssignmentDebit" id="productAssignmentD" value="D">
+                                                        <label class="form-check-label" for="productAssignmentD">D</label>
+                                                    </div>
 
                                                     <input type="text" name="nombre" class="form-control">
                                                 </div>
@@ -502,6 +506,18 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4" id="bipay" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="control-label">Consumo bipay:<span class="text-danger"> *</label>
+                                                    <input type="text" name="bipay" id="" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" id="decuento_prod" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="control-label">Descuento:<span class="text-danger"> *</label>
+                                                    <input type="text" name="descuento" id="" class="form-control">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
@@ -647,8 +663,8 @@
                                                     <label class="control-label">Mascara: <span class="text-danger"> *</span></label>
                                                     <input type="text" name="Mascara" class="form-control" maxlength="5">
                                                 </div>
-                                            </div>                                         
-                                            
+                                            </div>
+
                                         </div>
                                     </form>
                                     <legend class="scheduler-border"></legend>
@@ -711,6 +727,10 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" name="editproductAssignmentGson" id="editproductAssignmentGson" value="G">
                                     <label class="form-check-label" for="editproductAssignmentGson">G</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="editproductAssignmentDebit" id="editproductAssignmentDebit" value="D">
+                                    <label class="form-check-label" for="editproductAssignmentDebit">D</label>
                                 </div>
 
                                 <input type="text" name="nombre" class="form-control">
@@ -926,7 +946,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Fecha:</label>
                                 <input type="input" name="fecharegistro" class="form-control datepicker" readonly>
@@ -934,7 +954,7 @@
                         </div>
 
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Estado</label>
                                 <select class="form-control select2" name="estado">
@@ -942,6 +962,18 @@
                                     <option value="2">Desactivado</option>
 
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2" id="bipayedit">
+                            <div class=" form-group">
+                                <label class="control-label">Consumo bipay:<span class="text-danger"> *</label>
+                                <input type="text" name="bipay" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Descuento:<span class="text-danger"> *</label>
+                                <input type="text" name="descuento_prod" id="" class="form-control">
                             </div>
                         </div>
 
@@ -1118,6 +1150,16 @@
             $("#productAssignmentSon").click(function() {
                 ($('#productAssignmentSon').is(':checked')) ? $("#selectAssignmentDad").prop('disabled', false): $("#selectAssignmentDad").prop('disabled', 'disabled');
             });
+
+            $("#productAssignmentD").click(function() {
+
+                if ($(this).is(":checked")) {
+                    $('#bipay').show();
+                } else {
+                    $('#bipay').hide();
+                }
+            });
+
 
 
             $("#FormEditarProducto #editproductAssignmentSon").click(function() {

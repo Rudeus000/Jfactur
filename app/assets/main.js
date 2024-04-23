@@ -4497,11 +4497,21 @@ $(function () {
 				default:
 					$("#FormEditarProducto input[name='editproductAssignmentGson']").prop('checked', false);
 			}
+			switch (json.typeAssignmentProductoBipay) {
+				case 'D':
+					$("#FormEditarProducto input[name='editproductAssignmentDebit']").prop('checked', true);
+					$('#bipayedit').show();
+					break;
+				default:
+					$("#FormEditarProducto input[name='editproductAssignmentDebit']").prop('checked', false);
+					$('#bipayedit').hide();
+			}
 			switch (json.typeAssignmentProduct) {
 				case 'P':
 					$("#FormEditarProducto input[name='editproductAssignmentDad']").prop('checked', true);
 					$("#FormEditarProducto input[name='editproductAssignmentSon']").prop('checked', false);
 					$("#FormEditarProducto input[name='editproductAssignmentGson']").prop('checked', false);
+					$("#FormEditarProducto input[name='editproductAssignmentDebit']").prop('checked', false);
 					break;
 				case 'H':
 					$("#FormEditarProducto input[name='editproductAssignmentSon']").prop('checked', true);
@@ -4521,6 +4531,8 @@ $(function () {
 			$('#FormEditarProducto select[name=presentacion]').val(json.cod_present).trigger('change.select2');
 			$('#FormEditarProducto input[name=codigobarra]').val(json.barra_product);
 			$('#FormEditarProducto input[name=preciocosto]').val(json.prec_costo);
+			$('#FormEditarProducto input[name=bipay]').val(json.bipay);
+			$('#FormEditarProducto input[name=descuento_prod]').val(json.descuento_prod);
 			$('#FormEditarProducto input[name=precioventa]').val(json.prec_venta);
 			$('#FormEditarProducto input[name=precioventa_mayor]').val(json.prec_mayor_venta);
 			$('#FormEditarProducto input[name=precioventa_especial]').val(json.prec_especial_venta);
@@ -4534,7 +4546,13 @@ $(function () {
 			$('#FormEditarProducto select[name=estado]').val(json.est_product).trigger('change.select2');
 		});
 	});
-
+	$('#FormEditarProducto input[name="editproductAssignmentDebit"]').change(function() {
+		if ($(this).is(":checked")) {
+			$('#bipayedit').show();
+		} else {
+			$('#bipayedit').hide();
+		}
+	});
 	// $('#cambiarPassword').click(function(event) {
 
 	// 	if ($(this).is(":checked")) {
@@ -7930,6 +7948,7 @@ $(function () {
 		$('input[name=pesoProducto]').val(selectedItemValue.peso_product);
 		$('input[name=unidadProducto]').val(selectedItemValue.unidad);
 		$('input[name=precioProducto]').val(parseFloat(selectedItemValue.venta).toFixed(4));
+		$('input[name=descuentoProducto]').val(parseFloat(selectedItemValue.descuentop).toFixed(4));
 		if (selectedItemValue.estado == '0') {
 			$('button[type=submit],input[name=cantidadProducto],input[name=descuentoProducto]').prop('disabled', true);
 			return;
@@ -8122,6 +8141,7 @@ $(function () {
 				return;
 			}
 
+
 			var cotizacion = $('#FormVentaAgregar').serializeObject();
 			var productos = $('#FormVentaAgregarProducto').serializeObject();
 			jQuery.extend(cotizacion, productos);
@@ -8149,34 +8169,57 @@ $(function () {
 						$('#VentaImprimirA4').attr('href', path + 'administrador/regventas/imprimirVenta/' + resp.xml.archivo);
 						$('#VentaImprimirTicket').attr('href', path + 'administrador/regventas/imprimirticketVenta/' + resp.xml.archivo);
 						// $('#ModalAccionesDespuesGuardar').modal();
-						if (resp.printType == 'T') {
-							document.querySelector('#VentaImprimirTicket').click();
-						} else {
-							document.querySelector('#VentaImprimirA4').click();
-						}
-						location.reload();
+
+						Swal.fire({
+							title: "Éxito",
+							text: "La venta se ha registrado correctamente.",
+							type: "success"
+						}).then(function () {
+							// Puedes hacer alguna acción adicional después de que el usuario cierre el cuadro de diálogo Swal
+							// Por ejemplo, redirigir a otra página
+							if (resp.printType == 'T') {
+								document.querySelector('#VentaImprimirTicket').click();
+							} else {
+								document.querySelector('#VentaImprimirA4').click();
+							}
+							location.reload();
+						});
+
+
+					} else {
+						// Manejar errores si la venta no se registró correctamente
+						Swal.fire({
+							title: "Error",
+							text: resp.message,
+							type: "error"
+						}).then(function () {
+							// Puedes hacer alguna acción adicional después de que el usuario cierre el cuadro de diálogo Swal
+							// Por ejemplo, redirigir a otra página
+							location.reload();
+						});
+						;
 					}
 				});
 
 		}
 	});
 
-// Esperamos a que el documento esté completamente cargado
-$(document).ready(function () {
-    // Agregamos un evento de escucha para el evento de entrada (input) a los inputs de cantidad dentro de la tabla
-    $('#TableVentaProductos').on('input', '.cant', function () {
-        // Obtenemos el valor del input de cantidad
-        var cantidad = parseInt($(this).val());
-        // Obtenemos el valor máximo permitido del atributo "max"
-        var maxStock = parseInt($(this).attr('max'));
+	// Esperamos a que el documento esté completamente cargado
+	$(document).ready(function () {
+		// Agregamos un evento de escucha para el evento de entrada (input) a los inputs de cantidad dentro de la tabla
+		$('#TableVentaProductos').on('input', '.cant', function () {
+			// Obtenemos el valor del input de cantidad
+			var cantidad = parseInt($(this).val());
+			// Obtenemos el valor máximo permitido del atributo "max"
+			var maxStock = parseInt($(this).attr('max'));
 
-        // Verificamos si la cantidad ingresada es mayor que el stock disponible
-        if (cantidad > maxStock) {
-            // Si es mayor, ajustamos el valor del input al máximo permitido (stock disponible)
-            $(this).val(maxStock);
-        }
-    });
-});
+			// Verificamos si la cantidad ingresada es mayor que el stock disponible
+			if (cantidad > maxStock) {
+				// Si es mayor, ajustamos el valor del input al máximo permitido (stock disponible)
+				$(this).val(maxStock);
+			}
+		});
+	});
 
 
 	var id_array = [];
