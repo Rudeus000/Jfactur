@@ -7870,6 +7870,7 @@ $(function () {
 			$('#precio_u').prop('disabled', true).hide();
 			$('#monto_s').prop('disabled', false).show();
 			$('#isdn_product').prop('disabled', true).hide();
+			$('#tipo_vent_ser').prop('disabled', false).show();
 			$('#unidad_medida').show();
 			$('select[name=unidad_medida]').val('ZZ');
 		} else {
@@ -7882,6 +7883,7 @@ $(function () {
 			$('#monto_s').prop('disabled', false).hide();
 			$('#precio_u').prop('disabled', false).show();
 			$('#isdn_product').prop('disabled', false).show();
+			$('#tipo_vent_ser').prop('disabled', true).hide();
 			$('#unidad_medida').hide();
 
 		}

@@ -346,15 +346,13 @@
                     </div>
                     <div class="row">
 
-                      <div class="col-md-2">
+                      <div class="col-md-2" id="tipo_vent_ser"  style="display: none;">
                         <div class="form-group">
                           <label class="control-label">Tipo</label>
-                          <select name="tipo" class="form-control">
-                            <option value="V">Venta</option>
-                            <option value="B">Bonificacion</option>
-                            <option value="O">Obsequio</option>
+                          <select name="tipo" class="form-control select2">
+                            <option value="V">Gravada</option>                            
                             <option value="E">Exonerada</option>
-                            <option value="1001">Operacion sujeta a detraccion</option>
+                           
                           </select>
                         </div>
                       </div>
