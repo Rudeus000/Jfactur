@@ -17,7 +17,7 @@ public function validarDocumento()
     {
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE0Njg2Njc1fQ.-dY1jGmysRafLSg-mYv68HFBxP-aP2t_vjpz8UTJR2U';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE2Njc4ODc1fQ.3EraTOofjlQ82ohhkrUtZqf17M4b1wolKRykDQoxUzc';
 
 
 if ($tipo_doc == "2") {
