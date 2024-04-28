@@ -2,7 +2,7 @@
 // Variables
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiV2FzaGluZ3RvbiIsImV4cCI6MTY5NTk0OTcxNH0.Sslt6SfmBKMkN5GE_xs83uLaMzIQZbVhiR5pU7n0ZfA';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE2NzYwNjkwfQ.rm5R4EsFJ1fUnEPOgbMDDQCDMXBXTGV6UOgWsKG9WI4';
 
 
 if ($tipo_doc == "2") {
@@ -11,7 +11,8 @@ if ($tipo_doc == "2") {
         $documento = trim($documento);    
     }
 // API URL
-$url = "https://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
+$url = "http://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
+
 
 // Initialize cURL session
 $ch = curl_init();
@@ -72,7 +73,7 @@ if ($status_code === 200) {
     echo json_encode($datos);
 }
 }else {
-	$data = file_get_contents("https://api.apis.net.pe/v1/ruc?numero=" . $documento);
+	$data = file_get_contents("http://api.apis.net.pe/v1/ruc?numero=" . $documento);
 	$info = json_decode($data, true);
 
 	$datos = array(

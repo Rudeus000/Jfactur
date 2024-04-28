@@ -95,4 +95,48 @@ function edad($fecha_nacimiento) {
 		return $res;
 	}
 
+	function fechaFormateada() {
+		// Días de la semana en español
+    $diasSemana = array(
+				'Sunday' => 'Domingo',
+				'Monday' => 'Lunes',
+				'Tuesday' => 'Martes',
+				'Wednesday' => 'Miércoles',
+				'Thursday' => 'Jueves',
+				'Friday' => 'Viernes',
+				'Saturday' => 'Sábado'
+		);
+
+		// Meses en español
+		$meses = array(
+				'January' => 'Enero',
+				'February' => 'Febrero',
+				'March' => 'Marzo',
+				'April' => 'Abril',
+				'May' => 'Mayo',
+				'June' => 'Junio',
+				'July' => 'Julio',
+				'August' => 'Agosto',
+				'September' => 'Septiembre',
+				'October' => 'Octubre',
+				'November' => 'Noviembre',
+				'December' => 'Diciembre'
+		);
+
+		$fecha = date('Y-m-d H:i:s');
+		// Obtiene los componentes de la fecha y hora
+		$timestamp = strtotime($fecha);
+		$diaSemana = $diasSemana[date('l', $timestamp)];
+		$dia = date('d', $timestamp);
+		$mes = $meses[date('F', $timestamp)];
+		$anio = date('Y', $timestamp);
+		$hora = date('H:i', $timestamp);
+
+		// Formatea la fecha y hora en español
+		$fechaFormateada = "$diaSemana, $dia de $mes de $anio, $hora";
+
+		return $fechaFormateada;
+	}
+
+
 ?>

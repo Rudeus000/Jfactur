@@ -1809,4 +1809,136 @@ class Regventas extends CI_Controller
 		}
 	}
 
+	public function agregarpos()
+	{
+		$data['cod_medio_pay'] = $this->modelgeneral->getTable('sunat_mediosdepago');
+		$data['cod_bien'] = $this->modelgeneral->getTable('sunat_codigodetraccion');
+		$data['banco'] = $this->modelgeneral->getTableWhere('tb_banco', ['id_entidad_financiera' => 18]);
+		$data['busqueda_general'] = urlencode(json_encode($_GET));
+		$data['tipos_pagos'] = $this->modelgeneral->getTableWhere('tb_tipo_pago', ['estado_tipopago' => 1]);
+		$data['tipos_tarjetas'] = $this->modelgeneral->getTableWhere('tb_tarjeta', ['estado_tarj' => 1]);
+		$data['punto'] = $this->modelgeneral->getTableWhereRow('tb_puntoventa', ['cod_puntoventa' => $this->session->userdata('puntoventa')]);
+		$data['almacenes'] = $this->ventas_model->getAlmacenesDisponibles();
+		$data['cajas'] = $this->modelgeneral->getTableWhere('tb_caja', ['est_caja' => 1]);
+		$data['tipos'] = $this->ventas_model->getTiposVentas();
+		$data['cliente'] = $this->ventas_model->getClientePorDefecto();
+		$data['dolar'] = $this->modelgeneral->getTableWhereRow('parametros', ['nom_paramt' => 'DOLAR']);
+		$data['apertura'] = $this->ventas_model->getCajaApertura();
+		$data['doc_clientes'] = $this->ventas_model->getDocumentosCliente();
+		$data['unidades'] = $this->modelgeneral->getTableWhere('tb_unidades', ['est_unidad' => 1]);
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('admin/ventas/agregarpos', $data);
+		$this->load->view('layouts/footer');
+	}
+
+	public function getProductosPos()
+	{
+		$almacen = $this->input->get('almacen');
+		$productos = $this->db->from('tb_producto')
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo, prec_venta as venta, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo, tb_producto.cod_categoria, barra_product, tb_unidades.abreviatura_unid, tb_unidades.nomb_unid, peso_product", FALSE)
+			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
+			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
+			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+			->where('est_product', 1)
+			->where('cod_tiparticulo', 1)
+			->where('tb_producto_stock.cod_almacen',$almacen)
+			->get()->result();
+
+			$categorias = $this->db->from('tb_categoria')
+			->select('tb_categoria.*')
+			->join('tb_producto','tb_categoria.cod_categoria = tb_producto.cod_categoria')
+			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
+			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+			->where('est_product', 1)
+			->where('cod_tiparticulo', 1)
+			->where('tb_producto_stock.cod_almacen',$almacen)
+			->where('est_categoria',1)
+			->group_by('cod_categoria')
+			->get()->result();
+
+
+		foreach ($productos as $key => $p) {
+			if($p->stock < 1){
+				unset($productos[$key]);
+			}
+		}
+			
+		$resultado = [];
+		$resultado['productos'] = $productos;
+		$resultado['categorias'] = $categorias;
+		header('content-type: application/json; charset=utf-8');
+		echo json_encode($resultado);
+	}
+
+	public function getClientesPos()
+	{
+		$q = $this->input->get('q');
+		$dni = $this->input->get('dni');
+		$ruc = $this->input->get('ruc');
+
+		$array = [];
+		if ($dni == '1') {
+			$array[] = 1;
+		}
+		if ($ruc == '1') {
+			$array[] = 6;
+		}
+		
+		$this->db->from('tb_cliente');
+		$this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as documento, direc_cliente as direccion, precio_cliente');
+		$this->db->join('tb_tipodocumentocliente', 'tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli');
+
+		$this->db->where('(nomb_cliente like "%' . $q . '%" OR doc_cliente like "%' . $q . '%")', null);
+		$this->db->where_in('codsunat_tipdocucli', $array);
+		$result = $this->db->get()->result();
+
+		echo json_encode($result);
+	}
+
+	public function obtenerCliente()
+	{
+		$tipo_documento = $this->input->get('tipo_documento')=='RUC'?'4':'2';
+		$numero = $this->input->get('numero');
+
+		$query = $this->db->from('tb_cliente')
+		->select('id_cliente, nomb_cliente, direc_cliente')
+		->where('cod_tipdocucli',$tipo_documento)
+		->where('doc_cliente',$numero)
+		->get()->row();
+
+		$resp = [];
+		if (!is_null($query)) {
+			$resp['success'] = true;
+			$resp['response'] = $query;
+		}else{
+			$resp['success'] = false;
+		}
+		echo json_encode($resp);
+		
+	}
+
+	public function crearClientePos()
+	{
+		$data['cod_tipdocucli'] = $this->input->post('tipo_doc');
+		$data['doc_cliente	'] = $this->input->post('numero');
+		$data['precio_cliente'] = 'Normal';
+		$data['nomb_cliente	'] = $this->input->post('nombre');
+		$data['direc_cliente'] = $this->input->post('direccion');
+		$data['fecha_registro'] = date('Y-m-d');
+		$data['estado_cliente'] = 1;
+
+		$id = $this->modelgeneral->insertRegist('tb_cliente',$data);
+
+		$resp = [];
+		if(!is_null($id)){
+			$resp['success'] = true;
+			$resp['id_cliente'] = $id;
+		}else{
+			$resp['success'] = false;
+		}
+
+		echo json_encode($resp);
+	}
+
 }
