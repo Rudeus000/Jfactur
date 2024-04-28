@@ -14403,6 +14403,10 @@ if($('#container-pos').length){
 	$('#FormPos input[name=rucdni]').keypress(function(event){
 		if(event.which === 13) {
 				event.preventDefault();
+				if($('#FormPos select[name=tipo_documento]').val()==''){
+					alert('No ha seleccionado el documento (Boleta, Factura)');
+					return;
+				}
 				let tipo_documento = $('#FormPos select[name=tipo_documento]').val();
 				let numero = $(this).val();
 				if(tipo_documento=='RUC' && numero.length != 11){
@@ -14515,7 +14519,7 @@ if($('#container-pos').length){
 						} else {
 							document.querySelector('#VentaImprimirA4').click();
 						}
-						//location.reload();
+						location.reload();
 					}
 				}
 			});

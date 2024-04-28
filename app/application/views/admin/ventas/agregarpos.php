@@ -346,12 +346,12 @@
       <form id="FormMetodoPago" autocomplete="off">
           
         <div class="modal-body">
-          <div class="row">
+          <div class="row mb-2">
             <div class="col-sm-6">
-              Total a pedido
+              <h5>Total a pedido</h5>
             </div>
-            <div class="col-sm-6" id="totalPedidoPagar">
-
+            <div class="col-sm-6" >
+              <h5 id="totalPedidoPagar"></h5>
             </div>
           </div>
           <div class="row">
