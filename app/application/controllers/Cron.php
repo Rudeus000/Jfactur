@@ -70,6 +70,8 @@ class Cron extends CI_Controller
 
 	public function enviarFacturas($id)
 	{
+		$max_retries = 3;
+		$retry = 0;
 
 		$res = $this->ventas_model->getVenta($id);
 
@@ -106,46 +108,77 @@ class Cron extends CI_Controller
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		do {
 		$respuesta  = curl_exec($ch);
 		curl_close($ch);
 		$response = json_decode($respuesta, true);
 
+		// $respuesta  = curl_exec($ch);
+		// curl_close($ch);
+		// $response = json_decode($respuesta, true);
+	
 		$query = $this->db->select('cod_vent,rutaxml_vent,archivoxml_vent')
 			->where('cod_vent', $id)
 			->from('tb_venta')
 			->get();
-
+	
 		$queryFacturacion = $this->db->from('tb_facturacion')
 			->where('cod_vent', $id)
 			->get();
-		if ($response['respuesta'] == 'ok' and $response['hash_cdr'] != '') {
-			$hash = $response['hash_cdr'];
-			$estado = 1;
-		} else {
-			$hash = '';
-			$estado = 2;
-		}
-
-		if ($queryFacturacion->num_rows() == 0) {
+	
+			$msj_sunat = msj_sunat($response['msj_sunat']);
+	
+		if ($response['respuesta'] == 'ok' && $response['hash_cdr'] != '' && $response['cod_sunat'] == '0') {
 			$this->db->set('cod_fecha', date('Y-m-d'))
-				->set('cod_vent', $id)
+				->set('msj_sunat_fac', $msj_sunat)
+				->set('cod_sunat_fac', $response['cod_sunat'])
 				->set('cod_usu', $this->session->userdata('cod_usu'))
-				->set('hashcdr_fac', $hash)
-				->set('estado_fac', $estado)
-				->insert('tb_facturacion');
+				->set('hashcdr_fac', $response['hash_cdr'])
+				->set('estado_fac', "1");
+	
+			if ($queryFacturacion->num_rows() == 0) {
+				$this->db->set('cod_vent', $id)
+					->insert('tb_facturacion');
+			} else {
+				$this->db->where('cod_vent', $id)
+					->update('tb_facturacion');
+			}
+			break; // Break the loop if successful
 		} else {
-			$this->db->set('cod_fecha', date('Y-m-d'))
-				->set('cod_usu', $this->session->userdata('cod_usu'))
-				->set('hashcdr_fac', $hash)
-				->set('estado_fac', $estado)
-				->where('cod_vent', $id)
-				->update('tb_facturacion');
+			$retry++;
+			// Handle other cases if needed
+			// Wait for a short duration before retrying
+            sleep(3);
 		}
+	} while ($retry < $max_retries);
 
+	if ($retry === $max_retries) {
+        $this->db->set('cod_fecha', date('Y-m-d'))
+				->set('msj_sunat_fac', $msj_sunat)
+				->set('cod_sunat_fac', $response['cod_sunat'])
+				->set('cod_usu', $this->session->userdata('cod_usu'))
+				->set('hashcdr_fac', $response['hash_cdr'])
+				->set('estado_fac', "2");
+
+				if ($queryFacturacion->num_rows() == 0) {
+					$this->db->set('cod_vent', $id)
+						->insert('tb_facturacion');
+				} else {
+					$this->db->where('cod_vent', $id)
+						->update('tb_facturacion');
+				}
+				//break; // Break the loop if successful
+    }
+
+   
+	
 		$response['query'] = $query->row();
-		$response['estado'] = $estado;
+		//$response['estado'] = $estado;
 		//echo json_encode($response);
 	}
+	
+	//}
 
 	public function resumenBoleta()
 	{

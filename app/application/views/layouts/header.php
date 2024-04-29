@@ -54,13 +54,15 @@
 
     <!--  <link href="https://file.myfontastic.com/TvcWTqoUED5DW24kLXpmZ9/icons.css" rel="stylesheet"> -->
     <script src="<?php echo base_url_app(); ?>assets/js/helpers.js"></script>
-
+    
+    <!-- <script src="ruta/a/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
 
 </head>
 
 <body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>">
-   
-<!-- Begin page -->
+
+    <!-- Begin page -->
     <div id="wrapper">
 
         <!-- Top Bar Start -->
@@ -80,7 +82,7 @@
 
             <nav class="navbar-custom">
 
-                <ul class="list-inline float-right mb-0">                                   
+                <ul class="list-inline float-right mb-0">
                     <li class="list-inline-item dropdown notification-list">
                         <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Buscar">
                             <i class="fa fa-search noti-icon text-purple waves-light waves-effect" id="search-phone"></i>
@@ -177,7 +179,7 @@
 
         </div>
         <!-- Top Bar End -->
-    <!-- </div> -->
+        <!-- </div> -->
 
 </body>
 
@@ -190,7 +192,7 @@
             <!-- <div class="modal-header"> -->
             <div class="modal-header bg-success">
 
-                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i><a> </h3>
+                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i></h3>
                 <!-- <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5> -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

@@ -61,13 +61,19 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Proveedor</label>
                           <input type="text" name="proveedor" class="form-control">
                         </div>
                       </div>
                       <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Cod. compra</label>
+                          <input type="text" name="cod_compra" class="form-control">
+                        </div>
+                      </div> 
+                      <div class="col-md-1">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
                           <select name="estado" class="form-control">
@@ -101,8 +107,8 @@
                         <th style="text-align: center;">Proveedor</th>
                         <th style="text-align: center;">RUC/DNI</th>
                         <th style="text-align: center;">Almacen</th>
-                        <th style="text-align: center;">Subtotal</th>
-                        <th style="text-align: center;">IGV</th>
+                        <!-- <th style="text-align: center;">Subtotal</th> -->
+                        <!-- <th style="text-align: center;">IGV</th> -->
                         <th style="text-align: center;">Total</th>
                         <th style="text-align: center;">Pagos</th>
                         <th style="text-align: center;">Saldo</th>

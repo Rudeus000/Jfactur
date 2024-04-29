@@ -46,7 +46,9 @@ class Ventas_model extends CI_Model
     if ($data['estado'] != '') {
       $this->db->where('tb_venta.estado_vent', $data['estado']);
     }
-
+    if ($data['cod_venta']!='') {
+      $this->db->where('tb_venta.cod_vent',$data['cod_venta']);
+    }
     if ($data['length'] != -1) {
       $this->db->limit($data['length'], $data['start']);
     }
@@ -60,7 +62,7 @@ class Ventas_model extends CI_Model
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryLike->num_rows();
     $result['iTotalDisplayRecords'] = $queryLike->num_rows();
-$cobros="";
+    $cobros = "";
     $row = [];
     foreach ($query->result() as $q) {
       $cobros = $this->getCobros($q->cod_vent);
@@ -82,6 +84,24 @@ $cobros="";
         $archivoxml = $q->noxml_vent;
       }
 
+      $cod_usu = $this->session->userdata('cod_usu');
+      $query = $this->db->select('cod_perfil')
+        ->from('tb_usuario')
+        ->where('cod_usu', $cod_usu)
+        ->get();
+
+      // Verificar si se encontraron resultados
+      if ($query->num_rows() > 0) {
+        $usuario = $query->row();
+        $perfil_usuario = $usuario->cod_perfil;
+      }
+      // $cod_perfil = $q->cod_perfil;
+      $buttonAnular = '';
+
+      // Verifica si cod_perfil es igual a 1 para mostrar el botón "Anular Venta"
+      if ($perfil_usuario == 1) {
+        $buttonAnular = '<button data-id="' . $q->cod_vent . '" class="anular btn btn-dafault" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash text-danger"></i></button>&nbsp';
+      }
       $buttons = '
       <div class="btn-group">
 
@@ -92,7 +112,7 @@ $cobros="";
 
       <a href="' . base_url('administrador/regventas/editar/' . $q->cod_vent) . '" class="btn btn-xs " data-toggle="tooltip" title="Ver Venta"><i class="fa fa-eye text-info"></i></a>&nbsp
 
-      <button data-id="' . $q->cod_vent . '" class="anular btn btn-dafault" data-toggle="tooltip" title="Anular Venta"><i class="fa fa-trash text-danger"></i></button>&nbsp
+     ' . $buttonAnular . '
       
       ' . $xml . '
       
@@ -144,16 +164,16 @@ $cobros="";
   }
 
   function getTiposVentas()
-  {
+{
     return $this->db->from('tb_talonario')
-      ->select('cod_talonario,siglas_talonario,nom_tipdocumento,serie,docclidni_talonario,doccliruc_talonario,doccliex_talonario,docclipass_talonario')
+      ->select('cod_talonario, siglas_talonario, nom_tipdocumento, serie, docclidni_talonario, doccliruc_talonario, doccliex_talonario, docclipass_talonario')
       ->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
-      ->join('tb_usuario_documento', 'tb_tipodocumento.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND cod_usu = ' . $this->session->userdata('cod_usu'))
-      ->where('cod_puntoventa', $this->session->userdata('puntoventa'))
-      ->where_in('siglas_talonario', ['FC', 'TK'])
-      ->where('est_talonario', 1)
+      ->join('tb_usuario_documento', 'tb_talonario.serie = tb_usuario_documento.serie_usudoc AND tb_talonario.cod_tipdocu = tb_usuario_documento.cod_tipdocu AND tb_usuario_documento.cod_usu = ' . $this->session->userdata('cod_usu'))
+      ->where('tb_talonario.cod_puntoventa', $this->session->userdata('puntoventa'))
+      ->where_in('tb_talonario.siglas_talonario', ['FC', 'TK'])
+      ->where('tb_talonario.est_talonario', 1)
       ->get()->result();
-  }
+}
 
   function getAlmacenesDisponibles()
   {
@@ -270,7 +290,7 @@ $cobros="";
   function getDocumentosCliente()
   {
     return $this->db->from('tb_tipodocumentocliente')
-      ->where_in('codsunat_tipdocucli', ['1', '6','4','7'])
+      ->where_in('codsunat_tipdocucli', ['1', '6', '4', '7'])
       ->get()
       ->result();
   }

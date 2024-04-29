@@ -23,7 +23,9 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
-            <div class="card-header bg-success"><h3 class="my-0 text-white">Reporte detallado de ventas<i class="spinner-grow text-danger float-right"></i></h3></div>            
+              <div class="card-header bg-success">
+                <h3 class="my-0 text-white">Reporte detallado de ventas<i class="spinner-grow text-danger float-right"></i></h3>
+              </div>
               <div class="card-body table-responsive">
                 <fieldset>
                   <legend>Filtro</legend>
@@ -45,13 +47,13 @@
                           <input type="text" name="almacen" class="form-control">
                         </div>
                       </div>
-											<div class="col-md-3">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Cliente</label>
                           <input type="text" name="cliente" class="form-control">
                         </div>
                       </div>
-											<div class="col-md-3">
+                      <div class="col-md-3">
                         <!-- <div class="form-group">
                           <label class="control-label">Vendedor</label>
                           <input type="text" name="vendedor" class="form-control">
@@ -72,55 +74,55 @@
                           <?php endif ?>
                         </div>
                       </div>
-											<div class="col-md-3">
+                      <div class="col-md-3">
                         <div class="form-group">
-                          <button style="margin-top:27px" type="submit" class="btn btn-success"><i class=" fab fa-earlybirds m-r-5"></i>Filtrar</button>                         
-                          <a id="ReporteVentasDetalladasExcel" href="#" class="btn btn-primary" style="margin-top:27px" target="_blank"><i class="far fa-file-excel m-r-5"></i> Exportar a EXCEL</a>                 
+                          <button style="margin-top:27px" type="submit" class="btn btn-success"><i class=" fab fa-earlybirds m-r-5"></i>Filtrar</button>
+                          <a id="ReporteVentasDetalladasExcel" href="#" class="btn btn-primary" style="margin-top:27px" target="_blank"><i class="far fa-file-excel m-r-5"></i> Exportar a EXCEL</a>
                         </div>
                       </div>
                     </div>
                   </form>
-                </fieldset>  
-                <br>             
+                </fieldset>
+                <br>
                 <div class="table-responsive">
                   <table id="TableReporteDetalladoVentas" class="table table-bordered table-striped" cellspacing="0" width="100%">
-                   
+
                     <thead>
                       <tr class="btn-success">
                         <th style="text-align: center; width: 50px">Fecha</th>
                         <th style="text-align: center;">Almacen</th>
-												<th style="text-align: center;">Punto de Venta</th>
+                        <th style="text-align: center;">Punto de Venta</th>
                         <th style="text-align: center;">DNI-RUC</th>
-												<th style="text-align: center;">Cliente</th>
-												<th style="text-align: center;">Documento</th>
-												<th style="text-align: center;">Vendedor</th>
+                        <th style="text-align: center;">Cliente</th>
+                        <th style="text-align: center;">Documento</th>
+                        <th style="text-align: center;">Vendedor</th>
                         <th style="text-align: center;">Unidad.M.</th>
-												<th style="text-align: center;">Producto</th>
+                        <th style="text-align: center;">Producto</th>
                         <th style="text-align: center;">ISDN</th>
-												<th style="text-align: center;">Serie</th>
+                        <th style="text-align: center;">Serie</th>
                         <th style="text-align: center;">T.Pago</th>
-												<th style="text-align: center;">Prec.Unid.</th> 
-												<th style="text-align: center;">Descuento</th>
-												<th style="text-align: center;">Prec. con Desc.</th> 
-												<th class="bg-danger" tyle="text-align: center;">Cantidad</th>
-												<th style="text-align: center;">Subtotal</th>
+                        <th style="text-align: center;">Prec.Unid.</th>
+                        <th style="text-align: center;">Descuento</th>
+                        <th style="text-align: center;">Prec. con Desc.</th>
+                        <th class="bg-danger" tyle="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Subtotal</th>
                       </tr>
                     </thead>
-											<tfoot>
-												<tr>
-													<th colspan="16" style="text-align:right">Total:</th>
-													<th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
-												</tr>
-											</tfoot>
+                    <tfoot>
+                      <tr>
+                        <th colspan="16" style="text-align:right">Total:</th>
+                        <th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
+                      </tr>
+                    </tfoot>
                   </table>
 
                 </div>
                 <!-- End #wizard-vertical -->
               </div>
             </div>
-          </div>              
+          </div>
         </div>
-      </div> <!-- container -->         
+      </div> <!-- container -->
     </div> <!-- content -->
 
   </div>
@@ -133,5 +135,3 @@
 
 </div>
 <!-- END wrapper -->
-
-

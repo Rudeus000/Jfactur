@@ -9,23 +9,7 @@
     <div class="content">
       <div class="container-fluid">
 
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <!-- <h4 class="page-title float-left"><i class="fas fa-chalkboard-teacher"></i> Agregar Ventas</h4> -->
-              <ol class="breadcrumb float-right">
-                <li class="breadcrumb-item">
-                  <?= dia() ?> - <?= date('d/m/Y') ?> Cajero: <?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>
-                  <br>
-                  <?php if ($apertura != false) : ?>
-                    <?= $apertura->nomb_caja . ' ' . $apertura->horainicio_apertura . ' - ' . $apertura->horafin_apertura ?>
-                  <?php endif ?>
-                </li>
 
-              </ol>
-            </div>
-          </div>
-        </div>
 
         <div class="row">
           <div class="col-sm-12">
@@ -37,7 +21,6 @@
                 <form id="FormVentaAgregar" class="FormVenta" action="<?= base_url('administrador/regventas/agregarVenta') ?>" autocomplete="off">
                   <input type="hidden" name="cliente" value="<?= !is_null($cliente) ? $cliente->id : '' ?>">
                   <input type="hidden" name="total">
-
                   <?php if ($apertura == FALSE) : ?>
                     <div class="row">
                       <div class="col-md-12">
@@ -48,11 +31,11 @@
                       </div>
                     </div>
                   <?php endif ?>
-
                   <div class="row">
                     <div class="col-md-12">
+                      <button type="button" class="btn btn-block btn-xs btn-success waves-effect waves-light" id="btn_opciones">Opciones</button>
                       <div class="row">
-                        <div class="col-md-12">
+                        <div id="content-opcion-datos" class="col-md-12" style="display:none" >
                           <div class="card">
                             <div class="card-body">
 
@@ -128,9 +111,9 @@
                                   <div class="col-md-3">
                                     <div class="form-group">
                                       <label class="control-label">Cliente [<a title="" data-toggle="modal" data-target="#ModalAgregarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
-                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i></a> ][<a title="" id="VentaEditarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
-                                          <i class=" fas fa-user-edit noti-icon text-primary waves-light waves-effect"></i> ]
-                                        </a></label>
+                                          <i class=" fas fa-user-plus noti-icon text-pink waves-light waves-effect"></i> ][<a title="" id="VentaEditarCliente" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
+                                            <i class=" fas fa-user-edit noti-icon text-primary waves-light waves-effect"></i> ]
+                                          </a></label>
                                       <input type="text" id="ClienteVentaAutocomplete" name="nombreCliente" class="form-control" disabled value="<?= !is_null($cliente) ? $cliente->nombre : '' ?>">
                                     </div>
                                   </div>
@@ -281,17 +264,19 @@
                 <form id="FormVentaAgregarProducto" autocomplete="off">
                   <input type="hidden" name="producto">
                   <input type="hidden" name="idTypeAssignmentProduct">
-                  <fieldset>
+                  <div class="row">
+                    <div class="col-md-6">
+                    <fieldset>
                     <legend>Agregar Producto</legend>
                     <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-md-3" hidden>
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="servicioCheck" name="servicioCheck" />
                         <label for="servicioCheck">Servicio/producto</label>
                         <!-- </div> -->
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-3" hidden>
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="observacionCheck" name="observacionCheck" />
@@ -300,14 +285,14 @@
                       </div>
 
 
-                      <div class="col-md-3">
+                      <div class="col-md-3" hidden>
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#9261c6" data-size="small" id="detraccion-check" name="detraccion-check" />
                         <label for="detraccion-check">Detracción</label>
                         <!-- </div> -->
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-3" hidden>
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#FC0B00 " data-size="small" id="retencion-check" name="retencion-check" />
@@ -326,7 +311,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-1">
+                      <div class="col-md-1" hidden>
                         <div class="form-group">
                           <label class="control-label" id="precio_u">Precio Unit.</label>
                           <label class="control-label" disabled style="display:none" id="monto_s">Monto.</label>
@@ -340,24 +325,26 @@
                           <input type="text" name="cantidadProducto" id="cantidadProducto" class="form-control" value="">
                         </div>
                       </div>
-                      <div class="col-md-1">
+                      <div class="col-md-1" hidden>
                         <button type="submit" style="margin-top: 32px" class="btn btn-sm btn-pink"><i class="fa fa-plus"></i></button>
                       </div>
                     </div>
                     <div class="row">
 
-                      <div class="col-md-2" id="tipo_vent_ser"  style="display: none;">
+                      <div class="col-md-2" hidden>
                         <div class="form-group">
                           <label class="control-label">Tipo</label>
-                          <select name="tipo" class="form-control select2">
-                            <option value="V">Gravada</option>                            
+                          <select name="tipo" class="form-control">
+                            <option value="V">Venta</option>
+                            <option value="B">Bonificacion</option>
+                            <option value="O">Obsequio</option>
                             <option value="E">Exonerada</option>
-                           
+                            <option value="1001">Operacion sujeta a detraccion</option>
                           </select>
                         </div>
                       </div>
 
-                      <div class="col-md-2" id="unidad_p">
+                      <div class="col-md-2" id="unidad_p" hidden>
                         <div class="form-group">
                           <label class="control-label">Unidad Med.</label>
                           <input type="text" name="unidadProducto" class="form-control">
@@ -375,21 +362,21 @@
                         </div>
                       </div>
 
-                      <div class="col-md-1" id="peso_p">
+                      <div class="col-md-1" id="peso_p" hidden>
                         <div class="form-group">
                           <label class="control-label">Peso</label>
                           <input type="text" name="pesoProducto" class="form-control">
                         </div>
                       </div>
 
-                      <div class="col-md-1">
+                      <div class="col-md-1" hidden>
                         <div class="form-group">
                           <label class="control-label">Dscto.</label>
                           <input type="text" name="descuentoProducto" class="form-control">
                         </div>
                       </div>
 
-                      <div class="col-md-6" id="serie_c">
+                      <div class="col-md-6" id="serie_c" hidden>
                         <div class="form-group">
                           <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto" readonly>
@@ -400,7 +387,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2 <?= ($this->session->userdata('movil_expert') == '0' ? 'd-none' : '') ?>" id="isdn_product">
+                      <div class="col-md-2 <?= ($this->session->userdata('movil_expert') == '0' ? 'd-none' : '') ?>" id="isdn_product" hidden>
                         <div class="form-group">
                           <label class="control-label">Numero ISDN</label>
                           <input type="text" name="numeroisdn" class="form-control" id="producto_isdn">
@@ -409,73 +396,135 @@
                     </div>
               
                   </fieldset>
-                  <div class="table-responsive">
-                    <table id="TableVentaProductos" class="table table-striped table-hover">
-                      <thead>
-                        <tr class="bg-success text-white">
-                          <th></th>
-                          <th style="text-align: center;">Código</th>
-                          <th style="text-align: center;">Artículo</th>
-                          <th style="text-align: center; <?= ($this->session->userdata('movil_expert') == '0' ? 'display:none' : '') ?>">ISDN</th>
-                          <th style="text-align: center;">Marca</th>
-                          <th style="text-align: center;">Unidad</th>
-                          <th style="text-align: center;">Cant.</th>
-                          <th style="text-align: center;">P. Unit.</th>
-                          <th style="text-align: center;">Desc.</th>
-                          <th style="text-align: center;">IGV</th>
-                          <th style="text-align: center;">Prec. Sin IGV</th>
-                          <th style="text-align: center;">Subtotal</th>
-                          <th style="text-align: center;">Opc.</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                      <fieldset>
+                        <legend>Productos</legend>
+                        <div class="card-deck">
+                          <div class="card  border-primary mb-3">
+                            <div class="card-header">P. VENTA - S/.30</div>
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                              <p class="card-text">PANTALON RASGADO</p>
+                            </div>
+                            <div class="card-footer">
+                              <small class="text-muted">STOCK: 50</small>
+                            </div>
+                          </div>
+                          <div class="card  border-primary mb-3">
+                            <div class="card-header">P. VENTA - S/.30</div>
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                              <p class="card-text">PANTALON RASGADO</p>
+                            </div>
+                            <div class="card-footer">
+                              <small class="text-muted">STOCK: 50</small>
+                            </div>
+                          </div>
+                          <div class="card  border-primary mb-3">
+                            <div class="card-header">P. VENTA - S/.30</div>
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                              <p class="card-text">PANTALON RASGADO</p>
+                            </div>
+                            <div class="card-footer">
+                              <small class="text-muted">STOCK: 50</small>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="col-md-6">
+                      <fieldset>
+                        <legend>Mis pedido</legend>
+                        <div class="table-responsive">
+                          <table id="TableVentaProductos" class="table table-striped table-hover">
+                            <thead>
+                              <tr class="bg-success text-white">
+                                <th></th>
+                                <th style="text-align: center; display:none">Código</th>
+                                <th style="text-align: center;">Artículo</th>
+                                <th style="text-align: center; display:none;<?= ($this->session->userdata('movil_expert') == '0' ? 'display:none' : '') ?>">ISDN</th>
+                                <th style="text-align: center;display:none">Marca</th>
+                                <th style="text-align: center;display:none">Unidad</th>
+                                <th style="text-align: center;">Cant.</th>
+                                <th style="text-align: center;">P. Unit.</th>
+                                <th style="text-align: center;">Desc.</th>
+                                <th style="text-align: center;display:none">IGV</th>
+                                <th style="text-align: center;display:none">Prec. Sin IGV</th>
+                                <th style="text-align: center;display:none">Subtotal</th>
+                                <th style="text-align: center;">Opc.</th>
+                              </tr>
+                            </thead>
+                            <tbody>
 
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">Gravada</th>
-                          <td class="bg-danger text-white" id="venta-gravadas">00.00</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">Exonerada</th>
-                          <td class="bg-danger text-white" id="venta-exoneradas">00.00</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">Gratuito</th>
-                          <td class="bg-danger text-white" id="venta-gratuito">00.00</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">Descuentos</th>
-                          <td class="bg-danger text-white" id="venta-descuentos">00.00</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">IGV</th>
-                          <td class="bg-danger text-white" id="venta-igv">00.00</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td colspan="10"></td>
-                          <th class="bg-danger text-white">Total</th>
-                          <td class="bg-danger text-white" id="venta-total">00.00</td>
-                          <td></td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="1"></td>
+                                <th class="bg-danger text-white">Gravada</th>
+                                <td class="bg-danger text-white" id="venta-gravadas">00.00</td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td colspan="1"></td>
+                                <th class="bg-danger text-white">Exonerada</th>
+                                <td class="bg-danger text-white" id="venta-exoneradas">00.00</td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td colspan="1"></td>
+                                <th class="bg-danger text-white">Descuentos</th>
+                                <td class="bg-danger text-white" id="venta-descuentos">00.00</td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td colspan="1"></td>
+                                <th class="bg-danger text-white">IGV</th>
+                                <td class="bg-danger text-white" id="venta-igv">00.00</td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td colspan="1"></td>
+                                <th class="bg-danger text-white">Total</th>
+                                <td class="bg-danger text-white" id="venta-total">00.00</td>
+                                <td></td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        <button data-toggle="modal" data-target="#Modalprocesar" type="button" class="btn btn-block btn-xs btn-primary waves-effect waves-light">Procesar</button>
+                      </fieldset>
+                    </div>
+                  </div>                  
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                  <fieldset class="scheduler-border">
-                    <legend class="scheduler-border">Forma de Pago</legend>
+<div class="modal" id="Modalprocesar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Forma de Pago</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>      
+
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body table-responsive">
+                <div class="text-center">
+                <!-- <fieldset class="scheduler-border"> -->
+                    <!-- <legend class="scheduler-border">Forma de Pago</legend> -->
                     <div class="row">
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Metodo de Pago</label>
                           <select name="tipoPago" class="form-control input-sm">
@@ -487,7 +536,7 @@
                       </div>
 
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Tipo de Tarjeta</label>
                           <select name="tipoTarjeta" class="form-control" disabled>
@@ -498,14 +547,14 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">N° Operación</label>
                           <input type="text" name="operacion" class="form-control" disabled>
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Descuento (%)</label>
                           <input type="number" min="0" max="99" name="descuento" class="form-control" value="0">
@@ -513,14 +562,14 @@
                       </div>
 
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Monto Recibido</label>
                           <input type="text" name="montoRecibido" class="form-control" value="0.00">
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <label class="control-label">Vuelto</label>
                           <input type="text" name="vuelto" class="form-control" value="0.00" readonly>
@@ -642,31 +691,37 @@
                       </div>
                     </div>
                     <!-- </div> -->
-                  </fieldset>
-
-
-                </form>
-
-                <legend class="scheduler-border"></legend>
-
-                <div class="row" id="VentasContenedorGuardar">
-                  <div class="col-md-12">
-                    <div class="form-group float-right">
-                      <a href="<?= base_url('administrador/regventas') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
-                      <button type="submit" form="FormVentaAgregar" class="btn btn-success " <?= ($apertura == false) ? 'disabled' : '' ?>><i class="fa fa-save m-r-5"></i>Procesar</button>
-                    </div>
-                  </div>
+                  <!-- </fieldset> -->
                 </div>
 
               </div>
+
             </div>
+
           </div>
+
         </div>
       </div>
+      <div class="modal-footer">
+        
+      <legend class="scheduler-border"></legend>
+
+<div class="row" id="VentasContenedorGuardar">
+  <div class="col-md-12">
+    <div class="form-group float-right">
+      <a href="<?= base_url('administrador/regventas') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
+      <button type="submit" form="FormVentaAgregar" class="btn btn-success " <?= ($apertura == false) ? 'disabled' : '' ?>><i class="fa fa-save m-r-5"></i>Procesar</button>
     </div>
   </div>
 </div>
 
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
 <div class="modal" id="ModalAccionesDespuesGuardar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
@@ -790,7 +845,12 @@
                     <a href="#messages-b2" data-toggle="tab" aria-expanded="false" class="nav-link">
                       Datos adicionales
                     </a>
-                  </li>           
+                  </li>
+                  <!-- <li class="nav-item">
+                                                <a href="#settings-b2" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                                    Settings
+                                                </a>
+                                            </li> -->
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="home-b2">

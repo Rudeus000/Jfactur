@@ -32,6 +32,9 @@ class Compras_model extends CI_Model {
    if ($data['almacen']!='') {
      $this->db->where('tb_compra.cod_almacen',$data['almacen']);
    }
+   if ($data['cod_compra']!='') {
+    $this->db->where('tb_compra.cod_comp',$data['cod_compra']);
+  }
    if ($data['length']!=-1) {
      $this->db->limit($data['length'],$data['start']);
    }
@@ -60,7 +63,7 @@ class Compras_model extends CI_Model {
       ';
 
       $boton_detalle = '<button class="btn btn-icon waves-effect waves-light btn-success" ><span class="fa fa-caret-right"></span></button>';
-      $row[] = [$boton_detalle,$q->fecha_comp,$q->cod_comp,$q->documento_comp,$q->tb_proveedor_nom,$q->numdocumento_comp,$q->nomb_almacen,$q->subtotal_comp,$q->igv_comp,$q->total_comp,$pagos,$q->pendiente_comp,$buttons,json_encode($detalle)];
+      $row[] = [$boton_detalle,$q->fecha_comp,$q->cod_comp,$q->documento_comp,$q->tb_proveedor_nom,$q->numdocumento_comp,$q->nomb_almacen,$q->total_comp,$pagos,$q->pendiente_comp,$buttons,json_encode($detalle)];
      }
 
      $result['aaData'] = $row;

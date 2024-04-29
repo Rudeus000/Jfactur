@@ -43,67 +43,67 @@
                         </div>
                       </div>
 
-                        <div class="col-md-3">
-                                      <div class="form-group">
-                                        <label class="control-label">Tipo Documento:</label>
-                                        <select name="tb_talonario" class="form-control">
-                                           <option value="">--Todos--</option>
-                                                  <?php foreach ($documento as $d): ?>
-                                                  <option value="<?= $d->cod_tipdocu ?>"><?= $d->nom_tipdocumento  ?></option>
-                                                    <?php endforeach ?>
-                                        </select>
-                                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Tipo Documento:</label>
+                          <select name="tb_talonario" class="form-control">
+                            <option value="">--Todos--</option>
+                            <?php foreach ($documento as $d) : ?>
+                              <option value="<?= $d->cod_tipdocu ?>"><?= $d->nom_tipdocumento  ?></option>
+                            <?php endforeach ?>
+                          </select>
                         </div>
+                      </div>
 
-                         <div class="col-md-2">
-                                      <div class="form-group">
-                                        <label class="control-label">Serie:</label>
-                                        <select name="tb_talonario" class="form-control">
-                                           <option value="">F004</option>
-                                                  <?php foreach ($documento as $d): ?>
-                                                  <option value="<?= $d->cod_tipdocu ?>"><?= $d->nom_tipdocumento  ?></option>
-                                                    <?php endforeach ?>
-                                        </select>
-                                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Serie:</label>
+                          <select name="tb_talonario" class="form-control">
+                            <option value="">Seleccionar</option>
+                            <?php foreach ($documento as $d) : ?>
+                              <option value="<?= $d->cod_tipdocu ?>"><?= $d->nom_tipdocumento  ?></option>
+                            <?php endforeach ?>
+                          </select>
                         </div>
+                      </div>
 
-                        <div class="col-md-2">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Correlativo</label>
                           <input type="text" name="Correlativo" class="form-control">
                         </div>
                       </div>
-                
+
                       <div class="col-md-3">
                         <div class="form-group">
                           <label class="control-label">Cliente</label>
                           <input type="text" name="cliente" class="form-control">
                         </div>
                       </div>
-                        <div class="col-md-3">
-                                      <div class="form-group">
-                                        <label class="control-label">Punto de venta</label>
-                                        <select name="punto" class="form-control select2">
-                                           <option value="">--Todos--</option>
-                                                  <?php foreach ($punto as $p): ?>
-                                                  <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa  ?></option>
-                                                    <?php endforeach ?>
-                                        </select>
-                                      </div>
-                        </div> 
-                       
-                        <div class="col-md-3">
-                                      <div class="form-group">
-                                        <label class="control-label">Vendedor</label>
-                                        <select name="vendedor" class="form-control select2">
-                                            <option value="">--Todos--</option>
-                                                  <?php foreach ($usuario as $u): ?>
-                                                  <option value="<?= $u->cod_usu ?>"><?= $u->apell_usu.' '.$u->nomb_usu  ?></option>
-                                                    <?php endforeach ?>
-                                        </select>
-                                      </div>
-                        </div> 
-                   
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Punto de venta</label>
+                          <select name="punto" class="form-control select2">
+                            <option value="">--Todos--</option>
+                            <?php foreach ($punto as $p) : ?>
+                              <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa  ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Vendedor</label>
+                          <select name="vendedor" class="form-control select2">
+                            <option value="">--Todos--</option>
+                            <?php foreach ($usuario as $u) : ?>
+                              <option value="<?= $u->cod_usu ?>"><?= $u->apell_usu . ' ' . $u->nomb_usu  ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Estado</label>
@@ -114,7 +114,7 @@
                           </select>
                         </div>
                       </div>
-                   
+
                     </div>
                   </form>
                 </fieldset>
@@ -134,32 +134,32 @@
                         <th style="text-align: center;">Sucursal</th>
                         <th style="text-align: center;">Agente</th>
                         <th style="text-align: center;">Cliente</th>
-                        <th style="text-align: center;">Ruc/Dni</th> 
+                        <th style="text-align: center;">Ruc/Dni</th>
                         <th style="text-align: center;">Tipo Dcoumento</th>
-                         <th style="text-align: center;">Documento</th>
-                         <th style="text-align: center;">Articuclo</th>
-                         <th style="text-align: center;">serie articulo</th>                        
-                          <th style="text-align: center;">Cantidad</th>
-                          <th style="text-align: center;">Precio venta</th>                                                      
-                          <th style="text-align: center;">Descuento</th>
-                          <th style="text-align: center;">Importe</th>
-                           <th style="text-align: center;">Estado</th>
-                         <th style="text-align: center;">Opciones </th>
-                       
+                        <th style="text-align: center;">Documento</th>
+                        <th style="text-align: center;">Articuclo</th>
+                        <th style="text-align: center;">serie articulo</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Precio venta</th>
+                        <th style="text-align: center;">Descuento</th>
+                        <th style="text-align: center;">Importe</th>
+                        <th style="text-align: center;">Estado</th>
+                        <th style="text-align: center;">Opciones </th>
 
-                       <!--  <th style="text-align: center;">Monto</th>
+
+                        <!--  <th style="text-align: center;">Monto</th>
                         <th style="text-align: center;">Abonos</th>
                         <th style="text-align: center;">Abonos</th>
                         
                         <th></th> -->
                       </tr>
                     </thead>
-                       <tfoot>
-                         <tr>
-                             <th colspan="6" style="text-align:right">Total:</th>
-                              <th><strong><span id="TotalCotizacion"></span></strong></th>
-                         </tr>
-                     </tfoot>
+                    <tfoot>
+                      <tr>
+                        <th colspan="6" style="text-align:right">Total:</th>
+                        <th><strong><span id="TotalCotizacion"></span></strong></th>
+                      </tr>
+                    </tfoot>
 
                   </table>
 
@@ -167,9 +167,9 @@
                 <!-- End #wizard-vertical -->
               </div>
             </div>
-          </div>              
+          </div>
         </div>
-      </div> <!-- container -->         
+      </div> <!-- container -->
     </div> <!-- content -->
 
   </div>
@@ -182,5 +182,3 @@
 
 </div>
 <!-- END wrapper -->
-
-

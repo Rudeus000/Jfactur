@@ -110,7 +110,7 @@
 
 
 <div class="modal" id="ModalNotaCredito" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog  modal-xl" role="document">
     <div class="modal-content">
       <form id="FormNotaCredito" action="<?= base_url('administrador/regdocumentoelectronico/creditoDocumento') ?>" method="post" autocomplete="off">
       <input type="hidden" name="id">
@@ -240,6 +240,44 @@
 
                     </tbody>
                     <tfoot>
+                        <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">Gravada</th>
+                          <td class="bg-danger text-white" id="credito-gravadas">00.00</td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">Exonerada</th>
+                          <td class="bg-danger text-white" id="credito-exoneradas">00.00</td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">Gratuito</th>
+                          <td class="bg-danger text-white" id="credito-gratuito">00.00</td>
+                          <td></td>
+                        </tr>
+                        <!-- <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">Descuentos</th>
+                          <td class="bg-danger text-white" id="Credito-descuentos">00.00</td>
+                          <td></td>
+                        </tr> -->
+                        <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">IGV</th>
+                          <td class="bg-danger text-white" id="credito-igv">00.00</td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td colspan="7"></td>
+                          <th class="bg-danger text-white">Total</th>
+                          <td class="bg-danger text-white" id="credito-total">00.00</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    <!-- <tfoot>
                       <tr>
                         <td colspan="8"></td>
                         <th>Valor Venta</th>
@@ -258,7 +296,7 @@
                         <td id="CreditoTotal">00.00</td>
                         <td></td>
                       </tr>
-                    </tfoot>
+                    </tfoot> -->
                   </table>
                 </div> 
               </div>

@@ -174,7 +174,8 @@
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <label class="control-label">Nombre</label>
+                          <label class="control-label">Nombre[<a title="" data-toggle="modal" data-target="#ModalCompraAgregarProducto" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Nuevo">
+                              <i class="fas fa-external-link-alt text-pink waves-light waves-effect"></i></a> ]</label>
                           <input type="text" id="nombreProductoAutocomplete" name="nombreProducto" class="form-control">
                         </div>
                       </div>
@@ -186,8 +187,25 @@
                       </div>
                       <div class="col-md-2">
                         <div class="form-group">
+                          <label class="control-label">Tipo IGV:<span class="text-danger"> *</label>
+                          <select class="form-control input-sm select2" name="parametros">
+                            <option value="">--Selecciona--</option>
+                            <?php foreach ($parametros as $pr) : ?>
+                              <option value="<?= $pr->cod_parametros ?>"><?= $pr->nom_paramt ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="form-group">
                           <label class="control-label">Precio</label>
                           <input type="text" name="precioProducto" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="form-group">
+                          <label class="control-label">Prec.Vent.Act.</label>
+                          <input type="text" name="precioProductovent" class="form-control">
                         </div>
                       </div>
                       <div class="col-md-1">
@@ -218,8 +236,8 @@
                         <th style="text-align: center;">Cantidad</th>
                         <th style="text-align: center;">P. Unit.</th>
                         <th style="text-align: center;">IGV</th>
-                        <th style="text-align: center;">Valor Venta</th>
-                        <th style="text-align: center;">Subtotal</th>
+                        <th style="text-align: center;">Sub.total</th>
+                        <th style="text-align: center;">Importe</th>
                         <th>
 
                         </th>
@@ -231,20 +249,32 @@
                     <tfoot>
                       <tr>
                         <td colspan="8"></td>
-                        <th>Valor Venta</th>
-                        <td id="CompraValorVenta">00.00</td>
+                        <th class="bg-danger text-white">Gravada</th>
+                        <td class="bg-danger text-white" id="compra-gravada">00.00</td>
                         <td></td>
                       </tr>
                       <tr>
                         <td colspan="8"></td>
-                        <th>IGV</th>
-                        <td id="CompraIGV">00.00</td>
+                        <th class="bg-danger text-white">Exonerada</th>
+                        <td class="bg-danger text-white" id="compra-exonerada">00.00</td>
                         <td></td>
                       </tr>
                       <tr>
                         <td colspan="8"></td>
-                        <th>Total</th>
-                        <td id="CompraTotal">00.00</td>
+                        <th class="bg-danger text-white">Gratuito</th>
+                        <td class="bg-danger text-white" id="compra-gratuito">00.00</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td colspan="8"></td>
+                        <th class="bg-danger text-white">IGV</th>
+                        <td class="bg-danger text-white" id="compra-igv">00.00</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td colspan="8"></td>
+                        <th class="bg-danger text-white">Total</th>
+                        <td class="bg-danger text-white" id="compra-total">00.00</td>
                         <td></td>
                       </tr>
                     </tfoot>
@@ -460,3 +490,487 @@
     </div>
   </div>
 </div>
+
+
+<div id="ModalCompraAgregarProducto" class="modal bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+
+
+      <!-- <div class="card-header bg-success">
+                    <h3 class="my-0 text-white">Agregar producto<i class="spinner-grow text-warning float-right"></i></h3>
+                </div> -->
+      <div class="modal-body">
+        <div class="row">
+
+          <div class="col-md-12">
+            <!-- <div class="card"> -->
+            <div class="card-body">
+              <!-- <h4 class="header-title m-t-0 m-b-30">Tabs Bordered Justified</h4> -->
+
+              <ul class="nav nav-tabs tabs-bordered nav-justified">
+                <li class="nav-item">
+                  <a href="#producto" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                    Producto
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#marca" data-toggle="tab" aria-expanded="true" class="nav-link">
+                    Marca
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#categoria" data-toggle="tab" aria-expanded="false" class="nav-link">
+                    Categoria
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#unidadm" data-toggle="tab" aria-expanded="false" class="nav-link disabled">
+                    Unidad M.
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="producto">
+                  <form id="FormCompraAddProducto" action="<?= base_url('administrador/regcompras/addProducto') ?>" method="post" autocomplete="off">
+                    <input type="hidden">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <label class="control-label">Nombre:<span class="text-danger"> *</label>
+
+                          <div class="form-check form-check-inline ml-2">
+                            <input class="form-check-input" type="checkbox" name="productAssignment" id="productAssignmentDad" value="P">
+                            <label class="form-check-label" for="productAssignmentDad">P</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="productAssignment" id="productAssignmentSon" value="H">
+                            <label class="form-check-label" for="productAssignmentSon">H</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="productoConasignacion" id="productAssignmentGson" value="G">
+                            <label class="form-check-label" for="productAssignmentGson">G</label>
+                          </div>
+
+                          <input type="text" name="nombre" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Producto Padre:<span class="text-danger"> *</label>
+                          <select class="form-control select2" id="selectAssignmentDad" name="selectAssignmentDad">
+                            <option value="">--Selecciona--</option>
+                            <?php foreach ($TypeproductAssignments as $TypeproductAssignment) : ?>
+                              <option value="<?= $TypeproductAssignment->cod_producto ?>"><?= $TypeproductAssignment->nomb_product ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Marca:<span class="text-danger"> *</label>
+                          <div class="input-group" style="flex-wrap: inherit;">
+                            <select class="form-control select2" name="marcas">
+                              <option value="">--Selecciona--</option>
+                              <?php foreach ($marca as $marc) : ?>
+                                <option value="<?= $marc->cod_marca ?>"><?= $marc->nomb_marca ?></option>
+                              <?php endforeach ?>
+                            </select>
+                            <div class="input-group-append">
+                              <a href="" class="btn btn-rounded btn-pink float-right" id="btnAbrirMarca">+</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Categoria:<span class="text-danger"> *</label>
+                          <div class="input-group" style="flex-wrap: inherit;">
+                            <select class="form-control select2 select2-hidden-accessible input-sm" name="categorias">
+                              <option value="">--Selecciona--</option>
+                              <?php foreach ($categoria as $ca) : ?>
+                                <option value="<?= $ca->cod_categoria ?>"><?= $ca->nomb_categoria ?></option>
+                              <?php endforeach ?>
+                            </select>
+                            <div class="input-group-append">
+                              <a href="" class="btn btn-rounded btn-pink float-right" id="btnAbrirCategoria">+</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Unidad de Medida:<span class="text-danger"> *</label>
+                          <div class="input-group" style="flex-wrap: inherit;">
+                            <select class="form-control select2 select2-hidden-accessible input-sm" name="unidad">
+                              <option value="">--Selecciona--</option>
+                              <?php foreach ($medida as $me) : ?>
+                                <option value="<?= $me->cod_unid ?>"><?= $me->nomb_unid ?></option>
+                              <?php endforeach ?>
+                            </select>
+                            <div class="input-group-append">
+                              <a href="#" class="btn btn-rounded btn-pink float-right" id="btnAbrirUnid">+</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Tipo articulo:<span class="text-danger"> *</label>
+                          <div class="input-group" style="flex-wrap: inherit;">
+                            <select class="form-control select2 select2-hidden-accessible input-sm" name="tipoarticulo">
+                              <option value="">--Selecciona--</option>
+                              <?php foreach ($articulo as $tp) : ?>
+                                <option value="<?= $tp->cod_tiparticulo ?>"><?= $tp->nomb_tiparticulo ?></option>
+                              <?php endforeach ?>
+                            </select>
+                            <div class="input-group-append">
+                              <a href="#" class="btn btn-rounded btn-pink float-right" id="btnAbrirTipoArt">+</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Linea:<span class="text-danger"> *</label>
+                          <select class="form-control select2 select2-hidden-accessible input-sm" name="linea">
+                            <!-- <option value="">--Selecciona--</option> -->
+                            <?php foreach ($linea as $li) : ?>
+                              <option value="<?= $li->cod_linea ?>"><?= $li->nomb_linea ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Sub Linea:<span class="text-danger"> *</label>
+                          <select class="form-control select2 select2-hidden-accessible input-sm" name="sublinea">
+                            <!-- <option value="">--Selecciona--</option> -->
+                            <?php foreach ($sublinea as $sb) : ?>
+                              <option value="<?= $sb->cod_sublinea ?>"><?= $sb->nomb_sublinea ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Talla:<span class="text-danger"> *</label>
+                          <select class="form-control select2 select2-hidden-accessible input-sm" name="talla">
+                            <!-- <option value="">--Selecciona--</option> -->
+                            <?php foreach ($talla as $tl) : ?>
+                              <option value="<?= $tl->cod_talla ?>"><?= $tl->nomb_talla  ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Presentacion:<span class="text-danger"> *</label>
+                          <select class="form-control select2 select2-hidden-accessible input-sm" name="presentacion">
+                            <!-- <option value="">--Selecciona--</option> -->
+                            <?php foreach ($presentacion as $pres) : ?>
+                              <option value="<?= $pres->cod_present ?>"><?= $pres->nomb_present ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Precio compra:<span class="text-danger"> *</label>
+                          <input type="text" name="preciocosto" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Precio venta:<span class="text-danger"> *</label>
+                          <input type="text" name="precioventa" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Precio x Mayor:<span class="text-danger"> *</label>
+                          <input type="text" name="precioventa_mayor" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Precio Especial:<span class="text-danger"> *</label>
+                          <input type="text" name="precioventa_especial" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Stock minimo:<span class="text-danger"> *</label>
+                          <input type="text" name="stock" class="form-control" onKeyPress="if (event.keyCode < 48 || event.keyCode > 57)event.returnValue = false;">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Comision:<span class="text-danger"> *</label>
+                          <input type="text" name="comision" class="form-control">
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Codigo de Barras:<span class="text-danger"> *</label>
+                          <input type="text" name="codigobarra" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Disponibilidad venta: <span class="text-danger"> *</label>
+                          <select class="form-control select2" required="" name="dispventa">
+                            <option value="S">Si venta</option>
+                            <option value="N">No venta</option>
+
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Disponibilidad compra: <span class="text-danger"> *</label>
+                          <select class="form-control select2" required="" name="dispcompra">
+                            <option value="S">Si compra</option>
+                            <option value="N">No compra</option>
+
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Tipo IGV:<span class="text-danger"> *</label>
+                          <select class="form-control input-sm select2" name="parametros">
+                            <option value="">--Selecciona--</option>
+                            <?php foreach ($parametros as $pr) : ?>
+                              <option value="<?= $pr->cod_parametros ?>"><?= $pr->nom_paramt ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Fecha Vencimiento</label>
+                          <select name="fecha_vencimiento" class="form-control select2">
+                            <option value="0" selected>No</option>
+                            <option value="1">Si</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
+                      <button type="submit" class="btn btn-success waves-effect waves-light">Guardar</button>
+                    </div>
+                  </form>
+                  <!-- </form> -->
+                </div>
+                <div class="tab-pane" id="marca">
+                  <form id="FormMarcaProd" action="<?= base_url('administrador/regproducto/insertMarcaprod') ?>" method="post" autocomplete="off">
+                    <input type="hidden">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label">Ingrese marca:</label>
+                          <input type="text" name="descripcion" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <legend class="scheduler-border"></legend>
+                  <div class="row" id="MarcaContenedorGuardar">
+                    <div class="col-md-12">
+                      <div class="form-group float-right">
+                        <a href="" class="btn btn-pink" id="btnCerrarMarca"><i class="fas fa-fast-backward"></i> Back</a>
+                        <button type="submit" form="FormMarcaProd" class="btn btn-success "><i class="fa fa-save m-r-5"></i>Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="categoria">
+
+                  <form id="FormCategoriaProd" action="<?= base_url('administrador/regproducto/insertCategoriaprod') ?>" method="post" autocomplete="off">
+                    <input type="hidden">
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label">Ingrese categoria:</label>
+                          <input type="text" name="descripcion" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <legend class="scheduler-border"></legend>
+                  <div class="row" id="CategoriaContenedorGuardar">
+                    <div class="col-md-12">
+                      <div class="form-group float-right">
+                        <a href="" class="btn btn-pink" id="btnCerrarCategoria"><i class="fas fa-fast-backward"></i> Back</a>
+                        <button type="submit" form="FormCategoriaProd" class="btn btn-success "><i class="fa fa-save m-r-5"></i>Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="tab-pane" id="unidadm">
+                  <form id="FormUmedida" action="<?= base_url('administrador/regproducto/insertUmedidaprod') ?>" method="post" autocomplete="off">
+                    <input type="hidden">
+
+                    <div class="row">
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="control-label">Nombre: <span class="text-danger"> *</span></label>
+                          <input type="text" name="descripcion" class="form-control" maxlength="5">
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Tipo unidad:<span class="text-danger"> *</span></label>
+                          <select class="form-control select2 select2-hidden-accessible" name="tipounidad">
+                            <option value="">--Selecciona--</option>
+                            <?php foreach ($tipounidad as $t) : ?>
+                              <option value="<?= $t->cod_tipunidad ?>"><?= $t->nomb_tipunidad ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="control-label">Abreviatura: <span class="text-danger"> *</span></label>
+                          <input type="text" name="abreviatura" class="form-control" maxlength="20">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="control-label">Factor:<span class="text-danger"> *</span></label>
+                          <input type="text" name="factor" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <legend class="scheduler-border"></legend>
+                  <div class="row" id="CategoriaContenedorGuardar">
+                    <div class="col-md-12">
+                      <div class="form-group float-right">
+                        <a href="<?= base_url('') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
+                        <button type="submit" form="FormCategoria" class="btn btn-success "><i class="fa fa-save m-r-5"></i>Procesar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+      </div> <!-- end col -->
+
+    </div>
+  </div>
+  <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success waves-effect waves-light">Guardar</button>
+                </div>
+            </form> -->
+</div>
+</div>
+</div><!-- /.modal -->
+<script>
+            $(document).ready(function() {
+                // Manejar el clic en el botón
+                $('#btnAbrirMarca').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#marca"]').tab('show');
+                });
+                $('#btnAbrirCategoria').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#categoria"]').tab('show');
+                });
+                $('#btnCerrarMarca').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#producto"]').tab('show');
+                });
+                $('#btnCerrarCategoria').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#producto"]').tab('show');
+                });
+            });
+        </script>
+<script>
+  function soloLetras(e) {
+    key = e.keyCode || e.which;
+    tecla = String.fromCharCode(key).toLowerCase();
+    letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+    especiales = "8-37-39-46";
+
+    tecla_especial = false
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        tecla_especial = true;
+        break;
+      }
+    }
+
+    if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+      return false;
+    }
+  }
+
+  $("#selectAssignmentDad").prop('disabled', 'disabled');
+
+  $("#productAssignmentDad").click(function() {
+    $("#selectAssignmentDad").prop('disabled', 'disabled');
+  });
+
+  $("#productAssignmentSon").click(function() {
+    ($('#productAssignmentSon').is(':checked')) ? $("#selectAssignmentDad").prop('disabled', false): $("#selectAssignmentDad").prop('disabled', 'disabled');
+  });
+
+
+  $("#FormEditarProducto #editproductAssignmentSon").click(function() {
+    if ($('#FormEditarProducto #editproductAssignmentSon').is(':checked')) {
+      $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', false);
+      $("#FormEditarProducto input[name='editproductAssignmentDad']").prop('checked', false);
+    } else {
+      $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
+    }
+
+  });
+
+  $("#FormEditarProducto #editproductAssignmentDad").click(function() {
+    if ($('#FormEditarProducto #editproductAssignmentDad').is(':checked')) {
+      $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('disabled', true);
+      $("#FormEditarProducto select[name='editselectAssignmentDad']").prop('value', '')
+      $("#FormEditarProducto input[name='editproductAssignmentSon']").prop('checked', false);
+    } else {
+      $("#FormEditarProducto #editselectAssignmentDad").prop('disabled', 'disabled')
+    }
+
+  });
+</script>

@@ -210,7 +210,11 @@ class Modelgeneral extends CI_Model {
 			return 1;
 		}
 	}
-
+	public function insertarToken($tabla, $data)
+    {
+        $this->db->insert($tabla, $data);
+        return $this->db->insert_id(); // Devolver el ID del último registro insertado
+    }
 
 
 

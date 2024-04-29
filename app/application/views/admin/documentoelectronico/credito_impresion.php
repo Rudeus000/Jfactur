@@ -18,7 +18,8 @@
 	<div class="w25 text-center" style="float: right; border: 1.5px solid #03ABC2">
 		<br>
 		<b style="font-size: 12px;">R.U.C <?= $empresa->ruc_emp ?><b><p>
-		<b  style="font-size: 12px;">NOTA DE CRÉDITO</b>
+		<div class="Com-Datos" style="font-size: 15px; background: #03A6BF"><b>NOTA DE CRÉDITO</b></div>
+		<b  style="font-size: 12px;"></b>
 		<b  style="font-size: 12px;">ELECTRÓNICA</b>
 		<br>		
 		<b  style="font-size: 12px;"><?= $nota->seriecomp_nota ?> -  <?= $nota->numcomp_nota ?></b>
@@ -43,7 +44,7 @@
 	</div>
 	<div class="w40">
 		<p><b style="font-size: 11px;">Moneda:</b> &nbsp;&nbsp;SOLES</p>
-		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $nota->fecha_vent ?></p>
+		<p><b style="font-size: 11px;">Fecha Emisión:</b> &nbsp;&nbsp;<?= $nota->fecha_nota ?></p>
 		<!-- <p><b>Fecha de Vencimiento:</b> <?= $compras->fecvenc_comp?></p>
 		<p><b>N° Dias Pago:</b> <?= $compras->dias_comp?></p> -->
 	</div>
@@ -94,21 +95,30 @@
 	<div class="w30" style="float: right; padding: 5px;border:2px solid #03ABC2;">
 		<div class="w100">
 			<div class="w50"><b>Op. Exoneradas</b></div>
-			<div class="w50" style="text-align:right">0.00</div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($nota->exo_nota, 2) ?></div>
+		</div>
+		<div class="w100">
+			<div class="w50"><b>Gratuito</b></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= number_format($nota->free_nota, 2) ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Op. Gravadas</b></div>
-			<div class="w50" style="text-align:right"><?= $nota->totalgravadas_nota ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= $nota->totalgravadas_nota ?></div>
 		</div>
 		<div class="w100">
 			<div class="w50"><b>IGV (18%)</b></div>
-			<div class="w50" style="text-align:right"><?= $nota->totaligv_nota ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= $nota->totaligv_nota ?></div>
 		</div>		
 		<div class="w100" style="border-bottom:1px solid #03ABC2;margin:5px 0">
 		</div>
 		<div class="w100">
 			<div class="w50"><b>Importe Total</b></div>
-			<div class="w50" style="text-align:right"><?= $nota->total_nota ?></div>
+			<div class="w30">S/</div>
+			<div class="w20" style="text-align:right"><?= $nota->total_nota ?></div>
 		</div>
 	</div>
 </div>

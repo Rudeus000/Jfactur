@@ -95,7 +95,8 @@
                         <th style="text-align: center;">Cantidad</th> 
                         <th style="text-align: center;">Usuario</th>  
                         <th style="text-align: center;">Observación</th>                        
-                        <th style="text-align: center;"></th>
+                        <th style="text-align: center;">Opcion</th>
+                        <th style="text-align: center;">Imprimir</th>
                       </tr>
                     </thead>
 

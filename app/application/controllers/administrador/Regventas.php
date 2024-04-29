@@ -49,13 +49,23 @@ class Regventas extends CI_Controller
 		$data['desde'] = $this->input->get_post('desde');
 		$data['hasta'] = $this->input->get_post('hasta');
 		$cliente = $this->input->get_post('cliente');
+		$vendedor = $this->input->get_post('vendedor');
+		$punto = $this->input->get_post('punto');
+		$estado = $this->input->get_post('estado');
+		$data['cod_venta'] = $this->input->get_post('cod_venta');
 
 		// if ($cliente!='') {
-		$data['cliente'] = $cliente;
+		// $data['cliente'] = $cliente;
 		// }
-		$data['vendedor'] = $this->input->get_post('vendedor');
-		$data['punto'] = $this->input->get_post('punto');
-		$data['estado'] = $this->input->get_post('estado');
+		// $data['vendedor'] = $this->input->get_post('vendedor');
+		// $data['punto'] = $this->input->get_post('punto');
+		// $data['estado'] = $this->input->get_post('estado');
+
+
+		$data['cliente'] = $cliente;
+		$data['vendedor'] = $vendedor;
+		$data['punto'] = $punto;
+		$data['estado'] = $estado;
 
 		$datos = $this->ventas_model->getVentas($data);
 		header('content-type: application/json; charset=utf-8');
@@ -195,14 +205,14 @@ class Regventas extends CI_Controller
 
 		if ($precioCliente == 'Normal') {
 			$precioVenta = 'prec_venta';
-		} else if ($precioCliente == 'Mayor') {
+		} elseif ($precioCliente == 'Mayor') {
 			$precioVenta = 'prec_mayor_venta';
-		} else if ($precioCliente == 'Especial') {
+		} elseif ($precioCliente == 'Especial') {
 			$precioVenta = 'prec_especial_venta';
 		}
 
 		$resultProducto = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop,(CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -217,7 +227,7 @@ class Regventas extends CI_Controller
 
 		if (empty($resultProducto)) {
 			$resultProducto = $this->db->from('tb_producto')
-				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
+				->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop, (CASE WHEN stock > stockmin_product THEN 1 ELSE 0 END) as estado,peso_product, tb_producto.idTypeAssignmentProduct,stock,cod_tiparticulo,fecha_vencimiento", FALSE)
 				->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 				->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.idTypeAssignmentProduct')
 				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
@@ -234,7 +244,7 @@ class Regventas extends CI_Controller
 		$this->db->flush_cache();
 
 		$resultServicio = $this->db->from('tb_producto')
-			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, '1' as estado,peso_product,cod_tiparticulo,fecha_vencimiento", FALSE)
+			->select("tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo / " . $cambio . ") as costo,(" . $precioVenta . " / " . $cambio . ") as venta,nomb_unid as unidad, descuento_prod as descuentop, '1' as estado,peso_product,cod_tiparticulo,fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 			->where('est_product', 1)
@@ -397,6 +407,7 @@ class Regventas extends CI_Controller
 		$peridiocidad = $this->input->post('periodo');
 		$numero = $this->input->post('numero');
 		$total = $this->input->post('total');
+		$retencion_deuda = $this->input->post('retencion_mont');
 
 		if ($peridiocidad == 'Semanal') {
 			$periodo = '+7 day';
@@ -406,7 +417,9 @@ class Regventas extends CI_Controller
 			$periodo = '+28 day';
 		}
 
-		$monto = $total / $numero;
+		$montos = $total - $retencion_deuda;
+		$monto = $montos / $numero;
+
 		$cuotas = [];
 		$fecha = date('Y-m-d');
 		for ($i = 1; $i <= $numero; $i++) {
@@ -425,8 +438,14 @@ class Regventas extends CI_Controller
 	{
 		$apertura = $this->ventas_model->getCajaApertura();
 		if ($apertura == false) {
-			return false;
+			//$resp['success'] = false;
+			$resp['message'] = "Debes aperturar la caja, antes de continuar con la venta";
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($resp);
+			return false; // Terminar el proceso
+
 		}
+
 
 		$data['fecha_vent'] = $this->input->post('fecha');
 		$data['hora_vent'] = date('H:i:s');
@@ -458,6 +477,15 @@ class Regventas extends CI_Controller
 		$data['cod_caja'] = $apertura->cod_caja;
 		$data['cod_tipopago'] =   $this->input->post('tipoPago');
 		$data['operacion'] =  $this->input->post('operacion');
+
+		// Verificar si $printType está definido y no está vacío
+		if (!isset($printType) || empty($printType) || !isset($printType[0]->type_formt)) {
+			$resp['success'] = false;
+			$resp['message'] = "El CE selecionado no esta habilitado para este sucursal";
+			header('content-type: application/json; charset=utf-8');
+			echo json_encode($resp);
+			exit(); // Terminar el proceso
+		}
 		if (isset($_POST['tipoTarjeta'])) {
 			$data['cod_tarj'] =   $this->input->post('tipoTarjeta');
 		}
@@ -480,6 +508,14 @@ class Regventas extends CI_Controller
 			$data['detraccion_porcentaje'] = $this->input->post('detraccion_porcentaje');
 			$data['detraccion_monto'] = $this->input->post('detraccion_monto');
 			$data['detraccion_texto'] = $this->input->post('detraccion_informacion');
+		}
+
+		//RETENCION
+		if ($this->input->post('retencion-check') == 'on') {
+			$retencion_porcent = ($this->input->post('retencion_porcentaje') / 100);
+			$data['retencion_base_imp'] = $this->input->post('base_monto');
+			$data['retencion_porcentaje'] = $retencion_porcent;
+			$data['retencion_monto'] = $this->input->post('retencion_monto');;
 		}
 
 		$insert = $this->modelgeneral->insertRegist('tb_venta', $data);
@@ -532,6 +568,18 @@ class Regventas extends CI_Controller
 					$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $value]);
 					$codigo_producto = $_POST['id_prod'][$key];
 					$precio_unitario = $producto->prec_costo;
+					// Verificar si el producto tiene la asignación typeAssignmentProductoBipay=D
+					if (!is_null($producto) && property_exists($producto, 'typeAssignmentProductoBipay') && $producto->typeAssignmentProductoBipay == 'D') {
+						// Calcular la diferencia entre el monto de venta y bipay
+						$diferencia = $_POST['prec_prod'][$key] - $producto->bipay;
+						// Actualizar la tabla tb_venta_detalle con la diferencia y la descripción
+						$detalle['return_bipay'] = $diferencia;
+						$detalle['descripcion_retorno_bipay'] = 'Retorno del proceso bipay';
+					} else {
+						// Si el producto no tiene typeAssignmentProductoBipay=D, asegúrate de limpiar estos campos
+						$detalle['return_bipay'] = null;
+						$detalle['descripcion_retorno_bipay'] = null;
+					}
 				}
 
 				$detalle['cod_vent'] = $insert;
@@ -552,18 +600,23 @@ class Regventas extends CI_Controller
 				$detalle['cant_ventdet'] = $_POST['cant_prod'][$key];
 				$detalle['precunitcomp_ventdet'] = $precio_unitario;
 				$detalle['precunit_ventdet'] = $_POST['prec_prod'][$key];
-				if ($_POST['desc_prod'][$key] == '') {
+				if (empty($_POST['desc_prod'][$key])) {
 					$descuento = 0;
 				} else {
-					$descuento = $_POST['desc_prod'][$key];
+					$descuento = (float)$_POST['desc_prod'][$key];
 				}
 				$detalle['subtotal_ventdet'] = (($detalle['precunit_ventdet'] - $descuento) * $detalle['cant_ventdet']);
 				if ($_POST['tipo_igv'][$key] == '4') {
 					$detalle['igv_ventdet'] = 0;
-				} else {
+					$detalle['free_vent_det'] = 0;
+				} elseif ($_POST['tipo_igv'][$key] == '5') {
+					$detalle['igv_ventdet'] = 0;
+					$detalle['free_vent_det'] = $detalle['precunit_ventdet'];
+				} elseif ($_POST['tipo_igv'][$key] == '1') {
 					$detalle['igv_ventdet'] = round((($detalle['subtotal_ventdet'])  / 1.18) * 0.18, 2);
 					$igv_acumula += $detalle['igv_ventdet'];
 					$gravada_acumula += $detalle['subtotal_ventdet'];
+					$detalle['free_vent_det'] = 0;
 				}
 				$detalle['prec_ventdet'] = $detalle['subtotal_ventdet'] - $detalle['igv_ventdet'];
 				$detalle['descuento_ventdet'] = $descuento;
@@ -574,6 +627,7 @@ class Regventas extends CI_Controller
 				$detalle['peso_ventdet'] = $_POST['peso_prod'][$key];
 
 				$detalle['tipo_ventdet'] = $_POST['tipo'][$key];
+
 				$insertDetalle = $this->modelgeneral->insertRegist('tb_venta_detalle', $detalle);
 				if (!empty($producto)) {
 
@@ -646,7 +700,7 @@ class Regventas extends CI_Controller
 
 						//DESCONTAR FECHAS DE VENCIMIENTO
 						if (isset($_POST['producto_fecha'][$codigo_producto]) && $_POST['producto_fecha'][$codigo_producto] != '') {
-						// if ($_POST['producto_fecha'][$codigo_producto] != '') {
+							// if ($_POST['producto_fecha'][$codigo_producto] != '') {
 							$producto_fecha = $this->db->from('tb_producto_fecha')
 								->where('cod_prodfec', $_POST['producto_fecha'][$codigo_producto])
 								->get()->row();
@@ -724,7 +778,7 @@ class Regventas extends CI_Controller
 					if (($this->input->post('documento') =="15")) {
 						$arrboleta['tip_doc_ref']="01";
 					}
-					else if ($this->input->post('documento') =="16") {
+					elseif ($this->input->post('documento') =="16") {
 						$arrboleta['tip_doc_ref']="03";
 					}
 					else{
@@ -771,7 +825,7 @@ class Regventas extends CI_Controller
 					if ($this->input->post('documento') =="15") {
 						$arrnota['tip_doc_ref']="01";
 					}
-					else if ($this->input->post('documento') =="16") {
+					elseif ($this->input->post('documento') =="16") {
 						$arrnota['tip_doc_ref']="03";
 					}
 					else{
@@ -804,13 +858,15 @@ class Regventas extends CI_Controller
 				$resp['success'] = true;
 				$resp['id'] = $insert;
 
-				//$resp['printType'] = $printType[0]->type_formt;
-				$resp['printType'] = 'T';
+				$resp['printType'] = $printType[0]->type_formt;
+				// $resp['printType'] = 'T';
 				if ($talonario->siglas_talonario == 'FC') {
 					$resp['xml'] = $this->xmlHash($insert);
 				} else {
 					$resp['xml']['archivo'] = $this->generarNoXml($insert);
 				}
+			} else {
+				$resp['success'] = false;
 			}
 		} else {
 			$resp['success'] = false;
@@ -835,18 +891,51 @@ class Regventas extends CI_Controller
 
 		$acumula_gravada = 0;
 		$acumula_exonerada = 0;
+		$acumula_free = 0;
 
 		foreach ($venta->detalle as $detalle) {
-			if ($detalle->igv_ventdet > 0) {
-				$acumula_gravada += $detalle->subtotal_ventdet;
-			} else {
-				$acumula_exonerada += $detalle->subtotal_ventdet;
+			$id_prod = $detalle->cod_producto;
+			$tipo_ventser = $detalle->tipo_ventdet;
+			// Verificar si hay un tipo de IGV definido para este producto
+			if (isset($_POST['tipo_igv'][$id_prod]) && is_array($_POST['tipo_igv'])) {
+				$tipo_igv = $_POST['tipo_igv'][$id_prod];
+
+				switch ($tipo_igv) {
+					case '1':
+						$acumula_gravada += $detalle->subtotal_ventdet;
+						break;
+					case '4':
+						$acumula_exonerada += $detalle->subtotal_ventdet;
+						break;
+					case '5':
+						$acumula_free += $detalle->subtotal_ventdet;
+						break;
+					default:
+						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
+						break;
+				}
+			}else{
+				switch ($tipo_ventser) {
+					case 'V':
+						$acumula_gravada += $detalle->subtotal_ventdet;
+						break;
+					case 'E':
+						$acumula_exonerada += $detalle->subtotal_ventdet;
+						break;
+					
+					default:
+						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
+						break;
+				}
+
 			}
 		}
+
 
 		$acumula_gravada -= $venta->igv_vent;
 		$this->db->set('exonerada_vent', $acumula_exonerada)
 			->set('gravada_vent', $acumula_gravada)
+			->set('free_vent', $acumula_free)
 			->where('cod_vent', $venta->cod_vent)
 			->update('tb_venta');
 	}
@@ -883,16 +972,49 @@ class Regventas extends CI_Controller
 	}
 
 	// private function descontarDeAlmacen($data,$almacen)
+	// private function descontarDeAlmacen($data, $almacen, $idTypeAssignmentProduct)
+	// {
+	// 	//RESTAR DE ALMACEN
+	// 	// $this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$data['cant_ventdet']." WHERE cod_almacen = ".$almacen." AND cod_producto = ".$data['cod_producto']);
+	// 	if ($idTypeAssignmentProduct !== "null") {
+	// 		$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+	// 	} else {
+	// 		$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+	// 	}
+	// }
 	private function descontarDeAlmacen($data, $almacen, $idTypeAssignmentProduct)
 	{
-		//RESTAR DE ALMACEN
-		// $this->db->query("UPDATE tb_producto_stock SET stock = stock - ".$data['cant_ventdet']." WHERE cod_almacen = ".$almacen." AND cod_producto = ".$data['cod_producto']);
+		// Obtén información del producto
+		$productoInfo = $this->db->query("SELECT * FROM tb_producto WHERE cod_producto = " . $data['cod_producto'])->row_array();
+		$typeAssignment = $productoInfo['typeAssignmentProducto'];
+		$typeAssignmentBipay = $productoInfo['typeAssignmentProductoBipay'];
+
+		// Verificar si $idTypeAssignmentProduct no es nulo
 		if ($idTypeAssignmentProduct !== "null") {
-			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+			// Verificar si el producto tiene ambas asignaciones 'D' y 'G'
+			if ($typeAssignmentBipay === 'D' && $typeAssignment === 'G') {
+				// Obtener el valor de 'bipay'
+				$bipay = $productoInfo['bipay'];
+
+				// Calcular la diferencia entre el monto de venta y 'bipay'
+				$diferencia = $data['precunit_ventdet'] - $bipay;
+
+				// Restar la cantidad vendida del stock del almacén actual
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+
+				// Sumar la diferencia al stock del almacén con cod_almacen=8
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $diferencia . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+			} else {
+				// Si no cumple con ambas asignaciones o solo tiene la asignación 'G', realizar descuento de stock basado en el precio de venta como antes
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+			}
 		} else {
-			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
+			// Si $idTypeAssignmentProduct es nulo, realizar descuento de stock basado en el precio de venta como antes
+			$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . "  WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
 		}
 	}
+
+
 
 	public function deudasCliente()
 	{
@@ -924,49 +1046,56 @@ class Regventas extends CI_Controller
 
 	public function anular()
 	{
-		$data['estado_vent'] = 'A'; //ANULAR	
-		$where['cod_vent'] = $this->input->get('id');
+		$data['estado_vent'] = 'A'; // ANULAR	
+		$venta_id = $this->input->get('id');
 
-		/*=======================================
-		=            SUMAR STOCK            =
-		=======================================*/
-		$venta = $this->modelgeneral->getTableWhereRow('tb_venta', $where);
-		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', $where);
+		// Obtener información de la venta y sus detalles
+		$venta = $this->modelgeneral->getTableWhereRow('tb_venta', ['cod_vent' => $venta_id]);
+		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', ['cod_vent' => $venta_id]);
 
 		foreach ($detalle as $d) {
-			$whereStock['cod_producto'] = $d->cod_father_product;
-			$producto_row = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
-			if ($producto_row->cod_tiparticulo == 1) { //SI ES DEL TIPO PRODUCTO SE SUMA EL STOCK
+			$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
+			$producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
+
+			if ($producto->cod_tiparticulo == 1) { // Si es del tipo PRODUCTO
+				$whereStock['cod_producto'] = $d->cod_father_product;
 				$whereStock['cod_almacen'] = $venta->cod_almacen;
+
 				$productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
 
-				$nuevoStock = $productoStock->stock + $d->cant_ventdet;
+				if ($producto_detalle->typeAssignmentProducto == 'G') {
+					// Si el producto tiene asignación 'G', devolver el stock basado en el costo
+					$nuevoStock = $productoStock->stock + $d->precunit_ventdet;
+				} else {
+					$nuevoStock = $productoStock->stock + $d->cant_ventdet;
+				}
+
+				// Actualizar el stock del producto
 				$edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
 
-				//REGRESAR DISPONIBILIDAD A SERIE
-				$this->db->where('cod_vent', $where['cod_vent'])
+				// REGRESAR DISPONIBILIDAD A SERIE
+				$this->db->where('cod_vent', $venta_id)
 					->set('serie_estado', 'D')
 					->set('cod_vent', null)
 					->update('tb_producto_serie');
 
-				//Cambia estado venta en la tabla cobros
-				$this->db->where('cod_vent', $where['cod_vent'])
+				// Cambiar estado venta en la tabla cobros
+				$this->db->where('cod_vent', $venta_id)
 					->set('estado_vent', 'A')
 					->update('tb_cobro');
 			}
 		}
-		/*=====  End of SUMAR STOCK  ======*/
 
-		$edit = $this->modelgeneral->editRegist('tb_venta', $where, $data);
-		$resp = [];
-		$resp['where'] = $whereStock;
-		if ($edit) {
-			$resp['success'] = true;
-		} else {
-			$resp['success'] = false;
-		}
+		// Cambiar estado de la venta
+		$edit = $this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $venta_id], $data);
+
+		// Preparar respuesta JSON
+		$resp = ['where' => $whereStock];
+		$resp['success'] = $edit ? true : false;
 		echo json_encode($resp);
 	}
+
+
 
 	function agregarCliente()
 	{
@@ -974,8 +1103,8 @@ class Regventas extends CI_Controller
 		$this->form_validation->set_rules('nombre', '', 'required');
 		$this->form_validation->set_rules('documento', '', 'required');
 		// $this->form_validation->set_rules('telefono','','required');
-		 // Validación del documento
-		 if ($this->form_validation->run() == TRUE) {
+		// Validación del documento
+		if ($this->form_validation->run() == TRUE) {
 			$tipo = $this->input->post('tipo');
 			$nombre = $this->input->post('nombre');
 			$documento = trim($this->input->post('documento'));
@@ -987,7 +1116,7 @@ class Regventas extends CI_Controller
 				echo json_encode($resp);
 				return;
 			}
-	
+
 			// Realizar la validación aquí según el tipo de documento seleccionado
 			if ($tipo === "2" && !preg_match('/^\d{8}$/', $documento)) {
 				$resp['success'] = false;
@@ -1260,6 +1389,16 @@ class Regventas extends CI_Controller
 		//se recomienda leer: http://cpe.sunat.gob.pe/sites/default/files/inline-images/Guia%2BXML%2BFactura%2Bversion%202-1%2B1%2B0%20%282%29.pdf
 		$tipo_proceso = getTipoProceso();
 
+
+		$retencion = array();
+		$retencion['activo'] = false;
+
+		if ($res->retencion_base_imp != '' and $res->retencion_porcentaje != '') {
+			$retencion['activo'] = true;
+			$retencion['retencion_base_imp'] = round($res->retencion_base_imp, 2);
+			$retencion['retencion_porcentaje'] = $res->retencion_porcentaje;
+			$retencion['retencion_monto'] = round($res->retencion_monto, 2);
+		}
 		$detraccion = array();
 		$detraccion['activo'] = false;
 
@@ -1273,8 +1412,11 @@ class Regventas extends CI_Controller
 			$detraccion['texto'] = $res->detraccion_texto;
 		}
 
+		$total_reten_cuot = $res->total_vent - $res->retencion_monto;
 		$data = array(
 
+			// RETENCION
+			"retencion" => $retencion,
 			//DETRACION
 			"detraccion" => $detraccion,
 			//Cabecera del documento
@@ -1291,6 +1433,7 @@ class Regventas extends CI_Controller
 			"total_igv"                     => strval($res->igv_vent),
 			"total_isc"                   	=> "0",
 			"total_otr_imp"                 => "0",
+			"total_retencion_cuot"	=> $total_reten_cuot,
 			"total"                  		=> strval($res->total_vent),
 			"total_letras"              	=> 'SON ' . strtoupper(convertir(intval($res->total_vent))),
 			"nro_guia_remision"             => "",
@@ -1325,45 +1468,186 @@ class Regventas extends CI_Controller
 		$detalle = [];
 		$n = 1;
 
-		$total_gravadas = 0;
-		$total_exoneradas = 0;
 		foreach ($res->detalle as $d) {
-			if ($d->tipo_ventdet == 'V' or $d->tipo_ventdet == 'E') {
+			if ($d->tipo_ventdet == 'V' || $d->tipo_ventdet == 'E') {
 				$precio = $d->precunit_ventdet - $d->descuento_ventdet;
+				$det = []; // Se inicializa un nuevo array para cada detalle
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS
 				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
 				$det['txtPRECIO_DET'] = (string)$precio;
 				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
-				$det['txtPRECIO_TIPO_CODIGO'] = '01';
-
 				$det['txtIGV'] = $d->igv_ventdet;
 				$det['txtISC'] = '0';
 				$det['txtIMPORTE_DET'] = (string)$d->prec_ventdet;
-				$det['txtCOD_TIPO_OPERACION'] = ($d->igv_ventdet > 0) ? '10' : '20';
 				$det['txtCODIGO_DET'] = (string)(!is_null($d->cod_producto)) ? $d->cod_producto : $d->cod_servicio;
 				$det['txtDESCRIPCION_DET'] = (string)$d->producto_ventdet;
 				$precioSinIGV = $precio - ($precio / 1.18) * 0.18;
-				$det['txtPRECIO_SIN_IGV_DET'] = (string)($d->igv_ventdet > 0) ? round($precioSinIGV, 10) : $precio;
 				$det['txtCODIGO_PROD_SUNAT'] = '23251602';
 
-				$det['TIPO_IGV'] = ($d->igv_ventdet > 0) ? '1000' : '9997';
-				$det['MONTO_IGV'] = ($d->igv_ventdet > 0) ? '18.00' : '0';
-				$det['IGV_EXO'] = ($d->igv_ventdet > 0) ? 'IGV' : 'EXO';
+				$id_prod = $d->cod_producto;
+				$tip_vent = $d->tipo_ventdet;
+				// Verificar si hay un tipo de IGV definido para este producto
+				if (isset($_POST['tipo_igv'][$id_prod]) && is_array($_POST['tipo_igv'])) {
+					$tipo_igv = $_POST['tipo_igv'][$id_prod];
+					// Manejar el caso en que $tipo_igv no esté definido o sea un valor no esperado
+					if ($tipo_igv == '1') {
+						$det['txtPRECIO_TIPO_CODIGO'] = '01';
+						$det['txtCOD_TIPO_OPERACION'] = '10';
+						$det['txtPRECIO_SIN_IGV_DET'] = round($precioSinIGV, 10);
+						$det['TIPO_IGV'] = '1000';
+						$det['MONTO_IGV'] = '18.00';
+						$det['IGV_EXO'] = 'IGV';
+						$det['TIPO_IMPUESTO'] = 'VAT';
+						$det['TAX_CATEGORY_IDENTIFIER'] = 'S';
+					} elseif ($tipo_igv == '4') {
+						$det['txtPRECIO_TIPO_CODIGO'] = '01';
+						$det['txtCOD_TIPO_OPERACION'] = '20';
+						$det['txtPRECIO_SIN_IGV_DET'] = $precio;
+						$det['TIPO_IGV'] = '9997';
+						$det['MONTO_IGV'] = '0';
+						$det['IGV_EXO'] = 'EXO';
+						$det['TIPO_IMPUESTO'] = 'VAT';
+						$det['TAX_CATEGORY_IDENTIFIER'] = 'E';
+					} elseif ($tipo_igv == '5') {
+						$det['txtPRECIO_TIPO_CODIGO'] = '02';
+						$det['txtCOD_TIPO_OPERACION'] = '36';
+						$det['txtPRECIO_SIN_IGV_DET'] = $precio - $precio;
+						$det['TIPO_IGV'] = '9996';
+						$det['MONTO_IGV'] = '0';
+						$det['IGV_EXO'] = 'GRA';
+						$det['TIPO_IMPUESTO'] = 'FRE';
+						$det['TAX_CATEGORY_IDENTIFIER'] = 'Z';
+					}
+				} else {
+					if ($tip_vent == 'V') {
+						$det['txtPRECIO_TIPO_CODIGO'] = '01';
+						$det['txtCOD_TIPO_OPERACION'] = '10';
+						$det['txtPRECIO_SIN_IGV_DET'] = round($precioSinIGV, 10);
+						$det['TIPO_IGV'] = '1000';
+						$det['MONTO_IGV'] = '18.00';
+						$det['IGV_EXO'] = 'IGV';
+						$det['TIPO_IMPUESTO'] = 'VAT';
+						$det['TAX_CATEGORY_IDENTIFIER'] = 'S';
+					} elseif ($tip_vent == 'E') {
+						$det['txtPRECIO_TIPO_CODIGO'] = '01';
+						$det['txtCOD_TIPO_OPERACION'] = '20';
+						$det['txtPRECIO_SIN_IGV_DET'] = $precio;
+						$det['TIPO_IGV'] = '9997';
+						$det['MONTO_IGV'] = '0';
+						$det['IGV_EXO'] = 'EXO';
+						$det['TIPO_IMPUESTO'] = 'VAT';
+						$det['TAX_CATEGORY_IDENTIFIER'] = 'E';
+					}
+				}
+				//}
 				$detalle[] = $det;
 
-				if ($d->igv_ventdet > 0) {
-					$total_gravadas += $d->prec_ventdet;
-				} else {
-					$total_exoneradas += $d->prec_ventdet;
-				}
 				$n++;
 			}
 		}
 
 		$data['detalle'] = $detalle;
-		$data['total_gravadas'] = $total_gravadas;
-		$data['total_exoneradas'] = $total_exoneradas;
+		// $data['total_gravadas'] = $total_gravadas;
+		// $data['total_exonerada'] = $total_exoneradas;
+		$total_gravada = 0;
+		$total_exonerada = 0;
+		$total_free = 0;
+
+		foreach ($res->detalle as $detalle) {
+			$id_prod = $detalle->cod_producto;
+			$tip_vent = $detalle->tipo_ventdet;
+
+			// Verificar si hay un tipo de IGV definido para este producto
+			if (isset($_POST['tipo_igv'][$id_prod]) && is_array($_POST['tipo_igv'])) {
+				$tipo_igv = $_POST['tipo_igv'][$id_prod];
+
+				switch ($tipo_igv) {
+					case '1':
+						$total_gravada += $detalle->prec_ventdet;
+						break;
+					case '4':
+						$total_exonerada += $detalle->prec_ventdet;
+						break;
+					case '5':
+						$total_free += $detalle->prec_ventdet;
+						break;
+					default:
+						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
+						break;
+				}
+			} else {
+				switch ($tip_vent) {
+					case 'V':
+						$total_gravada += $detalle->prec_ventdet;
+						break;
+					case 'E':
+						$total_exonerada += $detalle->prec_ventdet;
+						break;
+
+					default:
+						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
+						break;
+						//}
+				}
+			}
+		}
+		// Inicializar un array para almacenar los tipos de IGV
+		$data['TIPO_IGV'] = [];
+		$data['MONTO_IGV'] = [];
+		$data['IGV_EXO'] = [];
+		$data['TIPO_IMPUESTO'] = [];
+		$data['TAX_CATEGORY_IDENTIFIER'] = [];
+		$data['TOTAL_GRA_EXO_FRE'] = [];
+		$data['TOTAL_IGV'] = [];
+
+		$igv_venta = 0;
+		$igv_venta = (strval($res->igv_vent) - $res->igv_vent);
+
+		foreach ($_POST['id_prod'] as $key => $value) {
+			if (isset($_POST['tipo_igv']) && is_array($_POST['tipo_igv'])) {
+				$tipo_igv = $_POST['tipo_igv'][$key] ?? null;
+				// Manejar el caso en que $tipo_igv no esté definido o sea un valor no esperado
+				switch ($tipo_igv) {
+					case '1':
+						$data['TIPO_IGV'][] = '1000';
+						$data['MONTO_IGV'][] = '18.00';
+						$data['IGV_EXO'][] = 'IGV';
+						$data['TIPO_IMPUESTO'][] = 'VAT';
+						$data['TAX_CATEGORY_IDENTIFIER'][] = 'S';
+						$data['TOTAL_GRA_EXO_FRE'][] = $total_gravada;
+						$data['TOTAL_IGV'][] = strval($res->igv_vent);
+						// Otros valores para 'MONTO_IGV', 'IGV_EXO', 'TIPO_IMPUESTO', 'TAX_CATEGORY_IDENTIFIER'
+						break;
+					case '4':
+						$data['TIPO_IGV'][] = '9997';
+						$data['MONTO_IGV'][] = '0';
+						$data['IGV_EXO'][] = 'EXO';
+						$data['TIPO_IMPUESTO'][] = 'VAT';
+						$data['TAX_CATEGORY_IDENTIFIER'][] = 'E';
+						$data['TOTAL_GRA_EXO_FRE'][] = $total_exonerada;
+						$data['TOTAL_IGV'][] = $igv_venta;
+						// Otros valores para 'MONTO_IGV', 'IGV_EXO', 'TIPO_IMPUESTO', 'TAX_CATEGORY_IDENTIFIER'
+						break;
+					case '5':
+						$data['TIPO_IGV'][] = '9996';
+						$data['MONTO_IGV'][] = '0';
+						$data['IGV_EXO'][] = 'GRA';
+						$data['TIPO_IMPUESTO'][] = 'FRE';
+						$data['TAX_CATEGORY_IDENTIFIER'][] = 'Z';
+						$data['TOTAL_GRA_EXO_FRE'][] = $total_free;
+						$data['TOTAL_IGV'][] = $igv_venta;
+						// Otros valores para 'MONTO_IGV', 'IGV_EXO', 'TIPO_IMPUESTO', 'TAX_CATEGORY_IDENTIFIER'
+						break;
+					default:
+						// Manejar el caso de un valor inesperado en $tipo_igv
+						// Por ejemplo: lanzar una excepción o establecer un valor predeterminado
+						break;
+				}
+			}
+		}
+
+
 
 		//Invocamos el servicio
 		$token = ''; //en caso quieras utilizar algún token generado desde tu sistema
@@ -1686,7 +1970,7 @@ class Regventas extends CI_Controller
 					"Tamaño" => 0,
 					"Modificado" => filemtime($directorio . $archivo)
 				);
-			} else if (is_readable($directorio . $archivo)) {
+			} elseif (is_readable($directorio . $archivo)) {
 				$res[] = array(
 					"Nombre" => $directorio . $archivo,
 					"Archivo" => $archivo,
