@@ -1168,35 +1168,40 @@ class Regdocumentoelectronico extends CI_Controller
 		$venta = $this->modelgeneral->getTableWhereRow('tb_venta', ['cod_vent' => $id_venta]);
 		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', ['cod_vent' => $id_venta]);
 	
-		foreach ($detalle as $d) {
-			$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
-			$producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
-	
-			if ($producto->cod_tiparticulo == 1) { // Si es del tipo PRODUCTO
-				$whereStock['cod_producto'] = $d->cod_father_product;
-				$whereStock['cod_almacen'] = $venta->cod_almacen;
-	
-				$productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
-	
-				if ($producto_detalle->typeAssignmentProducto == 'G') {
-					// Si el producto tiene asignación 'G', devolver el stock basado en el costo
-					$nuevoStock = $productoStock->stock + $d->precunit_ventdet;
-				} else {
-					$nuevoStock = $productoStock->stock + $d->cant_ventdet;
-				}
-	
-				// Actualizar el stock del producto
-				$edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
-	
-				// REGRESAR DISPONIBILIDAD A SERIE
-				$this->db->where('cod_vent', $id_venta)
-					->set('serie_estado', 'D')
-					->set('cod_vent', null)
-					->update('tb_producto_serie');
-	
-			
-			}
-		}
+    foreach ($detalle as $d) {
+      // Comprobar si es un servicio
+      if ($d->cod_father_product === null) {
+          continue; // Si es un servicio, omitir la iteración y pasar al siguiente detalle
+      }
+      
+      $producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
+      $producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
+  
+      // Verificar si el padre del producto es del tipo PRODUCTO
+      if ($producto && $producto->cod_tiparticulo == 1) {
+          $whereStock['cod_producto'] = $d->cod_father_product;
+          $whereStock['cod_almacen'] = $venta->cod_almacen;
+  
+          $productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
+  
+          if ($producto_detalle->typeAssignmentProducto == 'G') {
+              // Si el producto tiene asignación 'G', devolver el stock basado en el costo
+              $nuevoStock = $productoStock->stock + $d->precunit_ventdet;
+          } else {
+              $nuevoStock = $productoStock->stock + $d->cant_ventdet;
+          }
+  
+          // Actualizar el stock del producto
+          $edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
+  
+          // REGRESAR DISPONIBILIDAD A SERIE
+          $this->db->where('cod_vent', $id_venta)
+              ->set('serie_estado', 'D')
+              ->set('cod_vent', null)
+              ->update('tb_producto_serie');
+      }
+  }
+  
 	
 		// Cambiar estado de la venta
 		// $edit = $this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $venta_id], $data);

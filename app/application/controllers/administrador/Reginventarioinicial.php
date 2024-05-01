@@ -284,49 +284,61 @@ class Reginventarioinicial extends CI_Controller
 
 	function reporteExcelSeries()
 	{
-		$data['datos'] = $this->getInventarioInicialReporteseries();		
+		$data['datos'] = $this->getInventarioInicialReporteseries();
+		// Imprimir los datos para depuración
+		// foreach ($data['datos'] as $d) {
+		// 	echo $d->cod_producto . " | " . $d->nomb_product . " | " . $d->serie_estado . " | " . $d->fecha_ventas . "<br>";
+		// 	exit();
+		// }
+
 		$this->load->view('admin/inventarioinicial/reporte_excel_series', $data);
 	}
 
 	function getInventarioInicialReporteseries()
-	{
-		$this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp,ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro, 
+{
+    // Obtener la fecha actual y restar un año
+    $fecha_limite = date('Y-m-d', strtotime('-1 year'));
+
+    $this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp, ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro,
                         (CASE WHEN serie_estado = "N" THEN v.fecha_vent ELSE NULL END) AS fecha_venta');
-		$this->db->from('tb_producto p');
-		$this->db->join('tb_marca m', 'p.cod_marca = m.cod_marca');
-		$this->db->join('tb_categoria c', 'p.cod_categoria = c.cod_categoria');
-		$this->db->join('tb_unidades u', 'p.cod_unid = u.cod_unid');
-		$this->db->join('tb_producto_serie ps', 'p.cod_producto = ps.cod_producto');
-		$this->db->join('tb_almacen a', 'ps.cod_almacen = a.cod_almacen');
-		$this->db->join('tb_producto_stock ps2', 'p.cod_producto = ps2.cod_producto AND ps.cod_almacen = ps2.cod_almacen', 'left');
-		$this->db->join('tb_venta_detalle_serie vds', 'ps.cod_producto = vds.cod_producto', 'left');
-		$this->db->join('tb_venta_detalle vd', 'vds.cod_ventdet = vd.cod_ventdet', 'left');
-		$this->db->join('tb_venta v', 'vd.cod_vent = v.cod_vent', 'left');
+    $this->db->from('tb_producto p');
+    $this->db->join('tb_marca m', 'p.cod_marca = m.cod_marca');
+    $this->db->join('tb_categoria c', 'p.cod_categoria = c.cod_categoria');
+    $this->db->join('tb_unidades u', 'p.cod_unid = u.cod_unid');
+    $this->db->join('tb_producto_serie ps', 'p.cod_producto = ps.cod_producto');
+    $this->db->join('tb_almacen a', 'ps.cod_almacen = a.cod_almacen');
+    $this->db->join('tb_producto_stock ps2', 'p.cod_producto = ps2.cod_producto AND ps.cod_almacen = ps2.cod_almacen', 'left');
+    $this->db->join('tb_venta_detalle vd', 'p.cod_producto = vd.cod_father_product OR p.cod_producto = vd.cod_producto', 'left');
+    $this->db->join('tb_venta v', 'vd.cod_vent = v.cod_vent', 'left');
 
-		if ($this->input->get('producto') != '') {
-			$this->db->like('nomb_product', $this->input->get('producto'));
-		}
+    if ($this->input->get('producto') != '') {
+        $this->db->like('nomb_product', $this->input->get('producto'));
+    }
 
-		if ($this->input->get('categoria') != '') {
-			$this->db->where('c.cod_categoria', $this->input->get('categoria'));
-		}
+    if ($this->input->get('categoria') != '') {
+        $this->db->where('c.cod_categoria', $this->input->get('categoria'));
+    }
 
-		if ($this->input->get('marca') != '') {
-			$this->db->where('m.cod_marca', $this->input->get('marca'));
-		}
+    if ($this->input->get('marca') != '') {
+        $this->db->where('m.cod_marca', $this->input->get('marca'));
+    }
 
-		// Filtrar por almacén si se ha seleccionado uno
-		$almacen = $this->input->get('almacen');
-		if ($almacen !== null) {
-			$this->db->like('ps.cod_almacen', $almacen);
-		}
+    // Filtrar por almacén si se ha seleccionado uno
+    $almacen = $this->input->get('almacen');
+    if ($almacen !== null) {
+        $this->db->like('ps.cod_almacen', $almacen);
+    }
 
-		$this->db->distinct();
+    // Limitar la fecha de registro a un año atrás desde la fecha actual
+    $this->db->where('fecha_registro >=', $fecha_limite);
 
-		return $this->db->get()->result();
-	}
+    $this->db->distinct();
 
+    return $this->db->get()->result();
+}
 
+	
+	
 
 	public function getFechasProducto()
 	{

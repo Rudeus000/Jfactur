@@ -4546,7 +4546,7 @@ $(function () {
 			$('#FormEditarProducto select[name=estado]').val(json.est_product).trigger('change.select2');
 		});
 	});
-	$('#FormEditarProducto input[name="editproductAssignmentDebit"]').change(function() {
+	$('#FormEditarProducto input[name="editproductAssignmentDebit"]').change(function () {
 		if ($(this).is(":checked")) {
 			$('#bipayedit').show();
 		} else {
@@ -9717,12 +9717,17 @@ $(function () {
 
 				var tr = '';
 				$.each(data.detalle, function (index, val) {
+					if (val.tipo_ventdet == "V") {
+						var ser_tipoimpuesto = 1;
+					} else {
+						var ser_tipoimpuesto = 4;
+					}
 
 					tr += `
 								<tr id="prod-${val.cod_producto}" data-id="${val.cod_producto}">
 									<input type="hidden" name="id_prod[]" value="${val.cod_producto}"/>
 									<input type="hidden" name="id_detalle[]" value="${val.cod_ventdet}"/>
-									<input type="hidden" name="tipo_igv[]" value="${val.cod_parametros}" class="tipo_igv"/>
+									<input type="hidden" name="tipo_igv[]" value="${(val.cod_parametros == null) ? ser_tipoimpuesto : val.cod_parametros}" class="tipo_igv"/>
 									<td>${(val.cod_producto == null) ? val.cod_servicio : val.cod_producto}</td>
 									<td>${val.producto_ventdet}</td>
 									<td>${val.nomb_marca}</td>
