@@ -297,7 +297,7 @@ class Reginventarioinicial extends CI_Controller
 	function getInventarioInicialReporteseries()
 {
     // Obtener la fecha actual y restar un año
-    $fecha_limite = date('Y-m-d', strtotime('-1 year'));
+    // $fecha_limite = date('Y-m-d', strtotime('-1 year'));
 
     $this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp, ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro,
                         (CASE WHEN serie_estado = "N" THEN v.fecha_vent ELSE NULL END) AS fecha_venta');
@@ -330,7 +330,7 @@ class Reginventarioinicial extends CI_Controller
     }
 
     // Limitar la fecha de registro a un año atrás desde la fecha actual
-    $this->db->where('fecha_vent >=', $fecha_limite);
+    // $this->db->where('fecha_vent >=', $fecha_limite);
 
     $this->db->distinct();
 
