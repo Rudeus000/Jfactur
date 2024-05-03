@@ -330,7 +330,7 @@ class Reginventarioinicial extends CI_Controller
     }
 
     // Limitar la fecha de registro a un año atrás desde la fecha actual
-    $this->db->where('fecha_registro >=', $fecha_limite);
+    $this->db->where('fecha_vent >=', $fecha_limite);
 
     $this->db->distinct();
 
