@@ -294,48 +294,41 @@ class Reginventarioinicial extends CI_Controller
 		$this->load->view('admin/inventarioinicial/reporte_excel_series', $data);
 	}
 
-	function getInventarioInicialReporteseries()
-{
-    // Obtener la fecha actual y restar un año
-    // $fecha_limite = date('Y-m-d', strtotime('-1 year'));
-
-    $this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp, ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro,
-                        (CASE WHEN serie_estado = "N" THEN v.fecha_vent ELSE NULL END) AS fecha_venta');
-    $this->db->from('tb_producto p');
-    $this->db->join('tb_marca m', 'p.cod_marca = m.cod_marca');
-    $this->db->join('tb_categoria c', 'p.cod_categoria = c.cod_categoria');
-    $this->db->join('tb_unidades u', 'p.cod_unid = u.cod_unid');
-    $this->db->join('tb_producto_serie ps', 'p.cod_producto = ps.cod_producto');
-    $this->db->join('tb_almacen a', 'ps.cod_almacen = a.cod_almacen');
-    $this->db->join('tb_producto_stock ps2', 'p.cod_producto = ps2.cod_producto AND ps.cod_almacen = ps2.cod_almacen', 'left');
-    $this->db->join('tb_venta_detalle vd', 'p.cod_producto = vd.cod_father_product OR p.cod_producto = vd.cod_producto', 'left');
-    $this->db->join('tb_venta v', 'vd.cod_vent = v.cod_vent', 'left');
-
-    if ($this->input->get('producto') != '') {
-        $this->db->like('nomb_product', $this->input->get('producto'));
-    }
-
-    if ($this->input->get('categoria') != '') {
-        $this->db->where('c.cod_categoria', $this->input->get('categoria'));
-    }
-
-    if ($this->input->get('marca') != '') {
-        $this->db->where('m.cod_marca', $this->input->get('marca'));
-    }
-
-    // Filtrar por almacén si se ha seleccionado uno
-    $almacen = $this->input->get('almacen');
-    if ($almacen !== null) {
-        $this->db->like('ps.cod_almacen', $almacen);
-    }
-
-    // Limitar la fecha de registro a un año atrás desde la fecha actual
-    // $this->db->where('fecha_vent >=', $fecha_limite);
-
-    $this->db->distinct();
-
-    return $this->db->get()->result();
-}
+	function getInventarioInicialReporteseries($pagina_actual = 1, $registros_por_pagina = 10)
+	{
+		$this->db->select('*'); // Selecciona todas las columnas de la vista
+		$this->db->from('vista_inventario'); // Utiliza la vista en lugar de las tablas originales
+	
+		// Aplica los filtros de búsqueda
+		if ($this->input->get('producto') != '') {
+			$this->db->like('nomb_product', $this->input->get('producto'));
+		}
+	
+		if ($this->input->get('categoria') != '') {
+			$this->db->where('cod_categoria', $this->input->get('categoria'));
+		}
+	
+		if ($this->input->get('marca') != '') {
+			$this->db->where('cod_marca', $this->input->get('marca'));
+		}
+	
+		// Filtra por almacén si se ha seleccionado uno
+		$almacen = $this->input->get('almacen');
+		if ($almacen !== null) {
+			$this->db->like('nomb_almacen', $almacen);
+		}
+	
+		// Calcula el offset para la paginación
+		$offset = ($pagina_actual - 1) * $registros_por_pagina;
+	
+		// Aplica la paginación
+		$this->db->limit($registros_por_pagina, $offset);
+	
+		// Ejecuta la consulta y devuelve los resultados
+		return $this->db->get()->result();
+	}
+	
+	
 
 	
 	
