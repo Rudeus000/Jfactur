@@ -4665,6 +4665,8 @@ $(function () {
 			"url": path + 'administrador/reginventarioinicial/jsonInventarioInicial',
 			"type": "GET",
 			"data": function (d) {
+				d.desde = $("input[desde]").val();
+				d.hasta = $("input[hasta]").val();
 				d.almacen = $("select[name=almacen]").val();
 				d.producto = $("input[name=producto]").val();
 				d.categoria = $("select[name=categoria]").val();
@@ -4701,10 +4703,41 @@ $(function () {
 	});
 
 	$('#InventarioInicialReporteExcelSeries').click(function (event) {
+		// Serializar el formulario
 		let form = $('#FormAlmacenInventarioInicialFiltro').serializeObject();
 		let params = $.param(form);
+	
+		// Verificar si se han proporcionado las fechas
+		let desde = form.desde;
+		let hasta = form.hasta;
+		if (desde && hasta) {
+			// Convertir las fechas a objetos Date
+			let fechaDesde = new Date(desde);
+			let fechaHasta = new Date(hasta);
+			// Calcular la diferencia en milisegundos
+			let diferencia = fechaHasta - fechaDesde;
+			// Calcular el número de días en un año
+			let diasEnAnio = 365 * 24 * 60 * 60 * 1000;
+	
+			// Si la diferencia es mayor a un año, mostrar mensaje de error
+			if (diferencia > diasEnAnio) {
+				Swal.fire({
+					type:"error",
+					title: "Error",
+					text: "El rango de fechas no puede exceder un año.",
+					icon: "error",
+					button: "OK",
+				});
+				// Detener el comportamiento predeterminado del enlace
+				event.preventDefault();
+				return;
+			}
+		}
+	
+		// Asignar el enlace al botón
 		$(this).attr('href', path + 'administrador/reginventarioinicial/reporteExcelSeries?' + params);
 	});
+	
 
 	$('#FormAlmacenInventarioInicialFiltro select[name=almacen], #FormAlmacenInventarioInicialFiltro select[name=categoria], #FormAlmacenInventarioInicialFiltro select[name=marca]').change(function (event) {
 		$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();

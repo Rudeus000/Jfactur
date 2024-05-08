@@ -40,6 +40,15 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
+                                                    <label class="control-label">Fecha</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                                                        <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
                                                     <label class="control-label">Almacen:</label>
                                                     <select name="almacen" class="form-control select2">
                                                         <option value="">Seleccione</option>
@@ -55,7 +64,7 @@
                                                     <input type="text" name="producto" class="form-control" placeholder="Escriba y presione enter">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Categoria:</label>
                                                     <select name="categoria" class="form-control select2">
@@ -66,7 +75,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Marca:</label>
                                                     <select name="marca" class="form-control select2">
@@ -258,7 +267,7 @@
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
@@ -298,7 +307,7 @@
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
