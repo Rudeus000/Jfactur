@@ -296,8 +296,8 @@ class Reginventarioinicial extends CI_Controller
 
 	function getInventarioInicialReporteseries()
 	{
-		$this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp, ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro,
-							(CASE WHEN serie_estado = "N" THEN v.fecha_vent ELSE NULL END) AS fecha_venta');
+		$this->db->select('p.*, nomb_almacen, serie_descripcion, cod_comp,ps.cod_vent AS codigo_venta, serie_estado, histcompstock_serie, fecha_registro, 
+                        (CASE WHEN serie_estado = "N" THEN v.fecha_vent ELSE NULL END) AS fecha_venta');
 		$this->db->from('tb_producto p');
 		$this->db->join('tb_marca m', 'p.cod_marca = m.cod_marca');
 		$this->db->join('tb_categoria c', 'p.cod_categoria = c.cod_categoria');
@@ -305,18 +305,9 @@ class Reginventarioinicial extends CI_Controller
 		$this->db->join('tb_producto_serie ps', 'p.cod_producto = ps.cod_producto');
 		$this->db->join('tb_almacen a', 'ps.cod_almacen = a.cod_almacen');
 		$this->db->join('tb_producto_stock ps2', 'p.cod_producto = ps2.cod_producto AND ps.cod_almacen = ps2.cod_almacen', 'left');
-		$this->db->join('tb_venta_detalle vd', 'p.cod_producto = vd.cod_father_product OR p.cod_producto = vd.cod_producto', 'left');
+		$this->db->join('tb_venta_detalle_serie vds', 'ps.cod_producto = vds.cod_producto', 'left');
+		$this->db->join('tb_venta_detalle vd', 'vds.cod_ventdet = vd.cod_ventdet', 'left');
 		$this->db->join('tb_venta v', 'vd.cod_vent = v.cod_vent', 'left');
-	
-		// Filtrar por fecha de registro dentro del rango especificado
-		$desde = $this->input->get('desde');
-		$hasta = $this->input->get('hasta');
-		if ($desde != '' && $hasta != '') {
-		
-			// Agregar condiciones de rango de fecha
-			$this->db->where("fecha_registro >= ", $desde);
-			$this->db->where("fecha_registro <=", $hasta);
-		}
 	
 		if ($this->input->get('producto') != '') {
 			$this->db->like('nomb_product', $this->input->get('producto'));

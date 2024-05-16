@@ -37,16 +37,7 @@
                                 <fieldset>
                                     <legend>Filtro</legend>
                                     <form id="FormAlmacenInventarioInicialFiltro" action="" method="post" autocomplete="off">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Fecha</label>
-                                                    <div class="input-group">
-                                                        <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                                                        <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="row">                                          
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Almacen:</label>
