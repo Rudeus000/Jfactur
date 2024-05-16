@@ -674,7 +674,7 @@ class Regventas extends CI_Controller
 									$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct == 'H' and !is_null($producto->idTypeAssignmentProduct)) ? $producto->idTypeAssignmentProduct : $producto->cod_producto;
 									$whereSeries['serie_descripcion'] = $value;
 									$dataSeries['cod_vent'] = $insert;
-									$dataSeries['fecha_venta'] = $this->input->post('fecha');
+									// $dataSeries['fecha_venta'] = $this->input->post('fecha');
 									$dataSeries['serie_estado'] = 'N';
 									$this->modelgeneral->editRegist('tb_producto_serie', $whereSeries, $dataSeries);
 
@@ -688,7 +688,7 @@ class Regventas extends CI_Controller
 								$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct == 'H' and !is_null($producto->idTypeAssignmentProduct)) ? $producto->idTypeAssignmentProduct : $producto->cod_producto;
 								$whereSeries['serie_descripcion'] = $series;
 								$dataSeries['cod_vent'] = $insert;
-								$dataSeries['fecha_venta'] = $this->input->post('fecha');;
+								// $dataSeries['fecha_venta'] = $this->input->post('fecha');
 								$dataSeries['serie_estado'] = 'N';
 								$this->modelgeneral->editRegist('tb_producto_serie', $whereSeries, $dataSeries);
 
