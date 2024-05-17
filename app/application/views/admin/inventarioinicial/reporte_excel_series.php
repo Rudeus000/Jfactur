@@ -123,7 +123,7 @@ $objPHPExcel->getActiveSheet()
 ->getStyleByColumnAndRow(4,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(5,$row,$d->codigo_venta)
+->setCellValueByColumnAndRow(5,$row,$d->cod_vent)
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
