@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+use Picqer\Barcode\BarcodeGeneratorPNG; // Importar la biblioteca
 
 class Regproducto extends CI_Controller
 {
@@ -862,4 +862,79 @@ class Regproducto extends CI_Controller
         $resp['productos'] = $productos;
         return $resp;
     }
+
+  
+
+    public function generate_code() {
+        // Obtener los datos del formulario
+        $product_name = $this->input->post('product_name');
+        $product_code = $this->input->post('product_code');
+        $code_type = $this->input->post('code_type');
+
+        if ($code_type === 'barcode') {
+            $this->generate_barcode($product_code);
+        } else {
+            $this->generate_qrcode($product_code);
+        }
+    }
+
+    private function generate_barcode($code) {
+        $generator = new BarcodeGeneratorPNG();
+        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_128);
+
+        // Guardar la imagen en el servidor
+        $barcodeImagePath = FCPATH . 'uploads/barcodes/' . $code . '.png';
+        file_put_contents($barcodeImagePath, $barcode);
+
+        // Llamar a la función para generar el PDF con el código de barras
+        $this->generate_pdf($barcodeImagePath, 'barcode');
+    }
+
+    private function generate_qrcode($code) {
+        // Cargar la librería de código QR
+        $this->load->library('ciqrcode');
+
+        $params['data'] = $code;
+        $params['level'] = 'H';
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . 'uploads/qrcodes/' . $code . '.png';
+
+        // Generar el código QR
+        $this->ciqrcode->generate($params);
+
+        // Llamar a la función para generar el PDF con el código QR
+        $this->generate_pdf($params['savename'], 'qrcode');
+    }
+
+    private function generate_pdf($imagePath, $type) {
+        // Configurar MPDF
+        $this->mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'orientation' => 'P',
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 10,
+            'margin_bottom' => 10,
+            'margin_header' => 10,
+            'margin_footer' => 10
+        ]);
+
+        $html = '<h1>Generated ' . ucfirst($type) . '</h1>';
+        $html .= '<img src="' . base_url('uploads/' . ($type === 'barcode' ? 'barcodes/' : 'qrcodes/') . basename($imagePath)) . '" style="width:300px;height:300px;" />';
+
+        // Escribir HTML al PDF
+        $this->mpdf->SetTitle('Generated ' . ucfirst($type));
+        $this->mpdf->WriteHTML($html);
+        
+        // Generar y descargar el PDF
+        $pdfFileName = 'Generated_' . ucfirst($type) . '.pdf';
+        $this->mpdf->Output($pdfFileName, 'D'); // 'D' para descargar el PDF
+
+        // Para depuración, guardar el PDF en el servidor
+        //$this->mpdf->Output(FCPATH . 'uploads/pdfs/' . $pdfFileName, 'F'); // 'F' para guardar en el servidor
+    }
+    
+    
+
 }

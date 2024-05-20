@@ -623,48 +623,31 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="barcode">
-                                    <form id="FormBarcode" action="<?= base_url('administrador/regproducto/insertUmedidaprod') ?>" method="post" autocomplete="off">
+                                    <form id="FormBarcode" action="<?= base_url('administrador/regproducto/generate_code') ?>" method="post" autocomplete="off">
                                         <input type="hidden">
 
                                         <div class="row">
-
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Prefijo: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="Prefijo" class="form-control" maxlength="5">
+                                                    <label for="product_name">Product Name:</label>
+                                                    <input type="text" class="form-control" id="product_name" name="product_name">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Sofijo: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="sofijo" class="form-control" maxlength="5">
+                                                    <label for="product_code">Product Code:</label>
+                                                    <input type="text" class="form-control" id="product_code" name="product_code">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Valor inicial: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="valorini" class="form-control" maxlength="5">
+                                                    <label for="code_type">Code Type:</label>
+                                                    <select class="form-control" id="code_type" name="code_type">
+                                                        <option value="barcode">Barcode</option>
+                                                        <option value="qrcode">QR Code</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Valor final: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="valorend" class="form-control" maxlength="5">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Incremento: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="incremento" class="form-control" maxlength="5">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Mascara: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="Mascara" class="form-control" maxlength="5">
-                                                </div>
-                                            </div>
-
                                         </div>
                                     </form>
                                     <legend class="scheduler-border"></legend>

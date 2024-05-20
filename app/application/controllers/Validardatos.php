@@ -17,8 +17,8 @@ public function validarDocumento()
     {
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE2NzYwNjkwfQ.rm5R4EsFJ1fUnEPOgbMDDQCDMXBXTGV6UOgWsKG9WI4';
-
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE4ODk1NTAxfQ.ru-SomwC-KaKyKb-n_NPNFOK2pxr3iFrGPRHOuRnigE';
+// eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE2Njc4ODc1fQ.3EraTOofjlQ82ohhkrUtZqf17M4b1wolKRykDQoxUzc
 
 if ($tipo_doc == "2") {
     // Validar el formato del DNI (solo números y 8 dígitos)
