@@ -58,6 +58,10 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         array (
             'Luecano\\NumeroALetras\\' => 22,
         ),
+        'E' => 
+        array (
+            'Endroid\\QrCode\\' => 15,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
@@ -158,6 +162,10 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         'Luecano\\NumeroALetras\\' => 
         array (
             0 => __DIR__ . '/..' . '/luecano/numero-a-letras/src',
+        ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qr-code/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

@@ -3,7 +3,7 @@
         'name' => 'codeigniter/framework',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd9b5b4551f999bb4e37bf2de3147d007dfea84b9',
+        'reference' => '8fcbe6a3e78e2b266872a8619b29a401976e4afb',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'codeigniter/framework' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd9b5b4551f999bb4e37bf2de3147d007dfea84b9',
+            'reference' => '8fcbe6a3e78e2b266872a8619b29a401976e4afb',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -54,6 +54,15 @@
             'install_path' => __DIR__ . '/../doctrine/instantiator',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'endroid/qr-code' => array(
+            'pretty_version' => '4.6.1',
+            'version' => '4.6.1.0',
+            'reference' => 'a75c913b0e4d6ad275e49a2c1de1cacffc6c2184',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../endroid/qr-code',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'ezyang/htmlpurifier' => array(
             'pretty_version' => 'v4.17.0',

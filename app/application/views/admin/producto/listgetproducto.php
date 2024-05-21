@@ -275,7 +275,7 @@
                                                         <label class="form-check-label" for="productAssignmentD">D</label>
                                                     </div>
 
-                                                    <input type="text" name="nombre" class="form-control">
+                                                    <input type="text" style="text-transform:uppercase" name="nombre" class="form-control">
                                                 </div>
                                             </div>
 
@@ -454,11 +454,12 @@
                                             <!-- <div class="form-group row"> -->
 
                                             <div class="col-md-4">
-                                                <label class="control-label">Codigo de Barras:</label>
+                                                <label class="control-label">Codigo de barras:</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="codigobarra" placeholder="Datos para generar" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                                    <input type="text" class="form-control" name="codigobarra" readonly placeholder="Auto generado" aria-label="Recipient's username" style="text-transform:uppercase" aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-dark waves-effect waves-light" type="button">Crear</button>
+                                                        <!-- <button class="btn btn-dark waves-effect waves-light" type="button">Crear</button> -->
+                                                        <a href="#" class="btn btn-rounded btn-pink float-right" id="btnAbrirbarcode">+</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -533,7 +534,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Ingrese marca:</label>
-                                                    <input type="text" name="descripcion" class="form-control">
+                                                    <input type="text" style="text-transform:uppercase" name="descripcion" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -557,7 +558,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Ingrese categoria:</label>
-                                                    <input type="text" name="descripcion" class="form-control">
+                                                    <input type="text" style="text-transform:uppercase" name="descripcion" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -582,7 +583,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label class="control-label">Nombre: <span class="text-danger"> *</span></label>
-                                                    <input type="text" name="descripcion" class="form-control" maxlength="5">
+                                                    <input type="text" style="text-transform:uppercase" name="descripcion" class="form-control" maxlength="5">
                                                 </div>
                                             </div>
 
@@ -627,19 +628,13 @@
                                         <input type="hidden">
 
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="product_name">Product Name:</label>
-                                                    <input type="text" class="form-control" id="product_name" name="product_name">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="product_code">Product Code:</label>
                                                     <input type="text" class="form-control" id="product_code" name="product_code">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="code_type">Code Type:</label>
                                                     <select class="form-control" id="code_type" name="code_type">
@@ -648,14 +643,20 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="quantity">Quantity:</label>
+                                                    <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">
+                                                </div>
+                                            </div>
                                         </div>
                                     </form>
                                     <legend class="scheduler-border"></legend>
                                     <div class="row" id="BarcoContenedorGuardar">
                                         <div class="col-md-12">
                                             <div class="form-group float-right">
-                                                <a href="<?= base_url('') ?>" class="btn btn-pink "><i class="fas fa-times"></i> Cancelar</a>
-                                                <button type="submit" form="FormBarcode" class="btn btn-success "><i class="fa fa-save m-r-5"></i>Generar</button>
+                                                <a href="" id="btnCerrarbarcode" class="btn btn-pink "><i class="fas fa-times"></i> Back</a>
+                                                <button type="submit" form="FormBarcode" class="btn btn-success" formtarget="_blank"><i class="fa fa-save m-r-5"></i>Generar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -868,7 +869,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Codigo de Barras:<span class="text-danger"> *</label>
-                                <input type="text" name="codigobarra" class="form-control">
+                                <input type="text" name="codigobarra" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -1076,6 +1077,26 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const productoNameInput = document.querySelector('input[name="nombre"]');
+                const productCodeInput = document.querySelector('input[name="product_code"]');
+                const productCodeBarra = document.querySelector('input[name="codigobarra"]');
+                productoNameInput.addEventListener('input', function() {
+                    const nombreProducto = productoNameInput.value;
+                    if (nombreProducto) {
+                        const initials = nombreProducto.split(' ').map(word => word.charAt(0)).join('');
+                        const randomNumber = Math.floor(Math.random() * 10000);
+                        const productCode = initials + randomNumber.toString().padStart(4, '0');
+                        productCodeInput.value = productCode;
+                        productCodeBarra.value = productCode;
+
+                    } else {
+                        productCodeInput.value = '';
+                    }
+                });
+            });
+        </script>
+        <script>
             $(document).ready(function() {
                 // Manejar el clic en el botón
                 $('#btnAbrirMarca').click(function(event) {
@@ -1097,6 +1118,18 @@
                     $('.nav-tabs a[href="#producto"]').tab('show');
                 });
                 $('#btnCerrarCategoria').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#producto"]').tab('show');
+                });
+                $('#btnAbrirbarcode').click(function(event) {
+                    event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                    // Activar el tab-pane con el ID "marca"
+                    $('.nav-tabs a[href="#barcode"]').tab('show');
+                });
+                $('#btnCerrarbarcode').click(function(event) {
                     event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
 
                     // Activar el tab-pane con el ID "marca"
