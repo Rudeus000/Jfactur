@@ -15248,12 +15248,15 @@ if($('#container-pos').length){
 		submitHandler: function (form) {
 			if($('#pos-resumen-center .pos-resumen-item').length == 0){
 				alert('No seleccionó ningun producto');
+				return
 			}
 			if($('#FormPos input[name=tipoPedido]').val()==''){
 				alert('Seleccione un documento de venta');
+				return
 			}
 			if($('#FormPos input[name=cliente]').val()==''){
 				alert('Debe seleccionar un cliente');
+				return
 			}
 
 			$('#ModalMetodoPago').modal();
@@ -15261,7 +15264,12 @@ if($('#container-pos').length){
 	});
 
 	$('#FormPos select[name=tipoPedido]').change(function(){
-		let id = $(this).val();
+		seleccionarNumeracionSeriePOS()
+	});
+
+	function seleccionarNumeracionSeriePOS()
+	{
+		let id = $('#FormPos select[name=tipoPedido]').val();
 		if(id==''){
 			$('#FormPos #ClientePosVentaAutocomplete').attr('disabled',true);
 			$('#FormPos #ClientePosVentaAutocomplete').val('');
@@ -15270,7 +15278,7 @@ if($('#container-pos').length){
 			$('#FormPos input[name=direccion]').val('');
 			return;
 		}
-		let tipo_doc = $(this).data('dni');
+		const tipo_doc = $('#FormPos select[name=tipoPedido]').find(':selected').data('dni');
 		$.getJSON(path + 'administrador/regventas/numeracion', { id }, function (json, textStatus) {
 			$('#ClientePosVentaAutocomplete').attr('disabled',false);
 			$('#FormPos input[name=serie]').val(json.serie);
@@ -15281,7 +15289,9 @@ if($('#container-pos').length){
 				$('#FormPos select[name=tipo_documento]').val('RUC');
 			}
 		});
-	});
+	}
+
+	seleccionarNumeracionSeriePOS();
 
 	$('#FormPos input[name=rucdni]').keypress(function(event){
 		if(event.which === 13) {
@@ -15313,10 +15323,15 @@ if($('#container-pos').length){
 							}
 							let tipo_doc = tipo_documento=='RUC'?4:2;
 							let dni = numero
-							$.get(path_app+"application/controllers/Validardatos.php", {dni,tipo_doc},
+							$.get(path+"validardatos/validarDocumento", {dni,tipo_doc},
 								function (data_reniec, textStatus, jqXHR) {
 									
 									if((data_reniec[1]!='' || data_reniec[1]!= null) && (data_reniec[2]!='' || data_reniec[3]!= null) && (data_reniec[3]!='' || data_reniec[3]!= null)){
+
+										if(data_reniec[5]==null){
+											alert('Ocurrió un error en la consulta a RENIEC, comuniquese con el administrador');
+											return
+										}
 										let confirmar_insertar = confirm('Se encontró a '+data_reniec[5]+', ¿deseas agregarlo a la base de datos?');
 										if(!confirmar_insertar){
 											return;
