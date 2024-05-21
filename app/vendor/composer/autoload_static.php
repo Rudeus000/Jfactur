@@ -8,9 +8,9 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
 {
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'db356362850385d08a5381de2638b5fd' => __DIR__ . '/..' . '/mpdf/mpdf/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -33,7 +33,6 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
         'P' => 
         array (
@@ -42,12 +41,16 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Prophecy\\' => 9,
+            'Picqer\\Barcode\\' => 15,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'PHPStan\\PhpDocParser\\' => 21,
         ),
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
             'Mpdf\\QrCode\\' => 12,
+            'Mpdf\\PsrLogAwareTrait\\' => 22,
+            'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
             'Matrix\\' => 7,
         ),
@@ -55,18 +58,20 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         array (
             'Luecano\\NumeroALetras\\' => 22,
         ),
-        'H' => 
-        array (
-            'Http\\Message\\' => 13,
-        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Deprecations\\' => 22,
             'DeepCopy\\' => 9,
+            'DASPRiD\\Enum\\' => 13,
         ),
         'C' => 
         array (
             'Complex\\' => 8,
+        ),
+        'B' => 
+        array (
+            'BaconQrCode\\' => 12,
         ),
     );
 
@@ -93,10 +98,6 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
-        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -118,9 +119,17 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
+        'Picqer\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/picqer/php-barcode-generator/src',
+        ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
+        'PHPStan\\PhpDocParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
         ),
         'MyCLabs\\Enum\\' => 
         array (
@@ -129,6 +138,14 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         'Mpdf\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/qrcode/src',
+        ),
+        'Mpdf\\PsrLogAwareTrait\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-log-aware-trait/src',
+        ),
+        'Mpdf\\PsrHttpMessageShim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-http-message-shim/src',
         ),
         'Mpdf\\' => 
         array (
@@ -142,21 +159,29 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         array (
             0 => __DIR__ . '/..' . '/luecano/numero-a-letras/src',
         ),
-        'Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-http/message-factory/src',
-        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
         ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'DASPRiD\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dasprid/enum/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+        'BaconQrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
     );
 
@@ -718,6 +743,7 @@ class ComposerStaticInit9393e7c1649fe6afbbecd1855f1c496c
         'SebastianBergmann\\Timer\\RuntimeException' => __DIR__ . '/..' . '/phpunit/php-timer/src/RuntimeException.php',
         'SebastianBergmann\\Timer\\Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',

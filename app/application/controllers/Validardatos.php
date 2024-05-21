@@ -18,7 +18,7 @@ class Validardatos extends CI_Controller
         $documento = $_REQUEST["dni"];
         $tipo_doc = $_REQUEST["tipo_doc"];
         $token =
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE2NzYwNjkwfQ.rm5R4EsFJ1fUnEPOgbMDDQCDMXBXTGV6UOgWsKG9WI4";
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE4ODk1NTAxfQ.ru-SomwC-KaKyKb-n_NPNFOK2pxr3iFrGPRHOuRnigE";
 
         if ($tipo_doc == "2") {
             // Validar el formato del DNI (solo números y 8 dígitos)
@@ -26,7 +26,7 @@ class Validardatos extends CI_Controller
                 $documento = trim($documento);
             }
             // API URL
-            $url = "https://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
+            $url = "http://api.datos.bfacturas.pro/dni/{$documento}/token/{$token}";
 
             // Initialize cURL session
             $ch = curl_init();
