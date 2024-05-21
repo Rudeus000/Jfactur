@@ -248,7 +248,6 @@
                               <div class="col-md-12 mt-1">
                                 <div class="form-group mb-1">
                                   <select name="tipoPedido" class="form-control input-sm">
-                                      <option value="">Seleccione</option>
                                       <?php foreach ($tipos as $t) : ?>
                                       <option value="<?= $t->cod_talonario ?>" data-dni="<?= $t->docclidni_talonario ?>" data-ruc="<?= $t->doccliruc_talonario ?>" data-ex="<?= $t->doccliex_talonario ?>" data-pass="<?= $t->docclipass_talonario ?>" <?= $punto->talonario_defecto == $t->cod_talonario ? 'selected' : '' ?>><?= $t->nom_tipdocumento . ' - ' . $t->serie ?></option>
                                       <?php endforeach ?>
