@@ -758,9 +758,9 @@ class Apisunat
             }
             if (intval($detalle[$i]["EXONERADO"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>
-    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXONERADO"] . '</cbc:TaxAmount>
     <cac:TaxSubtotal>
-    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXONERADO"] . '</cbc:TaxAmount>
     <cac:TaxCategory>
     <cac:TaxScheme>
     <cbc:ID>9997</cbc:ID>
