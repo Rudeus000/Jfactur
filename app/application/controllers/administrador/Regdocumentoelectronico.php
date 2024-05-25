@@ -185,7 +185,7 @@ class Regdocumentoelectronico extends CI_Controller
       $det['STATUS'] = '1';
       $det['COD_MONEDA'] = $q->codmoneda_vent;
       $det['TOTAL'] = (string)$q->total_vent;
-      $det['GRAVADA'] = (string)$q->subtotal_vent;
+      $det['GRAVADA'] = (string)$q->gravada_vent;
       $det['EXONERADO'] = (string)$q->exonerada_vent;
       $det['INAFECTO'] = '0';
       $det['EXPORTACION'] = '0';
