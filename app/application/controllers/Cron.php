@@ -248,7 +248,7 @@ class Cron extends CI_Controller
 	{
 
 		$query = $this->db->from('tb_resumenboletadetalle')
-			->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,codmoneda_vent,nomb_cliente,serie,numero_vent,codsunat_tipdocucli,doc_cliente')
+			->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,exonerada_vent,gravada_vent,free_vent,total_vent,codmoneda_vent,nomb_cliente,serie,numero_vent,codsunat_tipdocucli,doc_cliente')
 			->join('tb_venta', 'tb_resumenboletadetalle.cod_vent = tb_venta.cod_vent')
 			->join('tb_talonario', 'tb_venta.cod_talonario = tb_talonario.cod_talonario')
 			->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
@@ -292,14 +292,15 @@ class Cron extends CI_Controller
 			$det['STATUS'] = '1';
 			$det['COD_MONEDA'] = $q->codmoneda_vent;
 			$det['TOTAL'] = (string)$q->total_vent;
-			$det['GRAVADA'] = (string)$q->subtotal_vent;
-			$det['EXONERADO'] = '0';
+			$det['GRAVADA'] = (string)$q->gravada_vent;
+			$det['EXONERADO'] = (string)$q->exonerada_vent;
 			$det['INAFECTO'] = '0';
 			$det['EXPORTACION'] = '0';
-			$det['GRATUITAS'] = '0';
+			$det['GRATUITAS'] = (string)$q->free_vent;
 			$det['MONTO_CARGO_X_ASIG'] = '0';
 			$det['CARGO_X_ASIGNACION'] = '0';
 			$det['ISC'] = '0';
+			$det['EXO'] = '0';
 			$det['IGV'] = (string)$q->igv_vent;
 			$det['OTROS'] = '0';
 			$detalle[] = $det;
