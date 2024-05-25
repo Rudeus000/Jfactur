@@ -642,12 +642,12 @@ class Apisunat
 <cbc:ID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
 </cac:PartyIdentification>
 <cac:PartyName>
-<cbc:Name><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:Name>
+<cbc:Name><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:Name>
 </cac:PartyName>
 </cac:SignatoryParty>
 <cac:DigitalSignatureAttachment>
 <cac:ExternalReference>
-<cbc:URI>#'.$cabecera["RAZON_SOCIAL_EMPRESA"].'-SIGN</cbc:URI>
+<cbc:URI>#' . $cabecera["RAZON_SOCIAL_EMPRESA"] . '-SIGN</cbc:URI>
 </cac:ExternalReference>
 </cac:DigitalSignatureAttachment>
 </cac:Signature>
@@ -656,7 +656,7 @@ class Apisunat
 <cbc:AdditionalAccountID>' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '</cbc:AdditionalAccountID>
 <cac:Party>
 <cac:PartyLegalEntity>
-<cbc:RegistrationName><![CDATA['.$cabecera["RAZON_SOCIAL_EMPRESA"].']]></cbc:RegistrationName>
+<cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:RegistrationName>
 </cac:PartyLegalEntity>
 </cac:Party>
 </cac:AccountingSupplierParty>';
@@ -680,12 +680,15 @@ class Apisunat
             $xmlCPE = $xmlCPE . '<cac:Status>
 <cbc:ConditionCode>' . $detalle[$i]["STATUS"] . '</cbc:ConditionCode>
 </cac:Status>
-<sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>
+<sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>';
 
+            if (intval($detalle[$i]["GRAVADA"]) > 0) {
+                $xmlCPE = $xmlCPE . '
 <sac:BillingPayment>
 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRAVADA"] . '</cbc:PaidAmount>
 <cbc:InstructionID>01</cbc:InstructionID>
 </sac:BillingPayment>';
+            }
 
             if (intval($detalle[$i]["EXONERADO"]) > 0) {
                 $xmlCPE = $xmlCPE . '<sac:BillingPayment>
@@ -742,7 +745,7 @@ class Apisunat
 </cac:TaxTotal>';
             }
             if (intval($detalle[$i]["IGV"]) > 0) {
-            $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
 <cac:TaxSubtotal>
 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
@@ -770,7 +773,7 @@ class Apisunat
     </cac:TaxCategory>
     </cac:TaxSubtotal>
     </cac:TaxTotal>';
-                }
+            }
 
             if (intval($detalle[$i]["OTROS"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>
