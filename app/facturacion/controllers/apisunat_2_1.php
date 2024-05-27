@@ -683,8 +683,7 @@ class Apisunat
 <sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>';
 
             if (intval($detalle[$i]["GRAVADA"]) > 0) {
-                $xmlCPE = $xmlCPE . '
-<sac:BillingPayment>
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRAVADA"] . '</cbc:PaidAmount>
 <cbc:InstructionID>01</cbc:InstructionID>
 </sac:BillingPayment>';
@@ -744,7 +743,7 @@ class Apisunat
 </cac:TaxSubtotal>
 </cac:TaxTotal>';
             }
-            if (intval($detalle[$i]["IGV"]) > 0) {
+            // if (intval($detalle[$i]["IGV"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>
 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
 <cac:TaxSubtotal>
@@ -758,12 +757,12 @@ class Apisunat
 </cac:TaxCategory>
 </cac:TaxSubtotal>
 </cac:TaxTotal>';
-            }
+            // }
             if (intval($detalle[$i]["EXONERADO"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>
-    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXONERADO"] . '</cbc:TaxAmount>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
     <cac:TaxSubtotal>
-    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXONERADO"] . '</cbc:TaxAmount>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
     <cac:TaxCategory>
     <cac:TaxScheme>
     <cbc:ID>9997</cbc:ID>

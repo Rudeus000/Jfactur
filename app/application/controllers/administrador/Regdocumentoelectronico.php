@@ -206,7 +206,8 @@ class Regdocumentoelectronico extends CI_Controller
 
     //codificamos la data
     $data_json = json_encode($data);
-
+//var_dump($data_json);
+//exit();
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $ruta);
     curl_setopt(
@@ -223,7 +224,8 @@ class Regdocumentoelectronico extends CI_Controller
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $respuesta  = curl_exec($ch);
     curl_close($ch);
-
+//var_dump($respuesta);
+//exit();
     $response = json_decode($respuesta, true);
     return $response;
   }
