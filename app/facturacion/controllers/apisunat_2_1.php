@@ -682,12 +682,12 @@ class Apisunat
 </cac:Status>
 <sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>';
 
-            if (intval($detalle[$i]["GRAVADA"]) > 0) {
+            // if (intval($detalle[$i]["GRAVADA"]) > 0) {
                 $xmlCPE = $xmlCPE . '<sac:BillingPayment>
 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRAVADA"] . '</cbc:PaidAmount>
 <cbc:InstructionID>01</cbc:InstructionID>
 </sac:BillingPayment>';
-            }
+           // }
 
             if (intval($detalle[$i]["EXONERADO"]) > 0) {
                 $xmlCPE = $xmlCPE . '<sac:BillingPayment>
