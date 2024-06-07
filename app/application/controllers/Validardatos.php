@@ -104,7 +104,7 @@ $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZ
             }
         } else {
             $data = file_get_contents(
-                "https://api.apis.net.pe/v1/ruc?numero=12345678789"
+                "https://api.apis.net.pe/v1/ruc?numero=".$documento
             );
             $info = json_decode($data, true);
 
