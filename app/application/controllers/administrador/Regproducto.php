@@ -239,19 +239,25 @@ class Regproducto extends CI_Controller
                 $data['typeAssignmentProduct'] = 'N';
                 $data['typeAssignmentProducto'] = 'N';
                 $data['idTypeAssignmentProduct'] = null;
-            } else if ($objectCheckedDad == null && $objectCheckedSon !== null && $objectCheckedGson == null) {
+            } elseif ($objectCheckedDad == null && $objectCheckedSon !== null && $objectCheckedGson == null) {
                 $data['idTypeAssignmentProduct'] = $this->input->post('editselectAssignmentDad');
                 $data['typeAssignmentProduct'] = 'H';
                 $data['typeAssignmentProducto'] = 'H';
-            } else if ($objectCheckedDad !== null && $objectCheckedSon == null && $objectCheckedGson == null) {
+            } elseif ($objectCheckedDad !== null && $objectCheckedSon == null && $objectCheckedGson == null) {
                 $data['idTypeAssignmentProduct'] = null;
                 $data['typeAssignmentProduct'] = 'P';
                 $data['typeAssignmentProducto'] = 'P';
-            } else if ($objectCheckedDad == null && $objectCheckedSon !== null && $objectCheckedGson !== null && $objectCheckedD !== null) {
+            } elseif ($objectCheckedDad == null && $objectCheckedSon !== null && $objectCheckedGson !== null && $objectCheckedD !== null) {
                 $data['idTypeAssignmentProduct'] = $this->input->post('editselectAssignmentDad');
                 $data['typeAssignmentProduct'] = 'H';
                 $data['typeAssignmentProducto'] = 'G';
                 $data['typeAssignmentProductoBipay'] = 'D';
+            }elseif($objectCheckedDad==null&&$objectCheckedSon!==null && $objectCheckedGson!==null&&$objectCheckedD==null){
+                $data['idTypeAssignmentProduct'] = $this->input->post('editselectAssignmentDad');
+                $data['typeAssignmentProduct'] = 'H';
+                $data['typeAssignmentProducto'] = 'G';
+                $data['typeAssignmentProductoBipay'] = null;
+
             }
             $data['descuento_prod'] = $this->input->post('descuento_prod');
             $data['bipay'] = $this->input->post('bipay');

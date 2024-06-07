@@ -89,6 +89,8 @@
                         <th>Fecha</th>
                         <th>Subtotal</th>
                         <th>IGV</th>
+                        <th>EXONERADA</th>
+                        <th>GRATUITA</th>
                         <th>Total</th>
 												<th>Tipo</th>
                         <th>Fecha Limite</th>

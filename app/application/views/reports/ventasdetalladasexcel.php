@@ -268,8 +268,17 @@ if($this->session->userdata('movil_expert')=='0'){
 
 $writer = new Xlsx($objPHPExcel);
 
+// Obtener la fecha actual en el formato deseado
+$currentDate = date('Y-m-d\THis.u');
+
+// Concatenar la fecha actual con el nombre del archivo
+$fileName = "RDV - $currentDate.xlsx";
+
+// Establecer las cabeceras para la descarga del archivo
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="Ventas Detalladas.xlsx"');
+header("Content-Disposition: attachment; filename=\"$fileName\"");
+
+// Guardar el archivo en la salida
 $writer->save("php://output");
 exit;
 ?>

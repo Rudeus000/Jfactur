@@ -299,11 +299,11 @@ class Apisunat
         $doc->preserveWhiteSpace = TRUE;
         //$doc->encoding = 'ISO-8859-1';
         $doc->encoding = 'utf-8';
-       
+
         // Inicializar un array para almacenar los bloques $cabSutotal
         $cabSutotalArray = [];
         $tipos_igv_procesados = []; // Array para almacenar los tipos de IGV ya procesados
-        
+
         // Iterar sobre los tipos de IGV y construir los bloques correspondientes
         for ($i = 0; $i < count($cabecera['TIPO_IGV']); $i++) {
             // Verificar si el tipo de IGV actual ya ha sido procesado
@@ -635,18 +635,19 @@ class Apisunat
 <cbc:ReferenceDate>' . $cabecera["FECHA_REFERENCIA"] . '</cbc:ReferenceDate>
 <cbc:IssueDate>' . $cabecera["FECHA_DOCUMENTO"] . '</cbc:IssueDate>
 <cac:Signature>
-<cbc:ID>' . $cabecera["CODIGO"] . '-' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:ID>
+<!-- Ruc del firmante -->
+        <cbc:ID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
 <cac:SignatoryParty>
 <cac:PartyIdentification>
 <cbc:ID>' . $cabecera["NRO_DOCUMENTO_EMPRESA"] . '</cbc:ID>
 </cac:PartyIdentification>
 <cac:PartyName>
-<cbc:Name>' . $cabecera["RAZON_SOCIAL_EMPRESA"] . '</cbc:Name>
+<cbc:Name><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:Name>
 </cac:PartyName>
 </cac:SignatoryParty>
 <cac:DigitalSignatureAttachment>
 <cac:ExternalReference>
-<cbc:URI>' . $cabecera["CODIGO"] . '-' . $cabecera["SERIE"] . '-' . $cabecera["SECUENCIA"] . '</cbc:URI>
+<cbc:URI>#' . $cabecera["RAZON_SOCIAL_EMPRESA"] . '-SIGN</cbc:URI>
 </cac:ExternalReference>
 </cac:DigitalSignatureAttachment>
 </cac:Signature>
@@ -655,7 +656,7 @@ class Apisunat
 <cbc:AdditionalAccountID>' . $cabecera["TIPO_DOCUMENTO_EMPRESA"] . '</cbc:AdditionalAccountID>
 <cac:Party>
 <cac:PartyLegalEntity>
-<cbc:RegistrationName>' . $cabecera["RAZON_SOCIAL_EMPRESA"] . '</cbc:RegistrationName>
+<cbc:RegistrationName><![CDATA[' . $cabecera["RAZON_SOCIAL_EMPRESA"] . ']]></cbc:RegistrationName>
 </cac:PartyLegalEntity>
 </cac:Party>
 </cac:AccountingSupplierParty>';
@@ -679,12 +680,14 @@ class Apisunat
             $xmlCPE = $xmlCPE . '<cac:Status>
 <cbc:ConditionCode>' . $detalle[$i]["STATUS"] . '</cbc:ConditionCode>
 </cac:Status>
-<sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>
+<sac:TotalAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["TOTAL"] . '</sac:TotalAmount>';
 
-<sac:BillingPayment>
+            // if (intval($detalle[$i]["GRAVADA"]) > 0) {
+                $xmlCPE = $xmlCPE . '<sac:BillingPayment>
 <cbc:PaidAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["GRAVADA"] . '</cbc:PaidAmount>
 <cbc:InstructionID>01</cbc:InstructionID>
 </sac:BillingPayment>';
+           // }
 
             if (intval($detalle[$i]["EXONERADO"]) > 0) {
                 $xmlCPE = $xmlCPE . '<sac:BillingPayment>
@@ -740,7 +743,8 @@ class Apisunat
 </cac:TaxSubtotal>
 </cac:TaxTotal>';
             }
-            $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+            // if (intval($detalle[$i]["IGV"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
 <cac:TaxSubtotal>
 <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["IGV"] . '</cbc:TaxAmount>
@@ -753,6 +757,37 @@ class Apisunat
 </cac:TaxCategory>
 </cac:TaxSubtotal>
 </cac:TaxTotal>';
+            // }
+            if (intval($detalle[$i]["EXONERADO"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
+    <cac:TaxSubtotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["EXO"] . '</cbc:TaxAmount>
+    <cac:TaxCategory>
+    <cac:TaxScheme>
+    <cbc:ID>9997</cbc:ID>
+    <cbc:Name>EXO</cbc:Name>
+    <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+    </cac:TaxScheme>
+    </cac:TaxCategory>
+    </cac:TaxSubtotal>
+    </cac:TaxTotal>';
+            }
+            if (intval($detalle[$i]["GRATUITAS"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["FREE"] . '</cbc:TaxAmount>
+    <cac:TaxSubtotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["FREE"] . '</cbc:TaxAmount>
+    <cac:TaxCategory>
+    <cac:TaxScheme>
+    <cbc:ID>9996</cbc:ID>
+    <cbc:Name>GRA</cbc:Name>
+    <cbc:TaxTypeCode>FRE</cbc:TaxTypeCode>
+    </cac:TaxScheme>
+    </cac:TaxCategory>
+    </cac:TaxSubtotal>
+    </cac:TaxTotal>';
+            }
 
             if (intval($detalle[$i]["OTROS"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>

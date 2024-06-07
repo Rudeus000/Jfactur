@@ -37,8 +37,8 @@
                                 <fieldset>
                                     <legend>Filtro</legend>
                                     <form id="FormAlmacenInventarioInicialFiltro" action="" method="post" autocomplete="off">
-                                        <div class="row">
-                                            <div class="col-md-3">
+                                        <div class="row">                                          
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Almacen:</label>
                                                     <select name="almacen" class="form-control select2">
@@ -55,7 +55,7 @@
                                                     <input type="text" name="producto" class="form-control" placeholder="Escriba y presione enter">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Categoria:</label>
                                                     <select name="categoria" class="form-control select2">
@@ -66,7 +66,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Marca:</label>
                                                     <select name="marca" class="form-control select2">
@@ -258,7 +258,7 @@
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
@@ -298,7 +298,7 @@
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>

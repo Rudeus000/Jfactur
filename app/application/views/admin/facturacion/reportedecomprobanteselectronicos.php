@@ -16,6 +16,8 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true)
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(11)->setAutoSize(true);
 
 
 $styleNormal = [
@@ -47,17 +49,17 @@ $styleBold = [
 	],
 ];
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A1:I1');
+						->mergeCells('A1:K1');
 $objPHPExcel->getActiveSheet()
 						->getCell('A1')
 						->setValue($empresa->razon_social);
-$objPHPExcel->getActiveSheet()->getStyle('A1:I1')->getFont()->setSize(14)->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A1:K1')->getFont()->setSize(14)->setBold(true);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A1:I1')
+    ->getStyle('A1:K1')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()
-	->getStyle("A1:I1")
+	->getStyle("A1:K1")
 	->getFill()
 	->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 	->getStartColor()
@@ -65,34 +67,34 @@ $objPHPExcel->getActiveSheet()
 
 
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A2:I2');
+						->mergeCells('A2:K2');
 $objPHPExcel->getActiveSheet()
 						->getCell('A2')
 						->setValue('REPORTE DE COMPROBANTES ELECTRONICOS');
-$objPHPExcel->getActiveSheet()->getStyle('A2:I2')->getFont()->setSize(14)->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getFont()->setSize(14)->setBold(true);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A2:I2')
+    ->getStyle('A2:K2')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()
-	->getStyle("A2:I2")
+	->getStyle("A2:K2")
 	->getFill()
 	->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 	->getStartColor()
 	->setARGB("FFD100");
 
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A3:I3');						
+						->mergeCells('A3:K3');						
 $objPHPExcel->getActiveSheet()
 						->getCell('A3')
 						->setValue('DESDE EL '.$data['desde'] = $this->input->get('desde').' HASTA EL '.$data['hasta'] = $this->input->get('hasta'));
-$objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getFont()->setSize(14)->setBold(false);
+$objPHPExcel->getActiveSheet()->getStyle('A3:K3')->getFont()->setSize(14)->setBold(false);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A3:I3')
+    ->getStyle('A3:K3')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 	$objPHPExcel->getActiveSheet()
-	->getStyle("A3:I3")
+	->getStyle("A3:K3")
 	->getFill()
 	->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 	->getStartColor()
@@ -101,17 +103,17 @@ $objPHPExcel->getActiveSheet()
 
 $date=date('d-m-Y');
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A4:I4');						
+						->mergeCells('A4:K4');						
 $objPHPExcel->getActiveSheet()
 						->getCell('A4')
 						->setValue('FECHA  : '.$date);
-$objPHPExcel->getActiveSheet()->getStyle('A4:I4')->getFont()->setSize(14)->setBold(false);
+$objPHPExcel->getActiveSheet()->getStyle('A4:K4')->getFont()->setSize(14)->setBold(false);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A4:I4')
+    ->getStyle('A4:K4')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 $objPHPExcel->getActiveSheet()
-	->getStyle("A4:I4")
+	->getStyle("A4:K4")
 	->getFill()
 	->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 	->getStartColor()
@@ -120,17 +122,17 @@ $objPHPExcel->getActiveSheet()
 
 $time=date('H:i:s');
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A5:I5');						
+						->mergeCells('A5:K5');						
 $objPHPExcel->getActiveSheet()
 						->getCell('A5')
 						->setValue('HORA   :      '.$time);
-$objPHPExcel->getActiveSheet()->getStyle('A5:I5')->getFont()->setSize(14)->setBold(false);
+$objPHPExcel->getActiveSheet()->getStyle('A5:K5')->getFont()->setSize(14)->setBold(false);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A5:I5')
+    ->getStyle('A5:K5')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 $objPHPExcel->getActiveSheet()
-	->getStyle("A5:I5")
+	->getStyle("A5:K5")
 	->getFill()
 	->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 	->getStartColor()
@@ -159,20 +161,28 @@ $objPHPExcel->getActiveSheet()
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,'TOTAL')
+->setCellValueByColumnAndRow(6,$row,'EXONERADA')
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,'TIPO DOC')
+->setCellValueByColumnAndRow(7,$row,'GRATUITA')
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,'ESTADO')
+->setCellValueByColumnAndRow(8,$row,'TOTAL')
 ->getStyleByColumnAndRow(8,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(9,$row,'MSJ_SUNAT')
+->setCellValueByColumnAndRow(9,$row,'TIPO DOC')
 ->getStyleByColumnAndRow(9,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(10,$row,'ESTADO')
+->getStyleByColumnAndRow(10,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(11,$row,'MSJ_SUNAT')
+->getStyleByColumnAndRow(11,$row)
 ->applyFromArray($styleBold);
 $row++;
 foreach ($datos as $d) {
@@ -197,12 +207,20 @@ foreach ($datos as $d) {
 	->getStyleByColumnAndRow(5,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(6,$row,$d->total)
+	->setCellValueByColumnAndRow(6,$row,$d->exonerada)
 	->getStyleByColumnAndRow(6,$row)
 	->applyFromArray($styleNormal);
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(7,$row,$d->tipo_documento.'-'.$d->serie.'-'.$d->numero)
+	->setCellValueByColumnAndRow(7,$row,$d->free)
 	->getStyleByColumnAndRow(7,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(8,$row,$d->total)
+	->getStyleByColumnAndRow(8,$row)
+	->applyFromArray($styleNormal);
+	$objPHPExcel->getActiveSheet()
+	->setCellValueByColumnAndRow(9,$row,$d->tipo_documento.'-'.$d->serie.'-'.$d->numero)
+	->getStyleByColumnAndRow(9,$row)
 	->applyFromArray($styleNormal);
 	
 	if ($d->estado_doc == '2') {
@@ -215,13 +233,13 @@ foreach ($datos as $d) {
 		$estadoactual = 'Sin respuesta';
 	}
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(8,$row,$estadoactual)
-	->getStyleByColumnAndRow(8,$row)
+	->setCellValueByColumnAndRow(10,$row,$estadoactual)
+	->getStyleByColumnAndRow(10,$row)
 	->applyFromArray($styleNormal);
 
 	$objPHPExcel->getActiveSheet()
-	->setCellValueByColumnAndRow(9,$row,$d->msj_sunat)
-	->getStyleByColumnAndRow(9,$row)
+	->setCellValueByColumnAndRow(11,$row,$d->msj_sunat)
+	->getStyleByColumnAndRow(11,$row)
 	->applyFromArray($styleNormal);		
 
 	
@@ -231,9 +249,17 @@ foreach ($datos as $d) {
 
 
 $writer = new Xlsx($objPHPExcel);
+// Obtener la fecha actual en el formato deseado
+$currentDate = date('Y-m-d\THis.u');
 
+// Concatenar la fecha actual con el nombre del archivo
+$fileName = "REPORTE DE CPE - $currentDate.xlsx";
+
+// Establecer las cabeceras para la descarga del archivo
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="Reporte de comprobantes electronicos.xlsx"');
+header("Content-Disposition: attachment; filename=\"$fileName\"");
+
+// Guardar el archivo en la salida
 $writer->save("php://output");
 exit;
 

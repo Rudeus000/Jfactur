@@ -6,10 +6,10 @@
      <div id="sidebar-menu">
        <!-- Left Menu Start -->
        <ul class="metismenu" id="side-menu">
-        <?php $empresa = getDatosEmpresa(); ?>
+         <?php $empresa = getDatosEmpresa(); ?>
          <?php if (isset($empresa) && !empty($empresa)) : ?>
            <li class="menu-title" style="text-align:center">
-             <span class="<?= ($empresa['empresa']->company_status==1) ? 'label label-primary' : 'label label-danger' ?>">
+             <span class="<?= ($empresa['empresa']->company_status == 1) ? 'label label-primary' : 'label label-danger' ?>">
                <?= ($empresa['empresa']->company_status == 1) ? 'SISTEMA EN PRODUCCION' : 'DEMO' ?>
              </span>
            </li>
@@ -36,7 +36,7 @@
            </li>
 
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1 or 6) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-boxes"></i><span class="float-right label bg-primary inline m-t-10">nuevo</span> <span>Almacén unid.</span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -85,7 +85,7 @@
 
 
 
-         <?php if ($this->session->userdata('perfil') == 1) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-shopping-cart"></i> <span> Compras </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -99,17 +99,19 @@
 
            </li>
          <?php endif ?>
-         <li>
-           <a href="javascript: void(0);"><i class="fas fa-shopping-basket"></i><span class="float-right label bg-primary inline m-t-10">nuevo</span><span> Ventas </span> <span class="menu-arrow"></span></a>
-           <ul class="nav-second-level" aria-expanded="false">
-             <li><a href="<?= base_url('administrador/regcotizacion') ?>"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i>Cotización</a></li>
-             <li><a href="<?= base_url('administrador/regventas') ?>"><i class="far fa-money-bill-alt" aria-hidden="true"></i>Ventas</a></li>
-             <li><a href="<?= base_url('administrador/regcuentascobrar') ?>"><i class="fab fa-cc-mastercard" aria-hidden="true"></i>Cuentas por cobrar</a></li>
-             <li><a href="<?php echo base_url(); ?>administrador/regcajaapertura"><i class="fas fa-box-open"></i>Apertura Caja</a></li>
-             <li><a href="<?php echo base_url(); ?>administrador/regcajacierre"><i class="fab fa-expeditedssl"></i>Cierre Caja</a></li>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 5) : ?>
+           <li>
+             <a href="javascript: void(0);"><i class="fas fa-shopping-basket"></i><span class="float-right label bg-primary inline m-t-10">nuevo</span><span> Ventas </span> <span class="menu-arrow"></span></a>
+             <ul class="nav-second-level" aria-expanded="false">
+               <li><a href="<?= base_url('administrador/regcotizacion') ?>"><i class="fas fa-cart-arrow-down" aria-hidden="true"></i>Cotización</a></li>
+               <li><a href="<?= base_url('administrador/regventas') ?>"><i class="far fa-money-bill-alt" aria-hidden="true"></i>Ventas</a></li>
+               <li><a href="<?= base_url('administrador/regcuentascobrar') ?>"><i class="fab fa-cc-mastercard" aria-hidden="true"></i>Cuentas por cobrar</a></li>
+               <li><a href="<?php echo base_url(); ?>administrador/regcajaapertura"><i class="fas fa-box-open"></i>Apertura Caja</a></li>
+               <li><a href="<?php echo base_url(); ?>administrador/regcajacierre"><i class="fab fa-expeditedssl"></i>Cierre Caja</a></li>
 
-           </ul>
-         </li>
+             </ul>
+           </li>
+         <?php endif ?>
          <?php if ($this->session->userdata('perfil') == 1) : ?>
            <li>
              <a href="javascript: void(0);"><i class="ion ion-ios-albums"></i><span>Gestion de doc. elec. </span> <span class="menu-arrow"></span></a>
@@ -124,7 +126,7 @@
              </ul>
            </li>
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
            <li>
              <a href="javascript: void(0);"><i class=" fas fa-clipboard-list"></i><span> Reporte Compras </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -136,27 +138,40 @@
              </ul>
            </li>
          <?php endif ?>
-         <li>
-           <a href="javascript: void(0);"><i class="fas fa-clipboard"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
-           <ul class="nav-second-level" aria-expanded="false">
-             <?php if ($this->session->userdata('perfil') == 1) : ?>
+         <?php if ($this->session->userdata('perfil') == 1) : ?>
+           <li>
+             <a href="javascript: void(0);"><i class="fas fa-clipboard"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
+             <ul class="nav-second-level" aria-expanded="false">
+
                <li><a href="<?= base_url('reportes/regreportcotipagos') ?>">Cotizaciones - Pagos</a></li>
                <li><a href="<?= base_url('reportes/regreportcoticlientes') ?>">Cotizaciones x Clientes</a></li>
                <li><a href="<?= base_url('reportes/regreportcotiproductos') ?>">Productos Cotizados</a></li>
-             <?php endif ?>
-             <li><a href="<?= base_url('reportes/regreportventotal') ?>">Ventas Realizadas</a></li>
-             <li><a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>">Ventas detalladas</a></li>
-             <li><a href="<?= base_url('reportes/regreportcomision') ?>">Comisiones</a></li>
-             <?php if ($this->session->userdata('perfil') == 1) : ?>
+
+               <li><a href="<?= base_url('reportes/regreportventotal') ?>">Ventas Realizadas</a></li>
+               <li><a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>">Ventas detalladas</a></li>
+               <li><a href="<?= base_url('reportes/regreportcomision') ?>">Comisiones</a></li>
+
                <li><a href="<?= base_url('reportes/regreportventpago') ?>">Ventas Formas de Pago</a></li>
                <li><a href="<?= base_url('reportes/regreportventdetalle') ?>">Ventas Pago</a></li>
                <li><a href="<?= base_url('reportes/regreportventcliente') ?>">Ventas Por Clientes</a></li>
                <li><a href="<?= base_url('reportes/regreportventproducto') ?>">Ventas Por Productos</a></li>
                <li><a href="<?= base_url('reportes/reganancvent') ?>">Ganancia ventas</a></li>
-             <?php endif ?>
 
-           </ul>
-         </li>
+
+             </ul>
+           </li>
+         <?php endif ?>
+         <?php if ($this->session->userdata('perfil') == 5) : ?>
+           <li>
+             <a href="javascript: void(0);"><i class="fas fa-clipboard"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
+             <ul class="nav-second-level" aria-expanded="false">            
+
+               <li><a href="<?= base_url('reportes/regreportventotal') ?>">Ventas Realizadas</a></li>
+               <li><a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>">Ventas detalladas</a></li>
+               <li><a href="<?= base_url('reportes/regreportcomision') ?>">Comisiones</a></li>
+             </ul>
+           </li>
+         <?php endif ?>
          <?php if ($this->session->userdata('perfil') == 1) : ?>
 
            <li>

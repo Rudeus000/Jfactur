@@ -141,7 +141,7 @@ class Regdocumentoelectronico extends CI_Controller
   {
 
     $query = $this->db->from('tb_resumenboletadetalle')
-      ->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,codmoneda_vent,nomb_cliente,serie,numero_vent,codsunat_tipdocucli,doc_cliente')
+      ->select('tb_venta.cod_vent,fecha_vent,subtotal_vent,igv_vent,total_vent,gravada_vent,exonerada_vent,free_vent,codmoneda_vent,nomb_cliente,serie,numero_vent,codsunat_tipdocucli,doc_cliente')
       ->join('tb_venta', 'tb_resumenboletadetalle.cod_vent = tb_venta.cod_vent')
       ->join('tb_talonario', 'tb_venta.cod_talonario = tb_talonario.cod_talonario')
       ->join('tb_tipodocumento', 'tb_talonario.cod_tipdocu = tb_tipodocumento.cod_tipdocu')
@@ -175,6 +175,7 @@ class Regdocumentoelectronico extends CI_Controller
     $detalle = [];
     $n = 1;
     foreach ($query as $q) {
+      // $fre = round((($q->free_vent) / 1.18) * 0.18, 2);
       $det['ITEM'] = (string)$n;
       $det['TIPO_COMPROBANTE'] = '03';
       $det['NRO_COMPROBANTE'] = (string)$q->serie . '-' . $q->numero_vent;
@@ -185,15 +186,17 @@ class Regdocumentoelectronico extends CI_Controller
       $det['STATUS'] = '1';
       $det['COD_MONEDA'] = $q->codmoneda_vent;
       $det['TOTAL'] = (string)$q->total_vent;
-      $det['GRAVADA'] = (string)$q->subtotal_vent;
-      $det['EXONERADO'] = '0';
+      $det['GRAVADA'] = (string)$q->gravada_vent;
+      $det['EXONERADO'] = (string)$q->exonerada_vent;
       $det['INAFECTO'] = '0';
       $det['EXPORTACION'] = '0';
       $det['GRATUITAS'] = '0';
       $det['MONTO_CARGO_X_ASIG'] = '0';
       $det['CARGO_X_ASIGNACION'] = '0';
       $det['ISC'] = '0';
+      $det['EXO'] = '0';
       $det['IGV'] = (string)$q->igv_vent;
+      // $det['FREE']=(string)$fre;    
       $det['OTROS'] = '0';
       $detalle[] = $det;
       $n++;
@@ -205,7 +208,8 @@ class Regdocumentoelectronico extends CI_Controller
 
     //codificamos la data
     $data_json = json_encode($data);
-
+//var_dump($data_json);
+//exit();
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $ruta);
     curl_setopt(
@@ -222,7 +226,8 @@ class Regdocumentoelectronico extends CI_Controller
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $respuesta  = curl_exec($ch);
     curl_close($ch);
-
+//var_dump($respuesta);
+//exit();
     $response = json_decode($respuesta, true);
     return $response;
   }
@@ -1165,47 +1170,52 @@ class Regdocumentoelectronico extends CI_Controller
   {
 
     //Obtener información de la venta y sus detalles
-		$venta = $this->modelgeneral->getTableWhereRow('tb_venta', ['cod_vent' => $id_venta]);
-		$detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', ['cod_vent' => $id_venta]);
-	
-		foreach ($detalle as $d) {
-			$producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
-			$producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
-	
-			if ($producto->cod_tiparticulo == 1) { // Si es del tipo PRODUCTO
-				$whereStock['cod_producto'] = $d->cod_father_product;
-				$whereStock['cod_almacen'] = $venta->cod_almacen;
-	
-				$productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
-	
-				if ($producto_detalle->typeAssignmentProducto == 'G') {
-					// Si el producto tiene asignación 'G', devolver el stock basado en el costo
-					$nuevoStock = $productoStock->stock + $d->precunit_ventdet;
-				} else {
-					$nuevoStock = $productoStock->stock + $d->cant_ventdet;
-				}
-	
-				// Actualizar el stock del producto
-				$edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
-	
-				// REGRESAR DISPONIBILIDAD A SERIE
-				$this->db->where('cod_vent', $id_venta)
-					->set('serie_estado', 'D')
-					->set('cod_vent', null)
-					->update('tb_producto_serie');
-	
-			
-			}
-		}
-	
-		// Cambiar estado de la venta
-		// $edit = $this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $venta_id], $data);
-	
-		// Preparar respuesta JSON
-		// $resp = ['where' => $whereStock];
-		// $resp['success'] = $edit ? true : false;
-		// echo json_encode($resp);
-	}
+    $venta = $this->modelgeneral->getTableWhereRow('tb_venta', ['cod_vent' => $id_venta]);
+    $detalle = $this->modelgeneral->getTableWhere('tb_venta_detalle', ['cod_vent' => $id_venta]);
+
+    foreach ($detalle as $d) {
+      // Comprobar si es un servicio
+      if ($d->cod_father_product === null) {
+        continue; // Si es un servicio, omitir la iteración y pasar al siguiente detalle
+      }
+
+      $producto = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_father_product]);
+      $producto_detalle = $this->modelgeneral->getTableWhereRow('tb_producto', ['cod_producto' => $d->cod_producto]);
+
+      // Verificar si el padre del producto es del tipo PRODUCTO
+      if ($producto && $producto->cod_tiparticulo == 1) {
+        $whereStock['cod_producto'] = $d->cod_father_product;
+        $whereStock['cod_almacen'] = $venta->cod_almacen;
+
+        $productoStock = $this->modelgeneral->getTableWhereRow('tb_producto_stock', $whereStock);
+
+        if ($producto_detalle->typeAssignmentProducto == 'G') {
+          // Si el producto tiene asignación 'G', devolver el stock basado en el costo
+          $nuevoStock = $productoStock->stock + $d->precunit_ventdet;
+        } else {
+          $nuevoStock = $productoStock->stock + $d->cant_ventdet;
+        }
+
+        // Actualizar el stock del producto
+        $edit = $this->modelgeneral->editRegist('tb_producto_stock', $whereStock, ['stock' => $nuevoStock]);
+
+        // REGRESAR DISPONIBILIDAD A SERIE
+        $this->db->where('cod_vent', $id_venta)
+          ->set('serie_estado', 'D')
+          ->set('cod_vent', null)
+          ->update('tb_producto_serie');
+      }
+    }
+
+
+    // Cambiar estado de la venta
+    // $edit = $this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $venta_id], $data);
+
+    // Preparar respuesta JSON
+    // $resp = ['where' => $whereStock];
+    // $resp['success'] = $edit ? true : false;
+    // echo json_encode($resp);
+  }
 
 
 

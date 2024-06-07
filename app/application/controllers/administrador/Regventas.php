@@ -674,6 +674,7 @@ class Regventas extends CI_Controller
 									$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct == 'H' and !is_null($producto->idTypeAssignmentProduct)) ? $producto->idTypeAssignmentProduct : $producto->cod_producto;
 									$whereSeries['serie_descripcion'] = $value;
 									$dataSeries['cod_vent'] = $insert;
+									$dataSeries['fecha_venta'] = $this->input->post('fecha');
 									$dataSeries['serie_estado'] = 'N';
 									$this->modelgeneral->editRegist('tb_producto_serie', $whereSeries, $dataSeries);
 
@@ -687,6 +688,7 @@ class Regventas extends CI_Controller
 								$whereSeries['cod_producto'] = ($producto->typeAssignmentProduct == 'H' and !is_null($producto->idTypeAssignmentProduct)) ? $producto->idTypeAssignmentProduct : $producto->cod_producto;
 								$whereSeries['serie_descripcion'] = $series;
 								$dataSeries['cod_vent'] = $insert;
+								$dataSeries['fecha_venta'] = $this->input->post('fecha');
 								$dataSeries['serie_estado'] = 'N';
 								$this->modelgeneral->editRegist('tb_producto_serie', $whereSeries, $dataSeries);
 
@@ -1905,13 +1907,14 @@ class Regventas extends CI_Controller
 			$det['STATUS'] = '1';
 			$det['COD_MONEDA'] = $q->codmoneda_vent;
 			$det['TOTAL'] = (string)$q->total_vent;
-			$det['GRAVADA'] = (string)$q->subtotal_vent;
-			$det['EXONERADO'] = '0';
+			$det['GRAVADA'] = (string)$q->gravada_vent;
+			$det['EXONERADO'] = (string)$q->exonerada_vent;
 			$det['INAFECTO'] = '0';
 			$det['EXPORTACION'] = '0';
-			$det['GRATUITAS'] = '0';
+			$det['GRATUITAS'] = (string)$q->free_vent;
 			$det['MONTO_CARGO_X_ASIG'] = '0';
 			$det['CARGO_X_ASIGNACION'] = '0';
+			$det['EXO']='0';
 			$det['ISC'] = '0';
 			$det['IGV'] = (string)$q->igv_vent;
 			$det['OTROS'] = '0';

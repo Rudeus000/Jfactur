@@ -4546,7 +4546,7 @@ $(function () {
 			$('#FormEditarProducto select[name=estado]').val(json.est_product).trigger('change.select2');
 		});
 	});
-	$('#FormEditarProducto input[name="editproductAssignmentDebit"]').change(function() {
+	$('#FormEditarProducto input[name="editproductAssignmentDebit"]').change(function () {
 		if ($(this).is(":checked")) {
 			$('#bipayedit').show();
 		} else {
@@ -4665,6 +4665,8 @@ $(function () {
 			"url": path + 'administrador/reginventarioinicial/jsonInventarioInicial',
 			"type": "GET",
 			"data": function (d) {
+				d.desde = $("input[desde]").val();
+				d.hasta = $("input[hasta]").val();
 				d.almacen = $("select[name=almacen]").val();
 				d.producto = $("input[name=producto]").val();
 				d.categoria = $("select[name=categoria]").val();
@@ -4701,10 +4703,41 @@ $(function () {
 	});
 
 	$('#InventarioInicialReporteExcelSeries').click(function (event) {
+		// Serializar el formulario
 		let form = $('#FormAlmacenInventarioInicialFiltro').serializeObject();
 		let params = $.param(form);
+	
+		// Verificar si se han proporcionado las fechas
+		let desde = form.desde;
+		let hasta = form.hasta;
+		if (desde && hasta) {
+			// Convertir las fechas a objetos Date
+			let fechaDesde = new Date(desde);
+			let fechaHasta = new Date(hasta);
+			// Calcular la diferencia en milisegundos
+			let diferencia = fechaHasta - fechaDesde;
+			// Calcular el número de días en un año
+			let diasEnAnio = 365 * 24 * 60 * 60 * 1000;
+	
+			// Si la diferencia es mayor a un año, mostrar mensaje de error
+			if (diferencia > diasEnAnio) {
+				Swal.fire({
+					type:"error",
+					title: "Error",
+					text: "El rango de fechas no puede exceder un año.",
+					icon: "error",
+					button: "OK",
+				});
+				// Detener el comportamiento predeterminado del enlace
+				event.preventDefault();
+				return;
+			}
+		}
+	
+		// Asignar el enlace al botón
 		$(this).attr('href', path + 'administrador/reginventarioinicial/reporteExcelSeries?' + params);
 	});
+	
 
 	$('#FormAlmacenInventarioInicialFiltro select[name=almacen], #FormAlmacenInventarioInicialFiltro select[name=categoria], #FormAlmacenInventarioInicialFiltro select[name=marca]').change(function (event) {
 		$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
@@ -9064,6 +9097,8 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		],
 		"columnDefs": [
@@ -9717,12 +9752,17 @@ $(function () {
 
 				var tr = '';
 				$.each(data.detalle, function (index, val) {
+					if (val.tipo_ventdet == "V") {
+						var ser_tipoimpuesto = 1;
+					} else {
+						var ser_tipoimpuesto = 4;
+					}
 
 					tr += `
 								<tr id="prod-${val.cod_producto}" data-id="${val.cod_producto}">
 									<input type="hidden" name="id_prod[]" value="${val.cod_producto}"/>
 									<input type="hidden" name="id_detalle[]" value="${val.cod_ventdet}"/>
-									<input type="hidden" name="tipo_igv[]" value="${val.cod_parametros}" class="tipo_igv"/>
+									<input type="hidden" name="tipo_igv[]" value="${(val.cod_parametros == null) ? ser_tipoimpuesto : val.cod_parametros}" class="tipo_igv"/>
 									<td>${(val.cod_producto == null) ? val.cod_servicio : val.cod_producto}</td>
 									<td>${val.producto_ventdet}</td>
 									<td>${val.nomb_marca}</td>

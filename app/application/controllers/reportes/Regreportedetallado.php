@@ -8,10 +8,12 @@ class Regreportedetallado extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('reportedetallado_model');
+		$this->permisos = $this->backend_lib->control();
 	}
-	
+	private $permisos;
 	public function compras()
 	{
+		$data['permisos'] = $this->permisos;
 		$this->load->view('layouts/header');
     $this->load->view('layouts/aside');
     $this->load->view('reports/comprasdetalladas');    
