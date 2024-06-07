@@ -773,6 +773,21 @@ class Apisunat
     </cac:TaxSubtotal>
     </cac:TaxTotal>';
             }
+            if (intval($detalle[$i]["GRATUITAS"]) > 0) {
+                $xmlCPE = $xmlCPE . '<cac:TaxTotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["FREE"] . '</cbc:TaxAmount>
+    <cac:TaxSubtotal>
+    <cbc:TaxAmount currencyID="' . $detalle[$i]["COD_MONEDA"] . '">' . $detalle[$i]["FREE"] . '</cbc:TaxAmount>
+    <cac:TaxCategory>
+    <cac:TaxScheme>
+    <cbc:ID>9996</cbc:ID>
+    <cbc:Name>GRA</cbc:Name>
+    <cbc:TaxTypeCode>FRE</cbc:TaxTypeCode>
+    </cac:TaxScheme>
+    </cac:TaxCategory>
+    </cac:TaxSubtotal>
+    </cac:TaxTotal>';
+            }
 
             if (intval($detalle[$i]["OTROS"]) > 0) {
                 $xmlCPE = $xmlCPE . '<cac:TaxTotal>

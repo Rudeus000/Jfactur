@@ -175,6 +175,7 @@ class Regdocumentoelectronico extends CI_Controller
     $detalle = [];
     $n = 1;
     foreach ($query as $q) {
+      // $fre = round((($q->free_vent) / 1.18) * 0.18, 2);
       $det['ITEM'] = (string)$n;
       $det['TIPO_COMPROBANTE'] = '03';
       $det['NRO_COMPROBANTE'] = (string)$q->serie . '-' . $q->numero_vent;
@@ -189,12 +190,13 @@ class Regdocumentoelectronico extends CI_Controller
       $det['EXONERADO'] = (string)$q->exonerada_vent;
       $det['INAFECTO'] = '0';
       $det['EXPORTACION'] = '0';
-      $det['GRATUITAS'] = (string)$q->free_vent;
+      $det['GRATUITAS'] = '0';
       $det['MONTO_CARGO_X_ASIG'] = '0';
       $det['CARGO_X_ASIGNACION'] = '0';
       $det['ISC'] = '0';
       $det['EXO'] = '0';
       $det['IGV'] = (string)$q->igv_vent;
+      // $det['FREE']=(string)$fre;    
       $det['OTROS'] = '0';
       $detalle[] = $det;
       $n++;

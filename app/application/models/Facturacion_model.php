@@ -91,7 +91,7 @@ class Facturacion_model extends CI_Model
 			if($q->estado_doc=='2'){
 				$label = '<label class="label label-danger">Rechazada</label>';
 			}
-			$row[] = [$q->id, $q->nomb_cliente, $q->fecha, $q->subtotal, $q->igv, $q->total, $q->tipo_documento . ' ' . $q->serie . '-' . $q->numero, $limite, $label, $check, $msj_sunat];
+			$row[] = [$q->id, $q->nomb_cliente, $q->fecha, $q->subtotal, $q->igv,$q->exonerada,$q->free, $q->total, $q->tipo_documento . ' ' . $q->serie . '-' . $q->numero, $limite, $label, $check, $msj_sunat];
 		}
 
 		$result['aaData'] = $row;
@@ -136,7 +136,7 @@ class Facturacion_model extends CI_Model
 		// $query = $this->db->get();
 		// $queryLike = $this->db->get();
 		$this->db->from('v_documentos_electronicos');
-		$this->db->select('id,doc_cliente,cod_vent,estado_doc,nomb_cliente,serie,numero,fecha,subtotal,igv,total,tipo_documento,ruta_xml,archivo_xml,cod_doc,estado_vent,hash,msj_sunat');
+		$this->db->select('id,doc_cliente,cod_vent,estado_doc,nomb_cliente,serie,numero,fecha,subtotal,igv,exonerada,free,total,tipo_documento,ruta_xml,archivo_xml,cod_doc,estado_vent,hash,msj_sunat');
 		// $this->db->join('tb_facturacion','tb_venta.cod_vent = tb_facturacion.cod_vent','left') ;
 		// $this->db->join('tb_cliente','tb_venta.id_cliente = tb_cliente.id_cliente');
 		// $this->db->join('tb_talonario','tb_venta.cod_talonario = tb_talonario.cod_talonario');
