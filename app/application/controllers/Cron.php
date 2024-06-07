@@ -296,7 +296,7 @@ class Cron extends CI_Controller
 			$det['EXONERADO'] = (string)$q->exonerada_vent;
 			$det['INAFECTO'] = '0';
 			$det['EXPORTACION'] = '0';
-			$det['GRATUITAS'] = (string)$q->free_vent;
+			$det['GRATUITAS'] = '0';
 			$det['MONTO_CARGO_X_ASIG'] = '0';
 			$det['CARGO_X_ASIGNACION'] = '0';
 			$det['ISC'] = '0';
