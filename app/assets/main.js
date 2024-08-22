@@ -4706,7 +4706,7 @@ $(function () {
 		// Serializar el formulario
 		let form = $('#FormAlmacenInventarioInicialFiltro').serializeObject();
 		let params = $.param(form);
-	
+
 		// Verificar si se han proporcionado las fechas
 		let desde = form.desde;
 		let hasta = form.hasta;
@@ -4718,11 +4718,11 @@ $(function () {
 			let diferencia = fechaHasta - fechaDesde;
 			// Calcular el número de días en un año
 			let diasEnAnio = 365 * 24 * 60 * 60 * 1000;
-	
+
 			// Si la diferencia es mayor a un año, mostrar mensaje de error
 			if (diferencia > diasEnAnio) {
 				Swal.fire({
-					type:"error",
+					type: "error",
 					title: "Error",
 					text: "El rango de fechas no puede exceder un año.",
 					icon: "error",
@@ -4733,11 +4733,11 @@ $(function () {
 				return;
 			}
 		}
-	
+
 		// Asignar el enlace al botón
 		$(this).attr('href', path + 'administrador/reginventarioinicial/reporteExcelSeries?' + params);
 	});
-	
+
 
 	$('#FormAlmacenInventarioInicialFiltro select[name=almacen], #FormAlmacenInventarioInicialFiltro select[name=categoria], #FormAlmacenInventarioInicialFiltro select[name=marca]').change(function (event) {
 		$('#TableAlmacenInventarioInicial').DataTable().ajax.reload();
@@ -5443,7 +5443,8 @@ $(function () {
 	$("#nombreProductoAutocomplete").easyAutocomplete({
 		minCharNumber: 2,
 		url: function (query) {
-			return path + "administrador/regcompras/getProductoBusqueda?producto=" + query
+			var tipoc = $('input[name=tipocambio]').val();
+			return path + "administrador/regcompras/getProductoBusqueda?producto=" + query + "&tipocambio=" + tipoc;
 		},
 		getValue: function (element) {
 			return element.nombre;
@@ -5454,6 +5455,7 @@ $(function () {
 				var selectedItemValue = $("#nombreProductoAutocomplete").getSelectedItemData();
 				$('input[name=unidadProducto]').val(selectedItemValue.unidad);
 				$('input[name=precioProducto]').val(selectedItemValue.costo);
+				$('input[name=tipoc]').val(selectedItemValue.tipoc);
 				$('input[name=precioProductovent]').val(selectedItemValue.venta);
 				$('input[name=producto]').val(selectedItemValue.id);
 				// Buscar el índice del parámetro seleccionado en el select
@@ -5881,6 +5883,56 @@ $(function () {
 		$('#prod-' + id).find('input[name="fechas_producto[]"]').val(fechas_producto);
 	}
 
+	$(document).ready(function () {
+		// Evento cuando cambia el tipo de ingreso
+		$('#tipoIngresoSeries').on('change', function () {
+			var tipoIngreso = $(this).val();
+
+			if (tipoIngreso === 'masivo') {
+				$('#serieMasivaInputs').show(); // Muestra los campos para ingreso masivo
+				$('.inputSeries').hide(); // Oculta los campos para ingreso independiente
+
+				// Remover reglas de validación de series independientes
+				$('.inputSeries input').each(function () {
+					$(this).rules("remove");
+				});
+
+				// Agregar reglas de validación para las series masivas
+				$('input[name="serieInicial"]').rules("add", {
+					required: true,
+					messages: {
+						required: "Este campo es obligatorio."
+					}
+				});
+				$('input[name="serieFinal"]').rules("add", {
+					required: true,
+					messages: {
+						required: "Este campo es obligatorio."
+					}
+				});
+			} else {
+				$('#serieMasivaInputs').hide(); // Oculta los campos para ingreso masivo
+				$('.inputSeries').show(); // Muestra los campos para ingreso independiente
+
+				// Remover reglas de validación de series masivas
+				$('input[name="serieInicial"], input[name="serieFinal"]').each(function () {
+					$(this).rules("remove");
+				});
+
+				// Agregar reglas de validación a las series independientes
+				var cantidad = parseInt($('#FormComprasAgregarProducto input[name=cantidadProducto]').val());
+				for (var i = 1; i <= cantidad; i++) {
+					$('.inputSeries input[name="serie[' + i + ']"]').rules("add", "required");
+				}
+			}
+		});
+
+		// Disparar el evento de cambio al cargar el modal para aplicar la configuración inicial
+		$('#tipoIngresoSeries').trigger('change');
+	});
+
+
+
 	$('#FormSeriesVerificar').validate({
 		ignore: [],
 		rules: {
@@ -5888,6 +5940,30 @@ $(function () {
 			almacen: { required: true },
 		},
 		submitHandler: function () {
+			var tipoIngreso = $('#tipoIngresoSeries').val();
+
+			if (tipoIngreso === 'masivo') {
+				var serieInicial = BigInt($('input[name=serieInicial]').val());
+				var serieFinal = BigInt($('input[name=serieFinal]').val());
+				var cantidad = parseInt($('#FormComprasAgregarProducto input[name=cantidadProducto]').val());
+
+				var series = [];
+				// Generar solo las series intermedias excluyendo la inicial y la final
+				for (var i = 1; i < cantidad - 1; i++) {
+					var serieActual = serieInicial + BigInt(i);
+					series.push(serieActual.toString());
+				}
+
+				// Limpiar y agregar series generadas como inputs ocultos
+				$('#ModalSeries .modal-body .inputSeries').html(''); // Limpia inputs previos
+				$.each(series, function (index, serie) {
+					var serieInput = `
+                    <input type="hidden" name="serie[${index + 1}]" value="${serie}">
+                `;
+					$('#ModalSeries .modal-body .inputSeries').append(serieInput);
+				});
+			}
+
 			var array_series = [];
 			$('#FormSeriesVerificar input[name^="serie"]').each(function (index, elem) {
 				if ($(elem).val() != '') {
@@ -5910,7 +5986,6 @@ $(function () {
 		}
 	});
 
-
 	$('#FormSeriesVerificar').on('focusout', 'input[name^="serie"]', function () {
 		var $this = $(this);
 		var serie = $this.val();
@@ -5932,33 +6007,89 @@ $(function () {
 		);
 	});
 
-
 	var id_array = [];
-
 	function guardarSeries() {
-		//var series = [];
+		// Resetear el formulario después de guardar
+		$('#FormSeriesVerificar')[0].reset();
+		$('#ModalSeries').modal('hide');
+		// Restablecer la interfaz para asegurar que el modal se muestre correctamente en la siguiente interacción
+		$('#ModalSeries .modal-body .inputSeries').html('');
 		var producto = $('input[name=producto]').val();
 		if (producto == '') {
 			return;
 		}
 
+		var tipoIngreso = $('#tipoIngresoSeries').val();
 		var cantidad = parseInt($('#FormComprasAgregarProducto input[name=cantidadProducto]').val());
-		$('#FormSeriesVerificar input[name=prodseri]').val($('input[name=producto]').val());
-		$('#FormSeriesVerificar input[name=almseri]').val($('select[name=almacen]').val());
-		$('#ModalSeries .modal-body .inputSeries').html('');
-		for (i = 1; i <= cantidad; i++) {
-			var serie = `
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="control-label">Serie ${i}</label>
-					<input type="text" name="serie[${i}]" class="form-control" validate>
+
+		if (tipoIngreso === 'masivo') {
+			var serieInicial = BigInt($('input[name=serieInicial]').val());
+			var serieFinal = BigInt($('input[name=serieFinal]').val());
+
+			// Verificar que los valores de serie inicial y final sean válidos y coherentes
+			if (serieInicial > serieFinal) {
+				Swal.fire({
+					title: "Error",
+					text: 'La serie inicial no puede ser mayor que la serie final.',
+					type: "error"
+				});
+				return;
+			}
+
+			// Generar las series intermedias entre la inicial y la final
+			var series = [];
+			for (var i = 0; i < cantidad; i++) {
+				var serieActual = serieInicial + BigInt(i);
+				if (serieActual > serieFinal) {
+					break;
+				}
+				series.push(serieActual.toString());
+			}
+
+			// Validar que el número de series generadas coincida con la cantidad esperada
+			if (series.length !== cantidad) {
+				Swal.fire({
+					title: "Error",
+					text: 'El número de series generadas no coincide con la cantidad de productos. Revisa el rango de series.',
+					type: "error"
+				});
+				return;
+			}
+
+			// Limpieza y generación de inputs con las series generadas
+			$('#FormSeriesVerificar input[name=prodseri]').val(producto);
+			$('#FormSeriesVerificar input[name=almseri]').val($('select[name=almacen]').val());
+			$('#ModalSeries .modal-body .inputSeries').html(''); // Limpiar los inputs previos
+
+			$.each(series, function (index, serie) {
+				var serieInput = `
+					<input type="hidden" name="serie[${index + 1}]" class="form-control" value="${serie}">
+				`;
+				$('#ModalSeries .modal-body .inputSeries').append(serieInput);
+			});
+
+			// Proceder a guardar el producto con las series generadas
+			guardarProducto();
+		} else {
+			// Lógica para ingreso independiente
+			$('#FormSeriesVerificar input[name=prodseri]').val(producto);
+			$('#FormSeriesVerificar input[name=almseri]').val($('select[name=almacen]').val());
+			$('#ModalSeries .modal-body .inputSeries').html(''); // Limpiar cualquier input previo
+
+			for (i = 1; i <= cantidad; i++) {
+				var serie = `
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label">Serie ${i}</label>
+						<input type="text" name="serie[${i}]" class="form-control" validate>
+					</div>
 				</div>
-			</div>
-			`;
-			$('#ModalSeries .modal-body .inputSeries').append(serie);
-			$('#FormSeriesVerificar input[name="serie[' + i + ']"]').rules("add", "required");
+				`;
+				$('#ModalSeries .modal-body .inputSeries').append(serie);
+				$('#FormSeriesVerificar input[name="serie[' + i + ']"]').rules("add", "required");
+			}
+			$('#ModalSeries').modal();
 		}
-		$('#ModalSeries').modal();
 	}
 
 	function guardarProducto() {
@@ -5968,7 +6099,6 @@ $(function () {
 
 		var fechas_producto = '';
 		if (fec_venc == '1') {
-
 			var fechas_array = [];
 			$.each($('#FormCompraFechaVencimiento .cantidad'), function (index, value) {
 				var objeto = {};
@@ -5984,8 +6114,10 @@ $(function () {
 		var series = null;
 		if ($('input[name=seriesProducto]').prop('checked')) {
 			var producto = $('#FormSeriesVerificar input[name=prodseri]').val();
-			var series = $('#FormSeriesVerificar input[name^="serie"]');
-			var cantidad = series.length;
+			var series = $('#FormSeriesVerificar input[name^="serie"]').filter(function () {
+				return $(this).val().trim() !== ""; // Filtrar sólo los inputs con valores no vacíos
+			});
+			cantidad = series.length;
 		}
 
 		$.getJSON(path + 'administrador/regcompras/getProducto', { producto }, function (resp, textStatus) {
@@ -8001,6 +8133,9 @@ $(function () {
 		var tipo = $(this).val();
 		if (tipo == 2) {
 			$('select[name=tipoTarjeta]').prop('disabled', false);
+			$('input[name=operacion]').prop('disabled', false);
+		} else if (tipo == 3) {
+			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', false);
 		} else {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
@@ -10331,7 +10466,6 @@ $(function () {
 		rules: {
 			nombreProducto: { required: true },
 			cantidadProducto: { required: true }
-
 		},
 		submitHandler: function () {
 			if (!$('#FormAgregarTraspasos').valid()) {
@@ -10342,80 +10476,144 @@ $(function () {
 				});
 				return;
 			}
-			var series = [];
-			if ($('#checkbox-serie:checked').length) {
-				for (i = 0; i < $('input[name=cantidadProducto]').val(); i++) {
-					let serie = window.prompt("Escriba la serie", 'Ingrese la serie');
-					series.push(serie);
+
+			$('#serieMode').off('change').on('change', function () {
+				var mode = $(this).val();
+				if (mode === 'individual') {
+					$('#seriesContainerIndividual').show();
+					$('#seriesContainerBloque').hide();
+				} else if (mode === 'bloque') {
+					$('#seriesContainerIndividual').hide();
+					$('#seriesContainerBloque').show();
 				}
-			}
+			});
 
-			var origen = $('select[name=origen]').val();
-			var destino = $('select[name=destino]').val();
-			var producto = $('input[name=producto]').val();
 			var cantidad = $('input[name=cantidadProducto]').val();
-			$.getJSON(path + 'administrador/regtraspasos/verificaCantidadTraspaso', { producto, cantidad, origen, destino, series }, function (json, textStatus) {
-				if (json.success && json.destino) {
-					// if (json.success) {
-					if ($('#TableTraspasosProductos tbody tr').length > 0) {
-						$('#TableTraspasosProductos tr').each(function () {
-							var data_id = parseInt($(this).data('id'));
-							id_array.push(data_id);
+			$('#seriesContainerIndividual').empty();
+
+			if ($('#checkbox-serie:checked').length) {
+				for (let i = 0; i < cantidad; i++) {
+					$('#seriesContainerIndividual').append(`
+						<div class="col-md-6">
+							<label for="serie${i}">Serie ${i + 1}</label>
+							<input type="text" class="form-control" id="serie${i}" name="serie[]">
+						</div>
+					`);
+				}
+				$('#serieModal').modal('show');
+
+				$('#saveSeries').off('click').on('click', function () {
+					var mode = $('#serieMode').val();
+					let series = [];
+					let valid = true;
+
+					if (mode === 'individual') {
+						$('input[name="serie[]"]').each(function () {
+							let serie = $(this).val();
+							if (serie) {
+								series.push(serie);
+							} else {
+								valid = false;
+								Swal.fire({
+									title: "Error",
+									text: "Debe ingresar todas las series.",
+									type: "error"
+								});
+								return false;
+							}
 						});
-						if (id_array.includes(parseInt(json.producto.cod_producto))) {
-							$('#prod-' + json.producto.cod_producto).remove();
-						}
-					}
+					} else if (mode === 'bloque') {
+						let serieInicial = $('#serieInicial').val();
+						let serieFinal = $('#serieFinal').val();
 
-					var seriesBadge = '';
-					if ($('#checkbox-serie:checked').length) {
+						// Convertir las series a cadenas numéricas con padding
+						let inicio = BigInt(serieInicial);
+						let fin = BigInt(serieFinal);
 
-						if (json.series.length == 0) {
+						if (inicio > fin) {
+							valid = false;
 							Swal.fire({
 								title: "Error",
-								text: "No se encontro ninguna serie",
+								text: "La serie inicial debe ser menor o igual a la serie final.",
 								type: "error"
 							});
 							return false;
 						}
-						$.each(json.series, function (indexSeries, valueSeries) {
-							seriesBadge += `
-							<input type="hidden" name="serie_producto[${json.producto.cod_producto}]" value="${valueSeries}">
-							<span class="badge badge-info">${valueSeries}</span>`;
-						});
-					}
-					var tr = `
-					<tr data-id="${json.producto.cod_producto}" id="prod-${json.producto.cod_producto}">
-						<td>
-						<input type="hidden" name="id_producto[]" value="${json.producto.cod_producto}" />
-						${json.producto.cod_producto}</td>						
-						<td>${json.producto.nomb_product + seriesBadge}</td>
-						<td>${json.producto.nomb_unid}</td>						
-						<td><input type="number" name="cant_producto[]" value="${(json.series.length > 0) ? json.series.length : $('input[name=cantidadProducto]').val()}" class="form-control" readonly></td>
-						<td><button data-id="${json.producto.cod_producto}" class="btn btn-sm btn-danger removerProducto"><i class="fa fa-trash"></i></button></td>
-					</tr>
-				`;
 
-					$('#TableTraspasosProductos tbody').append(tr);
-
-				} else {
-					if (json.destino) {
-						Swal.fire({
-							title: "Error",
-							text: json.mensaje,
-							type: "error"
-						});
-					} else {
-						Swal.fire({
-							title: "Error",
-							text: json.mensaje_destino,
-							type: "error"
-						});
+						let currentSerie = inicio;
+						while (currentSerie <= fin) {
+							series.push(currentSerie.toString());
+							currentSerie += BigInt(1); // Incrementar la serie
+						}
 					}
-				}
-			});
+
+					if (valid) {
+						$('#serieModal').modal('hide');
+						procesarTraspaso(series);
+					}
+				});
+			} else {
+				procesarTraspaso([]);
+			}
 		}
 	});
+
+	function procesarTraspaso(series) {
+		var origen = $('select[name=origen]').val();
+		var destino = $('select[name=destino]').val();
+		var producto = $('input[name=producto]').val();
+		var cantidad = $('input[name=cantidadProducto]').val();
+		$.getJSON(path + 'administrador/regtraspasos/verificaCantidadTraspaso', { producto, cantidad, origen, destino, series }, function (json, textStatus) {
+			if (json.success && json.destino) {
+				var seriesBadge = '';
+				if ($('#checkbox-serie:checked').length) {
+					if (json.series.length == 0) {
+						Swal.fire({
+							title: "Error",
+							text: "No se encontro ninguna serie",
+							type: "error"
+						});
+						return false;
+					}
+					$.each(json.series, function (indexSeries, valueSeries) {
+						seriesBadge += `
+						<input type="hidden" name="serie_producto[${json.producto.cod_producto}]" value="${valueSeries}">
+						<span class="badge badge-info">${valueSeries}</span>`;
+					});
+				}
+				var tr = `
+				<tr data-id="${json.producto.cod_producto}" id="prod-${json.producto.cod_producto}">
+					<td>
+					<input type="hidden" name="id_producto[]" value="${json.producto.cod_producto}" />
+					${json.producto.cod_producto}</td>                        
+					<td>${json.producto.nomb_product + seriesBadge}</td>
+					<td>${json.producto.nomb_unid}</td>                        
+					<td><input type="number" name="cant_producto[]" value="${(json.series.length > 0) ? json.series.length : $('input[name=cantidadProducto]').val()}" class="form-control" readonly></td>
+					<td><button data-id="${json.producto.cod_producto}" class="btn btn-sm btn-danger removerProducto"><i class="fa fa-trash"></i></button></td>
+				</tr>
+				`;
+
+				$('#TableTraspasosProductos tbody').append(tr);
+
+			} else {
+				if (json.destino) {
+					Swal.fire({
+						title: "Error",
+						text: json.mensaje,
+						type: "error"
+					});
+				} else {
+					Swal.fire({
+						title: "Error",
+						text: json.mensaje_destino,
+						type: "error"
+					});
+				}
+			}
+		});
+	}
+
+
 
 	$('#TableTraspasosProductos tbody').on('click', '.removerProducto', function (event) {
 		event.preventDefault();

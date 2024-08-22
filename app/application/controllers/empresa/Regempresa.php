@@ -76,6 +76,7 @@ class Regempresa extends CI_Controller {
 		$data['usuario_sol_emp'] = $this->input->post('usuario_sol');
 		$data['contrasena_sol_emp'] = $this->input->post('contrasena_sol');
 		$data['enviar_factura_emp'] = $this->input->post('enviar_factura_emp');
+		$data['fecha_emp'] = date('Y-m-d');
 		// $data['user_sol'] = $this->input->post('user_sol');	
 		// $data['pass_sol'] = $this->input->post('pass_sol');
 		$data['client_id_emp'] = $this->input->post('cliente_id');

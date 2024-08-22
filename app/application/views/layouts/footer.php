@@ -19,9 +19,11 @@
 <script src="<?= base_url_app() ?>assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="<?= base_url_app() ?>assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.es.min.js"></script>
 <script src="<?= base_url_app() ?>assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js"></script>
-<script src="<?= base_url_app() ?>assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+<script src="<?= base_url_app() ?>assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js"
+    type="text/javascript"></script>
 <script src="<?= base_url_app() ?>assets/plugins/select2/js/select2.min.js" type="text/javascript"></script>
-<script src="<?= base_url_app() ?>assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" type="text/javascript"></script>
+<script src="<?= base_url_app() ?>assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"
+    type="text/javascript"></script>
 
 <script src="<?php echo base_url_app(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url_app(); ?>assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
@@ -58,6 +60,7 @@
 <script src="<?= base_url_app() ?>assets/jquery-upload/js/jquery.fileupload.js"></script>
 
 <script src="<?= base_url_app() ?>assets/jquery-toast/src/jquery.toast.js"></script>
+<script src="<?= base_url_app() ?>assets/codeseven/build/toastr.min.js"></script>
 
 <script src="<?= base_url_app() ?>assets/main.js?v=<?= time() ?> "></script>
 
@@ -123,7 +126,7 @@
             $.post('<?= base_url() ?>Validardatos/validarDocumento', {
                 dni: $('#txt_documento').val(),
                 tipo_doc: tipo_doc
-            }, function(data) {
+            }, function (data) {
 
 
 
@@ -235,9 +238,9 @@ var path = '<?= base_url_app(); ?>';
 
     colores = ['rgb(255 0 0 / 85%)', 'rgba(0,166,90,0.85)', 'rgba(0,192,239,0.85)', 'rgba(221,75,57,0.85)'];
     $.post(path + "reportes/regdashboard/getCumpleanos", {},
-        function(data, textStatus, jqXHR) {
+        function (data, textStatus, jqXHR) {
             var num = 0;
-            $.each(data, function(indexInArray, val) {
+            $.each(data, function (indexInArray, val) {
                 $.toast({
                     loader: false,
                     text: "Hoy cumple años " + val.nomb_cliente + ', deseale un feliz cumpleaños <button onclick="desactivarCumpleano(' + val.id_cliente + ')" id="cumpleanos-' + val.id_cliente + '" class="btn btn-black btn-md desactivarCumpleano"><span class="fa fa-check"></span></button>',
@@ -245,7 +248,7 @@ var path = '<?= base_url_app(); ?>';
                     bgColor: colores[num], // Background color for toast
                     textColor: '#fff', // text color
                     allowToastClose: true, // Show the close button or not
-                    hideAfter: 10000, // `false` to make it sticky or time in miliseconds to hide after
+                    hideAfter: 1000, // `false` to make it sticky or time in miliseconds to hide after
                     stack: 5, // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
                     textAlign: 'left', // Alignment of text i.e. left, right, center
                     position: 'top-right' // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
@@ -264,9 +267,9 @@ var path = '<?= base_url_app(); ?>';
         var id_cliente = id;
         $('#cumpleanos-' + id_cliente).parent('.jq-toast-single').hide()
         $.post(path + "reportes/regdashboard/desactivarCumpleano", {
-                id: id_cliente
-            },
-            function(data, textStatus, jqXHR) {
+            id: id_cliente
+        },
+            function (data, textStatus, jqXHR) {
 
             },
             "JSON"
@@ -278,9 +281,9 @@ var path = '<?= base_url_app(); ?>';
 
     colores = ['rgb(122 0 255 / 89%)', 'rgba(0,166,90,0.85)', 'rgba(0,192,239,0.85)', 'rgba(221,75,57,0.85)'];
     $.post(path + "reportes/regdashboard/getUsu", {},
-        function(data, textStatus, jqXHR) {
+        function (data, textStatus, jqXHR) {
             var num = 0;
-            $.each(data, function(indexInArray, val) {
+            $.each(data, function (indexInArray, val) {
                 $.toast({
                     heading: '¡Feliz cumpleaños!',
                     // loader:false,
@@ -290,7 +293,7 @@ var path = '<?= base_url_app(); ?>';
                     bgColor: colores[num], // Background color for toast
                     textColor: '#fff', // text color
                     allowToastClose: true, // Show the close button or not
-                    hideAfter: 10000, // `false` to make it sticky or time in miliseconds to hide after
+                    hideAfter: 1000, // `false` to make it sticky or time in miliseconds to hide after
                     stack: 5, // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
                     textAlign: 'left', // Alignment of text i.e. left, right, center
                     position: 'top-right' // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
@@ -309,62 +312,112 @@ var path = '<?= base_url_app(); ?>';
         var cod_usu = id;
         $('#cumpleanosusu-' + cod_usu).parent('.jq-toast-single').hide()
         $.post(path + "reportes/regdashboard/desactivarCumpleanousu", {
-                id: cod_usu
-            },
-            function(data, textStatus, jqXHR) {
+            id: cod_usu
+        },
+            function (data, textStatus, jqXHR) {
 
             },
             "JSON"
         );
     }
 </script>
+<script>
+    // $('#ModalMensajeFecha').modal();
+
+    // colores = ['rgb(255 0 0 / 85%)', 'rgba(0,166,90,0.85)', 'rgba(0,192,239,0.85)', 'rgba(221,75,57,0.85)'];
+    $.post(path + "reportes/regdashboard/getFechaemp", {},
+        function (data, textStatus, jqXHR) {
+            console.log(data);
+            var num = 0;
+            $.each(data, function (indexInArray, val) {
+                var mensaje = '';
+
+                // Verificar si los permisos están desactivados
+                if (val.permisos_desactivados) {
+                    mensaje = "Estimado(a) cliente tienes un pago pendiente vencido, regulariza a la brevedad para reactivar el servicio. Gracias.";
+                } else if (val.hoy_corte) {
+                    mensaje = "Estimado(a) cliente. Evita las molestias de corte de servicio pagando a tiempo su facturacion. Hoy a media noche se corta su servicio";
+                } else {
+                    var dias_restantes = val.dias_restantes;
+                    if (dias_restantes <=5) {
+                        mensaje = "Estimado(a) cliente, su ciclo de facturacion vence en " + dias_restantes + " día" + (dias_restantes > 1 ? "s" : "") + ". Evita las molestias de corte de servicio, pagando a tiempo. Gracias";
+                    }else{
+                        return;
+                    }
+                }
+
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-top-center",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "500",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+
+                toastr["error"](mensaje, "Atencion")
+            });
+        },
+        "JSON"
+    );
+
+</script>
 
 <script type="text/javascript">
-    $('#modal1').on('hidden.bs.modal', function(e) {
+    $('#modal1').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal1 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal2').on('hidden.bs.modal', function(e) {
+    $('#modal2').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal2 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal3').on('hidden.bs.modal', function(e) {
+    $('#modal3').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal3 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal4').on('hidden.bs.modal', function(e) {
+    $('#modal4').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal4 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal5').on('hidden.bs.modal', function(e) {
+    $('#modal5').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal5 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal6').on('hidden.bs.modal', function(e) {
+    $('#modal6').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal6 iframe').attr("src", $("#modal6 iframe").attr("src"));
     });
-    $('#modal7').on('hidden.bs.modal', function(e) {
+    $('#modal7').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal7 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal8').on('hidden.bs.modal', function(e) {
+    $('#modal8').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal8 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal9').on('hidden.bs.modal', function(e) {
+    $('#modal9').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal9 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal10').on('hidden.bs.modal', function(e) {
+    $('#modal10').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal10 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
-    $('#modal11').on('hidden.bs.modal', function(e) {
+    $('#modal11').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal11 iframe').attr("src", $("#modal4 iframe").attr("src"));
     });
-    $('#modal12').on('hidden.bs.modal', function(e) {
+    $('#modal12').on('hidden.bs.modal', function (e) {
         // do something...
         $('#modal12 iframe').attr("src", $("#modal1 iframe").attr("src"));
     });
