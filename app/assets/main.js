@@ -7834,6 +7834,159 @@ $(function () {
 			}
 		}
 	});
+	$('#FormVentaAgregar select[name=tipoPedido]').change(function () {
+		seleccionarNumeracionSeriePOS()
+	});
+
+	function seleccionarNumeracionSeriePOS() {
+		let id = $('#FormVentaAgregar select[name=tipoPedido]').val();
+		if (id == '') {
+			$('#FormVentaAgregar #ClientePosVentaAutocomplete').attr('disabled', true);
+			$('#FormVentaAgregar #ClientePosVentaAutocomplete').val('');
+			$('#FormVentaAgregar select[name=tipo_documento]').val('');
+			$('#FormVentaAgregar input[name=rucdni]').val('');
+			$('#FormVentaAgregar input[name=direccion]').val('');
+			return;
+		}
+		const tipo_doc = $('#FormVentaAgregar select[name=tipoPedido]').find(':selected').data('dni');
+		$.getJSON(path + 'administrador/regventas/numeracion', { id }, function (json, textStatus) {
+			$('#ClientePosVentaAutocomplete').attr('disabled', false);
+			$('#FormVentaAgregar input[name=serie]').val(json.serie);
+			$('#FormVentaAgregar input[name=correlativo]').val(json.correlativo_actual);
+			if (tipo_doc == '1') {
+				$('#FormVentaAgregar select[name=tipo_documento]').val('DNI');
+			} else {
+				$('#FormVentaAgregar select[name=tipo_documento]').val('RUC');
+			}
+		});
+	}
+	seleccionarNumeracionSeriePOS();
+	$('#FormVentaAgregar input[name=nombreCliente]').keypress(function(event){
+		if(event.which === 13) {
+			event.preventDefault();
+			if($('#FormVentaAgregar select[name=tipo_documento]').val()==''){
+				Swal.fire({
+					title: 'Error',
+					text: 'No ha seleccionado el documento (Boleta, Factura)',
+					type: 'error'
+				});
+				return;
+			}
+			let tipo_documento = $('#FormVentaAgregar select[name=tipo_documento]').val();
+			let numero = $(this).val();
+			if(tipo_documento=='RUC' && numero.length != 11){
+				Swal.fire({
+					title: 'Error',
+					text: 'El número debe ser de 11 dígitos.',
+					type: 'error'
+				});
+				return;
+			}
+			if(tipo_documento=='DNI' && numero.length != 8){
+				Swal.fire({
+					title: 'Error',
+					text: 'El número debe ser de 8 dígitos.',
+					type: 'error'
+				});
+				return;
+			}
+			$.getJSON(path+"administrador/regventas/obtenerCliente", {tipo_documento,numero},
+				function (data, textStatus, jqXHR) {
+					if(data.success){
+						$('#FormVentaAgregar input[name=cliente]').val(data.response.id_cliente);
+						$('#FormVentaAgregar input[name=nombreCliente]').val(data.response.nomb_cliente);
+						$('#FormVentaAgregar input[name=direccion_cliente]').val(data.response.direc_cliente);
+						$('#FormVentaAgregar input[name=precioCliente]').val(data.response.precio_cliente);
+					}else{
+						let buscarEn = tipo_documento == 'RUC' ? 'SUNAT' : 'RENIEC';
+						Swal.fire({
+							title: 'No se encuentra registrado',
+							text: '¿Deseas buscarlo en '+buscarEn+'?',
+							type: 'warning',
+							showCancelButton: true,
+							confirmButtonText: 'Sí, buscar',
+							cancelButtonText: 'No, cancelar'
+						}).then((result) => {
+							if(result.value){
+								let tipo_doc = tipo_documento=='RUC'?4:2;
+								let dni = numero;
+								$.get(path+"validardatos/validarDocumento", {dni,tipo_doc},
+									function (data_reniec, textStatus, jqXHR) {
+										if(tipo_documento == 'DNI' && (data_reniec[1]!='' || data_reniec[1]!= null) && (data_reniec[2]!='' || data_reniec[3]!= null) && (data_reniec[3]!='' || data_reniec[3]!= null)){
+											if(data_reniec[1]==""){
+												Swal.fire({
+													title: 'Error',
+													text: 'Ocurrió un error en la consulta a RENIEC, revisa el numero DNI y intente, si persiste comuníquese con el administrador',
+													type: 'error',
+												});
+												return;
+											}
+											Swal.fire({
+												title: 'Registro encontrado',
+												text: 'Se encontró a '+data_reniec[5]+', ¿deseas agregarlo a la base de datos?',
+												type: 'info',
+												showCancelButton: true,
+												confirmButtonText: 'Sí, agregar',
+												cancelButtonText: 'No, cancelar'
+											}).then((result) => {
+												if(result.value){
+													$.ajax({
+														type: "POST",
+														url: path+"administrador/regventas/crearClientePos",
+														data: {'nombre':data_reniec[5], tipo_doc, numero, 'direccion':data_reniec[4]},
+														dataType: "JSON",
+														success: function (response) {
+															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
+															$('#FormVentaAgregar input[name=nombreCliente]').val(data_reniec[5]);
+															$('#FormVentaAgregar input[name=direccion_cliente]').val(data_reniec[4]);
+															$('#FormVentaAgregar input[name=rucdni]').val(data_reniec[0]);
+															$('#FormVentaAgregar input[name=precioCliente').val(response.precio_cliente);
+														}
+													});
+												}
+											});
+										}else if (tipo_documento == 'RUC' && data_reniec[1] != null) {											
+											Swal.fire({
+												title: 'Registro encontrado',
+												text: `Se encontró a ${data_reniec[1]}, ¿deseas agregarlo a la base de datos?`,
+												type: 'info',
+												showCancelButton: true,
+												confirmButtonText: 'Sí, agregar',
+												cancelButtonText: 'No, cancelar'
+											}).then((result) => {
+												if(result.value){
+													$.ajax({
+														type: "POST",
+														url: path+"administrador/regventas/crearClientePos",
+														data: {'nombre': data_reniec[1], tipo_doc, numero, 'direccion': data_reniec[7] + ' ' + data_reniec[8] + ' ' + data_reniec[9] + ' ' + data_reniec[10]},
+														dataType: "JSON",
+														success: function (response) {
+															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
+															$('#FormVentaAgregar input[name=nombreCliente]').val(data_reniec[1]);
+															$('#FormVentaAgregar input[name=direccion_cliente]').val(data_reniec[7] + ' ' + data_reniec[8] + '-' + data_reniec[9] + '-' + data_reniec[10]);
+															$('#FormVentaAgregar input[name=rucdni]').val(data_reniec[0]);
+															$('#FormVentaAgregar input[name=precioCliente').val(response.precio_cliente);
+														}
+													});
+												}
+											});
+										} else if (data_reniec.error) {
+											Swal.fire({
+												title: 'Error',
+												text: data_reniec.error,
+												type: 'error'
+											});
+										}
+									},
+									"JSON"
+								);
+							}
+						});
+					}
+				}
+			);
+		}
+	});
 
 	$("#VentaProductoAutocomplete").easyAutocomplete({
 		minCharNumber: 2,

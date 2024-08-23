@@ -17,7 +17,7 @@ class Validardatos extends CI_Controller
     {
 $documento = $_REQUEST['dni'];
 $tipo_doc = $_REQUEST['tipo_doc'];
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzE5NTE4MjE2fQ.Re9tD-LrbwhynYUAmaADFCyCcEw97tHgVozPPqrH4vU';
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c3VhcmlvIjoiZGVudGFsc2FjIiwiZXhwIjoxNzMyMjk5NzA3fQ.3NQsFu5oy-WV_fwIp90ncz9tw1mOza8f0vcTOC76CBs';
 
 
         if ($tipo_doc == "2") {

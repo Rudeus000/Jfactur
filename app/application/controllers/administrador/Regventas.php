@@ -2221,6 +2221,7 @@ class Regventas extends CI_Controller
 		if(!is_null($id)){
 			$resp['success'] = true;
 			$resp['id_cliente'] = $id;
+			$resp['precio_cliente'] = $data['precio_cliente'];
 		}else{
 			$resp['success'] = false;
 		}
