@@ -84,11 +84,11 @@
                   </form>
                 </fieldset>
                 <br>
-                <div class="table-responsive">
-                  <table id="TableReporteDetalladoVentas" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <!-- <div class="table-responsive"> -->
+                  <table id="TableReporteDetalladoVentas" class="table table-striped table-sm mb-0" cellspacing="0" width="100%">
 
                     <thead>
-                      <tr class="btn-success">
+                      <tr class="btn-dark">
                         <th style="text-align: center; width: 50px">Fecha</th>
                         <th style="text-align: center;">Almacen</th>
                         <th style="text-align: center;">Punto de Venta</th>
@@ -101,22 +101,23 @@
                         <th style="text-align: center;">ISDN</th>
                         <th style="text-align: center;">Serie</th>
                         <th style="text-align: center;">T.Pago</th>
+                        <th style="text-align: center;">N.Opracion</th>
                         <th style="text-align: center;">Prec.Unid.</th>
                         <th style="text-align: center;">Descuento</th>
-                        <th style="text-align: center;">Prec. con Desc.</th>
+                        <th style="text-align: center;">Prec.Desc.</th>
                         <th class="bg-danger" tyle="text-align: center;">Cantidad</th>
                         <th style="text-align: center;">Subtotal</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th colspan="16" style="text-align:right">Total:</th>
+                        <th colspan="17" style="text-align:right">Total:</th>
                         <th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
                       </tr>
                     </tfoot>
                   </table>
 
-                </div>
+                <!-- </div> -->
                 <!-- End #wizard-vertical -->
               </div>
             </div>

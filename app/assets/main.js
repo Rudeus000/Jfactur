@@ -7993,10 +7993,10 @@ $(function () {
 		});
 	}
 	seleccionarNumeracionSeriePOS();
-	$('#FormVentaAgregar input[name=nombreCliente]').keypress(function(event){
-		if(event.which === 13) {
+	$('#FormVentaAgregar input[name=nombreCliente]').keypress(function (event) {
+		if (event.which === 13) {
 			event.preventDefault();
-			if($('#FormVentaAgregar select[name=tipo_documento]').val()==''){
+			if ($('#FormVentaAgregar select[name=tipo_documento]').val() == '') {
 				Swal.fire({
 					title: 'Error',
 					text: 'No ha seleccionado el documento (Boleta, Factura)',
@@ -8006,7 +8006,7 @@ $(function () {
 			}
 			let tipo_documento = $('#FormVentaAgregar select[name=tipo_documento]').val();
 			let numero = $(this).val();
-			if(tipo_documento=='RUC' && numero.length != 11){
+			if (tipo_documento == 'RUC' && numero.length != 11) {
 				Swal.fire({
 					title: 'Error',
 					text: 'El número debe ser de 11 dígitos.',
@@ -8014,7 +8014,7 @@ $(function () {
 				});
 				return;
 			}
-			if(tipo_documento=='DNI' && numero.length != 8){
+			if (tipo_documento == 'DNI' && numero.length != 8) {
 				Swal.fire({
 					title: 'Error',
 					text: 'El número debe ser de 8 dígitos.',
@@ -8022,30 +8022,30 @@ $(function () {
 				});
 				return;
 			}
-			$.getJSON(path+"administrador/regventas/obtenerCliente", {tipo_documento,numero},
+			$.getJSON(path + "administrador/regventas/obtenerCliente", { tipo_documento, numero },
 				function (data, textStatus, jqXHR) {
-					if(data.success){
+					if (data.success) {
 						$('#FormVentaAgregar input[name=cliente]').val(data.response.id_cliente);
 						$('#FormVentaAgregar input[name=nombreCliente]').val(data.response.nomb_cliente);
 						$('#FormVentaAgregar input[name=direccion_cliente]').val(data.response.direc_cliente);
 						$('#FormVentaAgregar input[name=precioCliente]').val(data.response.precio_cliente);
-					}else{
+					} else {
 						let buscarEn = tipo_documento == 'RUC' ? 'SUNAT' : 'RENIEC';
 						Swal.fire({
 							title: 'No se encuentra registrado',
-							text: '¿Deseas buscarlo en '+buscarEn+'?',
+							text: '¿Deseas buscarlo en ' + buscarEn + '?',
 							type: 'warning',
 							showCancelButton: true,
 							confirmButtonText: 'Sí, buscar',
 							cancelButtonText: 'No, cancelar'
 						}).then((result) => {
-							if(result.value){
-								let tipo_doc = tipo_documento=='RUC'?4:2;
+							if (result.value) {
+								let tipo_doc = tipo_documento == 'RUC' ? 4 : 2;
 								let dni = numero;
-								$.get(path+"validardatos/validarDocumento", {dni,tipo_doc},
+								$.get(path + "validardatos/validarDocumento", { dni, tipo_doc },
 									function (data_reniec, textStatus, jqXHR) {
-										if(tipo_documento == 'DNI' && (data_reniec[1]!='' || data_reniec[1]!= null) && (data_reniec[2]!='' || data_reniec[3]!= null) && (data_reniec[3]!='' || data_reniec[3]!= null)){
-											if(data_reniec[1]==""){
+										if (tipo_documento == 'DNI' && (data_reniec[1] != '' || data_reniec[1] != null) && (data_reniec[2] != '' || data_reniec[3] != null) && (data_reniec[3] != '' || data_reniec[3] != null)) {
+											if (data_reniec[1] == "") {
 												Swal.fire({
 													title: 'Error',
 													text: 'Ocurrió un error en la consulta a RENIEC, revisa el numero DNI y intente, si persiste comuníquese con el administrador',
@@ -8055,17 +8055,17 @@ $(function () {
 											}
 											Swal.fire({
 												title: 'Registro encontrado',
-												text: 'Se encontró a '+data_reniec[5]+', ¿deseas agregarlo a la base de datos?',
+												text: 'Se encontró a ' + data_reniec[5] + ', ¿deseas agregarlo a la base de datos?',
 												type: 'info',
 												showCancelButton: true,
 												confirmButtonText: 'Sí, agregar',
 												cancelButtonText: 'No, cancelar'
 											}).then((result) => {
-												if(result.value){
+												if (result.value) {
 													$.ajax({
 														type: "POST",
-														url: path+"administrador/regventas/crearClientePos",
-														data: {'nombre':data_reniec[5], tipo_doc, numero, 'direccion':data_reniec[4]},
+														url: path + "administrador/regventas/crearClientePos",
+														data: { 'nombre': data_reniec[5], tipo_doc, numero, 'direccion': data_reniec[4] },
 														dataType: "JSON",
 														success: function (response) {
 															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
@@ -8077,7 +8077,7 @@ $(function () {
 													});
 												}
 											});
-										}else if (tipo_documento == 'RUC' && data_reniec[1] != null) {											
+										} else if (tipo_documento == 'RUC' && data_reniec[1] != null) {
 											Swal.fire({
 												title: 'Registro encontrado',
 												text: `Se encontró a ${data_reniec[1]}, ¿deseas agregarlo a la base de datos?`,
@@ -8086,11 +8086,11 @@ $(function () {
 												confirmButtonText: 'Sí, agregar',
 												cancelButtonText: 'No, cancelar'
 											}).then((result) => {
-												if(result.value){
+												if (result.value) {
 													$.ajax({
 														type: "POST",
-														url: path+"administrador/regventas/crearClientePos",
-														data: {'nombre': data_reniec[1], tipo_doc, numero, 'direccion': data_reniec[7] + ' ' + data_reniec[8] + ' ' + data_reniec[9] + ' ' + data_reniec[10]},
+														url: path + "administrador/regventas/crearClientePos",
+														data: { 'nombre': data_reniec[1], tipo_doc, numero, 'direccion': data_reniec[7] + ' ' + data_reniec[8] + ' ' + data_reniec[9] + ' ' + data_reniec[10] },
 														dataType: "JSON",
 														success: function (response) {
 															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
@@ -13228,6 +13228,7 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		],
 		"initComplete": function (settings, json) {
@@ -15383,125 +15384,124 @@ $(function () {
 
 
 
-/* ========================================================================== */
-/*                            AGREGAR PRODUCTOS POS                           */
-/* ========================================================================== */
-if($('#container-pos').length){
+	/* ========================================================================== */
+	/*                            AGREGAR PRODUCTOS POS                           */
+	/* ========================================================================== */
+	if ($('#container-pos').length) {
 
-	$('#pos-ver-todos-productos').click(function(){
-		$('.pos-producto-container').show();
-	});
+		$('#pos-ver-todos-productos').click(function () {
+			$('.pos-producto-container').show();
+		});
 
-	
-	$.get(path+"administrador/regventas/getProductosPos", {'almacen': $('#FormPos input[name=almacen]').val()},
-		function (data, textStatus, jqXHR) {
-			let categorias = data['categorias'];
-			let productos = data['productos'];
-			let categoria = '';
-			$.each(categorias, function (indexC, valueC) { 
-				categoria += `<div class="pos-categoria" data-categoria="${ valueC['cod_categoria'] }">${ valueC['nomb_categoria'] }</div>`;
-			});
-			$('#pos-categorias').html(categoria);
 
-			let producto = '';
-			$.each(productos, function (indexP, valueP) { 
-				producto += `
-				<div class="col-md-4 col-lg-3 mb-4 pos-producto-container categoria-${ valueP['cod_categoria'] }" data-nombre="${ valueP['nombre'] }" data-barra="${ valueP['barra_product'] }" data-id="${ valueP['id'] }">
+		$.get(path + "administrador/regventas/getProductosPos", { 'almacen': $('#FormPos input[name=almacen]').val() },
+			function (data, textStatus, jqXHR) {
+				let categorias = data['categorias'];
+				let productos = data['productos'];
+				let categoria = '';
+				$.each(categorias, function (indexC, valueC) {
+					categoria += `<div class="pos-categoria" data-categoria="${valueC['cod_categoria']}">${valueC['nomb_categoria']}</div>`;
+				});
+				$('#pos-categorias').html(categoria);
 
-					<div class="pos-producto" id="pos-producto-item-${ valueP['id'] }"  data-id="${ valueP['id'] }" data-nombre="${ valueP['nombre'] }" data-precio="${ valueP['venta'] }" data-stock="${ valueP['stock'] }" data-unidad="${valueP['nomb_unid']}" data-unidad="${valueP['nomb_unid']}" data-unidad_abreviatura="${valueP['abreviatura_unid']}" data-idTypeAssignmentProduct="${valueP['idTypeAssignmentProduct']}"  data-peso="${valueP['peso_product']}" >
-						<div class="pos-producto-stock">Stock - ${ valueP['stock'] }</div>
-						<div class="pos-producto-stock">Compra - ${ valueP['costo'] }</div>
+				let producto = '';
+				$.each(productos, function (indexP, valueP) {
+					producto += `
+				<div class="col-md-4 col-lg-3 mb-4 pos-producto-container categoria-${valueP['cod_categoria']}" data-nombre="${valueP['nombre']}" data-barra="${valueP['barra_product']}" data-id="${valueP['id']}">
+
+					<div class="pos-producto" id="pos-producto-item-${valueP['id']}"  data-id="${valueP['id']}" data-nombre="${valueP['nombre']}" data-precio="${valueP['venta']}" data-stock="${valueP['stock']}" data-unidad="${valueP['nomb_unid']}" data-unidad="${valueP['nomb_unid']}" data-unidad_abreviatura="${valueP['abreviatura_unid']}" data-idTypeAssignmentProduct="${valueP['idTypeAssignmentProduct']}"  data-peso="${valueP['peso_product']}" >
+						<div class="pos-producto-stock">Stock - ${valueP['stock']}</div>
+						<div class="pos-producto-stock">Compra - ${valueP['costo']}</div>
 						<div class="pos-producto-imagen">
 						<img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg">
 						</div>
-						<div class="pos-producto-nombre text-center font-weight-bold mt-2">${ valueP['nombre'] }</div>
-						<div class="pos-producto-precio text-center font-weight-bold">${ valueP['venta'] }</div>
+						<div class="pos-producto-nombre text-center font-weight-bold mt-2">${valueP['nombre']}</div>
+						<div class="pos-producto-precio text-center font-weight-bold">${valueP['venta']}</div>
 					</div>
 				</div>
 				`;
-			});
-			$('#container-pos-galeria .row').html(producto);
-		},
-		"JSON"
-	);
+				});
+				$('#container-pos-galeria .row').html(producto);
+			},
+			"JSON"
+		);
 
-	$('#container-pos-categorias #pos-categorias').on('click','.pos-categoria', function () {
-		let categoria = $(this).data('categoria');
-		$('.pos-producto-container').hide();
-		$('.pos-producto-container.categoria-'+categoria).show();
-	});
+		$('#container-pos-categorias #pos-categorias').on('click', '.pos-categoria', function () {
+			let categoria = $(this).data('categoria');
+			$('.pos-producto-container').hide();
+			$('.pos-producto-container.categoria-' + categoria).show();
+		});
 
-	$('#pos-filtrar-nombre').on('input', function() {
-		let filtro = $(this).val().toLowerCase(); // Obtenemos el valor del input y lo convertimos a minúsculas para una búsqueda sin distinción entre mayúsculas y minúsculas
-		$('.pos-producto-container').each(function() {
+		$('#pos-filtrar-nombre').on('input', function () {
+			let filtro = $(this).val().toLowerCase(); // Obtenemos el valor del input y lo convertimos a minúsculas para una búsqueda sin distinción entre mayúsculas y minúsculas
+			$('.pos-producto-container').each(function () {
 
 				let nombreProducto = $(this).data('nombre').toLowerCase(); // Obtenemos el valor del atributo data-nombre del elemento y lo convertimos a minúsculas
-				
+
 				if (nombreProducto.indexOf(filtro) !== -1) { // Comprobamos si el valor del atributo data-nombre incluye el filtro introducido
-						$(this).show(); // Si coincide, mostramos el elemento
+					$(this).show(); // Si coincide, mostramos el elemento
 				} else {
-						$(this).hide(); // Si no coincide, ocultamos el elemento
-				}
-		});
-	});
-
-	$("#ingresar-codigo-barra").keypress(function(event) {
-		if (event.which === 13) {
-			let barra = $(this).val();
-			let busqueda = false;
-			$('.pos-producto-container').each(function() {
-
-				let barraProducto = $(this).data('barra').toLowerCase(); // Obtenemos el valor del atributo data-barra del elemento y lo convertimos a minúsculas
-				
-				if (barraProducto == barra) { // Comprobamos si el valor del atributo data-barra incluye el filtro introducido
-					let id = $(this).data('id');
-					busqueda = true;
-					posAgregarProducto(id);
-					$("#ingresar-codigo-barra").val("");
+					$(this).hide(); // Si no coincide, ocultamos el elemento
 				}
 			});
-			if(!busqueda){
-				alert('No se encontró coincidencia');
-			}
-		}
-	});
+		});
 
-	$("#container-pos-galeria").on('click','.pos-producto', function () {
-		let id = $(this).data('id');
-		posAgregarProducto(id);
-	});
+		$("#ingresar-codigo-barra").keypress(function (event) {
+			if (event.which === 13) {
+				let barra = $(this).val();
+				let busqueda = false;
+				$('.pos-producto-container').each(function () {
 
-	function posAgregarProducto(id)
-	{
-		let verifica = $('#pos-resumen-center').find('#producto-'+id).length
-		if(verifica){
-			alert('Este producto ya fue agregado hace unos momentos');
-			return;
-		}
+					let barraProducto = $(this).data('barra').toLowerCase(); // Obtenemos el valor del atributo data-barra del elemento y lo convertimos a minúsculas
 
-		let then = $('#pos-producto-item-'+id);
-		let producto = id;
-		let nombre = $(then).data('nombre');
-		let precio = $(then).data('precio');
-		let stock = $(then).data('stock');
-		let almacen = $('#FormPos input[name=almacen]').val();
-		let unidad = $(then).data('unidad');
-		let peso = $(then).data('peso');
-		let unidad_abreviatura = $(then).data('unidad_abreviatura');
-		let idTypeAssignmentProduct = $(then).data('idTypeAssignmentProduct');
-
-		$.ajax({
-			type: "GET",
-			url: path+"administrador/regventas/getProducto",
-			data: {'producto':id, 'cantidad':1, 'cambio':1, almacen},
-			dataType: "JSON",
-			success: function (response) {
-				let producto_fecha = '';
-				if (response.response.fechas != null) {
-					producto_fecha = response.response.fechas.cod_prodfec;
+					if (barraProducto == barra) { // Comprobamos si el valor del atributo data-barra incluye el filtro introducido
+						let id = $(this).data('id');
+						busqueda = true;
+						posAgregarProducto(id);
+						$("#ingresar-codigo-barra").val("");
+					}
+				});
+				if (!busqueda) {
+					alert('No se encontró coincidencia');
 				}
+			}
+		});
 
-				let item = `<div class="row mx-0 pos-resumen-item" id="producto-${ id }" data-stock="${ stock }">
+		$("#container-pos-galeria").on('click', '.pos-producto', function () {
+			let id = $(this).data('id');
+			posAgregarProducto(id);
+		});
+
+		function posAgregarProducto(id) {
+			let verifica = $('#pos-resumen-center').find('#producto-' + id).length
+			if (verifica) {
+				alert('Este producto ya fue agregado hace unos momentos');
+				return;
+			}
+
+			let then = $('#pos-producto-item-' + id);
+			let producto = id;
+			let nombre = $(then).data('nombre');
+			let precio = $(then).data('precio');
+			let stock = $(then).data('stock');
+			let almacen = $('#FormPos input[name=almacen]').val();
+			let unidad = $(then).data('unidad');
+			let peso = $(then).data('peso');
+			let unidad_abreviatura = $(then).data('unidad_abreviatura');
+			let idTypeAssignmentProduct = $(then).data('idTypeAssignmentProduct');
+
+			$.ajax({
+				type: "GET",
+				url: path + "administrador/regventas/getProducto",
+				data: { 'producto': id, 'cantidad': 1, 'cambio': 1, almacen },
+				dataType: "JSON",
+				success: function (response) {
+					let producto_fecha = '';
+					if (response.response.fechas != null) {
+						producto_fecha = response.response.fechas.cod_prodfec;
+					}
+
+					let item = `<div class="row mx-0 pos-resumen-item" id="producto-${id}" data-stock="${stock}">
 											<input type="hidden" name="id_prod[${producto}]" value="${producto}">
 											<input type="hidden" name="idTypeAssignmentProduct[${producto}]" value="${response.response.idTypeAssignmentProduct}">
 											<input type="hidden" name="id_almacen[${producto}]" value="${almacen}">
@@ -15524,213 +15524,211 @@ if($('#container-pos').length){
 														<img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" width="50px">
 													</div>
 													<div class="pos-resumen-item-nombre">
-														<div>${ nombre }</div>
-														<div class="mt-1"><b>S/${ precio }</b></div>
+														<div>${nombre}</div>
+														<div class="mt-1"><b>S/${precio}</b></div>
 													</div>
 												</div>
 											</div>
 											<div class="col-4">
 												<div class="pos-resumen-item-cantidad">
-													<button type="button" class="btn btn-warning btn-rounded btn-sm pos-resumen-btn-menos" data-id="${ id }"><i class="fa fa-minus"></i></button>
+													<button type="button" class="btn btn-warning btn-rounded btn-sm pos-resumen-btn-menos" data-id="${id}"><i class="fa fa-minus"></i></button>
 													<span class="pos-resumen-item-cantidad-numero">1</span>
-													<button type="button" class="btn btn-warning btn-rounded btn-sm pos-resumen-btn-mas" data-id="${ id }"><i class="fa fa-plus"></i></button>
+													<button type="button" class="btn btn-warning btn-rounded btn-sm pos-resumen-btn-mas" data-id="${id}"><i class="fa fa-plus"></i></button>
 													<div class="pos-resumen-eliminar  mt-2">
-														<button class="btn btn-danger btn-sm btn-rounded pos-resumen-btn-eliminar" data-id="${ id }">Eliminar</button>
+														<button class="btn btn-danger btn-sm btn-rounded pos-resumen-btn-eliminar" data-id="${id}">Eliminar</button>
 													</div>
 												</div>
 											</div>
 										</div>`;
 
-				$('#pos-resumen-center #items').prepend(item);
-				calcularVentaPos();				
-			}
-		});
-		
-		
-		
-	}
-
-	$('#pos-resumen-center').on('click','.pos-resumen-btn-menos',function(){
-		let id = $(this).data('id');
-		let num = $('#producto-' + id).find("input[name='cant_prod["+id+"]']").val();
-		num = parseInt(num);
-		if(num==1){
-			return;
-		}
-		num--;
-		$('#producto-' + id).find("input[name='cant_prod["+id+"]']").val(num);
-		$('#producto-' + id).find(".pos-resumen-item-cantidad-numero").html(num);
-		calcularVentaPos();
-	});
-
-	$('#pos-resumen-datos').click(function(){
-		$('#pos-resumen-datos-content').toggle();
-	})
-
-
-	$('#pos-resumen-center').on('click','.pos-resumen-btn-mas',function(){
-		let id = $(this).data('id');
-
-		let stock = $('#producto-' + id).data('stock');
-		stock = parseInt(stock);
-		let num = $('#producto-' + id).find("input[name='cant_prod["+id+"]']").val();
-		num = parseInt(num);
-		
-		if(stock==num){
-			alert('Stock agotado');
-			return;
-		}
-		
-		num++;
-		$('#producto-' + id).find("input[name='cant_prod["+id+"]']").val(num);
-		$('#producto-' + id).find(".pos-resumen-item-cantidad-numero").html(num);
-		calcularVentaPos();
-	});
-
-	$('#pos-resumen-center').on('click','.pos-resumen-btn-eliminar',function(){
-		let id = $(this).data('id');
-		$('#producto-' + id).remove();
-		calcularVentaPos();
-	});
-
-	function calcularVentaPos()
-	{
-		if ($('#pos-resumen-center .pos-resumen-item').length > 0) {
-			let igv = 0;
-			let subtotal = 0;
-			let total = 0;
-
-			$('#pos-resumen-center .pos-resumen-item').each(function () {
-				let cadena = $(this).prop('id');
-				
-				var partes = cadena.split("-"); // Divide la cadena en ["producto", "7"]
-				var id = parseInt(partes[1]);
-				let cantidad = $(this).find("input[name='cant_prod["+id+"]']").val();
-				cantidad = parseInt(cantidad);
-				let precio = $(this).find("input[name='prec_prod["+id+"]']").val();
-				precio = parseFloat(precio);
-				total += precio * cantidad;
+					$('#pos-resumen-center #items').prepend(item);
+					calcularVentaPos();
+				}
 			});
-			subtotal = total / 1.18;
-			igv = total - subtotal;
-			$('#pos-resumen-subtotal').html('S/'+round(subtotal,2));
-			$('#pos-resumen-igv').html('S/'+round(igv,2));
-			$('#pos-resumen-total').html('S/'+round(total,2));
-			$('#FormPos input[name=total]').val(total);
-			$('#FormPos input[name=monto]').val(total);
-			$('#FormMetodoPago input[name=montoRecibido]').val(total);
-			$('#totalPedidoPagar').html('S/'+round(total,2));
-		}
-	}
 
-	$('#pasar-a-caja').click(function(){
-		$('#pos-resumen-datos-content').show();
-	});
-	$('#FormPos').validate({
-		ignore: [],
-		rules: {
-			tipoPedido: {required: true},
-			serie: {required: true},
-			correlativo: {required: true},
-			tipo_documento: { required: true },
-			rucdni: { required: true },
-			nombres: { required: true },
-		},
-		submitHandler: function (form) {
-			if($('#pos-resumen-center .pos-resumen-item').length == 0){
-				alert('No seleccionó ningun producto');
-				return
+
+
+		}
+
+		$('#pos-resumen-center').on('click', '.pos-resumen-btn-menos', function () {
+			let id = $(this).data('id');
+			let num = $('#producto-' + id).find("input[name='cant_prod[" + id + "]']").val();
+			num = parseInt(num);
+			if (num == 1) {
+				return;
 			}
-			if($('#FormPos input[name=tipoPedido]').val()==''){
-				alert('Seleccione un documento de venta');
-				return
-			}
-			if($('#FormPos input[name=cliente]').val()==''){
-				alert('Debe seleccionar un cliente');
-				return
+			num--;
+			$('#producto-' + id).find("input[name='cant_prod[" + id + "]']").val(num);
+			$('#producto-' + id).find(".pos-resumen-item-cantidad-numero").html(num);
+			calcularVentaPos();
+		});
+
+		$('#pos-resumen-datos').click(function () {
+			$('#pos-resumen-datos-content').toggle();
+		})
+
+
+		$('#pos-resumen-center').on('click', '.pos-resumen-btn-mas', function () {
+			let id = $(this).data('id');
+
+			let stock = $('#producto-' + id).data('stock');
+			stock = parseInt(stock);
+			let num = $('#producto-' + id).find("input[name='cant_prod[" + id + "]']").val();
+			num = parseInt(num);
+
+			if (stock == num) {
+				alert('Stock agotado');
+				return;
 			}
 
-			$('#ModalMetodoPago').modal();
-		}
-	});
+			num++;
+			$('#producto-' + id).find("input[name='cant_prod[" + id + "]']").val(num);
+			$('#producto-' + id).find(".pos-resumen-item-cantidad-numero").html(num);
+			calcularVentaPos();
+		});
 
-	$('#FormPos select[name=tipoPedido]').change(function(){
-		seleccionarNumeracionSeriePOS()
-	});
+		$('#pos-resumen-center').on('click', '.pos-resumen-btn-eliminar', function () {
+			let id = $(this).data('id');
+			$('#producto-' + id).remove();
+			calcularVentaPos();
+		});
 
-	function seleccionarNumeracionSeriePOS()
-	{
-		let id = $('#FormPos select[name=tipoPedido]').val();
-		if(id==''){
-			$('#FormPos #ClientePosVentaAutocomplete').attr('disabled',true);
-			$('#FormPos #ClientePosVentaAutocomplete').val('');
-			$('#FormPos select[name=tipo_documento]').val('');
-			$('#FormPos input[name=rucdni]').val('');
-			$('#FormPos input[name=direccion]').val('');
-			return;
+		function calcularVentaPos() {
+			if ($('#pos-resumen-center .pos-resumen-item').length > 0) {
+				let igv = 0;
+				let subtotal = 0;
+				let total = 0;
+
+				$('#pos-resumen-center .pos-resumen-item').each(function () {
+					let cadena = $(this).prop('id');
+
+					var partes = cadena.split("-"); // Divide la cadena en ["producto", "7"]
+					var id = parseInt(partes[1]);
+					let cantidad = $(this).find("input[name='cant_prod[" + id + "]']").val();
+					cantidad = parseInt(cantidad);
+					let precio = $(this).find("input[name='prec_prod[" + id + "]']").val();
+					precio = parseFloat(precio);
+					total += precio * cantidad;
+				});
+				subtotal = total / 1.18;
+				igv = total - subtotal;
+				$('#pos-resumen-subtotal').html('S/' + round(subtotal, 2));
+				$('#pos-resumen-igv').html('S/' + round(igv, 2));
+				$('#pos-resumen-total').html('S/' + round(total, 2));
+				$('#FormPos input[name=total]').val(total);
+				$('#FormPos input[name=monto]').val(total);
+				$('#FormMetodoPago input[name=montoRecibido]').val(total);
+				$('#totalPedidoPagar').html('S/' + round(total, 2));
+			}
 		}
-		const tipo_doc = $('#FormPos select[name=tipoPedido]').find(':selected').data('dni');
-		$.getJSON(path + 'administrador/regventas/numeracion', { id }, function (json, textStatus) {
-			$('#ClientePosVentaAutocomplete').attr('disabled',false);
-			$('#FormPos input[name=serie]').val(json.serie);
-			$('#FormPos input[name=correlativo]').val(json.correlativo_actual);
-			if(tipo_doc=='1'){
-				$('#FormPos select[name=tipo_documento]').val('DNI');
-			}else{
-				$('#FormPos select[name=tipo_documento]').val('RUC');
+
+		$('#pasar-a-caja').click(function () {
+			$('#pos-resumen-datos-content').show();
+		});
+		$('#FormPos').validate({
+			ignore: [],
+			rules: {
+				tipoPedido: { required: true },
+				serie: { required: true },
+				correlativo: { required: true },
+				tipo_documento: { required: true },
+				rucdni: { required: true },
+				nombres: { required: true },
+			},
+			submitHandler: function (form) {
+				if ($('#pos-resumen-center .pos-resumen-item').length == 0) {
+					alert('No seleccionó ningun producto');
+					return
+				}
+				if ($('#FormPos input[name=tipoPedido]').val() == '') {
+					alert('Seleccione un documento de venta');
+					return
+				}
+				if ($('#FormPos input[name=cliente]').val() == '') {
+					alert('Debe seleccionar un cliente');
+					return
+				}
+
+				$('#ModalMetodoPago').modal();
 			}
 		});
-	}
 
-	seleccionarNumeracionSeriePOS();
+		$('#FormPos select[name=tipoPedido]').change(function () {
+			seleccionarNumeracionSeriePOS()
+		});
 
-	$('#FormPos input[name=rucdni]').keypress(function(event){
-		if(event.which === 13) {
+		function seleccionarNumeracionSeriePOS() {
+			let id = $('#FormPos select[name=tipoPedido]').val();
+			if (id == '') {
+				$('#FormPos #ClientePosVentaAutocomplete').attr('disabled', true);
+				$('#FormPos #ClientePosVentaAutocomplete').val('');
+				$('#FormPos select[name=tipo_documento]').val('');
+				$('#FormPos input[name=rucdni]').val('');
+				$('#FormPos input[name=direccion]').val('');
+				return;
+			}
+			const tipo_doc = $('#FormPos select[name=tipoPedido]').find(':selected').data('dni');
+			$.getJSON(path + 'administrador/regventas/numeracion', { id }, function (json, textStatus) {
+				$('#ClientePosVentaAutocomplete').attr('disabled', false);
+				$('#FormPos input[name=serie]').val(json.serie);
+				$('#FormPos input[name=correlativo]').val(json.correlativo_actual);
+				if (tipo_doc == '1') {
+					$('#FormPos select[name=tipo_documento]').val('DNI');
+				} else {
+					$('#FormPos select[name=tipo_documento]').val('RUC');
+				}
+			});
+		}
+
+		seleccionarNumeracionSeriePOS();
+
+		$('#FormPos input[name=rucdni]').keypress(function (event) {
+			if (event.which === 13) {
 				event.preventDefault();
-				if($('#FormPos select[name=tipo_documento]').val()==''){
+				if ($('#FormPos select[name=tipo_documento]').val() == '') {
 					alert('No ha seleccionado el documento (Boleta, Factura)');
 					return;
 				}
 				let tipo_documento = $('#FormPos select[name=tipo_documento]').val();
 				let numero = $(this).val();
-				if(tipo_documento=='RUC' && numero.length != 11){
+				if (tipo_documento == 'RUC' && numero.length != 11) {
 					alert('El número debe ser de 11 digitos.');
 					return;
 				}
-				if(tipo_documento=='DNI' && numero.length != 8){
+				if (tipo_documento == 'DNI' && numero.length != 8) {
 					alert('El número debe ser de 8 digitos.');
 					return;
 				}
-				$.getJSON(path+"administrador/regventas/obtenerCliente", {tipo_documento,numero},
+				$.getJSON(path + "administrador/regventas/obtenerCliente", { tipo_documento, numero },
 					function (data, textStatus, jqXHR) {
-						if(data.success){
+						if (data.success) {
 							$('#FormPos input[name=cliente]').val(data.response.id_cliente);
 							$('#FormPos input[name=nombreCliente]').val(data.response.nomb_cliente);
 							$('#FormPos input[name=direccion_cliente]').val(data.response.direc_cliente);
-						}else{
+						} else {
 							let confirmar = confirm('No se encuentra registrado, ¿deseas buscarlo en RENIEC?');
-							if(!confirmar){
+							if (!confirmar) {
 								return;
 							}
-							let tipo_doc = tipo_documento=='RUC'?4:2;
+							let tipo_doc = tipo_documento == 'RUC' ? 4 : 2;
 							let dni = numero
-							$.get(path+"validardatos/validarDocumento", {dni,tipo_doc},
+							$.get(path + "validardatos/validarDocumento", { dni, tipo_doc },
 								function (data_reniec, textStatus, jqXHR) {
-									
-									if((data_reniec[1]!='' || data_reniec[1]!= null) && (data_reniec[2]!='' || data_reniec[3]!= null) && (data_reniec[3]!='' || data_reniec[3]!= null)){
 
-										if(data_reniec[5]==null){
+									if ((data_reniec[1] != '' || data_reniec[1] != null) && (data_reniec[2] != '' || data_reniec[3] != null) && (data_reniec[3] != '' || data_reniec[3] != null)) {
+
+										if (data_reniec[5] == null) {
 											alert('Ocurrió un error en la consulta a RENIEC, comuniquese con el administrador');
 											return
 										}
-										let confirmar_insertar = confirm('Se encontró a '+data_reniec[5]+', ¿deseas agregarlo a la base de datos?');
-										if(!confirmar_insertar){
+										let confirmar_insertar = confirm('Se encontró a ' + data_reniec[5] + ', ¿deseas agregarlo a la base de datos?');
+										if (!confirmar_insertar) {
 											return;
 										}
 										$.ajax({
 											type: "POST",
-											url: path+"administrador/regventas/crearClientePos",
-											data: {'nombre':data_reniec[5], tipo_doc, numero, 'direccion':data_reniec[4]},
+											url: path + "administrador/regventas/crearClientePos",
+											data: { 'nombre': data_reniec[5], tipo_doc, numero, 'direccion': data_reniec[4] },
 											dataType: "JSON",
 											success: function (response) {
 												$('#FormPos input[name=cliente]').val(response.id_cliente);
@@ -15738,7 +15736,7 @@ if($('#container-pos').length){
 												$('#FormPos input[name=direccion_cliente]').val(data_reniec[4]);
 											}
 										});
-									}else{
+									} else {
 										alert('No se encontró en RENIEC')
 									}
 								},
@@ -15748,87 +15746,87 @@ if($('#container-pos').length){
 					}
 				);
 			}
-	});
+		});
 
-	$('#FormMetodoPago select[name=tipoPago]').change(function (event) {
-		var tipo = $(this).val();
-		if (tipo == 2) {
-			$('#FormMetodoPago  select[name=tipoTarjeta]').prop('disabled', false);
-			$('#FormMetodoPago  input[name=operacion]').prop('disabled', false);
-		} else {
-			$('#FormMetodoPago  select[name=tipoTarjeta]').prop('disabled', true);
-			$('#FormMetodoPago  input[name=operacion]').prop('disabled', true);
-		}
-	});
-
-	$('#FormMetodoPago').validate({
-		ignore: [],
-		rules: {
-			tipoPago: {required: true},
-			montoRecibido: {required: true},
-			vuelto: {required: true},
-			
-		},
-		submitHandler: function (form) {
-			
-			if(!$('#FormMetodoPago select[name=tipoTarjeta]').prop('disabled') && $('#FormMetodoPago select[name=tipoTarjeta]').val() == ''){
-				alert('Debe seleccionar un tipo de tarjeta');
+		$('#FormMetodoPago select[name=tipoPago]').change(function (event) {
+			var tipo = $(this).val();
+			if (tipo == 2) {
+				$('#FormMetodoPago  select[name=tipoTarjeta]').prop('disabled', false);
+				$('#FormMetodoPago  input[name=operacion]').prop('disabled', false);
+			} else {
+				$('#FormMetodoPago  select[name=tipoTarjeta]').prop('disabled', true);
+				$('#FormMetodoPago  input[name=operacion]').prop('disabled', true);
 			}
-			let vuelto = parseFloat($('#FormMetodoPago input[name=vuelto]').val());
-			if(vuelto < 0){
-				alert('El monto recibido no es suficiente');
-			}
+		});
 
-			let FormPos = $('#FormPos').serializeObject();
-			let FormMetodoPago = $('#FormMetodoPago').serializeObject();
-			jQuery.extend(FormPos, FormMetodoPago);
-			
-			
-			
-			$('#FormMetodoPago').find('button:submit').prop('disabled', false).html('Procesando');
+		$('#FormMetodoPago').validate({
+			ignore: [],
+			rules: {
+				tipoPago: { required: true },
+				montoRecibido: { required: true },
+				vuelto: { required: true },
 
-			$.ajax({
-				type: "POST",
-				url: path+"administrador/regventas/agregarVenta",
-				data: FormPos,
-				dataType: "JSON",
-				success: function (response) {
-					if (response.success) {
-						$('#FormPos')[0].reset();
-						$('#FormPos').removeClass('has-success');
-						$('#FormPos').find('.form-group').removeClass('has-success');
-						
+			},
+			submitHandler: function (form) {
 
-						$('#VentasContenedorGuardar').find('button:submit').prop('disabled', false).html('Pasar a caja');
-						$('#VentaImprimirA4').attr('href', path + 'administrador/regventas/imprimirVenta/' + response.xml.archivo);
-						$('#VentaImprimirTicket').attr('href', path + 'administrador/regventas/imprimirticketVenta/' + response.xml.archivo);
-						// $('#ModalAccionesDespuesGuardar').modal();
-						if (response.printType == 'T') {
-							document.querySelector('#VentaImprimirTicket').click();
-						} else {
-							document.querySelector('#VentaImprimirA4').click();
-						}
-						location.reload();
-					}
+				if (!$('#FormMetodoPago select[name=tipoTarjeta]').prop('disabled') && $('#FormMetodoPago select[name=tipoTarjeta]').val() == '') {
+					alert('Debe seleccionar un tipo de tarjeta');
 				}
-			});
-			
-			
-		}
-	});
+				let vuelto = parseFloat($('#FormMetodoPago input[name=vuelto]').val());
+				if (vuelto < 0) {
+					alert('El monto recibido no es suficiente');
+				}
+
+				let FormPos = $('#FormPos').serializeObject();
+				let FormMetodoPago = $('#FormMetodoPago').serializeObject();
+				jQuery.extend(FormPos, FormMetodoPago);
 
 
-	$('#FormMetodoPago input[name=montoRecibido]').on('input', function(){
-		var total = parseFloat($('#FormPos input[name=total]').val()) || 0;
-		var montoRecibido = parseFloat($(this).val()) || 0;
-		var vuelto = montoRecibido - total;
-		$('#FormMetodoPago input[name=vuelto]').val(vuelto.toFixed(2));
-	});
 
-	
+				$('#FormMetodoPago').find('button:submit').prop('disabled', false).html('Procesando');
+
+				$.ajax({
+					type: "POST",
+					url: path + "administrador/regventas/agregarVenta",
+					data: FormPos,
+					dataType: "JSON",
+					success: function (response) {
+						if (response.success) {
+							$('#FormPos')[0].reset();
+							$('#FormPos').removeClass('has-success');
+							$('#FormPos').find('.form-group').removeClass('has-success');
 
 
-}
+							$('#VentasContenedorGuardar').find('button:submit').prop('disabled', false).html('Pasar a caja');
+							$('#VentaImprimirA4').attr('href', path + 'administrador/regventas/imprimirVenta/' + response.xml.archivo);
+							$('#VentaImprimirTicket').attr('href', path + 'administrador/regventas/imprimirticketVenta/' + response.xml.archivo);
+							// $('#ModalAccionesDespuesGuardar').modal();
+							if (response.printType == 'T') {
+								document.querySelector('#VentaImprimirTicket').click();
+							} else {
+								document.querySelector('#VentaImprimirA4').click();
+							}
+							location.reload();
+						}
+					}
+				});
+
+
+			}
+		});
+
+
+		$('#FormMetodoPago input[name=montoRecibido]').on('input', function () {
+			var total = parseFloat($('#FormPos input[name=total]').val()) || 0;
+			var montoRecibido = parseFloat($(this).val()) || 0;
+			var vuelto = montoRecibido - total;
+			$('#FormMetodoPago input[name=vuelto]').val(vuelto.toFixed(2));
+		});
+
+
+
+
+	}
 
 
 	/* ========================================================================== */

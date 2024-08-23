@@ -536,7 +536,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Metodo de Pago</label>
-                          <select name="tipoPago" class="form-control input-sm">
+                          <select name="tipoPago" class="form-control input-sm select2">
                             <?php foreach ($tipos_pagos as $t): ?>
                               <option value="<?= $t->cod_tipopago ?>"><?= $t->nom_tipopago ?></option>
                             <?php endforeach ?>

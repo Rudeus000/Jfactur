@@ -631,7 +631,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="product_code">Product Code:</label>
-                                                    <input type="text" class="form-control" id="product_code" name="product_code">
+                                                    <input type="text" class="form-control" id="product_code" name="product_code" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
