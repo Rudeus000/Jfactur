@@ -51,8 +51,9 @@
 
 
     <link href="<?= base_url_app() ?>assets/jquery-toast/src/jquery.toast.css" rel="stylesheet" type="text/css" />
+     <link href="<?= base_url_app() ?>assets/codeseven/build/toastr.min.css" rel="stylesheet" type="text/css" />
 
-    <!--  <link href="https://file.myfontastic.com/TvcWTqoUED5DW24kLXpmZ9/icons.css" rel="stylesheet"> -->
+     <!-- <link href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js" rel="stylesheet"> -->
     <script src="<?php echo base_url_app(); ?>assets/js/helpers.js"></script>
     
     <!-- <script src="ruta/a/JsBarcode.all.min.js"></script>

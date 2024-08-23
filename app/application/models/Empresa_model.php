@@ -94,4 +94,32 @@ class Empresa_model extends CI_Model
 		$empresa = $this->db->get()->row();
 		return $empresa;
 	}
+
+	 function get_fechavence_emp() {
+		// Calcular la fecha de vencimiento y la fecha de corte
+		$this->db->select("
+			cod_empresa,
+			fecha_emp,
+			CURDATE() as fecha_actual, 
+			DATE_ADD(fecha_emp, INTERVAL 1 MONTH) as fecha_vencimiento,
+			DATE_ADD(DATE_ADD(fecha_emp, INTERVAL 1 MONTH), INTERVAL 1 DAY) as fecha_corte,
+			DATEDIFF(DATE_ADD(DATE_ADD(fecha_emp, INTERVAL 1 MONTH), INTERVAL 1 DAY), CURDATE()) as dias_restantes
+		");
+		$this->db->from('tb_empresa');
+		// $this->db->having('fecha_vencimiento <=', date('Y-m-d'));
+		// $this->db->having('fecha_corte >=', date('Y-m-d'));
+		$query = $this->db->get();
+	
+		return $query->result_array();
+	}
+	
+	
+	
+	public function desactivarPermisos() {
+		$this->db->set('read', '0');
+		$this->db->where('read', '1');
+		$this->db->update('permisos');
+	}
+	
+
 }

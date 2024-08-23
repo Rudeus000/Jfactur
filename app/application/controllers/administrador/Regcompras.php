@@ -88,8 +88,11 @@ class Regcompras extends CI_Controller
 	function getProductoBusqueda()
 	{
 		$producto = $this->input->get('producto');
+		$tipoc = $this->input->get('tipocambio');
+		 // Si no se proporciona un tipo de cambio, se asume 1 (moneda local)
+		 $tipoc = $tipoc ? $tipoc : 1;
 		$result = $this->db->from('tb_producto')
-			->select('tb_producto.cod_producto as id,nomb_product as nombre,prec_costo as costo,prec_venta as venta,nomb_unid as unidad,nom_paramt as parametros, fecha_vencimiento')
+			->select('tb_producto.cod_producto as id,nomb_product as nombre,(prec_costo* ' . $tipoc . ') as costo,prec_venta as venta,nomb_unid as unidad,nom_paramt as parametros, fecha_vencimiento')
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
 			->join('parametros', 'tb_producto.cod_parametros = parametros.cod_parametros')
 			->where('est_product', 1)
