@@ -18,14 +18,15 @@ $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true)
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(11)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(12)->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(13)->setAutoSize(true);
 $objPHPExcel->getActiveSheet()
-						->mergeCells('A1:K1');
+						->mergeCells('A1:M1');
 $objPHPExcel->getActiveSheet()
-						->getCell('A1')
-						->setValue('Inventario de productos con series');
-$objPHPExcel->getActiveSheet()->getStyle('A1:K1')->getFont()->setSize(18)->setBold(true);
+						->getCell('M1')
+						->setValue('INVENTARIO DE PRODUCTO CON SERIES');
+$objPHPExcel->getActiveSheet()->getStyle('A1:M1')->getFont()->setSize(18)->setBold(true);
 $objPHPExcel->getActiveSheet()
-    ->getStyle('A1:K1')
+    ->getStyle('A1:M1')
     ->getAlignment()
     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -80,32 +81,36 @@ $objPHPExcel->getActiveSheet()
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,'COD.VENTA')
+->setCellValueByColumnAndRow(6,$row,'FECHA COMPRA')
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,'ESTADO SERIE')
+->setCellValueByColumnAndRow(7,$row,'PRECIO COMPRA')
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,'HISTROIAL SERIE')
+->setCellValueByColumnAndRow(8,$row,'COD.VENTA')
 ->getStyleByColumnAndRow(8,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(9,$row,'FECHA REGISTRO')
+->setCellValueByColumnAndRow(9,$row,'ESTADO SERIE')
 ->getStyleByColumnAndRow(9,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(10,$row,'PRECIO COMP ACT.')
+->setCellValueByColumnAndRow(10,$row,'HISTROIAL SERIE')
 ->getStyleByColumnAndRow(10,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(11,$row,'PRECIO VENT ACT.')
+->setCellValueByColumnAndRow(11,$row,'FECHA REGISTRO')
 ->getStyleByColumnAndRow(11,$row)
 ->applyFromArray($styleBold);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(12,$row,'FECHA VENTA')
+->setCellValueByColumnAndRow(12,$row,'PRECIO VENT ACT.')
 ->getStyleByColumnAndRow(12,$row)
+->applyFromArray($styleBold);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(13,$row,'FECHA VENTA')
+->getStyleByColumnAndRow(13,$row)
 ->applyFromArray($styleBold);
 $row++;
 foreach ($datos as $d) {
@@ -132,42 +137,45 @@ $objPHPExcel->getActiveSheet()
 ->getStyleByColumnAndRow(5,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(6,$row,$d->cod_vent)
+->setCellValueByColumnAndRow(6,$row,$d->fecha_comp)
 ->getStyleByColumnAndRow(6,$row)
 ->applyFromArray($styleNormal);
+
+$prec_compra=$d->precio_comp;
+$prec_compra_format='S/ '.number_format($prec_compra,2);
+
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(7,$row,$d->serie_estado=='D'?'DISPONIBLE':'VENDIDO')
+->setCellValueByColumnAndRow(7,$row,$prec_compra_format)
 ->getStyleByColumnAndRow(7,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(8,$row,$d->histcompstock_serie)
+->setCellValueByColumnAndRow(8,$row,$d->cod_vent)
 ->getStyleByColumnAndRow(8,$row)
 ->applyFromArray($styleNormal);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(9,$row,$d->fecha_registro)
+->setCellValueByColumnAndRow(9,$row,$d->serie_estado=='D'?'DISPONIBLE':'VENDIDO')
 ->getStyleByColumnAndRow(9,$row)
 ->applyFromArray($styleNormal);
-// Obtener el valor del costo
-$prec_costo = $d->prec_costo;
-// Dar formato de moneda soles
-$prec_costo_formatted = 'S/ ' . number_format($prec_costo, 2);
-
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(10,$row,$prec_costo_formatted)
+->setCellValueByColumnAndRow(10,$row,$d->histcompstock_serie)
 ->getStyleByColumnAndRow(10,$row)
+->applyFromArray($styleNormal);
+$objPHPExcel->getActiveSheet()
+->setCellValueByColumnAndRow(11,$row,$d->fecha_registro)
+->getStyleByColumnAndRow(11,$row)
 ->applyFromArray($styleNormal);
 // Obtener el valor del costo
 $prec_venta = $d->prec_venta;
 // Dar formato de moneda soles
 $prec_venta_formatted = 'S/ ' . number_format($prec_venta, 2);
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(11,$row,$prec_venta_formatted)
-->getStyleByColumnAndRow(11,$row)
+->setCellValueByColumnAndRow(12,$row,$prec_venta_formatted)
+->getStyleByColumnAndRow(12,$row)
 ->applyFromArray($styleNormal);
 //$fecha_vent_formateada = date('Y-m-d', strtotime($d->fecha_venta));
 $objPHPExcel->getActiveSheet()
-->setCellValueByColumnAndRow(12,$row,$d->fecha_venta)
-->getStyleByColumnAndRow(12,$row)
+->setCellValueByColumnAndRow(13,$row,$d->fecha_venta)
+->getStyleByColumnAndRow(13,$row)
 ->applyFromArray($styleNormal);
 	$row++;
 }

@@ -157,7 +157,16 @@ $objPHPExcel->getActiveSheet()->setTitle('Reporte');
 $objPHPExcel->getActiveSheet(0);
 
 $writer = new Xlsx($objPHPExcel);
+// Obtener la fecha actual en el formato deseado
+$currentDate = date('Y-m-d\THis.u');
+
+// Concatenar la fecha actual con el nombre del archivo
+$fileName = "RIPROS - $currentDate.xlsx";
+
+// Establecer las cabeceras para la descarga del archivo
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="Inventario inicial(ingresos).xlsx"');
+header("Content-Disposition: attachment; filename=\"$fileName\"");
+
+// Guardar el archivo en la salida
 $writer->save("php://output");
 exit;

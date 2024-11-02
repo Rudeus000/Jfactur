@@ -80,6 +80,7 @@ class Regcajaapertura extends CI_Controller {
 	public function agregar()
 	{
 		$data['cod_caja'] = $this->input->post('caja');
+		$data['cod_puntoventa'] = $this->session->userdata('puntoventa');
 		$data['monto_apertura'] = $this->input->post('monto');
 		$data['cod_usu'] = $this->session->userdata('cod_usu');
 		$data['turno_apertura'] = $this->input->post('turno');

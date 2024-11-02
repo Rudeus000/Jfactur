@@ -9,19 +9,19 @@
 
 	<div>Ruc:<?= $empresa->ruc_emp ?></div>
 	<div> Web: <?= WEBSITE ?> </div>
-	<div><b>PAGO </b></div>
+	<div><b>COMPROBANTE DE PAGO</b></div>
 	<div>NO. OPE: <?= str_pad($ventas->numero_vent, 7, "0", STR_PAD_LEFT); ?></div>
 </div>
 <div class="w100" style="font-size:12px">
-	<div class="w30">
+	<!-- <div class="w30">
 		<b><?= ($ventas->codsunat_tipdocucli == '6') ? 'RUC' : 'DNI' ?></b>
 	</div>
-	<div class="w70">: <?= $ventas->doc_cliente ?></div>
+	<div class="w70">: <?= $ventas->doc_cliente ?></div> -->
 	<div class="w30">
 
 		<b><?= ($ventas->codsunat_tipdocucli == '6') ? 'Razon Social' : 'Nombres' ?></b>
 	</div>
-	<div class="w70">: <?= character_limiter($ventas->nomb_cliente, 30, '...') ?></div>
+	<div class="w70">: <?= character_limiter($ventas->nomb_cliente, 5, '****') ?></div>
 
 	<!-- <div class="w30"><b>Vendedor</b></div>
 	<div class="w70">: <?= character_limiter($ventas->nomb_usu . '***') ?></div> -->

@@ -20,11 +20,14 @@
 
     <!-- Plugins css-->
     <link href="<?= base_url_app() ?>assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css" rel="stylesheet" />
-    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css"
+        rel="stylesheet" />
     <link href="<?= base_url_app() ?>assets/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet">
     <link href="<?= base_url_app() ?>assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"
+        rel="stylesheet">
+    <link href="<?= base_url_app() ?>assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css"
+        rel="stylesheet">
     <link href="<?= base_url_app() ?>assets/plugins/switchery/switchery.min.css" rel="stylesheet">
 
     <!-- App css -->
@@ -34,8 +37,10 @@
     <link href="<?= base_url_app() ?>assets/css/app.css" rel="stylesheet" type="text/css" />
     <!-- your custom css -->
 
-    <link href="<?= base_url_app(); ?>assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url_app(); ?>assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url_app(); ?>assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="<?= base_url_app(); ?>assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
 
     <link rel="stylesheet" href="<?= base_url_app() ?>assets/plugins/EasyAutocomplete-1.3.5/easy-autocomplete.min.css">
     <link rel="stylesheet" href="<?= base_url_app() ?>assets/jquery-upload/css/jquery.fileupload.css">
@@ -51,17 +56,17 @@
 
 
     <link href="<?= base_url_app() ?>assets/jquery-toast/src/jquery.toast.css" rel="stylesheet" type="text/css" />
-     <link href="<?= base_url_app() ?>assets/codeseven/build/toastr.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url_app() ?>assets/codeseven/build/toastr.min.css" rel="stylesheet" type="text/css" />
 
-     <!-- <link href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js" rel="stylesheet"> -->
+    <!-- <link href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js" rel="stylesheet"> -->
     <script src="<?php echo base_url_app(); ?>assets/js/helpers.js"></script>
-    
+
     <!-- <script src="ruta/a/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
 
 </head>
 
-<body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>">
+<body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>" data-multibusiness="<?= $this->session->userdata('multi_business') ?>">
 
     <!-- Begin page -->
     <div id="wrapper">
@@ -82,44 +87,49 @@
             </div>
 
             <nav class="navbar-custom">
-
                 <ul class="list-inline float-right mb-0">
                     <li class="list-inline-item dropdown notification-list">
-                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Buscar">
-                            <i class="fa fa-search noti-icon text-purple waves-light waves-effect" id="search-phone"></i>
+                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" role="button"
+                            aria-haspopup="false" aria-expanded="false" data-original-title="Buscar">
+                            <i class="fa fa-search noti-icon text-purple waves-light waves-effect"
+                                id="search-phone"></i>
                         </a>
                     </li>
-
                     <li class="list-inline-item dropdown notification-list">
-                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('administrador/regcotizacion/agregar') ?>" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Cotizacion">
+                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip"
+                            href="<?= base_url('administrador/regcotizacion/agregar') ?>" role="button"
+                            aria-haspopup="false" aria-expanded="false" data-original-title="Cotizacion">
                             <i class="ion ion-ios-list-box noti-icon text-purple waves-light waves-effect"></i>
                         </a>
                     </li>
-
-
                     <li class="list-inline-item dropdown notification-list">
-                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('administrador/regcompras/agregar') ?>" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Compras">
+                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip"
+                            href="<?= base_url('administrador/regcompras/agregar') ?>" role="button"
+                            aria-haspopup="false" aria-expanded="false" data-original-title="Compras">
                             <i class="ion ion-md-cart noti-icon text-primary waves-light waves-effect"></i>
                         </a>
                     </li>
-
                     <li class="list-inline-item dropdown notification-list">
-                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('reportes/regreportedetallado/Ventas') ?>" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Reporte Ventas">
+                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip"
+                            href="<?= base_url('reportes/regreportedetallado/Ventas') ?>" role="button"
+                            aria-haspopup="false" aria-expanded="false" data-original-title="Reporte Ventas">
                             <i class="ion ion-md-clipboard noti-icon text-danger waves-light waves-effect"></i>
                         </a>
                     </li>
-
                     <li class="list-inline-item dropdown notification-list">
-                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip" href="<?= base_url('administrador/regventas/agregar') ?>" role="button" aria-haspopup="false" aria-expanded="false" data-original-title="Venta">
+                        <a title="" data-placement="top" class="tooltips" data-toggle="tooltip"
+                            href="<?= base_url('administrador/regventas/agregar') ?>" role="button"
+                            aria-haspopup="false" aria-expanded="false" data-original-title="Venta">
                             <!--  <i class="ion ion-md-clipboard noti-icon text-danger waves-light waves-effect"></i> -->
                             <i class="noti-icon ion ion-ios-basket text-pink waves-light waves-effect"></i>
                         </a>
                     </li>
-
                     <li class="list-inline-item dropdown notification-list">
-                        <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <i class="noti-icon"><img src="<?php echo base_url_app(); ?>assets/images/users/usuario_inicio.png" alt="user" class="img-fluid rounded-circle"></i>
-                            <!-- <span class="profile-username ml-2 text-dark"><?= $this->session->userdata('nomb_usu') ?> </span> <span class="mdi mdi-menu-down text-dark"></span>                           -->
+                        <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
+                            <i class="noti-icon"><img
+                                    src="<?php echo base_url_app(); ?>assets/images/users/usuario_inicio.png" alt="user"
+                                    class="img-fluid rounded-circle"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-animated dropdown-menu-right profile-dropdown ">
 
@@ -131,13 +141,15 @@
 
                             <div class="dropdown-divider"></div>
                             <!-- item-->
-                            <?php if ($this->session->userdata('puntoventa_reportes') == 'admin') : ?>
+                            <?php if ($this->session->userdata('puntoventa_reportes') == 'admin'): ?>
                                 <div class="dropdown-item noti-title">
                                     <i class="mdi mdi-mdi mdi-store"></i> <span>Super admin</span>
                                 </div>
-                            <?php elseif ($this->session->userdata('puntoventa_reportes') != 'admin') : ?>
+                            <?php elseif ($this->session->userdata('puntoventa_reportes') != 'admin'): ?>
                                 <div class="dropdown-item noti-title">
-                                    <i class="mdi mdi-mdi mdi-store"></i> <span><?= character_limiter($this->session->userdata('puntoventa_nombre'), 10, '') ?> </span>
+                                    <i class="mdi mdi-mdi mdi-store"></i>
+                                    <span><?= character_limiter($this->session->userdata('puntoventa_nombre'), 10, '') ?>
+                                    </span>
                                 </div>
                             <?php endif ?>
 
@@ -161,7 +173,6 @@
                     </li>
 
                 </ul>
-
                 <ul class="list-inline menu-left mb-0">
                     <li class="float-left">
                         <button class="button-menu-mobile open-left waves-light waves-effect">
@@ -180,20 +191,23 @@
 
         </div>
         <!-- Top Bar End -->
-        <!-- </div> -->
+         
+    <!-- </div> -->
 
 </body>
 
 
 
 
-<div id="ModalBusquedaGeneral" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalBusquedaGeneral" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width:1000px">
         <div class="modal-content">
             <!-- <div class="modal-header"> -->
             <div class="modal-header bg-success">
 
-                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i class="spinner-grow text-pink float-right"></i></h3>
+                <h3 class="my-0 text-white"><i class="mdi mdi-database-search"></i> Busqueda general<i
+                        class="spinner-grow text-pink float-right"></i></h3>
                 <!-- <h5 class="modal-title" id="exampleModalLabel">Búsqueda general</h5> -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -207,14 +221,16 @@
                     <input type="hidden" name="idTypeAssignmentProduct">
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto" class="form-control" placeholder="Ingrese el nombre del producto">
+                            <input type="text" id="BusquedaGeneralAutocomplete" name="nombreProducto"
+                                class="form-control" placeholder="Ingrese el nombre del producto">
                         </div>
                     </div>
                 </form>
                 <br>
 
 
-                <form id="FormBusquedaGeneralTabla" action="<?= base_url('administrador/regventas/agregar') ?>" method="get" class="table-responsive">
+                <form id="FormBusquedaGeneralTabla" action="<?= base_url('administrador/regventas/agregar') ?>"
+                    method="get" class="table-responsive">
                     <input type="hidden" name="busqueda_general_venta" value="1">
                     <table id="table-busqueda-general" class="table table-bordered">
                         <thead>
@@ -243,7 +259,8 @@
                         </tfoot>
                     </table>
                     <div class="modal-footer">
-                        <button class="btn btn-danger float-right" type="submit"><i class="fab fa-opencart"></i> Siguiente</button>
+                        <button class="btn btn-danger float-right" type="submit"><i class="fab fa-opencart"></i>
+                            Siguiente</button>
                     </div>
                 </form>
             </div>

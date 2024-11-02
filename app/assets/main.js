@@ -1,6 +1,7 @@
 var path = $('body').data('path');
 var path_app = $('body').data('path-app');
 var movilexpert = $('body').data('movilexpert');
+var multibusiness = $('body').data('multibusiness');
 $('body').addClass('enlarged');
 // $('ul.collapse').removeClass('in');
 
@@ -2433,6 +2434,7 @@ $(function () {
 			}
 		},
 		"columns": [
+			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": false },
@@ -5654,7 +5656,7 @@ $(function () {
 				return;
 			}
 			var verifica = verificarIgualdadCantidadFechasVencimiento();
-
+			$('#guardarCompras').prop('disabled', true).html('<i class="fa fa-sync fa-spin m-r-5"></i> Procesando');
 
 			if (!verifica) {
 				return;
@@ -8070,7 +8072,7 @@ $(function () {
 														success: function (response) {
 															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
 															$('#FormVentaAgregar input[name=nombreCliente]').val(data_reniec[5]);
-															$('#FormVentaAgregar input[name=direccion_cliente]').val(data_reniec[4]);
+															$('#FormVentaAgregar input[name=DireccionCliente]').val(response.direc_cliente);
 															$('#FormVentaAgregar input[name=rucdni]').val(data_reniec[0]);
 															$('#FormVentaAgregar input[name=precioCliente').val(response.precio_cliente);
 														}
@@ -8095,7 +8097,7 @@ $(function () {
 														success: function (response) {
 															$('#FormVentaAgregar input[name=cliente]').val(response.id_cliente);
 															$('#FormVentaAgregar input[name=nombreCliente]').val(data_reniec[1]);
-															$('#FormVentaAgregar input[name=direccion_cliente]').val(data_reniec[7] + ' ' + data_reniec[8] + '-' + data_reniec[9] + '-' + data_reniec[10]);
+															$('#FormVentaAgregar input[name=DireccionCliente]').val(data_reniec[7] + ' ' + data_reniec[8] + '-' + data_reniec[9] + '-' + data_reniec[10]);
 															$('#FormVentaAgregar input[name=rucdni]').val(data_reniec[0]);
 															$('#FormVentaAgregar input[name=precioCliente').val(response.precio_cliente);
 														}
@@ -8282,7 +8284,7 @@ $(function () {
 
 
 	// $('#FormVentaAgregar #fechav').prop('disabled',true);
-	$('#FormVentaAgregarProducto select[name=tipoPago]').change(function (event) {
+	$('#ModalprocesarVenta select[name=tipoPago]').change(function (event) {
 		var tipo = $(this).val();
 		if (tipo == 2) {
 			$('select[name=tipoTarjeta]').prop('disabled', false);
@@ -8290,9 +8292,12 @@ $(function () {
 		} else if (tipo == 3) {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', false);
+			$('input[name=monto_tb]').prop('disabled', true);
+			// $('input[name=monto]').val(0).prop('readonly', false);
 		} else {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', true);
+			$('input[name=monto_tb]').val(0).prop('disabled', false);
 		}
 	});
 
@@ -8385,7 +8390,7 @@ $(function () {
 		});
 	}
 
-	$('#FormVentaAgregar input[name=monto]').focusout(function (event) {
+	$('#ModalprocesarVenta input[name=monto]').focusout(function (event) {
 		if ($('select[name=pago]').val() == 'CRE') {
 
 			verificarCoberturaCliente(function (resp) {
@@ -8407,21 +8412,113 @@ $(function () {
 			});
 		}
 	});
-
-	$('#FormVentaAgregarProducto input[name=montoRecibido]').focusout(function (event) {
+	$('#ModalprocesarVenta').on('shown.bs.modal', function () {
+		$('#ModalprocesarVenta input[name=monto_tb]').val(0);
+		calcularMontoRecibidotb(); // Llama a la función para actualizar el monto_efectivo con el valor inicial
+	});
+	
+	// $('#ModalprocesarVenta input[name=monto_total]').val();
+	$('#ModalprocesarVenta input[name=montoRecibido]').focusout(function (event) {
 		calcularVueltoProductoVenta();
+	});
+	$('#ModalprocesarVenta input[name=monto_tb]').focusout(function (event) {
+		calcularMontoRecibidotb();
+		// calcularVueltoProductoVenta();
 	});
 
 	function calcularVueltoProductoVenta() {
-		let montoRecibido = parseFloat($('#FormVentaAgregarProducto input[name=montoRecibido]').val());
-		let monto = parseFloat($('#FormVentaAgregar input[name=monto]').val());
+		let montoRecibido = parseFloat($('#ModalprocesarVenta input[name=montoRecibido]').val());
+		let monto = parseFloat($('#FormVentaAgregar input[name=monto_efectivo]').val());
 		if (!isNaN(monto)) {
 			if (montoRecibido > 0) {
 				let vuelto = montoRecibido - monto;
-				$('input[name=vuelto]').val(round(vuelto, 2));
+				$('#ModalprocesarVenta input[name=vuelto]').val(round(vuelto, 2));
 			}
 		}
 	}
+	function calcularMontoRecibidotb() {
+		let montoRecibidotb = parseFloat($('#ModalprocesarVenta input[name=monto_tb]').val());		
+		let monto = parseFloat($('#FormVentaAgregar input[name=monto]').val());
+		if (!isNaN(monto)) {
+			if (montoRecibidotb >= 0) {
+				let montoActual = monto - montoRecibidotb;				
+				$('input[name=monto_efectivo]').val(round(montoActual, 2));
+				$('input[name=montoRecibido]').val(round(montoActual, 2));			
+			}
+		}
+	}
+	// Cuando el formulario se envíe, copiar los valores del modal al formulario principal
+	$('#FormVentaAgregar').submit(function (event) {
+		// Evitar el envío del formulario inmediatamente
+		event.preventDefault();
+
+		// Obtener los valores del modal
+		let montoRecibido = $('#ModalprocesarVenta input[name=montoRecibido]').val();
+		let vuelto = $('#ModalprocesarVenta input[name=vuelto]').val();
+		let descuento = $('#ModalprocesarVenta input[name=descuento]').val();
+		let monto_tb = $('#ModalprocesarVenta input[name=monto_tb]').val();
+		let operacion = $('#ModalprocesarVenta input[name=operacion]').val();
+		let tipoPago = $('#ModalprocesarVenta select[name=tipoPago]').val();
+		let tipoTarjeta = $('#ModalprocesarVenta select[name=tipoTarjeta]').val();
+		let monto = $('#ModalprocesarVenta input[name=monto]').val();
+		let pago = $('#ModalprocesarVenta select[name=pago]').val()
+		let dias_cuotas = $('#ModalprocesarVenta input[name=dias_cuotas]').is(':checked');
+		let ndias = $('#ModalprocesarVenta input[name=dias]').val();
+		let fecVenc = $('#ModalprocesarVenta input[name=fecVenc]').val();
+		let saldo = $('#ModalprocesarVenta input[name=saldo]').val();
+
+
+
+		// Pasar esos valores a los inputs ocultos del formulario principal
+		$('#FormVentaAgregar input[name=montoRecibido]').val(montoRecibido);
+		$('#FormVentaAgregar input[name=vuelto]').val(vuelto);
+		$('#FormVentaAgregar input[name=descuento]').val(descuento);
+		$('#FormVentaAgregar input[name=monto_tb]').val(monto_tb);
+		$('#FormVentaAgregar input[name=operacion]').val(operacion);
+		$('#FormVentaAgregar input[name=monto]').val(monto);
+		$('#FormVentaAgregar input[name=tipoPago]').val(tipoPago);
+		$('#FormVentaAgregar input[name=tipoTarjeta]').val(tipoTarjeta);
+		$('#FormVentaAgregar input[name=pago]').val(pago);
+		$('#FormVentaAgregar input[name=dias_cuotas]').val(dias_cuotas ? 'on' : '');
+		$('#FormVentaAgregar input[name=dias]').val(ndias);
+		$('#FormVentaAgregar input[name=fecVenc]').val(fecVenc);
+		$('#FormVentaAgregar input[name=saldo]').val(saldo);
+
+		// Ahora, continuar con el envío del formulario
+		// this.submit();  // Reenviar el formulario con los valores actualizados
+
+		// Obtener valores de la tabla de cuotas en el modal
+		let cuotasFechas = [];
+		let cuotasMontos = [];
+
+		$('#TableCuotas tbody tr').each(function () {
+			let fecha = $(this).find('input[name="cuotas_fecha[]"]').val();
+			let monto = $(this).find('input[name="cuotas_monto[]"]').val();
+			cuotasFechas.push(fecha);
+			cuotasMontos.push(monto);
+		});
+
+		// Limpiar cualquier input oculto previo de cuotas en el formulario principal
+		$('#FormVentaAgregar').find('input[name="cuotas_fecha[]"]').remove();
+		$('#FormVentaAgregar').find('input[name="cuotas_monto[]"]').remove();
+
+		// Crear inputs ocultos para cada cuota en el formulario principal
+		cuotasFechas.forEach((fecha, index) => {
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'cuotas_fecha[]',
+				value: fecha
+			}).appendTo('#FormVentaAgregar');
+
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'cuotas_monto[]',
+				value: cuotasMontos[index]
+			}).appendTo('#FormVentaAgregar');
+		});
+	});
+
+
 
 
 	$('#FormVentaAgregar').validate({
@@ -8442,27 +8539,27 @@ $(function () {
 				return;
 			}
 
-			var monto = parseFloat($('input[name=monto]').val());
+			var monto = parseFloat($('#ModalprocesarVenta input[name=monto]').val());
 			var saldo = parseFloat($('input[name=saldo]').val());
 			var total = parseFloat($('#venta-total').text());
-			var montoRecibido = parseFloat($('input[name=montoRecibido]').val());
-			// if ((monto + saldo) != total) {
-			// 	Swal.fire({
-			// 		title: "Error",
-			// 		text: "La suma de pago y saldo no es igual al monto total de la venta.",
-			// 		type: "error"
-			// 	});
-			// 	return;
-			// }
-
-			if (montoRecibido < monto) {
+			var montoRecibido = parseFloat($('#ModalprocesarVenta input[name=montoRecibido]').val());
+			if ((monto + saldo) != total) {
 				Swal.fire({
 					title: "Error",
-					text: "El monto recibido no puede ser menor que el monto.",
+					text: "La suma de pago y saldo no es igual al monto total de la venta.",
 					type: "error"
 				});
 				return;
 			}
+
+			// if (montoRecibido < monto) {
+			// 	Swal.fire({
+			// 		title: "Error",
+			// 		text: "El monto recibido no puede ser menor que el monto.",
+			// 		type: "error"
+			// 	});
+			// 	return;
+			// }
 
 
 			var cotizacion = $('#FormVentaAgregar').serializeObject();
@@ -8639,24 +8736,24 @@ $(function () {
             <td class="details-control">
               ${(seriesCheckBox) ? '<button type="button" class="btn btn-icon waves-effect waves-light btn-success"><span class="fa fa-caret-right"></span></button>' : ''}
             </td>
-            <td>${resp.response.cod_producto}</td>
+            <td class="${(multibusiness == '1') ? 'd-none' : ''}">${resp.response.cod_producto}</td>
             <td><input name="nombre_prod[${producto}]" class="form-control" value="${html_escape(resp.response.nomb_product)}"></td>
             <td class="${(movilexpert == '0') ? 'd-none' : ''}"><input name="producto_isdn[${producto}]" class="form-control" value="${$('#producto_isdn').val()}"></td>
-						<td>${resp.response.nomb_marca}</td>						
-            <td>${resp.response.nomb_unid}</td>
+						<td class="${(multibusiness == '1') ? 'd-none' : ''}">${resp.response.nomb_marca}</td>						
+            <td class="${(multibusiness == '1') ? 'd-none' : ''}">${resp.response.nomb_unid}</td>
             
 			<td style="width:110px">
             <input min="1" max="${resp.response.stock_disponible}" type="${(seriesCheckBox) ? 'hidden' : 'number'}" class="cant form-control" name="cant_prod[${producto}]" value="${cantidad}" />${(seriesCheckBox) ? cantidad : ''}
         </td>
             <td style="width:140px"><input type="text" class="prec form-control" name="prec_prod[${producto}]" value="${($('input[name=precioProducto]').val())}"></td>
-            <td>
+            <td <td class="${(multibusiness == '1') ? 'd-none' : ''} text-center">
               <input type="hidden" class="desc" name="desc_prod[${producto}]" value="${$('input[name=descuentoProducto]').val()}" />
               ${round($('input[name=descuentoProducto]').val(), 2)}
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
+            <td class="${(multibusiness == '1') ? 'd-none' : ''} text-center"></td>
+            <td class="${(multibusiness == '1') ? 'd-none' : ''} text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center">
               <div class="btn-group btn-group-justified m-b-10">
                 <button data-id="${resp.response.cod_producto}" class="removerProducto btn btn-danger btn-sm" type="button"><i class="fas fa-trash-alt"></i></button>
               </div>
@@ -8911,6 +9008,7 @@ $(function () {
 		$('input[name=monto]').val(round(totalgenral, 2));
 		$('input[name=total]').val(round(totalgenral, 2));
 		$('input[name=montoRecibido]').val(round(totalgenral, 2));
+		$('#ModalprocesarVenta input[name=monto_total]').val(round(totalgenral, 2));
 
 		calcularMontoDetraccion();
 		calcularMontoRetencion();
@@ -8918,7 +9016,7 @@ $(function () {
 	}
 
 	function calcularDescuento() {
-		var descuentoTotal = parseFloat($('input[name=descuento]').val());
+		var descuentoTotal = parseFloat($('#ModalprocesarVenta input[name=descuento]').val());
 		$('#TableVentaProductos tbody .fila-producto').each(function () {
 			var id = $(this).data('id');
 			var prec = parseFloat($(this).find('.prec').val());
@@ -8931,7 +9029,7 @@ $(function () {
 		})
 	}
 
-	$('input[name=descuento]').focusout(function (e) {
+	$('#ModalprocesarVenta input[name=descuento]').focusout(function (e) {
 		calcularDescuento();
 		calcularTotalVenta();
 	});
@@ -8939,7 +9037,7 @@ $(function () {
 
 	$('.FormVenta input[name=monto]').focusout(function (event) {
 		var total = parseFloat($('#venta-total').text());
-		var monto = parseFloat($('input[name=monto]').val());
+		var monto = parseFloat($('#ModalprocesarVenta input[name=monto]').val());
 		if (monto > total) {
 			$(this).val(total);
 			Swal.fire({
@@ -8947,9 +9045,11 @@ $(function () {
 				text: "El monto no puede ser mayor que " + total,
 				type: "error",
 			});
+			return;
 		}
 		var saldo = total - monto;
 		$('input[name=saldo]').val(saldo.toFixed(2));
+		$('input[name=monto_efectivo]').val(monto.toFixed(2));
 	});
 
 	$('.FormVenta input[name=dias]').focusout(function (event) {
@@ -9011,16 +9111,21 @@ $(function () {
 			});
 			return;
 		}
+		let monto = parseFloat($('#ModalprocesarVenta input[name=monto]').val());
+		if (isNaN(monto)) monto = 0; // Asegura que monto tenga un valor numérico
+		let saldo = total - monto;
+
 		var retencionAplicada = $('input[name=retencion-check]').prop('checked');
 		if (retencionAplicada) {
 			var monto_reten = parseFloat($('input[name=retencion_monto]').val());
 			total -= monto_reten;
 		}
-		$('#total-cuotas').html(total);
+
+		$('#total-cuotas').html(saldo);
 		$('#TableCuotasContent').show();
-		let periodo = $('select[name=periodo]').val();
-		let numero = $('input[name=numero_cuotas]').val();
-		$.post(path + "administrador/regventas/calcularCuotas", { periodo, numero, total },
+		let periodo = $('#ModalprocesarVenta select[name=periodo]').val();
+		let numero = $('#ModalprocesarVenta input[name=numero_cuotas]').val();
+		$.post(path + "administrador/regventas/calcularCuotas", { periodo, numero, total:saldo },
 			function (data, textStatus, jqXHR) {
 				var tr = '';
 				$.each(data, function (index, value) {
@@ -9285,7 +9390,7 @@ $(function () {
 	$('.monto-recibido').click(function (e) {
 		e.preventDefault();
 		let monto = $(this).data('monto');
-		$('#FormVentaAgregarProducto input[name=montoRecibido]').val(monto);
+		$('#ModalprocesarVenta input[name=montoRecibido]').val(monto);
 		calcularVueltoProductoVenta();
 	});
 
@@ -10575,13 +10680,16 @@ $(function () {
 				return;
 			}
 
+			// Desactivar el botón "Guardar" para evitar envíos duplicados
+			$('#guardarTraspaso').prop('disabled', true).html('<i class="fa fa-sync fa-spin m-r-5"></i> Procesando');
+
 			var traspaso = $('#FormAgregarTraspasos').serializeObject();
 			var productos = $('#FormTraspasosAgregarProducto').serializeObject();
 			jQuery.extend(traspaso, productos);
 
-			$('#FormAgregarTraspasos').on('submit', function () {
-				$('#guardarTraspaso').prop('disabled', true);
-			});
+			// $('#FormAgregarTraspasos').on('submit', function () {
+			// 	$('#guardarTraspaso').prop('disabled', true);
+			// });
 
 			$.ajax({
 				url: path + 'administrador/regtraspasos/agregarTraspaso',
@@ -10649,11 +10757,30 @@ $(function () {
 					$('#seriesContainerIndividual').append(`
 						<div class="col-md-6">
 							<label for="serie${i}">Serie ${i + 1}</label>
-							<input type="text" class="form-control" id="serie${i}" name="serie[]">
+							<input type="text" class="form-control serie-input" id="serie${i}" name="serie[]">
 						</div>
 					`);
 				}
 				$('#serieModal').modal('show');
+
+				// Agregar validación y salto de foco con Enter
+				$('.serie-input').each(function () {
+					$(this).rules("add", "required");
+
+					$(this).on('keydown', function (e) {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							let currentInput = $(this);
+							let nextInput = currentInput.closest('div').next().find('.serie-input');
+
+							if (nextInput.length) {
+								nextInput.focus();
+							} else {
+								currentInput.blur(); // Si es el último input, quitar el foco
+							}
+						}
+					});
+				});
 
 				$('#saveSeries').off('click').on('click', function () {
 					var mode = $('#serieMode').val();
@@ -10710,6 +10837,7 @@ $(function () {
 			}
 		}
 	});
+
 
 	function procesarTraspaso(series) {
 		var origen = $('select[name=origen]').val();
@@ -12315,6 +12443,7 @@ $(function () {
 		},
 		"columns": [
 
+			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
@@ -14027,6 +14156,122 @@ $(function () {
 
 	/* ============================================ */
 	/*               END COMPANY STATUS             */
+	/* ============================================ */
+
+	/* ============================================ */
+	/* CHECK OPCION DE SERVICIO		                */
+	/* ============================================ */
+	$('#servicio-status').change(function (e) {
+		//e.preventDefault();
+		var check = $(this);
+		if (check.is(':checked')) {
+			$('#servicio-status').trigger('click');
+			$('#ModalServicioStatusConfirmar').modal();
+		} else {
+			$.post(path + "empresa/regempresa/servicioStatus", { 'serv_status': 0 },
+				function (data, textStatus, jqXHR) {
+				},
+				"HTML"
+			);
+			return;
+		}
+	});
+
+
+	$('#FormConfirmarServicio').validate({
+		rules: {
+			contrasenacs: { required: true }
+		},
+		submitHandler: function () {
+			var contrasena = $('input[name=contrasenacserv]').val();
+			$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
+				function (data, textStatus, jqXHR) {
+					if (data['success'] == true) {
+						$.post(path + "empresa/regempresa/servicioStatus", { 'serv_status': 1 },
+							function (data, textStatus, jqXHR) {
+							},
+							"HTML"
+						);
+						$('#servicio-status').trigger('click');
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se activo la opcion de servicio",
+							type: "success"
+						});
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "La contraseña es incorrecta.",
+							type: "error"
+						});
+					}
+					$('#ModalServicioStatusConfirmar').modal('hide');
+				},
+				"JSON"
+			);
+		}
+	});
+
+	/* ============================================ */
+	/*      END CHECK OPCION DE SERVICI             */
+	/* ============================================ */
+
+	/* ============================================ */
+	/* CHECK OPCION DE MULTI BUSINESS		                */
+	/* ============================================ */
+	$('#emp-pos').change(function (e) {
+		//e.preventDefault();
+		var check = $(this);
+		if (check.is(':checked')) {
+			$('#emp-pos').trigger('click');
+			$('#ModalMulbusStatusConfirmar').modal();
+		} else {
+			$.post(path + "empresa/regempresa/multiBusiness", { 'multi_business': 0 },
+				function (data, textStatus, jqXHR) {
+				},
+				"HTML"
+			);
+			return;
+		}
+	});
+
+
+	$('#FormMulbusStatusConfirmar').validate({
+		rules: {
+			contrasenacs: { required: true }
+		},
+		submitHandler: function () {
+			var contrasena = $('input[name=contrasenamultibu]').val();
+			$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
+				function (data, textStatus, jqXHR) {
+					if (data['success'] == true) {
+						$.post(path + "empresa/regempresa/multiBusiness", { 'multi_business': 1 },
+							function (data, textStatus, jqXHR) {
+							},
+							"HTML"
+						);
+						$('#emp-pos').trigger('click');
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se activo la opcion de servicio",
+							type: "success"
+						});
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "La contraseña es incorrecta.",
+							type: "error"
+						});
+					}
+					$('#ModalMulbusStatusConfirmar').modal('hide');
+				},
+				"JSON"
+			);
+		}
+	});
+
+	/* ============================================ */
+	/*      END CHECK OPCION DE SERVICI             */
 	/* ============================================ */
 
 	/* ======================== */

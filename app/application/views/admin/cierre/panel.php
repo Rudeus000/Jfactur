@@ -103,6 +103,7 @@
                           <tr class="bg-success text-white">
                             <th>Secuencia</th>
                             <th>Fecha Hora Cierre</th>
+                            <th>Sucursal</th>
                             <th>Caja Origen</th>
                             <th>Usuario</th>
                             <th>Caja Destino</th>
@@ -119,15 +120,15 @@
                         </thead>
                         <tfoot>
                           <tr>
-                            <th colspan="12" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
+                            <th colspan="13" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
                             <th><strong><span id="Totalingresos"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="12" style="text-align:right"><span class="text-danger">Egresos caja:</th>
+                            <th colspan="13" style="text-align:right"><span class="text-danger">Egresos caja:</th>
                             <th><strong><span id="Totalegresos" class="label label-danger"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="12" style="text-align:right">Total en caja:</th>
+                            <th colspan="13" style="text-align:right">Total en caja:</th>
                             <th><strong><span id="Totalcaja"></span></strong></th>
                           </tr>
                         </tfoot>

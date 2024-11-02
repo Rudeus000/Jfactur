@@ -299,7 +299,7 @@
                 <div class="row" id="ComprasContenedorGuardar">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <button type="submit" form="FormComprasAgregar" class="btn btn-success"><i class="fa fa-save"></i>
+                      <button type="submit" id="guardarCompras" form="FormComprasAgregar" class="btn btn-success"><i class="fa fa-save"></i>
                         Guardar</button>
                       <a href="<?= base_url('administrador/regcompras') ?>" class="btn btn-pink"><i
                           class="fas fa-times"></i> Cerrar</a>

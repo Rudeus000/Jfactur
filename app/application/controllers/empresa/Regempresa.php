@@ -167,6 +167,15 @@ class Regempresa extends CI_Controller {
 		);
 		$this->session->set_userdata('movil_expert',$estado);
 	}
+	public function multiBusiness()
+	{
+		$multibuestado = $this->input->post('multi_business');
+		$this->modelgeneral->editRegist('tb_empresa',
+			['cod_empresa' => 1],
+			['emp_pos' => $multibuestado]
+		);
+		$this->session->set_userdata('multi_business',$multibuestado);
+	}
 	public function companyStatus()
 	{
 		$companystatus = $this->input->post('com_status');
@@ -175,6 +184,16 @@ class Regempresa extends CI_Controller {
 			['company_status' => $companystatus]
 		);
 		// $this->session->set_userdata('movil_expert',$estado);
+	}
+
+	public function servicioStatus()
+	{
+		$serviciostatus = $this->input->post('serv_status');
+		$this->modelgeneral->editRegist('tb_empresa',
+			['cod_empresa' => 1],
+			['servicio_check' => $serviciostatus]
+		);
+		$this->session->set_userdata('enable_serv',$serviciostatus);
 	}
 
 	function anuncio(){		

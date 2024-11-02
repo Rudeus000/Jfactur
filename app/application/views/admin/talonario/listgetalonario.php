@@ -231,6 +231,7 @@
                                     <option value="FC">FACTURAS - BOLETAS</option>
                                     <option value="PC">PROFORMA - COTIZACIONES</option>
                                     <option value="TK">TICKETS</option>
+                                    <option value="RB">RECIBO</option>
                                 </select>
                             </div>
                         </div>
@@ -365,6 +366,7 @@
                                     <option value="FC">FACTURAS - BOLETAS</option>
                                     <option value="PC">PROFORMA - COTIZACIONES</option>
                                     <option value="TK">TICKETS</option>
+                                    <option value="RB">RECIBO</option>
                                 </select>
                             </div>
                         </div>

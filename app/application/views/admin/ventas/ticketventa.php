@@ -127,9 +127,14 @@
 		<div class="w1-3 text-right"><?= $ventas->monto_vent ?></div>
 	</div>
 	<div class="w100">
-		<div class="w1-3"><b>Monto Recibido:</b></div>
+		<div class="w1-3"><b>Efectivo:</b></div>
 		<div class="w1-3 text-right">S/</div>
 		<div class="w1-3 text-right"><?= $ventas->montorecibido_vent ?></div>
+	</div>
+	<div class="w100">
+		<div class="w1-3"><b>Billetera D.:</b></div>
+		<div class="w1-3 text-right">S/</div>
+		<div class="w1-3 text-right"><?= $ventas->monto_bd ?></div>
 	</div>
 	<div class="w100">
 		<div class="w1-3"><b>Vuelto:</b></div>

@@ -296,7 +296,7 @@ class Reginventarioinicial extends CI_Controller
 
 	function getInventarioInicialReporteseries()
 	{
-		$this->db->select('tb_producto.*, nomb_almacen, est_product, serie_descripcion, cod_comp, cod_vent, serie_estado, histcompstock_serie,fecha_registro,prec_costo,prec_venta,fecha_venta');
+		$this->db->select('tb_producto.*, nomb_almacen, est_product, serie_descripcion, cod_comp, fecha_comp, precio_comp,cod_vent, serie_estado, histcompstock_serie,fecha_registro,prec_costo,prec_venta,fecha_venta');
 		$this->db->from('tb_producto');
 		$this->db->join('tb_marca', 'tb_producto.cod_marca = tb_marca.cod_marca');
 		$this->db->join('tb_categoria', 'tb_producto.cod_categoria = tb_categoria.cod_categoria');

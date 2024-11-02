@@ -137,16 +137,16 @@
                          <th style="text-align: center;">Ruc/Dni</th>
                          <th style="text-align: center;">Cliente</th>                         
                          <th style="text-align: center;">Moneda</th>
+                         <th style="text-align: center;">Yape </th>
                          <th style="text-align: center;">Importe</th>
-                         <th style="text-align: center;">Estado</th>
-                         <th style="text-align: center;">Opciones </th>
+                         <th style="text-align: center;">Estado</th>                       
                        
 
-                       <!--  <th style="text-align: center;">Monto</th>
+                        <!-- <th style="text-align: center;">Monto</th>
                         <th style="text-align: center;">Abonos</th>
                         <th style="text-align: center;">Abonos</th>
                         
-                        <th></th> -->
+                        <th></th>
                       </tr>
                     </thead>
                        <tfoot>
@@ -154,7 +154,7 @@
                              <th colspan="6" style="text-align:right">Total:</th>
                               <th><strong><span id="TotalCotizacion"></span></strong></th>
                          </tr>
-                     </tfoot>
+                     </tfoot> -->
 
                   </table>
 

@@ -67,11 +67,11 @@
                   <table id="TableCuentasCobrar" class="table mb-0" cellspacing="0" width="100%">
                     <thead>
                       <tr class="bg-success text-white">
-                        <th style="text-align: center;">Cliente</th>
-                        <th style="text-align: center;">DNI/RUC</th>
-                        <th style="text-align: center;">Monto</th>
-                        <th style="text-align: center;">Abonos</th>
-                        <th style="text-align: center;">Saldo</th>
+                        <th>Cliente</th>
+                        <th>DNI/RUC</th>
+                        <th>Monto</th>
+                        <th>Abonos</th>
+                        <th>Saldo</th>
                         <th></th>
                       </tr>
                     </thead>

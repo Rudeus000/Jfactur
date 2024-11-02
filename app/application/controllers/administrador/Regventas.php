@@ -36,7 +36,7 @@ class Regventas extends CI_Controller
 	{
 		$data['start'] = $this->input->get_post('start', true);
 		$data['length'] = $this->input->get_post('length', true);
-		$data['sEcho']  = $this->input->get_post('_', true);
+		$data['sEcho'] = $this->input->get_post('_', true);
 		$columns = ['fecha_vent', 'nom_tipdocumento', 'fecha_vent', 'nomb_cliente'];
 		$orderCampo = $this->input->get_post('order', true);
 		$orderCampo = $orderCampo[0]['column'];
@@ -135,7 +135,6 @@ class Regventas extends CI_Controller
 		$this->load->view('admin/ventas/ventagregar', $data);
 		$this->load->view('layouts/footer');
 	}
-
 	public function numeracion($tipo = NULL)
 	{
 		if (is_null($tipo)) {
@@ -143,17 +142,29 @@ class Regventas extends CI_Controller
 		} else {
 			$id = $tipo;
 		}
-		$query =  $this->db->from('tb_talonario')
+
+		$query = $this->db->from('tb_talonario')
 			->select('correlativo_actual,serie')
 			->where('cod_puntoventa', $this->session->userdata('puntoventa'))
 			->where('cod_talonario', $id)
 			->get()->row();
-		if (is_null($tipo)) {
-			echo json_encode($query);
+
+		if ($query) {
+			if (is_null($tipo)) {
+				echo json_encode($query);
+			} else {
+				return $query->correlativo_actual;
+			}
 		} else {
-			return $query->correlativo_actual;
+			// Manejo de caso cuando no se encuentra ninguna fila
+			if (is_null($tipo)) {
+				echo json_encode(['error' => 'No data found']);
+			} else {
+				return null; // O cualquier valor que consideres adecuado en caso de error
+			}
 		}
 	}
+
 
 	private function aumentarNumeracion($tipo, $actual)
 	{
@@ -466,6 +477,8 @@ class Regventas extends CI_Controller
 		$data['igv_vent'] = null;
 		$data['subtotal_vent'] = null;
 		$data['total_vent'] = $this->input->post('total');
+		$data['monto_bd'] = $this->input->post('monto_tb');
+		$data['monto_efectivo'] = $this->input->post('monto_efectivo');
 		$data['montorecibido_vent'] = $this->input->post('montoRecibido');
 		$data['vuelto_vent'] = $this->input->post('vuelto');
 		$data['pendiente_vent'] = $data['total_vent'] - $data['monto_vent'];
@@ -475,8 +488,8 @@ class Regventas extends CI_Controller
 		$data['login_usu'] = $this->session->userdata('login_usu');
 		$data['cod_puntoventa'] = $this->session->userdata('puntoventa');
 		$data['cod_caja'] = $apertura->cod_caja;
-		$data['cod_tipopago'] =   $this->input->post('tipoPago');
-		$data['operacion'] =  $this->input->post('operacion');
+		$data['cod_tipopago'] = $this->input->post('tipoPago');
+		$data['operacion'] = $this->input->post('operacion');
 
 		// Verificar si $printType está definido y no está vacío
 		if (!isset($printType) || empty($printType) || !isset($printType[0]->type_formt)) {
@@ -487,9 +500,9 @@ class Regventas extends CI_Controller
 			exit(); // Terminar el proceso
 		}
 		if (isset($_POST['tipoTarjeta'])) {
-			$data['cod_tarj'] =   $this->input->post('tipoTarjeta');
+			$data['cod_tarj'] = $this->input->post('tipoTarjeta');
 		}
-		$data['cod_apertura'] =  $apertura->cod_apertura;
+		$data['cod_apertura'] = $apertura->cod_apertura;
 		if (isset($_POST['dias'])) {
 			$data['dias_vent'] = $this->input->post('dias');
 			$data['fechavenc_vent'] = $this->input->post('fecVenc');
@@ -515,7 +528,8 @@ class Regventas extends CI_Controller
 			$retencion_porcent = ($this->input->post('retencion_porcentaje') / 100);
 			$data['retencion_base_imp'] = $this->input->post('base_monto');
 			$data['retencion_porcentaje'] = $retencion_porcent;
-			$data['retencion_monto'] = $this->input->post('retencion_monto');;
+			$data['retencion_monto'] = $this->input->post('retencion_monto');
+			;
 		}
 
 		$insert = $this->modelgeneral->insertRegist('tb_venta', $data);
@@ -603,7 +617,7 @@ class Regventas extends CI_Controller
 				if (empty($_POST['desc_prod'][$key])) {
 					$descuento = 0;
 				} else {
-					$descuento = (float)$_POST['desc_prod'][$key];
+					$descuento = (float) $_POST['desc_prod'][$key];
 				}
 				$detalle['subtotal_ventdet'] = (($detalle['precunit_ventdet'] - $descuento) * $detalle['cant_ventdet']);
 				if ($_POST['tipo_igv'][$key] == '4') {
@@ -613,7 +627,7 @@ class Regventas extends CI_Controller
 					$detalle['igv_ventdet'] = 0;
 					$detalle['free_vent_det'] = $detalle['precunit_ventdet'];
 				} elseif ($_POST['tipo_igv'][$key] == '1') {
-					$detalle['igv_ventdet'] = round((($detalle['subtotal_ventdet'])  / 1.18) * 0.18, 2);
+					$detalle['igv_ventdet'] = round((($detalle['subtotal_ventdet']) / 1.18) * 0.18, 2);
 					$igv_acumula += $detalle['igv_ventdet'];
 					$gravada_acumula += $detalle['subtotal_ventdet'];
 					$detalle['free_vent_det'] = 0;
@@ -645,7 +659,8 @@ class Regventas extends CI_Controller
 							/*FIN Poblamos el detalle para la boleta de ingreso */
 							/*Poblamos el detalle para la nota de ingreso */
 							$arr_detval[$value]['nund'] = $_POST['cant_prod'][$key];
-							$arr_detval[$value]['ccod_undmed'] = $undmed_prod->abreviatura_unid;;
+							$arr_detval[$value]['ccod_undmed'] = $undmed_prod->abreviatura_unid;
+							;
 							$arr_detval[$value]['ccod_art'] = $cod_art_almacen; //$value; 
 							$arr_detval[$value]['cdsc_art'] = $producto->nomb_product;
 							//sacamos el costo actual del producto
@@ -744,8 +759,8 @@ class Regventas extends CI_Controller
 
 
 			$this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $insert], [
-				'igv_vent' => round((($gravada_acumula)  / 1.18) * 0.18, 2),
-				'subtotal_vent' => $this->input->post('total') - round((($gravada_acumula)  / 1.18) * 0.18, 2)
+				'igv_vent' => round((($gravada_acumula) / 1.18) * 0.18, 2),
+				'subtotal_vent' => $this->input->post('total') - round((($gravada_acumula) / 1.18) * 0.18, 2)
 			]);
 
 			$this->calcularGravadaExoneradaDeVenta($insert);
@@ -777,15 +792,15 @@ class Regventas extends CI_Controller
 						$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $codtalonario]);
 						//var_export($objTalonario);
 						/*
-					if (($this->input->post('documento') =="15")) {
-						$arrboleta['tip_doc_ref']="01";
-					}
-					elseif ($this->input->post('documento') =="16") {
-						$arrboleta['tip_doc_ref']="03";
-					}
-					else{
-						$arrboleta['tip_doc_ref']="00";
-					}*/
+																											  if (($this->input->post('documento') =="15")) {
+																												  $arrboleta['tip_doc_ref']="01";
+																											  }
+																											  elseif ($this->input->post('documento') =="16") {
+																												  $arrboleta['tip_doc_ref']="03";
+																											  }
+																											  else{
+																												  $arrboleta['tip_doc_ref']="00";
+																											  }*/
 						$arrboleta['tip_doc_ref'] = $objTalonario->cod_tipdocu;
 						$arrboleta['serie_doc_ref'] = $this->input->post('serie');
 						$arrboleta['num_doc_ref'] = $this->input->post('correlativo');
@@ -824,15 +839,15 @@ class Regventas extends CI_Controller
 						$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $this->input->post('tipoPedido')]);
 						$arrnota['tip_doc_ref'] = $objTalonario->cod_tipdocu;
 						/*
-					if ($this->input->post('documento') =="15") {
-						$arrnota['tip_doc_ref']="01";
-					}
-					elseif ($this->input->post('documento') =="16") {
-						$arrnota['tip_doc_ref']="03";
-					}
-					else{
-						$arrnota['tip_doc_ref']="00";
-					}*/
+																											  if ($this->input->post('documento') =="15") {
+																												  $arrnota['tip_doc_ref']="01";
+																											  }
+																											  elseif ($this->input->post('documento') =="16") {
+																												  $arrnota['tip_doc_ref']="03";
+																											  }
+																											  else{
+																												  $arrnota['tip_doc_ref']="00";
+																											  }*/
 						$arrnota['serie_doc_ref'] = $this->input->post('serie');
 						$arrnota['num_doc_ref'] = $this->input->post('correlativo');
 						$arrnota['ccod_mon'] = 'S';
@@ -916,7 +931,7 @@ class Regventas extends CI_Controller
 						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
 						break;
 				}
-			}else{
+			} else {
 				switch ($tipo_ventser) {
 					case 'V':
 						$acumula_gravada += $detalle->subtotal_ventdet;
@@ -924,7 +939,7 @@ class Regventas extends CI_Controller
 					case 'E':
 						$acumula_exonerada += $detalle->subtotal_ventdet;
 						break;
-					
+
 					default:
 						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
 						break;
@@ -944,15 +959,36 @@ class Regventas extends CI_Controller
 
 	private function guardarCuotas($cod_venta)
 	{
-		if ($this->input->post('pago') == 'CRE' and $this->input->post('dias_cuotas') == 'on') {
-			$this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $cod_venta], ['num_cuotas_vent' => count($_POST['cuotas_fecha'])]);
+		if ($this->input->post('pago') == 'CRE' && $this->input->post('dias_cuotas') == 'on') {
 
-			$data = [];
-			$data['cod_vent'] = $cod_venta;
-			foreach ($_POST['cuotas_fecha'] as $key => $value) {
-				$data['fecha_ventcuo'] = $_POST['cuotas_fecha'][$key];
-				$data['monto_ventcuo'] = $_POST['cuotas_monto'][$key];
-				$this->modelgeneral->insertRegist('tb_venta_cuotas', $data);
+			if (isset($_POST['cuotas_fecha']) && isset($_POST['cuotas_monto'])) {
+				// Actualiza el número de cuotas
+				$this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $cod_venta], ['num_cuotas_vent' => count($_POST['cuotas_fecha'])]);
+
+				// Inicializa un array para los datos de las cuotas
+				$data = [];
+				$data['cod_vent'] = $cod_venta;
+
+				// Variable para almacenar el total de las cuotas
+				$total_cuotas_monto = 0;
+
+				// Itera sobre cada cuota
+				foreach ($_POST['cuotas_fecha'] as $key => $value) {
+					$data['fecha_ventcuo'] = $_POST['cuotas_fecha'][$key];
+					$monto_cuota = is_numeric($_POST['cuotas_monto'][$key]) ? (float) $_POST['cuotas_monto'][$key] : 0;
+					$data['monto_ventcuo'] = $monto_cuota;
+
+					// Acumula el monto de la cuota
+					$total_cuotas_monto += $monto_cuota;
+
+					// Inserta cada cuota en la tabla 'tb_venta_cuotas'
+					$this->modelgeneral->insertRegist('tb_venta_cuotas', $data);
+				}
+
+				// Actualiza el saldo_vent con el total de las cuotas
+				$this->modelgeneral->editRegist('tb_venta', ['cod_vent' => $cod_venta], ['saldo_vent' => $total_cuotas_monto]);
+			} else {
+				log_message('error', 'No se recibieron datos de cuotas.');
 			}
 		}
 	}
@@ -984,6 +1020,7 @@ class Regventas extends CI_Controller
 	// 		$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $data['cod_producto']);
 	// 	}
 	// }
+	
 	private function descontarDeAlmacen($data, $almacen, $idTypeAssignmentProduct)
 	{
 		// Obtén información del producto
@@ -1369,7 +1406,16 @@ class Regventas extends CI_Controller
 		]);
 		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
 		$data['empresa'] = $this->empresa_model->getEmpresa($data);
-		$html = $this->load->view('admin/ventas/ticketventa', $data, TRUE);
+		// $talonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $data['cod_talonario']]);
+		$talonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $data['ventas']->cod_talonario]);
+
+
+		if($talonario->siglas_talonario == 'RB'){
+			$html = $this->load->view('admin/ventas/ticketventaSe', $data, TRUE);
+		}else{
+			$html = $this->load->view('admin/ventas/ticketventa', $data, TRUE);
+		}
+		
 		$css = file_get_contents(APP_PATH . 'assets/styles_pdf.css');
 		$this->mpdf->SetTitle($data['ventas']->archivoxml_vent);
 		//$this->mpdf->setHTMLHeader($htmlHeader);
@@ -1422,44 +1468,44 @@ class Regventas extends CI_Controller
 			//DETRACION
 			"detraccion" => $detraccion,
 			//Cabecera del documento
-			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
-			"tipo_operacion"				=> $detraccion['activo'] == true ? "1001" : "0101", //Venta interna pag 28
+			"tipo_proceso" => $tipo_proceso['tipo_proceso'],
+			"tipo_operacion" => $detraccion['activo'] == true ? "1001" : "0101", //Venta interna pag 28
 			//"total_gravadas"               	=> strval($res->subtotal_vent),
-			"total_inafecta"                => "0",
+			"total_inafecta" => "0",
 			//"total_exoneradas"				=> "0",
-			"total_gratuitas"			    => "0",
-			"total_exportacion"		    	=> "0",
-			"total_descuento"	    		=> "0",
-			"sub_total"              		=> strval($res->subtotal_vent),
-			"porcentaje_igv"                => "18.00",
-			"total_igv"                     => strval($res->igv_vent),
-			"total_isc"                   	=> "0",
-			"total_otr_imp"                 => "0",
-			"total_retencion_cuot"	=> $total_reten_cuot,
-			"total"                  		=> strval($res->total_vent),
-			"total_letras"              	=> 'SON ' . strtoupper(convertir(intval($res->total_vent))),
-			"nro_guia_remision"             => "",
-			"cod_guia_remision"             => "",
-			"nro_otr_comprobante"           => "",
-			"serie_comprobante"             => $res->serie, //Para Facturas la serie debe comenzar por la letra F, seguido de tres dígitos
-			"numero_comprobante"            => (string)$res->numero_vent,
-			"fecha_comprobante"             => $res->fecha_vent,
-			"fecha_vto_comprobante"         => date('Y-m-d'),
-			"cod_tipo_documento"            => strval($res->codsunat_tipdocu),
-			"cod_moneda"                    => $res->codmoneda_vent,
-			"cuotas" 												=> (!empty($res->cuotas)) ? $res->cuotas : null,
+			"total_gratuitas" => "0",
+			"total_exportacion" => "0",
+			"total_descuento" => "0",
+			"sub_total" => strval($res->subtotal_vent),
+			"porcentaje_igv" => "18.00",
+			"total_igv" => strval($res->igv_vent),
+			"total_isc" => "0",
+			"total_otr_imp" => "0",
+			"total_retencion_cuot" => $total_reten_cuot,
+			"total" => strval($res->total_vent),
+			"total_letras" => 'SON ' . strtoupper(convertir(intval($res->total_vent))),
+			"nro_guia_remision" => "",
+			"cod_guia_remision" => "",
+			"nro_otr_comprobante" => "",
+			"serie_comprobante" => $res->serie, //Para Facturas la serie debe comenzar por la letra F, seguido de tres dígitos
+			"numero_comprobante" => (string) $res->numero_vent,
+			"fecha_comprobante" => $res->fecha_vent,
+			"fecha_vto_comprobante" => date('Y-m-d'),
+			"cod_tipo_documento" => strval($res->codsunat_tipdocu),
+			"cod_moneda" => $res->codmoneda_vent,
+			"cuotas" => (!empty($res->cuotas)) ? $res->cuotas : null,
 
 			//Datos del cliente
-			"cliente_numerodocumento"       => $res->doc_cliente,
-			"cliente_nombre"                => $res->nomb_cliente,
-			"cliente_tipodocumento"         => (string)$res->codsunat_tipdocucli,
-			"cliente_direccion"             => $res->direc_cliente,
-			"cliente_pais"         			=> "PE",
-			"cliente_ciudad"				=> "AYACUCHO",
-			"cliente_codigoubigeo"          => "050101",
-			"cliente_departamento"          => "AYACUCHO",
-			"cliente_provincia"         	=> "HUAMANGA",
-			"cliente_distrito"              => "AYACUCHO",
+			"cliente_numerodocumento" => $res->doc_cliente,
+			"cliente_nombre" => $res->nomb_cliente,
+			"cliente_tipodocumento" => (string) $res->codsunat_tipdocucli,
+			"cliente_direccion" => $res->direc_cliente,
+			"cliente_pais" => "PE",
+			"cliente_ciudad" => "AYACUCHO",
+			"cliente_codigoubigeo" => "050101",
+			"cliente_departamento" => "AYACUCHO",
+			"cliente_provincia" => "HUAMANGA",
+			"cliente_distrito" => "AYACUCHO",
 
 			//data de la empresa emisora o contribuyente que entrega el documento electrónico.
 			"emisor" => getEmisor()
@@ -1476,14 +1522,14 @@ class Regventas extends CI_Controller
 				$det = []; // Se inicializa un nuevo array para cada detalle
 				$det['txtITEM'] = $n;
 				$det['txtUNIDAD_MEDIDA_DET'] = $d->unidad_abreviatura_ventdet; //NIU = BIENES, ZZ = SERVICIOS
-				$det['txtCANTIDAD_DET'] = (string)$d->cant_ventdet;
-				$det['txtPRECIO_DET'] = (string)$precio;
-				$det['txtSUB_TOTAL_DET'] = (string)$d->prec_ventdet;
+				$det['txtCANTIDAD_DET'] = (string) $d->cant_ventdet;
+				$det['txtPRECIO_DET'] = (string) $precio;
+				$det['txtSUB_TOTAL_DET'] = (string) $d->prec_ventdet;
 				$det['txtIGV'] = $d->igv_ventdet;
 				$det['txtISC'] = '0';
-				$det['txtIMPORTE_DET'] = (string)$d->prec_ventdet;
-				$det['txtCODIGO_DET'] = (string)(!is_null($d->cod_producto)) ? $d->cod_producto : $d->cod_servicio;
-				$det['txtDESCRIPCION_DET'] = (string)$d->producto_ventdet;
+				$det['txtIMPORTE_DET'] = (string) $d->prec_ventdet;
+				$det['txtCODIGO_DET'] = (string) (!is_null($d->cod_producto)) ? $d->cod_producto : $d->cod_servicio;
+				$det['txtDESCRIPCION_DET'] = (string) $d->producto_ventdet;
 				$precioSinIGV = $precio - ($precio / 1.18) * 0.18;
 				$det['txtCODIGO_PROD_SUNAT'] = '23251602';
 
@@ -1590,7 +1636,7 @@ class Regventas extends CI_Controller
 					default:
 						// En caso de que el tipo de IGV no sea ni 1 ni 4, no hacemos nada
 						break;
-						//}
+					//}
 				}
 			}
 		}
@@ -1672,7 +1718,7 @@ class Regventas extends CI_Controller
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$respuesta  = curl_exec($ch);
+		$respuesta = curl_exec($ch);
 
 		curl_close($ch);
 
@@ -1760,7 +1806,7 @@ class Regventas extends CI_Controller
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$respuesta  = curl_exec($ch);
+		$respuesta = curl_exec($ch);
 		curl_close($ch);
 		$response = json_decode($respuesta, true);
 
@@ -1882,12 +1928,12 @@ class Regventas extends CI_Controller
 
 			//Cabecera del documento
 
-			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
-			"codigo"						=> 'RC',
-			"serie"							=> date("Ymd", strtotime($fecha)),
-			"secuencia"             		=> (string)$secuencia,
-			"fecha_referencia"             	=> $fecha,
-			"fecha_documento"          		=> $fecha,
+			"tipo_proceso" => $tipo_proceso['tipo_proceso'],
+			"codigo" => 'RC',
+			"serie" => date("Ymd", strtotime($fecha)),
+			"secuencia" => (string) $secuencia,
+			"fecha_referencia" => $fecha,
+			"fecha_documento" => $fecha,
 
 			//data de la empresa emisora o contribuyente que entrega el documento electrónico.
 			"emisor" => getEmisor()
@@ -1897,26 +1943,26 @@ class Regventas extends CI_Controller
 		$detalle = [];
 		$n = 1;
 		foreach ($query as $q) {
-			$det['ITEM'] = (string)$n;
+			$det['ITEM'] = (string) $n;
 			$det['TIPO_COMPROBANTE'] = '03';
-			$det['NRO_COMPROBANTE'] = (string)$q->serie . '-' . $q->numero_vent;
-			$det['NRO_DOCUMENTO'] = (string)$q->doc_cliente;
-			$det['TIPO_DOCUMENTO'] = (string)$q->codsunat_tipdocucli;
+			$det['NRO_COMPROBANTE'] = (string) $q->serie . '-' . $q->numero_vent;
+			$det['NRO_DOCUMENTO'] = (string) $q->doc_cliente;
+			$det['TIPO_DOCUMENTO'] = (string) $q->codsunat_tipdocucli;
 			$det['NRO_COMPROBANTE_REF'] = '0';
 			$det['TIPO_COMPROBANTE_REF'] = '0';
 			$det['STATUS'] = '1';
 			$det['COD_MONEDA'] = $q->codmoneda_vent;
-			$det['TOTAL'] = (string)$q->total_vent;
-			$det['GRAVADA'] = (string)$q->gravada_vent;
-			$det['EXONERADO'] = (string)$q->exonerada_vent;
+			$det['TOTAL'] = (string) $q->total_vent;
+			$det['GRAVADA'] = (string) $q->gravada_vent;
+			$det['EXONERADO'] = (string) $q->exonerada_vent;
 			$det['INAFECTO'] = '0';
 			$det['EXPORTACION'] = '0';
-			$det['GRATUITAS'] = (string)$q->free_vent;
+			$det['GRATUITAS'] = (string) $q->free_vent;
 			$det['MONTO_CARGO_X_ASIG'] = '0';
 			$det['CARGO_X_ASIGNACION'] = '0';
-			$det['EXO']='0';
+			$det['EXO'] = '0';
 			$det['ISC'] = '0';
-			$det['IGV'] = (string)$q->igv_vent;
+			$det['IGV'] = (string) $q->igv_vent;
 			$det['OTROS'] = '0';
 			$detalle[] = $det;
 			$n++;
@@ -1943,7 +1989,7 @@ class Regventas extends CI_Controller
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$respuesta  = curl_exec($ch);
+		$respuesta = curl_exec($ch);
 		curl_close($ch);
 
 		$response = json_decode($respuesta, true);
@@ -1959,13 +2005,15 @@ class Regventas extends CI_Controller
 		$res = array();
 
 		// Agregamos la barra invertida al final en caso de que no exista
-		if (substr($directorio, -1) != "/") $directorio .= "/";
+		if (substr($directorio, -1) != "/")
+			$directorio .= "/";
 
 		// Creamos un puntero al directorio y obtenemos el listado de archivos
 		$dir = @dir($directorio) or die("getFileList: Error abriendo el directorio $directorio para leerlo");
 		while (($archivo = $dir->read()) !== false) {
 			// Obviamos los archivos ocultos
-			if ($archivo[0] == ".") continue;
+			if ($archivo[0] == ".")
+				continue;
 			if (is_dir($directorio . $archivo)) {
 				$res[] = array(
 					"Nombre" => $directorio . $archivo . "/",
@@ -2013,7 +2061,7 @@ class Regventas extends CI_Controller
 			//Cabecera del documento
 			"archivoxml_res" => $archivo,
 			"ticket_res" => $idticket,
-			"tipo_proceso" 					=> $tipo_proceso['tipo_proceso'],
+			"tipo_proceso" => $tipo_proceso['tipo_proceso'],
 			//data de la empresa emisora o contribuyente que entrega el documento electrónico.
 			"emisor" => getEmisor()
 		);
@@ -2039,7 +2087,7 @@ class Regventas extends CI_Controller
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$respuesta  = curl_exec($ch);
+		$respuesta = curl_exec($ch);
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		$response = json_decode($respuesta, true);
@@ -2129,28 +2177,28 @@ class Regventas extends CI_Controller
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 			->where('est_product', 1)
 			->where('cod_tiparticulo', 1)
-			->where('tb_producto_stock.cod_almacen',$almacen)
+			->where('tb_producto_stock.cod_almacen', $almacen)
 			->get()->result();
 
-			$categorias = $this->db->from('tb_categoria')
+		$categorias = $this->db->from('tb_categoria')
 			->select('tb_categoria.*')
-			->join('tb_producto','tb_categoria.cod_categoria = tb_producto.cod_categoria')
+			->join('tb_producto', 'tb_categoria.cod_categoria = tb_producto.cod_categoria')
 			->join('tb_producto_stock', 'tb_producto_stock.cod_producto = tb_producto.cod_producto')
 			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
 			->where('est_product', 1)
 			->where('cod_tiparticulo', 1)
-			->where('tb_producto_stock.cod_almacen',$almacen)
-			->where('est_categoria',1)
+			->where('tb_producto_stock.cod_almacen', $almacen)
+			->where('est_categoria', 1)
 			->group_by('cod_categoria')
 			->get()->result();
 
 
 		foreach ($productos as $key => $p) {
-			if($p->stock < 1){
+			if ($p->stock < 1) {
 				unset($productos[$key]);
 			}
 		}
-			
+
 		$resultado = [];
 		$resultado['productos'] = $productos;
 		$resultado['categorias'] = $categorias;
@@ -2171,7 +2219,7 @@ class Regventas extends CI_Controller
 		if ($ruc == '1') {
 			$array[] = 6;
 		}
-		
+
 		$this->db->from('tb_cliente');
 		$this->db->select('id_cliente as id,nomb_cliente as nombre,doc_cliente as documento, direc_cliente as direccion, precio_cliente');
 		$this->db->join('tb_tipodocumentocliente', 'tb_cliente.cod_tipdocucli = tb_tipodocumentocliente.cod_tipdocucli');
@@ -2185,24 +2233,24 @@ class Regventas extends CI_Controller
 
 	public function obtenerCliente()
 	{
-		$tipo_documento = $this->input->get('tipo_documento')=='RUC'?'4':'2';
+		$tipo_documento = $this->input->get('tipo_documento') == 'RUC' ? '4' : '2';
 		$numero = $this->input->get('numero');
 
 		$query = $this->db->from('tb_cliente')
-		->select('id_cliente, nomb_cliente, direc_cliente')
-		->where('cod_tipdocucli',$tipo_documento)
-		->where('doc_cliente',$numero)
-		->get()->row();
+			->select('id_cliente, nomb_cliente, direc_cliente')
+			->where('cod_tipdocucli', $tipo_documento)
+			->where('doc_cliente', $numero)
+			->get()->row();
 
 		$resp = [];
 		if (!is_null($query)) {
 			$resp['success'] = true;
 			$resp['response'] = $query;
-		}else{
+		} else {
 			$resp['success'] = false;
 		}
 		echo json_encode($resp);
-		
+
 	}
 
 	public function crearClientePos()
@@ -2215,14 +2263,15 @@ class Regventas extends CI_Controller
 		$data['fecha_registro'] = date('Y-m-d');
 		$data['estado_cliente'] = 1;
 
-		$id = $this->modelgeneral->insertRegist('tb_cliente',$data);
+		$id = $this->modelgeneral->insertRegist('tb_cliente', $data);
 
 		$resp = [];
-		if(!is_null($id)){
+		if (!is_null($id)) {
 			$resp['success'] = true;
 			$resp['id_cliente'] = $id;
 			$resp['precio_cliente'] = $data['precio_cliente'];
-		}else{
+			$resp['direc_cliente'] = $data['direc_cliente'];
+		} else {
 			$resp['success'] = false;
 		}
 

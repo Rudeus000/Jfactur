@@ -166,7 +166,7 @@
 
 </div>
 
-<div class="modal fade" id="serieModal" tabindex="-1" role="dialog" aria-labelledby="serieModalLabel"
+<div class="modal" id="serieModal" tabindex="-1" role="dialog" aria-labelledby="serieModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -185,7 +185,7 @@
           </select>
         </div>
 
-        <div class="row" id="seriesContainerIndividual"></div> <!-- Inputs para series individuales -->
+        <div class="row serie" id="seriesContainerIndividual"></div> <!-- Inputs para series individuales -->
 
         <div class="row" id="seriesContainerBloque" style="display: none;">
           <div class="col-md-6">

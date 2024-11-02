@@ -40,7 +40,7 @@ class Regcajacierre extends CI_Controller
 		$data['start'] = $this->input->get_post('start', true);
 		$data['length'] = $this->input->get_post('length', true);
 		$data['sEcho']  = $this->input->get_post('_', true);
-		$columns = ['cod_apertura', 'fechacierre_apertura'];
+		$columns = ['cod_apertura', 'fechacierre_apertura','nomb_puntoventa'];
 		$orderCampo = $this->input->get_post('order', true);
 		$orderCampo = $orderCampo[0]['column'];
 		$orderCampo = $columns[$orderCampo];
@@ -78,11 +78,12 @@ class Regcajacierre extends CI_Controller
 		$result = [];
 		$apertura = $this->input->get('apertura');
 		$query = $this->db->from('tb_venta')
-			->select(" 
+			->select("
 			IFNULL(SUM(CASE WHEN cod_tipopago = 1 AND pago_vent = 'CO' THEN monto_vent END ),0) as efectivo,
 			IFNULL(SUM(CASE WHEN cod_tipopago = 2 AND pago_vent = 'CO' THEN monto_vent END ),0) as tarjeta,
 			IFNULL(SUM(CASE WHEN cod_tipopago = 3 AND pago_vent = 'CO' THEN monto_vent END ),0) as yape,
 			IFNULL(SUM(pendiente_vent),0) as credito,
+			IFNULL(SUM(monto_bd),0) as montobd,
 			", FALSE)
 			->where('estado_vent', 'G')
 			->where('cod_apertura', $apertura)
@@ -95,10 +96,10 @@ class Regcajacierre extends CI_Controller
 			$result['credito'] = 0;
 			$result['yape'] = 0;
 		} else {
-			$result['efectivo'] = $query->row()->efectivo;
+			$result['efectivo'] = $query->row()->efectivo-$query->row()->montobd;
 			$result['tarjeta'] = $query->row()->tarjeta;
 			$result['credito'] = $query->row()->credito;
-			$result['yape'] = $query->row()->yape;
+			$result['yape'] = $query->row()->montobd + $query->row()->yape;
 		}
 
 

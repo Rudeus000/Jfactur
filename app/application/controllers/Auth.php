@@ -247,7 +247,7 @@ class Auth extends CI_Controller
 				}
 			} else {
 				$resp['success'] = false;
-				$resp['message'] = "Error al registrar el usuario. Inténtalo de nuevo.";
+				$resp['message'] = "Error al registrar el usuario. Intentalo de nuevo.";
 			}
 
 

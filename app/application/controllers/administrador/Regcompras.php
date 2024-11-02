@@ -363,6 +363,8 @@ class Regcompras extends CI_Controller
 						$dataSerie['cod_almacen'] = $data['cod_almacen'];
 						$dataSerie['serie_descripcion'] = $valueSerie;
 						$dataSerie['cod_comp'] = $insert;
+						$dataSerie['fecha_comp']=$data['fecha_comp'];
+						$dataSerie['precio_comp'] = $precio_unit;
 
 						// Verificar si $prodStock es un objeto válido antes de acceder a 'stock'
 						if (is_object($prodStock) && property_exists($prodStock, 'stock')) {

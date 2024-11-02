@@ -31,20 +31,22 @@ class Cajacierre_model extends CI_Model
     $this->db->select('tb_caja_apertura.cod_apertura');
     $this->db->join('tb_caja as origen', 'tb_caja_apertura.cod_caja = origen.cod_caja');
     $this->db->join('tb_caja as destino', 'tb_caja_apertura.destino_apertura = destino.cod_caja');
+    $this->db->join('tb_puntoventa', 'tb_caja_apertura.cod_puntoventa = tb_puntoventa.cod_puntoventa');
     $this->db->join('tb_usuario', 'tb_caja_apertura.cod_usu = tb_usuario.cod_usu');
     $this->db->where('estado_apertura', 'C');
     $queryTotal = $this->db->get();
 
     $this->db->from('tb_caja_apertura');
-    $this->db->select('tb_caja_apertura.*, CONCAT(apell_usu, " ", nomb_usu) as NombreUsuario, origen.nomb_caja as origen,destino.nomb_caja as destino');
+    $this->db->select('tb_caja_apertura.*, CONCAT(apell_usu, " ", nomb_usu) as NombreUsuario, nomb_puntoventa,origen.nomb_caja as origen,destino.nomb_caja as destino');
     $this->db->join('tb_caja as origen', 'tb_caja_apertura.cod_caja = origen.cod_caja');
     $this->db->join('tb_caja as destino', 'tb_caja_apertura.destino_apertura = destino.cod_caja');
+    $this->db->join('tb_puntoventa', 'tb_caja_apertura.cod_puntoventa = tb_puntoventa.cod_puntoventa');
     $this->db->join('tb_usuario', 'tb_caja_apertura.cod_usu = tb_usuario.cod_usu');
     $this->db->where('fecha_apertura >= ', $data['desde']);
     $this->db->where('fecha_apertura <=', $data['hasta']);
     $this->db->where('estado_apertura', 'C');
     if ($data['caja'] != '') {
-      $this->db->like('nomb_caja', $data['caja']);
+      $this->db->having("origen LIKE'%". $data['caja']."%'");
     }
     if ($data['usuario'] != '') {
       $this->db->having("NombreUsuario LIKE '%" . $data['usuario'] . "%'");
@@ -63,16 +65,17 @@ class Cajacierre_model extends CI_Model
 
 
     $this->db->from('tb_caja_apertura');
-    $this->db->select('tb_caja_apertura.*, CONCAT(apell_usu, " ", nomb_usu) as NombreUsuario, origen.nomb_caja as origen,destino.nomb_caja as destino');
+    $this->db->select('tb_caja_apertura.*, CONCAT(apell_usu, " ", nomb_usu) as NombreUsuario, nomb_puntoventa,origen.nomb_caja as origen,destino.nomb_caja as destino');
     $this->db->join('tb_caja as origen', 'tb_caja_apertura.cod_caja = origen.cod_caja');
     $this->db->join('tb_caja as destino', 'tb_caja_apertura.destino_apertura = destino.cod_caja');
+    $this->db->join('tb_puntoventa', 'tb_caja_apertura.cod_puntoventa = tb_puntoventa.cod_puntoventa');
     $this->db->join('tb_usuario', 'tb_caja_apertura.cod_usu = tb_usuario.cod_usu');
     $this->db->where('fecha_apertura >= ', $data['desde']);
     $this->db->where('fecha_apertura <=', $data['hasta']);
     $this->db->where('estado_apertura', 'C');
 
     if ($data['caja'] != '') {
-      $this->db->like('nomb_caja', $data['caja']);
+      $this->db->having("origen LIKE'%".$data['caja']."%'");
     }
     if ($data['usuario'] != '') {
       $this->db->having("NombreUsuario LIKE '%" . $data['usuario'] . "%'");
@@ -100,7 +103,7 @@ class Cajacierre_model extends CI_Model
       $buttons = '
       <div class="btn-group">
      <a href="' . base_url('administrador/regcajacierre/imprimirCierrecaja/' . $q->cod_apertura) . '" target="_blank" class="btn btn-sm btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>';
-      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura,$q->yape_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
+      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->nomb_puntoventa,$q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura,$q->yape_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
     }
 
     $result['aaData'] = $row;
