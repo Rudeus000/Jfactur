@@ -8292,7 +8292,7 @@ $(function () {
 		} else if (tipo == 3) {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', false);
-			$('input[name=monto_tb]').prop('disabled', true);
+			$('input[name=monto_tb]').prop('disabled', true).val(0);
 			// $('input[name=monto]').val(0).prop('readonly', false);
 		} else {
 			$('select[name=tipoTarjeta]').prop('disabled', true);

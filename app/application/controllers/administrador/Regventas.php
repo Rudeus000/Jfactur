@@ -477,7 +477,7 @@ class Regventas extends CI_Controller
 		$data['igv_vent'] = null;
 		$data['subtotal_vent'] = null;
 		$data['total_vent'] = $this->input->post('total');
-		$data['monto_bd'] = $this->input->post('monto_tb');
+		$data['monto_bd'] = $this->input->post('monto_tb')??0;		
 		$data['monto_efectivo'] = $this->input->post('monto_efectivo');
 		$data['montorecibido_vent'] = $this->input->post('montoRecibido');
 		$data['vuelto_vent'] = $this->input->post('vuelto');
