@@ -107,7 +107,8 @@
                                                         <option value="">--Todos--</option>
                                                         <?php foreach ($categoria as $c): ?>
                                                             <option value="<?= $c->cod_categoria ?>">
-                                                                <?= $c->nomb_categoria ?></option>
+                                                                <?= $c->nomb_categoria ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -131,7 +132,8 @@
                                                         <option value="">--Todos--</option>
                                                         <?php foreach ($articulo as $a): ?>
                                                             <option value="<?= $a->cod_tiparticulo ?>">
-                                                                <?= $a->nomb_tiparticulo ?></option>
+                                                                <?= $a->nomb_tiparticulo ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -328,7 +330,8 @@
                                                         <option value="">--Selecciona--</option>
                                                         <?php foreach ($TypeproductAssignments as $TypeproductAssignment): ?>
                                                             <option value="<?= $TypeproductAssignment->cod_producto ?>">
-                                                                <?= $TypeproductAssignment->nomb_product ?></option>
+                                                                <?= $TypeproductAssignment->nomb_product ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -343,7 +346,8 @@
                                                             <option value="">--Selecciona--</option>
                                                             <?php foreach ($marca as $marc): ?>
                                                                 <option value="<?= $marc->cod_marca ?>">
-                                                                    <?= $marc->nomb_marca ?></option>
+                                                                    <?= $marc->nomb_marca ?>
+                                                                </option>
                                                             <?php endforeach ?>
                                                         </select>
                                                         <div class="input-group-append">
@@ -365,7 +369,8 @@
                                                             <option value="">--Selecciona--</option>
                                                             <?php foreach ($categoria as $ca): ?>
                                                                 <option value="<?= $ca->cod_categoria ?>">
-                                                                    <?= $ca->nomb_categoria ?></option>
+                                                                    <?= $ca->nomb_categoria ?>
+                                                                </option>
                                                             <?php endforeach ?>
                                                         </select>
                                                         <div class="input-group-append">
@@ -407,7 +412,8 @@
                                                             <option value="">--Selecciona--</option>
                                                             <?php foreach ($articulo as $tp): ?>
                                                                 <option value="<?= $tp->cod_tiparticulo ?>">
-                                                                    <?= $tp->nomb_tiparticulo ?></option>
+                                                                    <?= $tp->nomb_tiparticulo ?>
+                                                                </option>
                                                             <?php endforeach ?>
                                                         </select>
                                                         <div class="input-group-append">
@@ -444,7 +450,8 @@
                                                         <!-- <option value="">--Selecciona--</option> -->
                                                         <?php foreach ($sublinea as $sb): ?>
                                                             <option value="<?= $sb->cod_sublinea ?>">
-                                                                <?= $sb->nomb_sublinea ?></option>
+                                                                <?= $sb->nomb_sublinea ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -475,7 +482,8 @@
                                                         <!-- <option value="">--Selecciona--</option> -->
                                                         <?php foreach ($presentacion as $pres): ?>
                                                             <option value="<?= $pres->cod_present ?>">
-                                                                <?= $pres->nomb_present ?></option>
+                                                                <?= $pres->nomb_present ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -538,7 +546,12 @@
                                             <!-- <div class="form-group row"> -->
 
                                             <div class="col-md-4">
-                                                <label class="control-label">Codigo de barras:</label>
+
+                                                <input type="checkbox" data-plugin="switchery" data-color="#1bb99a"
+                                                    data-secondary-color="#FC0B00" data-size="small"
+                                                    id="barcodeCheck" />
+                                                <label for="barcodeCheck">Codigo B-Q</label>
+
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="codigobarra" readonly
                                                         placeholder="Auto generado" aria-label="Recipient's username"
@@ -584,7 +597,8 @@
                                                         <option value="">--Selecciona--</option>
                                                         <?php foreach ($parametros as $pr): ?>
                                                             <option value="<?= $pr->cod_parametros ?>">
-                                                                <?= $pr->nom_paramt ?></option>
+                                                                <?= $pr->nom_paramt ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -707,7 +721,8 @@
                                                         <option value="">--Selecciona--</option>
                                                         <?php foreach ($tipounidad as $t): ?>
                                                             <option value="<?= $t->cod_tipunidad ?>">
-                                                                <?= $t->nomb_tipunidad ?></option>
+                                                                <?= $t->nomb_tipunidad ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -862,7 +877,8 @@
                                     <option value="">--Selecciona--</option>
                                     <?php foreach ($TypeproductAssignments as $TypeproductAssignment): ?>
                                         <option value="<?= $TypeproductAssignment->cod_producto ?>">
-                                            <?= $TypeproductAssignment->nomb_product ?></option>
+                                            <?= $TypeproductAssignment->nomb_product ?>
+                                        </option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -1252,6 +1268,15 @@
         </script>
         <script>
             $(document).ready(function () {
+                $('#barcodeCheck').change(function () {
+                    if ($(this).is(':checked')) {
+                        // Activar el input si el checkbox está marcado
+                        $('input[name="codigobarra"]').prop('readonly', false);
+                    } else {
+                        // Desactivar el input si el checkbox está desmarcado
+                        $('input[name="codigobarra"]').prop('readonly', true);
+                    }
+                });
                 // Manejar el clic en el botón
                 $('#btnAbrirMarca').click(function (event) {
                     event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
