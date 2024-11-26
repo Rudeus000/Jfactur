@@ -153,7 +153,7 @@
 
 
 <!-- Modal para mostrar los resultados de la comparación -->
-<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal" id="miModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
