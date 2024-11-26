@@ -36,11 +36,11 @@ class Regcajacierre extends CI_Controller
 
 	function jsonCierre()
 	{
-		
+
 		$data['start'] = $this->input->get_post('start', true);
 		$data['length'] = $this->input->get_post('length', true);
-		$data['sEcho']  = $this->input->get_post('_', true);
-		$columns = ['cod_apertura', 'fechacierre_apertura','nomb_puntoventa'];
+		$data['sEcho'] = $this->input->get_post('_', true);
+		$columns = ['cod_apertura', 'fechacierre_apertura', 'nomb_puntoventa'];
 		$orderCampo = $this->input->get_post('order', true);
 		$orderCampo = $orderCampo[0]['column'];
 		$orderCampo = $columns[$orderCampo];
@@ -79,11 +79,11 @@ class Regcajacierre extends CI_Controller
 		$apertura = $this->input->get('apertura');
 		$query = $this->db->from('tb_venta')
 			->select("
-			IFNULL(SUM(CASE WHEN cod_tipopago = 1 AND pago_vent = 'CO' THEN monto_vent END ),0) as efectivo,
+			IFNULL(SUM(monto_efectivo),0) as efectivo,
 			IFNULL(SUM(CASE WHEN cod_tipopago = 2 AND pago_vent = 'CO' THEN monto_vent END ),0) as tarjeta,
-			IFNULL(SUM(CASE WHEN cod_tipopago = 3 AND pago_vent = 'CO' THEN monto_vent END ),0) as yape,
+			IFNULL(SUM(monto_bd),0) as yape,
 			IFNULL(SUM(pendiente_vent),0) as credito,
-			IFNULL(SUM(monto_bd),0) as montobd,
+			
 			", FALSE)
 			->where('estado_vent', 'G')
 			->where('cod_apertura', $apertura)
@@ -96,10 +96,10 @@ class Regcajacierre extends CI_Controller
 			$result['credito'] = 0;
 			$result['yape'] = 0;
 		} else {
-			$result['efectivo'] = $query->row()->efectivo-$query->row()->montobd;
+			$result['efectivo'] = $query->row()->efectivo;
 			$result['tarjeta'] = $query->row()->tarjeta;
 			$result['credito'] = $query->row()->credito;
-			$result['yape'] = $query->row()->montobd + $query->row()->yape;
+			$result['yape'] = $query->row()->yape;
 		}
 
 
@@ -107,7 +107,8 @@ class Regcajacierre extends CI_Controller
 
 		$bonos = $this->db->from('tb_cobro')
 			->select('IFNULL(SUM(monto_cobro),0) as bonos_cobrados', FALSE)
-			->where('cod_caja', $queryApertura->cod_caja)
+			->where('estado_vent', 'G')
+			->where('cod_caja', $apertura)
 			->where('fecha_cobro', $queryApertura->fecha_apertura)
 			->where('tipo_cobro', 'Credito')
 			->group_by('fecha_cobro')
@@ -163,13 +164,13 @@ class Regcajacierre extends CI_Controller
 		$data['cajacierre'] = $this->cajacierre_model->getImpresionCierre($id);
 		//$data['empresa'] = $this->empresa_model->getEmpresa($data);
 		$html = $this->load->view('admin/cierre/impresion_cierre', $data, TRUE);
-		$css = $css = file_get_contents(APP_PATH.'assets/styles_pdf.css');
+		$css = $css = file_get_contents(APP_PATH . 'assets/styles_pdf.css');
 		$this->mpdf->SetTitle('Ventas');
 		$this->mpdf->writeHTML($css, 1);
 		$this->mpdf->writeHTML($html, 2);
 		$this->mpdf->Output('assets/ventas.pdf', 'I');
 	}
-	
+
 
 	function addEgresosIngresos()
 	{
@@ -188,14 +189,14 @@ class Regcajacierre extends CI_Controller
 			$data['cod_tarj'] = $this->input->post('tipoTarjeta');
 			$data['cod_ban'] = $this->input->post('banco');
 			$data['cuenta_gastos'] = $this->input->post('cuenta');
-			$data['oper_gastos'] =  $this->input->post('operacion');
+			$data['oper_gastos'] = $this->input->post('operacion');
 			$data['nomb_gastoS'] = $this->input->post('descripcion');
 			$data['observacion_gastos'] = $this->input->post('observacionm');
 			$data['total_gastos'] = $this->input->post('montom');
 			$data['documento_gastos'] = $this->input->post('documento');
 			$data['persona_gastos'] = $this->input->post('namemovimiento');
 			//$data['observacion_gastos']= $this->input->post('observacionm');
-			$data['est_gastos'] =  1;
+			$data['est_gastos'] = 1;
 			$insert = $this->modelgeneral->insertRegist('tb_gastos', $data);
 			$resp = [];
 			if (!is_null($insert)) {
@@ -207,6 +208,40 @@ class Regcajacierre extends CI_Controller
 			echo json_encode($resp);
 		}
 	}
+
+	public function verificaContrasena()
+	{
+		$usuariosuper = $this->input->post('usuariosuper');
+		$contrasenasuper = $this->input->post('contrasenasuper');
+
+		// Validar que ambos campos estén presentes
+		if (empty($usuariosuper) || empty($contrasenasuper)) {
+			echo json_encode(['success' => false, 'message' => 'Usuario y contraseña son requeridos.']);
+			return;
+		}
+
+		// Consulta en la base de datos para validar el usuario y contraseña de un supervisor
+		$query = $this->db->from('tb_usuario')
+			->where('cod_perfil', 1) // perfil de supervisor
+			->where('login_usu', $usuariosuper) // Verificar el nombre de usuario
+			->where('passwoord_usu', sha1($contrasenasuper)) // Verificar la contraseña
+			->get();
+
+		$res = [];
+
+		if ($query->num_rows() > 0) {
+			// La autenticación fue exitosa
+			$res['success'] = true;
+			$res['message'] = 'Validacion exitosa';
+		} else {
+			// La autenticación falló
+			$res['success'] = false;
+			$res['message'] = 'Credenciales de supervisor son incorrectas.';
+		}
+
+		echo json_encode($res);
+	}
+
 }
 
 /* End of file Regcajacierre.php */

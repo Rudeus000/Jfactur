@@ -339,6 +339,20 @@ class Reportedetallado_model extends CI_Model {
 		->get()->result();
 	}
 
+	public function verificarISDNConFecha($isdn, $fechaInicio, $fechaFin) {
+		$this->db->select('producto_isdn');
+		$this->db->from('tb_venta_detalle');
+		$this->db->join('tb_venta', 'tb_venta.cod_vent = tb_venta_detalle.cod_vent');
+		$this->db->where('tb_venta_detalle.producto_isdn', $isdn);
+		$this->db->where('tb_venta.fecha_vent >=', $fechaInicio);
+		$this->db->where('tb_venta.fecha_vent <=', $fechaFin);
+		$query = $this->db->get();
+	
+		return $query->num_rows() > 0;
+	}
+	
+
+
 	function getVentasDetalladasExcel($data)
 	{
 		$this->db->from('tb_venta_detalle');

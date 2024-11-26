@@ -36,15 +36,17 @@
                             <div class="card-body table-responsive">
                                 <fieldset>
                                     <legend>Filtro</legend>
-                                    <form id="FormAlmacenInventarioInicialFiltro" action="" method="post" autocomplete="off">
-                                        <div class="row">                                          
+                                    <form id="FormAlmacenInventarioInicialFiltro" action="" method="post"
+                                        autocomplete="off">
+                                        <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Almacen:</label>
                                                     <select name="almacen" class="form-control select2">
                                                         <option value="">Seleccione</option>
-                                                        <?php foreach ($almacenes as $a) : ?>
-                                                            <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
+                                                        <?php foreach ($almacenes as $a): ?>
+                                                            <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -52,7 +54,8 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="control-label">Producto:</label>
-                                                    <input type="text" name="producto" class="form-control" placeholder="Escriba y presione enter">
+                                                    <input type="text" name="producto" class="form-control"
+                                                        placeholder="Escriba y presione enter">
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -60,8 +63,9 @@
                                                     <label class="control-label">Categoria:</label>
                                                     <select name="categoria" class="form-control select2">
                                                         <option value="">Seleccione</option>
-                                                        <?php foreach ($categorias as $c) : ?>
-                                                            <option value="<?= $c->cod_categoria ?>"><?= $c->nomb_categoria ?></option>
+                                                        <?php foreach ($categorias as $c): ?>
+                                                            <option value="<?= $c->cod_categoria ?>">
+                                                                <?= $c->nomb_categoria ?></option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -71,8 +75,9 @@
                                                     <label class="control-label">Marca:</label>
                                                     <select name="marca" class="form-control select2">
                                                         <option value="">Seleccione</option>
-                                                        <?php foreach ($marcas as $m) : ?>
-                                                            <option value="<?= $m->cod_marca ?>"><?= $m->nomb_marca ?></option>
+                                                        <?php foreach ($marcas as $m): ?>
+                                                            <option value="<?= $m->cod_marca ?>"><?= $m->nomb_marca ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -84,28 +89,35 @@
                                 <br>
                                 <div class="row float-right">
                                     <div class="col-md-12">
-                                        <a id="InventarioInicialReportePdf" href="#" class="btn btn-rounded btn-pink" target="_blank"><i class="far fa-file-pdf"></i> PDF</a>
+                                        <a id="InventarioInicialReportePdf" href="#" class="btn btn-rounded btn-pink"
+                                            target="_blank"><i class="far fa-file-pdf"></i> PDF</a>
 
-                                        <a id="InventarioInicialReporteExcel" href="#" class="btn btn-rounded btn-purple" target="_blank"><i class="far fa-file-excel"></i> EXCEL</a>
+                                        <a id="InventarioInicialReporteExcel" href="#"
+                                            class="btn btn-rounded btn-purple" target="_blank"><i
+                                                class="far fa-file-excel"></i> EXCEL</a>
 
-                                        <a id="InventarioInicialReporteExcelSeries" href="#" class="btn btn-rounded btn-primary" target="_blank"><i class="far fa-file-excel"></i> Exportar series</a>
+                                        <a id="InventarioInicialReporteExcelSeries" href="#"
+                                            class="btn btn-rounded btn-primary" target="_blank"><i
+                                                class="far fa-file-excel"></i> Exportar series</a>
 
                                     </div>
                                 </div>
                                 <br>
                                 <div>
-                                    <table id="TableAlmacenInventarioInicial" class="table  table-striped" cellspacing="0" width="100%">
+                                    <table id="TableAlmacenInventarioInicial" class="table  table-striped"
+                                        cellspacing="0" width="100%">
                                         <thead>
                                             <tr class="bg-success text-white">
-                                                <th style="text-align: center;">Producto</th>
-                                                <th style="text-align: center;">Marca</th>
-                                                <th style="text-align: center;">Categoria</th>
-                                                <th style="text-align: center;">Unidad</th>
-                                                <th style="text-align: center;">P. Costo</th>
-                                                <th style="text-align: center;">P. Venta</th>
-                                                <th style="text-align: center;">Fechas</th>
-                                                <th style="text-align: center;">Stock Actual</th>
-                                                <th style="text-align: center;">Stock Inicial</th>
+                                                <th>Codigo</th>
+                                                <th>Producto</th>
+                                                <th>Marca</th>
+                                                <th>Categoria</th>
+                                                <th>Unidad</th>
+                                                <th>P. Costo</th>
+                                                <th>P. Venta</th>
+                                                <th>Fechas</th>
+                                                <th>Stock Actual</th>
+                                                <th>Stock Inicial</th>
                                             </tr>
                                         </thead>
 
@@ -160,7 +172,8 @@
 </div>
 
 
-<div id="ModalFechasProductos" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalFechasProductos" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -172,7 +185,9 @@
             <div class="modal-body">
                 <button type="button" class="btn btn-success" id="agregar-producto-fecha">Agregar</button>
 
-                <form id="FormProductoFecha" action="<?= base_url('administrador/reginventarioinicial/agregarProductoFecha') ?>" autocomplete="off" style="display:none">
+                <form id="FormProductoFecha"
+                    action="<?= base_url('administrador/reginventarioinicial/agregarProductoFecha') ?>"
+                    autocomplete="off" style="display:none">
                     <input type="hidden" name="producto">
                     <input type="hidden" name="almacen">
                     <div class="row">
@@ -221,7 +236,8 @@
 
 <!-- ... Código existente ... -->
 
-<div id="ModalSeleccionAlmacen" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalSeleccionAlmacen" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="FormSeleccionarAlmacen">
@@ -246,7 +262,7 @@
                             <label for="selectAlmacen">Almacén:</label>
                             <select name="almacen" class="form-control">
                                 <option value="">Seleccione</option>
-                                <?php foreach ($almacenes as $a) : ?>
+                                <?php foreach ($almacenes as $a): ?>
                                     <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
                                 <?php endforeach ?>
                             </select>
@@ -266,7 +282,8 @@
 
 
 
-<div id="ModalSeleccionAlmacenParaFechaVencimiento" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalSeleccionAlmacenParaFechaVencimiento" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="FormSeleccionarAlmacenParaFechaVencimiento" action="" method="post">
@@ -286,7 +303,7 @@
                             <label for="selectAlmacen">Almacén:</label>
                             <select name="almacen" class="form-control">
                                 <option value="">Seleccione</option>
-                                <?php foreach ($almacenes as $a) : ?>
+                                <?php foreach ($almacenes as $a): ?>
                                     <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?></option>
                                 <?php endforeach ?>
                             </select>

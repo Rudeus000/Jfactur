@@ -29,7 +29,9 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header bg-success">
-                <h3 class="my-0 text-white">Caja chica<a class="btn btn-rounded btn-pink float-right" data-toggle="modal" data-target="#ModalAgregarCierre"><i class="fa fa-plus m-r-5"></i>Agregar</a></h3>
+                <h3 class="my-0 text-white">Caja chica<a class="btn btn-rounded btn-pink float-right"
+                    data-toggle="modal" data-target="#ModalAgregarCierre"><i class="fa fa-plus m-r-5"></i>Agregar</a>
+                </h3>
               </div>
               <div class="card-body table-responsive">
                 <!-- <div class="row">
@@ -64,7 +66,7 @@
                               <input type="text" name="caja" class="form-control">
                             </div>
                           </div>
-                          <?php if ($this->session->userdata('perfil') == 1) : ?>
+                          <?php if ($this->session->userdata('perfil') == 1): ?>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
@@ -72,11 +74,12 @@
                               </div>
                             </div>
                           <?php endif ?>
-                          <?php if ($this->session->userdata('perfil') != 1) : ?>
+                          <?php if ($this->session->userdata('perfil') != 1): ?>
                             <div class="col-md-4" hidden="">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
-                                <input type="text" readonly value="<?= $this->session->userdata('nomb_usu') ?>" name="usuario" class="form-control">
+                                <input type="text" readonly value="<?= $this->session->userdata('nomb_usu') ?>"
+                                  name="usuario" class="form-control">
                               </div>
                             </div>
                           <?php endif ?>
@@ -84,13 +87,16 @@
                             <div class="form-group">
                               <label class="control-label">Fecha</label>
                               <div class="input-group">
-                                <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                                <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                                <input type="text" name="desde" class="form-control datepicker"
+                                  value="<?= date('Y-m-d') ?>">
+                                <input type="text" name="hasta" class="form-control datepicker"
+                                  value="<?= date('Y-m-d') ?>">
                               </div>
                             </div>
                           </div>
                           <div class="col-md-2">
-                            <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button>
+                            <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i
+                                class="fa fa-search"></i> Buscar</button>
                           </div>
                         </div>
                       </form>
@@ -98,7 +104,9 @@
                     <br>
 
                     <div>
-                      <table id="TableCierre" class="table  table-striped tblcierre tblcierree tblcierret tblcierrey tblcierrea" cellspacing="0" width="100%">
+                      <table id="TableCierre"
+                        class="table  table-striped tblcierre tblcierree tblcierret tblcierrey tblcierrea"
+                        cellspacing="0" width="100%">
                         <thead>
                           <tr class="bg-success text-white">
                             <th>Secuencia</th>
@@ -148,7 +156,7 @@
                               <input type="text" name="caja" class="form-control">
                             </div>
                           </div>
-                          <?php if ($this->session->userdata('perfil') == 1) : ?>
+                          <?php if ($this->session->userdata('perfil') == 1): ?>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
@@ -156,18 +164,21 @@
                               </div>
                             </div>
                           <?php endif ?>
-                          <?php if ($this->session->userdata('perfil') != 1) : ?>
+                          <?php if ($this->session->userdata('perfil') != 1): ?>
                             <div class="col-md-4" hidden="">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
-                                <input type="text" readonly value="<?= $this->session->userdata('nomb_usu') ?>" name="usuario" class="form-control">
+                                <input type="text" readonly value="<?= $this->session->userdata('nomb_usu') ?>"
+                                  name="usuario" class="form-control">
                               </div>
                             </div>
                           <?php endif ?>
                           <div class="col-md-2">
                             <!-- <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i> Buscar</button> -->
 
-                            <button type="button" class="btn btn-pink" data-toggle="modal" data-target="#ModalAgregarMovimiento" style="margin-top: 29px"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            <button type="button" class="btn btn-pink" data-toggle="modal"
+                              data-target="#ModalAgregarMovimiento" style="margin-top: 29px"><i
+                                class="fas fa-plus-circle"></i> Agregar</button>
                           </div>
                         </div>
                       </form>
@@ -175,7 +186,8 @@
                     <br>
 
                     <div>
-                      <table id="TableCierre" class="table  table-striped tblcierre tblcierree tblcierret tblcierrea" cellspacing="0" width="100%">
+                      <table id="TableCierre" class="table  table-striped tblcierre tblcierree tblcierret tblcierrea"
+                        cellspacing="0" width="100%">
                         <thead>
                           <tr class="bg-success text-white">
                             <th>Fecha</th>
@@ -216,7 +228,8 @@
 <div class="modal" id="ModalAgregarCierre" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <form id="FormCierre" action="<?= base_url('administrador/regcajacierre/agregar') ?>" method="post" autocomplete="off">
+      <form id="FormCierre" action="<?= base_url('administrador/regcajacierre/agregar') ?>" method="post"
+        autocomplete="off">
         <div class="modal-header bg-success">
           <h5 class="modal-title text-white" id="exampleModalLabel">Agregar Cierre</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -232,7 +245,7 @@
                     <label class="control-label">Caja Origen:</label>
                     <select name="caja" class="form-control">
                       <option value="">Seleccione</option>
-                      <?php foreach ($cajas_aperturas as $c) : ?>
+                      <?php foreach ($cajas_aperturas as $c): ?>
                         <option value="<?= $c->cod_caja ?>"><?= $c->nomb_caja ?></option>
                       <?php endforeach ?>
                     </select>
@@ -251,7 +264,8 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label class="control-label">Tipo:<span class="text-danger">[-]<span class="text-primary">[+]<span class="text-danger"> *</label>
+                        <label class="control-label">Tipo:<span class="text-danger">[-]<span
+                              class="text-primary">[+]<span class="text-danger"> *</label>
 
                         <select name="tipmovement" class="form-control">
                           <option value="E">Egresos(-)</option>
@@ -276,7 +290,28 @@
                     </div>
                   </div>
                 </fieldset>
-
+                <fieldset>
+                <legend>Validar cierre</legend>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="control-label">Usuario Supervisor:</label>
+                      <input type="text" name="usuariosuper" id="usuariosuper" class="form-control" placeholder="Ingrese usuario"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="control-label">Contraseña Supervisor:</label>
+                      <input type="password" name="passwordsuper" id="passwordsuper" class="form-control"
+                        placeholder="Ingrese contraseña" required>
+                    </div>
+                  </div>
+                </div>  
+                </fieldset>              
+                <!-- Mensaje de error en caso de credenciales incorrectas -->
+                <div id="supervisor-validation-message" class="text-danger" style="display: none;">                 
+                </div>
               </div>
             </div>
             <div class="col-md-6">
@@ -286,7 +321,7 @@
                     <label class="control-label">Caja Destino</label>
                     <select name="destino" class="form-control">
                       <option value="">Seleccione</option>
-                      <?php foreach ($cajas_destinos as $d) : ?>
+                      <?php foreach ($cajas_destinos as $d): ?>
                         <option value="<?= $d->cod_caja ?>"><?= $d->nomb_caja ?></option>
                       <?php endforeach ?>
                     </select>
@@ -295,7 +330,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="control-label">Fecha Hora Cierre</label>
-                    <input type="text" name="fechaHora" class="form-control datepicker" readonly value="<?= date('Y-m-d H:i:s') ?>">
+                    <input type="text" name="fechaHora" class="form-control datepicker" readonly
+                      value="<?= date('Y-m-d H:i:s') ?>">
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -347,11 +383,13 @@
   </div>
 </div>
 
-<div id="ModalAgregarMovimiento" class="modal bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="ModalAgregarMovimiento" class="modal bs-example-modal-center" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 
-      <form id="FormMovimiento" action="<?= base_url('administrador/regcajacierre/addEgresosIngresos') ?>" method="post" autocomplete="off">
+      <form id="FormMovimiento" action="<?= base_url('administrador/regcajacierre/addEgresosIngresos') ?>" method="post"
+        autocomplete="off">
         <input type="hidden">
         <div class="modal-header bg-success">
           <h4 class="text-white">Registrar movimientos</h4>
@@ -362,39 +400,42 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label class="control-label">Sucursal:</label>
-                <?php if ($this->session->userdata('perfil') == 1) : ?>
+                <?php if ($this->session->userdata('perfil') == 1): ?>
                   <select name="sucursal" class="form-control">
                     <option value="">Seleccione</option>
-                    <?php foreach ($puntos as $p) : ?>
+                    <?php foreach ($puntos as $p): ?>
                       <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
                     <?php endforeach ?>
                   </select>
-                <?php endif  ?>
-                <?php if ($this->session->userdata('perfil') != 1) : ?>
+                <?php endif ?>
+                <?php if ($this->session->userdata('perfil') != 1): ?>
                   <select name="sucursal" class="form-control" hidden>
-                    <?php foreach ($puntos as $p) : ?>
+                    <?php foreach ($puntos as $p): ?>
                       <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
                     <?php endforeach ?>
                   </select>
-                  <input type="text" name="sucursal" readonly class="form-control" value="<?= $p->nomb_puntoventa ?? '' ?>">
-                <?php endif  ?>
+                  <input type="text" name="sucursal" readonly class="form-control"
+                    value="<?= $p->nomb_puntoventa ?? '' ?>">
+                <?php endif ?>
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="form-group">
                 <label class="control-label">Usuario:</label>
-                <?php if ($this->session->userdata('perfil') == 1) : ?>
+                <?php if ($this->session->userdata('perfil') == 1): ?>
                   <select name="usuario" class="form-control">
                     <option value="">Seleccione</option>
-                    <?php foreach ($vendedores as $v) : ?>
+                    <?php foreach ($vendedores as $v): ?>
                       <option value="<?= $v->cod_usu ?>"><?= $v->apell_usu . ' ' . $v->nomb_usu ?></option>
                     <?php endforeach ?>
                   </select>
-                <?php endif  ?>
-                <?php if ($this->session->userdata('perfil') != 1) : ?>
-                  <input type="text" id="usuario" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
-                  <input type="text" name="usuario" readonly class="form-control" value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
+                <?php endif ?>
+                <?php if ($this->session->userdata('perfil') != 1): ?>
+                  <input type="text" id="usuario" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>"
+                    style="display:none">
+                  <input type="text" name="usuario" readonly class="form-control"
+                    value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
                 <?php endif ?>
               </div>
             </div>
@@ -407,7 +448,8 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="control-label">Tipo:<span class="text-danger">[-]<span class="text-primary">[+]<span class="text-danger"> *</label>
+                <label class="control-label">Tipo:<span class="text-danger">[-]<span class="text-primary">[+]<span
+                        class="text-danger"> *</label>
 
                 <select name="tipmovimiento" class="form-control">
                   <option value="E">Egresos(-)</option>
@@ -420,7 +462,7 @@
               <div class="form-group">
                 <label class="control-label">Tipo abono:<span class="text-danger"> *</label>
                 <select name="tipoAbono" class="form-control">
-                  <?php foreach ($tipos_pagos as $t) : ?>
+                  <?php foreach ($tipos_pagos as $t): ?>
                     <option value="<?= $t->cod_tipopago ?>"><?= $t->nom_tipopago ?></option>
                   <?php endforeach ?>
                 </select>
@@ -431,7 +473,7 @@
                 <label class="control-label">Tipo Tarjeta:<span class="text-danger"> *</label>
                 <select name="tipoTarjeta" class="form-control">
                   <option value=""></option>
-                  <?php foreach ($tipos_tarjetas as $t) : ?>
+                  <?php foreach ($tipos_tarjetas as $t): ?>
                     <option value="<?= $t->cod_tarj ?>"><?= $t->nomb_tarj ?></option>
                   <?php endforeach ?>
                 </select>
@@ -442,7 +484,7 @@
                 <label class="control-label">Banco:<span class="text-danger"> *</label>
                 <select class="form-control select2 select2-hidden-accessible input-sm" name="banco">
                   <option value="">--Selecciona--</option>
-                  <?php foreach ($banco as $b) : ?>
+                  <?php foreach ($banco as $b): ?>
                     <option value="<?= $b->cod_ban ?>"><?= $b->nomb_ban ?></option>
                   <?php endforeach ?>
                 </select>
@@ -470,7 +512,7 @@
                 <label class="control-label">Tipo gasto</label>
                 <select class="form-control select" name="tipomovimiento">
                   <option value="">--Selecciona--</option>
-                  <?php foreach ($tipogastos as $t) : ?>
+                  <?php foreach ($tipogastos as $t): ?>
                     <option value="<?= $t->cod_tipgastos ?>"><?= $t->descripcion ?></option>
                   <?php endforeach ?>
                 </select>
@@ -514,7 +556,7 @@
                   <label class="control-label">Tipo:</label>
                   <select name="tipo" id="tipo_documento" class="form-control">
                     <option value="">Seleccione</option>
-                    <?php foreach ($doc_clientes as $d) : ?>
+                    <?php foreach ($doc_clientes as $d): ?>
                       <option value="<?= $d->cod_tipdocucli ?>"><?= $d->nom_tipdocucli ?></option>
                     <?php endforeach ?>
                   </select>
@@ -523,7 +565,8 @@
               <div class="col-md-4">
                 <label class="control-label">Nro documento</label>
                 <div class="input-group md-3">
-                  <input type="text" class="form-control" name="documento" placeholder="Ingrese numero" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                  <input type="text" class="form-control" name="documento" placeholder="Ingrese numero"
+                    aria-label="Recipient's username" aria-describedby="basic-addon2">
                   <div class="input-group-append">
                     <button class="btn btn-outline-primary" type="button"><i class="fa fa-search"></i></button>
                   </div>

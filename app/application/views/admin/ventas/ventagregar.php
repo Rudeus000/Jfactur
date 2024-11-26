@@ -257,8 +257,8 @@
                     <legend>Agregar Producto</legend>
                     <div class="row">
 
-                      <div id="check_servicio"
-                        class="col-md-3 <?= ($this->session->userdata('enable_serv') == '0' ? 'd-none' : '') ?>">
+                      <div class="col-md-3 <?= ($this->session->userdata('enable_serv') == '0' ? 'd-none' : '') ?>"
+                        id="check_servicio">
                         <!-- <div class="switchery-demo"> -->
                         <!-- <input type="checkbox" class="custom-control-input" > -->
                         <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small"
@@ -373,8 +373,10 @@
                       </div>
 
                       <div class="col-md-6" id="serie_c">
+
                         <div class="form-group">
                           <div class="custom-control custom-checkbox">
+                          <input type="hidden" id="serieSeleccionada" name="serieSeleccionada" value="">
                             <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto"
                               readonly>
                             <label class="custom-control-label" for="serieChek">Series</label>
@@ -382,6 +384,7 @@
                           <select id="select2-series" class="form-control selct2" name="seriesProducto[]"
                             multiple="multiple" style="margin-top: 6px" disabled>
                           </select>
+                          <!-- <select name="seriesProducto[]" id="select2-series"></select> -->
                         </div>
                       </div>
 
@@ -414,9 +417,7 @@
                             style="text-align: center;<?= ($this->session->userdata('multi_business') == '1' ? 'display:none' : '') ?>">
                             Unidad</th>
                           <th style="text-align: center;">Cant.</th>
-                          <th
-                            style="text-align: center;<?= ($this->session->userdata('multi_business') == '1' ? 'display:none' : '') ?>">
-                            P. Unit.</th>
+                          <th style="text-align: center;">P. Unit.</th>
                           <th
                             style="text-align: center;<?= ($this->session->userdata('multi_business') == '1' ? 'display:none' : '') ?>">
                             Desc.</th>
@@ -443,7 +444,7 @@
                           $colspan = 3;
                         } elseif ($this->session->userdata('movil_expert') == '1') { // Primera condición extra
                           $colspan = 10;
-                        } 
+                        }
                         ?>
                         <tr>
                           <td colspan="<?= $colspan ?>"></td>

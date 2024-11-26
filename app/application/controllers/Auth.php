@@ -32,18 +32,52 @@ class Auth extends CI_Controller
 	public function login()
 	{
 		$username = $this->input->post('username');
-		$paswoord = $this->input->post('paswoord');
+		$password = $this->input->post('paswoord');
 		$perfil = $this->input->post('perfil');
-		$res = $this->user_model->login($username, sha1($paswoord));
+	
+		// Obtener los datos del usuario desde la base de datos
+		$usuario = $this->user_model->getUserByUsername($username);
+	
+		// Verificar si el usuario existe y si está bloqueado
+		if ($usuario && $usuario->estado_usuario == 0) {
+			$this->session->set_flashdata('message', 'Acceso bloqueado por múltiples intentos fallidos. Por favor, contacte con el administrador del sistema.');
+			redirect(base_url());
+			return;
+		}
+		// Verificar si el usuario existe y si está bloqueado
+		if ($usuario && $usuario->estado_usuario == 2) {
+			$this->session->set_flashdata('message', 'El usuario que intenta acceder al sistema, esta bloqueado por el administrador');
+			redirect(base_url());
+			return;
+		}
+	
+		// Verificar las credenciales del usuario
+		$res = $this->user_model->login($username, sha1($password));
 		$logo = $this->confempresa_model->getEmpresa($data);
 		$empresa = $this->modelgeneral->getTableWhereRow('tb_empresa', ['cod_empresa' => 1]);
+	
 		if (!$res) {
-			$this->session->set_flashdata('message', 'Acceso denegado, contacte con el administrador del sistema 921842183');
+			// Incrementar el contador de intentos fallidos en la base de datos
+			$this->user_model->incrementarIntentos($username);
+	
+			// Obtener el número actual de intentos fallidos
+			$intentos_actuales = $this->user_model->getIntentos($username);
+	
+			if ($intentos_actuales >= 3) {
+				// Bloquear al usuario si excede los 3 intentos
+				$this->user_model->bloquearUsuario($username);
+				$this->session->set_flashdata('message', 'Acceso bloqueado por múltiples intentos fallidos. Por favor, contacte con el administrador del sistema.');
+			} else {
+				$this->session->set_flashdata('message', 'Acceso denegado, datos incorrectos.');
+			}
 			redirect(base_url());
 		} else {
+			// Restablecer los intentos fallidos y activar al usuario si el inicio de sesión es exitoso
+			$this->user_model->restablecerIntentos($username);
+	
 			$puntoventa = $this->modelgeneral->getTableWhereRow('tb_puntoventa', ['pordefecto_puntoventa' => 1]);
 			$almacen = $this->modelgeneral->getTableWhereRow('tb_puntoventa_almacen', ['cod_puntoventa' => $puntoventa->cod_puntoventa, 'pordefecto' => 1]);
-
+	
 			$data = array(
 				'cod_usu' => $res->cod_usu,
 				'apell_usu' => $res->apell_usu,
@@ -52,11 +86,12 @@ class Auth extends CI_Controller
 				'login_usu' => $res->login_usu,
 				'foto' => $logo->photo,
 				'puntoventa' => $puntoventa->cod_puntoventa,
-				//'puntoventa_reportes' => $puntoventa->cod_puntoventa,
 				'almacen' => $almacen->cod_almacen,
 				'login' => TRUE,
 				'stock_minimo' => TRUE,
 				'movil_expert' => $empresa->movilexpert_emp,
+				'enable_serv' => $empresa->servicio_check,
+				'multi_business' => $empresa->emp_pos,
 				'alerta_stock' => $empresa->alerta_stock_emp,
 				'alerta_vencimiento' => $empresa->alerta_vencimiento_emp
 			);
@@ -64,6 +99,7 @@ class Auth extends CI_Controller
 			redirect(base_url('perfil'));
 		}
 	}
+	
 
 	public function acceder()
 	{

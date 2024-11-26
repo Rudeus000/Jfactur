@@ -57,7 +57,7 @@ class Reportventastotal_model extends CI_Model {
 		}
 
 		$this->db->from('tb_venta as v');
-		$this->db->select('td.nom_tipdocumento,CONCAT(t.serie, " - ", v.numero_vent) as documento,v.fecha_vent,c.doc_cliente,c.nomb_cliente,v.moneda_vent,v.monto_bd,v.total_vent,v.estado_vent');
+		$this->db->select('td.nom_tipdocumento,CONCAT(t.serie, " - ", v.numero_vent) as documento,v.fecha_vent,c.doc_cliente,v.pago_vent,c.nomb_cliente,v.moneda_vent,v.saldo_vent,v.monto_vent,monto_efectivo,v.monto_bd,v.total_vent,v.estado_vent');
 		$this->db->join('tb_cliente as c','v.id_cliente = c.id_cliente','left');
 		$this->db->join('tb_talonario as t','v.cod_talonario = t.cod_talonario','left');
 		$this->db->join('tb_tipodocumento as td','t.cod_tipdocu = td.cod_tipdocu','left');
@@ -124,6 +124,13 @@ class Reportventastotal_model extends CI_Model {
 				$moneda = 'DOLARES';
 			}
 
+			if ($q->pago_vent== 'CO') {			
+				$tipago = '<label class="label label-primary" >Contado</label>';
+			}
+			if ($q->pago_vent== 'CRE') {
+				$tipago = '<label class="label label-danger" >Credito</label>';
+			}
+
 		  if ($q->estado_vent== 'G') {
 				$estado = '<label class="label label-success" >Generado</label>';
 			}elseif($q->estado_vent== 'A'){
@@ -133,7 +140,7 @@ class Reportventastotal_model extends CI_Model {
 			// $abono = $this->getAbonos($q->tb_proveedor_id);
 			// $saldo = $q->monto - $abono;
 			// $buttons = '<a class="btn btn-xs btn-success" href="'.base_url('administrador/regcuentascobrar/detalle/'.$q->tb_proveedor_id).'"><i class="fa fa-plus"></i> Detalle</a>';
-			$row[] = [$q->nom_tipdocumento,$q->documento,$q->fecha_vent,$q->doc_cliente,$q->nomb_cliente,$moneda,$q->monto_bd,$q->total_vent,$estado];
+			$row[] = [$q->nom_tipdocumento,$q->documento,$q->fecha_vent,$q->doc_cliente,$q->nomb_cliente,$moneda,$tipago,$q->monto_bd,$q->monto_efectivo,$q->saldo_vent,$q->total_vent,$estado];
 		}
 
 		$result['aaData'] = $row;

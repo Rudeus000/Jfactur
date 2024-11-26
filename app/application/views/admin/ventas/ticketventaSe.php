@@ -19,12 +19,18 @@
 	<div class="w70">: <?= $ventas->doc_cliente ?></div> -->
 	<div class="w30">
 
-		<b><?= ($ventas->codsunat_tipdocucli == '6') ? 'Razon Social' : 'Nombres' ?></b>
+		<b>EMPRESA</b>
 	</div>
-	<div class="w70">: <?= character_limiter($ventas->nomb_cliente, 5, '****') ?></div>
+	<div class="w70">: BITEL</div>
 
-	<!-- <div class="w30"><b>Vendedor</b></div>
-	<div class="w70">: <?= character_limiter($ventas->nomb_usu . '***') ?></div> -->
+	<div class="w30"><b>NUMERO</b></div>
+	<?php foreach ($ventas->detalle as $dt) : ?>
+			
+				
+					<div class="w70">: <?= $dt->producto_isdn ?></div>
+					
+				
+			<?php endforeach ?>
 
 
 	<div class="w30"><b>Fecha</b></div>

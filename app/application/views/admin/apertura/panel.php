@@ -110,7 +110,7 @@
 <div class="modal" id="ModalAgregarConfirmar" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
-      <form id="FormConfirmarAgregar" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">
+      <form id="FormConfirmarAgregar" action="" method="post" autocomplete="off">
         <div class="modal-header bg-danger">
           <h5 class="modal-title text-white" id="exampleModalLabel"><i class="fab fa-expeditedssl m-r-5"></i>Confirmar permiso</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">

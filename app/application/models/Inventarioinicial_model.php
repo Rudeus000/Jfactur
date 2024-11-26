@@ -110,7 +110,7 @@ class Inventarioinicial_model extends CI_Model {
           $fecha = '';
         }
         
-        $row[] = [$q->nomb_product,$q->nomb_marca,$q->nomb_categoria,$q->nomb_unid,$q->prec_costo,$q->prec_venta,$fecha,$q->stock,$inputStockInicial];
+        $row[] = ['PR' . sprintf('%07d', $q->cod_producto),$q->nomb_product,$q->nomb_marca,$q->nomb_categoria,$q->nomb_unid,$q->prec_costo,$q->prec_venta,$fecha,$q->stock,$inputStockInicial];
   		}
 
   		$result['aaData'] = $row;

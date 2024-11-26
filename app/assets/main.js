@@ -2534,10 +2534,32 @@ $(function () {
 			destino: { required: true }
 		},
 		submitHandler: function () {
-			enviarFormulario('#FormCierre', function (json) {
-				$('#ModalAgregarCierre').modal('hide');
-				$('#TableCierre').DataTable().ajax.reload();
-			})
+			// Obtener los valores del nombre de usuario y contraseña del supervisor
+			var usuarioSupervisor = $('#usuariosuper').val();
+			var contrasenaSupervisor = $('#passwordsuper').val();
+
+			// Realizar la solicitud AJAX para verificar la contraseña del supervisor
+			$.ajax({
+				url: path + 'administrador/regcajacierre/verificaContrasena',
+				type: 'POST',
+				data: { usuariosuper: usuarioSupervisor, contrasenasuper: contrasenaSupervisor },
+				dataType: 'json',
+				success: function (res) {
+					if (res.success) {
+						// Si la contraseña es correcta, enviar el formulario
+						enviarFormulario('#FormCierre', function (json) {
+							$('#ModalAgregarCierre').modal('hide');
+							$('#TableCierre').DataTable().ajax.reload();
+						});
+					} else {
+						// Mostrar mensaje de error si la contraseña es incorrecta
+						$('#supervisor-validation-message').html(res.message).show();
+					}
+				},
+				error: function () {
+					alert('Hubo un error al verificar la contraseña del supervisor. Intente nuevamente.');
+				}
+			});
 		}
 	});
 
@@ -4345,6 +4367,7 @@ $(function () {
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": false },
+			{ "orderable": false },
 
 		]
 	});
@@ -4678,6 +4701,7 @@ $(function () {
 		"columns": [
 			{ "orderable": true },
 			{ "orderable": true },
+			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
@@ -8121,6 +8145,11 @@ $(function () {
 			);
 		}
 	});
+	$("#VentaProductoAutocomplete").on("input", function () {
+		let serieIngresada = $(this).val(); // Captura el valor ingresado
+		console.log("Serie capturada al escribir:", serieIngresada);
+		$('#serieSeleccionada').val(serieIngresada); // Almacena en el input oculto
+	});
 
 	$("#VentaProductoAutocomplete").easyAutocomplete({
 		minCharNumber: 2,
@@ -8229,7 +8258,7 @@ $(function () {
 		}
 	});
 
-	function obtenerSeriesProducto() {
+	function obtenerSeriesProducto(serieSeleccionada = null) {
 		idTypeAssignmentProduct = $('input[name=idTypeAssignmentProduct]').val();
 		// producto = $('input[name=producto]').val();
 		if (idTypeAssignmentProduct !== "") {
@@ -8246,7 +8275,7 @@ $(function () {
 				});
 				$('#select2-series').prop('disabled', false);
 
-				if (res.length == 0) {
+				if (res.length === 0) {
 					$('input[name=serieCheckProducto]').prop('checked', false);
 					$('input[name=serieCheckProducto]').prop('disabled', true);
 					$('input[name=cantidadProducto]').prop('disabled', false);
@@ -8256,6 +8285,14 @@ $(function () {
 					$('input[name=serieCheckProducto]').prop('disabled', false);
 					$('input[name=cantidadProducto]').prop('disabled', true);
 					$('#select2-series').prop('disabled', false);
+					// Preseleccionar la serie almacenada
+					let serieTemp = $('#serieSeleccionada').val();
+					if (serieTemp) {
+						let serieEncontrada = res.find(serie => serie.id === serieTemp); // Ajusta 'id' si el campo de la serie es diferente
+						if (serieEncontrada) {
+							$('#select2-series').val(serieTemp).trigger('change.select2');
+						}
+					}
 				}
 			},
 			"JSON"
@@ -8292,8 +8329,12 @@ $(function () {
 		} else if (tipo == 3) {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', false);
-			$('input[name=monto_tb]').prop('disabled', true).val(0);
-			// $('input[name=monto]').val(0).prop('readonly', false);
+			$('input[name=montoRecibido]').val(0).prop('readonly', true);
+			$('input[name=monto_efectivo]').val(0).prop('readonly', true);
+			let montobd = parseFloat($('#ModalprocesarVenta input[name=monto]').val());
+
+			$('input[name=monto_tb]').val(round(montobd, 2));
+
 		} else {
 			$('select[name=tipoTarjeta]').prop('disabled', true);
 			$('input[name=operacion]').prop('disabled', true);
@@ -8416,7 +8457,7 @@ $(function () {
 		$('#ModalprocesarVenta input[name=monto_tb]').val(0);
 		calcularMontoRecibidotb(); // Llama a la función para actualizar el monto_efectivo con el valor inicial
 	});
-	
+
 	// $('#ModalprocesarVenta input[name=monto_total]').val();
 	$('#ModalprocesarVenta input[name=montoRecibido]').focusout(function (event) {
 		calcularVueltoProductoVenta();
@@ -8437,13 +8478,13 @@ $(function () {
 		}
 	}
 	function calcularMontoRecibidotb() {
-		let montoRecibidotb = parseFloat($('#ModalprocesarVenta input[name=monto_tb]').val());		
-		let monto = parseFloat($('#FormVentaAgregar input[name=monto]').val());
+		let montoRecibidotb = parseFloat($('#ModalprocesarVenta input[name=monto_tb]').val());
+		let monto = parseFloat($('#ModalprocesarVenta input[name=monto]').val());
 		if (!isNaN(monto)) {
 			if (montoRecibidotb >= 0) {
-				let montoActual = monto - montoRecibidotb;				
+				let montoActual = monto - montoRecibidotb;
 				$('input[name=monto_efectivo]').val(round(montoActual, 2));
-				$('input[name=montoRecibido]').val(round(montoActual, 2));			
+				$('input[name=montoRecibido]').val(round(montoActual, 2));
 			}
 		}
 	}
@@ -9050,6 +9091,7 @@ $(function () {
 		var saldo = total - monto;
 		$('input[name=saldo]').val(saldo.toFixed(2));
 		$('input[name=monto_efectivo]').val(monto.toFixed(2));
+		$('input[name=montoRecibido]').val(monto.toFixed(2));
 	});
 
 	$('.FormVenta input[name=dias]').focusout(function (event) {
@@ -9125,7 +9167,7 @@ $(function () {
 		$('#TableCuotasContent').show();
 		let periodo = $('#ModalprocesarVenta select[name=periodo]').val();
 		let numero = $('#ModalprocesarVenta input[name=numero_cuotas]').val();
-		$.post(path + "administrador/regventas/calcularCuotas", { periodo, numero, total:saldo },
+		$.post(path + "administrador/regventas/calcularCuotas", { periodo, numero, total: saldo },
 			function (data, textStatus, jqXHR) {
 				var tr = '';
 				$.each(data, function (index, value) {
@@ -10523,12 +10565,83 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
-			{ "orderable": false }
+			{ "orderable": false },
+			{ "orderable": false },
+			{ "orderable": false },
 
 
 		]
 	});
 
+
+	// Cambiar entre mostrar y ocultar el motivo de rechazo según la acción seleccionada
+	$('#accion').on('change', function () {
+		if ($(this).val() === '2') {
+			$('#motivoRechazoContainer').show();
+			$('#motivoRechazo').prop('required', true);
+		} else {
+			$('#motivoRechazoContainer').hide();
+			$('#motivoRechazo').prop('required', false);
+		}
+	});
+
+	// Validar el traspaso cuando se hace clic en el botón de Confirmar
+	$('#btnValidar').on('click', function () {
+		let cod_traspaso = $('#idTraspaso').val();
+		let password = $('#password').val();
+		let estado = $('#accion').val();
+		let motivoRechazo = $('#motivoRechazo').val();
+
+		// Aquí puedes hacer una llamada AJAX para enviar estos datos al servidor y procesar la validación
+		$.ajax({
+			url: path + 'administrador/regtraspasos/validarTraspaso',  // Cambia a la URL correcta en tu controlador
+			type: 'POST',
+			data: {
+				cod_traspaso: cod_traspaso,
+				password: password,
+				estado: estado,
+				motivoRechazo: motivoRechazo
+			},
+			dataType: 'json',  // Asegúrate de que la respuesta sea en formato JSON
+			success: function (response) {
+				// Verifica si la respuesta es exitosa
+				if (response.success) {
+					// Muestra el mensaje de éxito con Swal.fire
+					Swal.fire({
+						type: 'success',
+						title: 'Éxito',
+						text: response.message, // Mensaje del servidor
+						allowOutsideClick: false,  // Evita que se cierre al hacer clic fuera
+						confirmButtonText: 'Aceptar',
+					}).then(function() {
+						// Recargar la página solo después de presionar "Aceptar"
+						
+							location.reload();
+						
+					});
+				} else {
+					// Si no es exitoso, muestra el mensaje de error
+					Swal.fire({
+						type: 'error',
+						title: 'Error',
+						text: response.message,
+						allowOutsideClick: false,
+						confirmButtonText: 'Aceptar',
+					});
+				}
+			},
+			error: function (xhr, status, error) {
+				// Si hay un error en la solicitud AJAX, muestra un mensaje genérico
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'No se pudo completar la solicitud.',
+					allowOutsideClick: false,
+					confirmButtonText: 'Aceptar',
+				});
+			}
+		});
+	});
 	$('#TableTraspasos tbody').on('click', 'td.details-control', function () {
 		var tr = $(this).closest('tr');
 		var row = TableTraspasos.row(tr);
@@ -10545,7 +10658,7 @@ $(function () {
 	});
 
 	function formatTraspasoDetalle(d) {
-		var query = jQuery.parseJSON(d[12]);
+		var query = jQuery.parseJSON(d[14]);
 
 		var table = `
 	
@@ -10701,7 +10814,7 @@ $(function () {
 					if (resp.success) {
 						Swal.fire({
 							title: "Buen trabajo!",
-							text: "El traspaso se realizo correctamente",
+							text: "El traspaso se encuentra pendiente de validacion por el receptor",
 							type: "success"
 						});
 						setTimeout(() => {
@@ -12443,6 +12556,9 @@ $(function () {
 		},
 		"columns": [
 
+			{ "orderable": true },
+			{ "orderable": true },
+			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
 			{ "orderable": true },
@@ -14253,7 +14369,7 @@ $(function () {
 						$('#emp-pos').trigger('click');
 						Swal.fire({
 							title: "Buen trabajo",
-							text: "Se activo la opcion de servicio",
+							text: "Se activo la opcion de multi business",
 							type: "success"
 						});
 					} else {

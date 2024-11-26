@@ -96,7 +96,7 @@ class Productos_model extends CI_Model {
 
                                                   
 
-            $row[] = [$q->TipoArticulo,$q->NombreProducto,$q->marca,$q->categoria,$q->unidad,$q->prec_costo
+            $row[] = ['PR' . sprintf('%07d', $q->cod_producto),$q->TipoArticulo,$q->NombreProducto,$q->marca,$q->categoria,$q->unidad,$q->prec_costo
             ,$q->prec_venta,$q->stockmin_product,$q->fecha_modificacion,$estado,$botones];
 		}
 		$result['aaData'] = $row;

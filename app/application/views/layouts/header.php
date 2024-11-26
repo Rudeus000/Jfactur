@@ -60,10 +60,10 @@
 
     <!-- <link href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js" rel="stylesheet"> -->
     <script src="<?php echo base_url_app(); ?>assets/js/helpers.js"></script>
-
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- <script src="ruta/a/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
-
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
 </head>
 
 <body data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>" data-multibusiness="<?= $this->session->userdata('multi_business') ?>">
@@ -191,8 +191,8 @@
 
         </div>
         <!-- Top Bar End -->
-         
-    <!-- </div> -->
+
+        <!-- </div> -->
 
 </body>
 

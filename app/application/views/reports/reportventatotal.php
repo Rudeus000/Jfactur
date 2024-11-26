@@ -137,7 +137,10 @@
                          <th style="text-align: center;">Ruc/Dni</th>
                          <th style="text-align: center;">Cliente</th>                         
                          <th style="text-align: center;">Moneda</th>
-                         <th style="text-align: center;">Yape </th>
+                         <th style="text-align: center;">T.venta</th>
+                         <th style="text-align: center;">Yape</th>
+                         <th style="text-align: center;">Efectivo</th>
+                         <th style="text-align: center;">Credito</th>                         
                          <th style="text-align: center;">Importe</th>
                          <th style="text-align: center;">Estado</th>                       
                        
