@@ -193,9 +193,9 @@
   $(document).ready(function () {
     $('#btnSubirYComparar').click(function () {
       var formData = new FormData();
-        formData.append('archivo', $('#archivo')[0].files[0]);
-        formData.append('fecha_inicio', $('#fecha_inicio').val());
-        formData.append('fecha_fin', $('#fecha_fin').val());
+      formData.append('archivo', $('#archivo')[0].files[0]);
+      formData.append('fecha_inicio', $('#fecha_inicio').val());
+      formData.append('fecha_fin', $('#fecha_fin').val());
 
       $.ajax({
         url: '<?php echo base_url("reportes/regreportedetallado/compararExcel"); ?>', // Cambia esta URL según la ruta de tu controlador
@@ -220,16 +220,36 @@
               tablaHTML += "<tr><td>" + item.isdn + "</td><td>" + item.codigoTienda + "</td><td>" + item.tipoCanal + "</td><td>" + item.tipoTransaccion + "</td><td>" + item.cantidad + "</td></tr>";
             });
 
-            tablaHTML += "</tbody></table>";
+            tablaHTML += "</tbody>";
+
+            // Agregar pie de tabla vacío (se actualizará dinámicamente)
+            tablaHTML += "<tfoot><tr style='font-weight: bold;'><td colspan='4' style='text-align: right;'>Suma Total:</td><td id='sumaCantidad'>0.00</td></tr></tfoot>";
+            tablaHTML += "</table>";
             tablaHTML += "<br><strong>Total de ISDN no registrados: " + isdnData.length + "</strong>";
 
             // Mostrar mensaje y la tabla
             $('#resultado-comparacion').html(mensaje + tablaHTML);
 
-            // Inicializar DataTable con paginación
-            $('#tablaISDN').DataTable({
+            // Inicializar DataTable
+            var table = $('#tablaISDN').DataTable({
               "pageLength": 10 // Muestra 10 elementos por página
             });
+
+            // Actualizar suma en tiempo real
+            table.on('draw', function () {
+              var sumaTotal = 0;
+
+              // Iterar sobre las filas visibles actualmente
+              table.rows({ search: 'applied' }).data().each(function (row) {
+                sumaTotal += parseFloat(row[4] || 0); // La columna 'cantidad' está en el índice 4
+              });
+
+              // Actualizar el pie de tabla
+              $('#sumaCantidad').text(sumaTotal.toFixed(2));
+            });
+
+            // Disparar evento para calcular la suma inicial
+            table.draw();
 
           } else {
             $('#resultado-comparacion').html('<p>Todos los ISDN están registrados.</p>');

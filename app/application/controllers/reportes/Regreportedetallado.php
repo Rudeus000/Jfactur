@@ -167,6 +167,8 @@ class Regreportedetallado extends CI_Controller
 				}
 	
 				$isdnNoEncontrados = [];
+				$sumaTotalCantidad = 0; // Variable para la suma total de la columna 'cantidad'
+
 	
 				foreach ($worksheet->getRowIterator(8) as $row) {
 					$isdnCell = $worksheet->getCell("Q" . $row->getRowIndex())->getValue();
@@ -180,6 +182,9 @@ class Regreportedetallado extends CI_Controller
 					$tipoCanal = $worksheet->getCell("E" . $row->getRowIndex())->getValue();
 					$tipoTransaccion = $worksheet->getCell("S" . $row->getRowIndex())->getValue();
 					$cantidad = $worksheet->getCell("O" . $row->getRowIndex())->getValue();
+
+					// Acumular la suma total de la columna 'cantidad'
+					$sumaTotalCantidad += (float)$cantidad;
 	
 					// Verificar si el ISDN existe en la base de datos dentro del rango de fechas
 					if (!$this->reportedetallado_model->verificarISDNConFecha($isdnCell, $fechaInicio, $fechaFin)) {

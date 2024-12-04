@@ -620,6 +620,20 @@
                                                     <input type="text" name="bipay" id="" class="form-control">
                                                 </div>
                                             </div>
+                                            <!-- <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Almacen:<span class="text-danger">
+                                                            *</span></label>
+                                                    <select class="form-control select2 select2-hidden-accessible"
+                                                        name="almacen">
+                                                        <option value="">--Selecciona--</option>
+                                                        <?php foreach ($almacen as $a): ?>
+                                                            <option value="<?= $a->cod_almacen ?>"><?= $a->nomb_almacen ?>
+                                                            </option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                                </div>
+                                            </div> -->
                                             <div class="col-md-4" id="decuento_prod">
                                                 <div class="form-group">
                                                     <label class="control-label">Descuento:<span class="text-danger">

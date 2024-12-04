@@ -15,8 +15,14 @@ class Regdashboard extends CI_Controller
 
 	public function index()
 	{
+		$empresa = $this->Empresa_model->getempresa();
 
-
+		if ($empresa->advertisement_comp == 1 && !$this->session->userdata('modal_shown')) {
+			$this->session->set_userdata('show_modal', true);
+			$this->session->set_userdata('modal_shown', true); // Evita que se vuelva a mostrar
+		} else {
+			$this->session->set_userdata('show_modal', false);
+		}
 		$data = array(
 			'dia' => $this->reportdashboard_model->rowCountVentasDia(),
 			'clientes' => $this->reportdashboard_model->rowCountClientes(),
@@ -296,6 +302,12 @@ class Regdashboard extends CI_Controller
 			->update('tb_usuario');
 	}
 
+	public function advertisement_comp(){
+		if ($this->session ->userdata('advertisement_comp'==true)){
+
+
+		}
+	}
 	public function productosStockMinimosFechasVencimiento()
 	{
 		if ($this->session->userdata('stock_minimo') == true) {

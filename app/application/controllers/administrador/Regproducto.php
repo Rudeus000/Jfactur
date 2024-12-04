@@ -25,6 +25,7 @@ class Regproducto extends CI_Controller
 
     public function index()
     {
+        // $data['almacen'] = $this->modelgeneral->getTable('tb_almacen');
         $data['permisos'] = $this->permisos;
         $data['categoria'] = $this->modelgeneral->getTable('tb_categoria');
         $data['marca'] = $this->modelgeneral->getTable('tb_marca');

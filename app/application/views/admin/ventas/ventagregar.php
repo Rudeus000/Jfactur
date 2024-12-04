@@ -376,7 +376,7 @@
 
                         <div class="form-group">
                           <div class="custom-control custom-checkbox">
-                          <input type="hidden" id="serieSeleccionada" name="serieSeleccionada" value="">
+                            <input type="hidden" id="serieSeleccionada" name="serieSeleccionada" value="">
                             <input type="checkbox" class="custom-control-input" id="serieChek" name="serieCheckProducto"
                               readonly>
                             <label class="custom-control-label" for="serieChek">Series</label>

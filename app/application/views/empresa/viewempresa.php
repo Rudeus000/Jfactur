@@ -212,13 +212,13 @@
 											<input <?= $empresa->igv == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="igv" />
 											<label for="igv">IGV 10%</label>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<input <?= $empresa->movilexpert_emp == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" id="movil-expert" />
-											<label for="movil-expert">Modulo telefonia</label>
+											<label for="movil-expert">Mod.Telefonia</label>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<input <?= $empresa->MovAlmacenAutomatico == 'S' ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small" name="mov-almacen" id="mov-almacen" />
-											<label for="mov-almacen">Movi. Almacén Aut.</label>
+											<label for="mov-almacen">Mov.Almacén Aut.</label>
 										</div>
 										<div class="col-md-1">
 											<input <?= $empresa->emp_pos == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-size="small"  id="emp-pos" />
@@ -231,6 +231,10 @@
 										<div class="col-md-1">
 											<input <?= $empresa->servicio_check == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="servicio-status" />
 											<label for="servicio-status">Servicio</label>
+										</div>
+										<div class="col-md-1">
+											<input <?= $empresa->anun_check == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="servicio-status" />
+											<label for="anun-status">Anuncio</label>
 										</div>
 									</div>
 									<div class="row">

@@ -13685,7 +13685,7 @@ $(function () {
 
 		}
 	});
-	// exportar utilidad buta a excel
+	// exportar utilidad bruta a excel
 	$('#Reportutilidadexcel').click(function (event) {
 		let form = $('#ReportcomisionproductosFormBusqueda').serializeObject();
 		let params = $.param(form);
