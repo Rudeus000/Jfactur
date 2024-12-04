@@ -233,8 +233,8 @@
 											<label for="servicio-status">Servicio</label>
 										</div>
 										<div class="col-md-1">
-											<input <?= $empresa->anun_check == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="servicio-status" />
-											<label for="anun-status">Anuncio</label>
+											<input <?= $empresa->advertisement_comp == 1 ? 'checked' : '' ?> type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-secondary-color="#FC0B00" data-size="small" id="advert-status" />
+											<label for="advert-status">Anuncio</label>
 										</div>
 									</div>
 									<div class="row">
@@ -506,6 +506,32 @@
 						<div class="col-md-12">
 							<label>Confirmar permiso del Administrador</label>
 							<input type="password" name="contrasenacserv" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-primary btn-rounded">Confirmar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal" id="ModalAdvertStatusConfirmar" role="dialog" aria-labelledby="exampleModalLabelCompany" aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<form id="FormConfirmarAdvert" action="<?= base_url('administrador/regcajaapertura/confirmarContrasena') ?>" method="post" autocomplete="off">
+				<div class="modal-header bg-danger">
+					<h5 class="modal-title text-white" id="exampleModalLabel"><i class="fab fa-expeditedssl m-r-5"></i>Confirmar permiso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<label>Confirmar permiso del Administrador</label>
+							<input type="password" name="contrasenaadvert" class="form-control">
 						</div>
 					</div>
 				</div>

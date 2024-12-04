@@ -196,6 +196,16 @@ class Regempresa extends CI_Controller {
 		$this->session->set_userdata('enable_serv',$serviciostatus);
 	}
 
+	public function advertisement()
+	{
+		$advert = $this->input->post('advert_status');
+		$this->modelgeneral->editRegist('tb_empresa',
+			['cod_empresa' => 1],
+			['advertisement_comp' => $advert]
+		);
+		$this->session->set_userdata('enable_advert',$advert);
+	}
+
 	function anuncio(){		
 		// $data['cumpleano_clin'] = $this->input->post('cumpleano_clin');
 		$data['anuncio'] = $this->input->post('anuncio');		

@@ -14292,7 +14292,7 @@ $(function () {
 			return;
 		}
 	});
-
+	
 
 	$('#FormConfirmarServicio').validate({
 		rules: {
@@ -14322,6 +14322,65 @@ $(function () {
 						});
 					}
 					$('#ModalServicioStatusConfirmar').modal('hide');
+				},
+				"JSON"
+			);
+		}
+	});
+
+	/* ============================================ */
+	/*      END CHECK OPCION DE SERVICI             */
+	/* ============================================ */
+
+	/* ============================================ */
+	/* CHECK OPCION DE ADVERTISEMENT                */
+	/* ============================================ */
+	$('#advert-status').change(function (e) {
+		//e.preventDefault();
+		var check = $(this);
+		if (check.is(':checked')) {
+			$('#advert-status').trigger('click');
+			$('#ModalAdvertStatusConfirmar').modal();
+		} else {
+			$.post(path + "empresa/regempresa/advertisement", { 'advert_status': 0 },
+				function (data, textStatus, jqXHR) {
+				},
+				"HTML"
+			);
+			return;
+		}
+	});
+
+
+
+	$('#FormConfirmarAdvert').validate({
+		rules: {
+			contrasenacs: { required: true }
+		},
+		submitHandler: function () {
+			var contrasena = $('input[name=contrasenaadvert]').val();
+			$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
+				function (data, textStatus, jqXHR) {
+					if (data['success'] == true) {
+						$.post(path + "empresa/regempresa/advertisement", { 'advert_status': 1 },
+							function (data, textStatus, jqXHR) {
+							},
+							"HTML"
+						);
+						$('#advert-status').trigger('click');
+						Swal.fire({
+							title: "Buen trabajo",
+							text: "Se activo la opcion de servicio",
+							type: "success"
+						});
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "La contraseña es incorrecta.",
+							type: "error"
+						});
+					}
+					$('#ModalAdvertStatusConfirmar').modal('hide');
 				},
 				"JSON"
 			);
