@@ -36,7 +36,7 @@
            </li>
 
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 3 || $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-boxes"></i><span class="float-right label bg-primary inline m-t-10">nuevo</span> <span>Almacén unid.</span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -85,7 +85,7 @@
 
 
 
-         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 3) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-shopping-cart"></i> <span> Compras </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -99,7 +99,7 @@
 
            </li>
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 5) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 2 || $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-shopping-basket"></i><span class="float-right label bg-primary inline m-t-10">nuevo</span><span> Ventas </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -112,7 +112,7 @@
              </ul>
            </li>
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="ion ion-ios-albums"></i><span>Gestion de doc. elec. </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -126,7 +126,7 @@
              </ul>
            </li>
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 6) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 3) : ?>
            <li>
              <a href="javascript: void(0);"><i class=" fas fa-clipboard-list"></i><span> Reporte Compras </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
@@ -161,7 +161,7 @@
              </ul>
            </li>
          <?php endif ?>
-         <?php if ($this->session->userdata('perfil') == 5) : ?>
+         <?php if ($this->session->userdata('perfil') == 2 || $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-clipboard"></i><span> Reporte Ventas </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">            

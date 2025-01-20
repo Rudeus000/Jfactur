@@ -15,6 +15,7 @@ class Regventas extends CI_Controller
 		$this->load->model('modelgeneral');
 		$this->load->model('notaunidad_model');
 		$this->load->model('notavalorizado_model');
+		$this->load->model('cajaapertura_model');
 		// $this->load->model('modelgeneral');
 
 		$this->load->helper('general');
@@ -115,6 +116,30 @@ class Regventas extends CI_Controller
 
 	public function agregar()
 	{
+		$cod_puntoventa = $this->session->userdata('puntoventa');
+		$cod_usu = $this->session->userdata('cod_usu');
+	
+		// Validar sesión del usuario
+		if (empty($cod_puntoventa) || empty($cod_usu)) {
+			// Redirigir al login si no hay sesión activa
+			redirect('auth/login');
+			return;
+		}
+	
+		// Llamar al modelo para verificar el estado de la caja
+		$cajas_pendientes = $this->cajaapertura_model->validarCajasPendientes($cod_puntoventa, $cod_usu);
+		$hora_actual = (int)date('H'); // Hora actual en formato 24 horas
+	
+		// Bloquear acceso si hay cajas pendientes de validación después de las 11:00 am
+		if ($cajas_pendientes['estado'] === 'pendiente_validacion' && $hora_actual >= 11) {
+			$this->session->set_flashdata('error', 'El módulo de ventas está bloqueado porque la caja no ha sido validada. Contacta a tu jefe directo.');
+			//redirect('home/saleblock'); // Redirigir a una página de error o advertencia
+			$this->load->view('layouts/header');
+		$this->load->view('layouts/aside');
+		$this->load->view('home/saleblock');
+		$this->load->view('layouts/footer');
+			return;
+		}
 		$data['cod_medio_pay'] = $this->modelgeneral->getTable('sunat_mediosdepago');
 		$data['cod_bien'] = $this->modelgeneral->getTable('sunat_codigodetraccion');
 		$data['banco'] = $this->modelgeneral->getTableWhere('tb_banco', ['id_entidad_financiera' => 18]);

@@ -2224,12 +2224,56 @@ $(function () {
 			$('#TableApertura').DataTable().ajax.reload();
 		}
 	});
-
 	$('#AgregarApertura').click(function (event) {
-		$('input[name=contrasena]').val('');
-		$('#ModalAgregarConfirmar').modal();
-		$('#FormApertura').find('button:submit').prop('disabled', false).html('Guardar');
+		const $btn = $(this);
+		$btn.prop('disabled', true).html('Validando...');
+	
+		$.post(path + "administrador/regcajaapertura/verificarCashStatus", {}, function (data) {
+			$btn.prop('disabled', false).html('Agregar Apertura');
+	
+			if (data.success) {
+				Swal.fire({
+					title: "Apertura Disponible",
+					text: data.message,
+					type: "success"
+				}).then(() => {
+					$('input[name=contrasena]').val('');
+					$('#ModalAgregarConfirmar').modal();
+					$('#FormApertura').find('button:submit').prop('disabled', false).html('Guardar');
+				});
+			} else if (data.block_sales) {
+				Swal.fire({
+					title: "Módulo Bloqueado",
+					text: data.message,
+					type: "error"				
+				});
+			} else {
+				Swal.fire({
+					title: "Error de Apertura",
+					text: data.message,
+					type: "error"
+				});
+			}
+		}, "JSON").fail(function (jqXHR, textStatus, errorThrown) {
+			$btn.prop('disabled', false).html('Agregar Apertura');
+	
+			let errorMessage = "No se pudo conectar con el servidor. Inténtelo de nuevo más tarde.";
+			if (textStatus === "timeout") {
+				errorMessage = "La solicitud tardó demasiado en responder. Verifica tu conexión.";
+			} else if (jqXHR.status === 500) {
+				errorMessage = "Error interno del servidor. Contacta al administrador.";
+			}
+	
+			Swal.fire({
+				title: "Error de Conexión",
+				text: errorMessage,
+				type: "error"
+			});
+		});
 	});
+	
+	
+
 
 	$('#FormConfirmarAgregar').validate({
 		rules: {
@@ -2447,6 +2491,7 @@ $(function () {
 			{ "orderable": false },
 			{ "orderable": false },
 			{ "orderable": false },
+			{ "orderable": false },
 			{ "orderable": false }
 		],
 
@@ -2456,6 +2501,65 @@ $(function () {
 			totalCierre(json.totalCierre);
 		}
 	});
+
+	// Validar el traspaso cuando se hace clic en el botón de Confirmar
+	$('#btnValidarCierre').on('click', function () {
+		let cod_cierre = $('#idCierre').val();
+		let password_cierre = $('#passwordCierre').val();
+		let estado_cierre = $('#accionCierre').val();
+		let motivoRechazo_cierre = $('#motivoRechazoCierre').val();
+
+		// Aquí puedes hacer una llamada AJAX para enviar estos datos al servidor y procesar la validación
+		$.ajax({
+			url: path + 'administrador/regcajacierre/validarCierre',  // Cambia a la URL correcta en tu controlador
+			type: 'POST',
+			data: {
+				cod_cierre: cod_cierre,
+				password: password_cierre,
+				estado: estado_cierre,
+				motivoRechazo: motivoRechazo_cierre
+			},
+			dataType: 'json',  // Asegúrate de que la respuesta sea en formato JSON
+			success: function (response) {
+				// Verifica si la respuesta es exitosa
+				if (response.success) {
+					// Muestra el mensaje de éxito con Swal.fire
+					Swal.fire({
+						type: 'success',
+						title: 'Éxito',
+						text: response.message, // Mensaje del servidor
+						allowOutsideClick: false,  // Evita que se cierre al hacer clic fuera
+						confirmButtonText: 'Aceptar',
+					}).then(function() {
+						// Recargar la página solo después de presionar "Aceptar"
+						
+							location.reload();
+						
+					});
+				} else {
+					// Si no es exitoso, muestra el mensaje de error
+					Swal.fire({
+						type: 'error',
+						title: 'Error',
+						text: response.message,
+						allowOutsideClick: false,
+						confirmButtonText: 'Aceptar',
+					});
+				}
+			},
+			error: function (xhr, status, error) {
+				// Si hay un error en la solicitud AJAX, muestra un mensaje genérico
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'No se pudo completar la solicitud.',
+					allowOutsideClick: false,
+					confirmButtonText: 'Aceptar',
+				});
+			}
+		});
+	});
+
 	$('#FormCierreFiltro').validate({
 		submitHandler: function () {
 			$('#TableCierre').DataTable().ajax.reload(function (json) {
@@ -7712,11 +7816,12 @@ $(function () {
 				d.desde = $("input[name=desde]").val();
 				d.hasta = $("input[name=hasta]").val();
 				d.cliente = $('input[name=cliente]').val();
-				if (d.vendedor = $('select[name=vendedor]').val()) {
-					d.vendedor = $('select[name=vendedor]').val();
-				} else {
-					d.vendedor = $('input[name=vendedor]').val();
-				}
+				// Validar si el campo vendedor está presente y tiene valor
+				const vendedorSelect = $('select[name=vendedor]').val();
+				const vendedorInput = $('input[name=vendedorcod]').val();
+				d.vendedor = vendedorSelect ? vendedorSelect : vendedorInput;
+				// console.log('Datos enviados:', d);
+
 				d.punto = $('select[name=punto]').val();
 				d.estado = $('select[name=estado]').val();
 				d.cod_venta = $("input[name=cod_venta]").val();
@@ -13449,11 +13554,12 @@ $(function () {
 				d.hasta = $("input[name=hasta]").val();
 				d.almacen = $("input[name=almacen]").val();
 				d.cliente = $("input[name=cliente]").val();
-				if (d.vendedor = $('select[name=vendedor]').val()) {
-					d.vendedor = $('select[name=vendedor').val();
-				} else {
-					d.vendedor = $('input[name=vendedorcod]').val();
-				}
+				
+				// Validar si el campo vendedor está presente y tiene valor
+				const vendedorSelect = $('select[name=vendedor]').val();
+				const vendedorInput = $('input[name=vendedorcod]').val();
+				d.vendedor = vendedorSelect ? vendedorSelect : vendedorInput;
+				//console.log('Datos enviados:', d);
 			}
 		},
 		"columns": [

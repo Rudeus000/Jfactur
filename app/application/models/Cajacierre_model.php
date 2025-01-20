@@ -27,6 +27,9 @@ class Cajacierre_model extends CI_Model
 
   function getCierre($data)
   {
+    $perfil = $this->session->userdata('perfil');
+    $cod_puntoventa = $this->session->userdata('puntoventa'); // Obtener el punto de venta de la sesión
+
     $this->db->from('tb_caja_apertura');
     $this->db->select('tb_caja_apertura.cod_apertura');
     $this->db->join('tb_caja as origen', 'tb_caja_apertura.cod_caja = origen.cod_caja');
@@ -45,6 +48,11 @@ class Cajacierre_model extends CI_Model
     $this->db->where('fecha_apertura >= ', $data['desde']);
     $this->db->where('fecha_apertura <=', $data['hasta']);
     $this->db->where('estado_apertura', 'C');
+
+      // Si no es administrador, filtrar por sucursal
+      if ($perfil != 1) {
+        $this->db->where('tb_caja_apertura.cod_puntoventa', $cod_puntoventa);
+    }
     if ($data['caja'] != '') {
       $this->db->having("origen LIKE'%". $data['caja']."%'");
     }
@@ -73,6 +81,11 @@ class Cajacierre_model extends CI_Model
     $this->db->where('fecha_apertura >= ', $data['desde']);
     $this->db->where('fecha_apertura <=', $data['hasta']);
     $this->db->where('estado_apertura', 'C');
+
+    // Si no es administrador, filtrar por sucursal
+    if ($perfil != 1) {
+      $this->db->where('tb_caja_apertura.cod_puntoventa', $cod_puntoventa);
+  }
 
     if ($data['caja'] != '') {
       $this->db->having("origen LIKE'%".$data['caja']."%'");
@@ -103,7 +116,24 @@ class Cajacierre_model extends CI_Model
       $buttons = '
       <div class="btn-group">
      <a href="' . base_url('administrador/regcajacierre/imprimirCierrecaja/' . $q->cod_apertura) . '" target="_blank" class="btn btn-sm btn-success" data-toggle="tooltip" title="Imprimir Ticket"><i class="far fa-file-alt"></i></a>';
-      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->nomb_puntoventa,$q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura,$q->yape_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
+
+     $boton_estado = '';
+     $es_administrador = $this->session->userdata('perfil') == 1;
+     
+     if ($q->cash_status == 0) { // Pendiente
+         if ($es_administrador) {
+             $boton_estado = '<button class="btn btn-warning" onclick="abrirModalValidacionCierre(' . $q->cod_apertura . ')">Pendiente</button>';
+         } else {
+             $boton_estado = '<span class="badge badge-warning">Pendiente</span>';
+         }
+     } elseif ($q->cash_status == 1) { // Aceptado
+         if ($es_administrador) {
+             $boton_estado = '<button class="btn btn-success" disabled>Validado</button>';
+         } else {
+             $boton_estado = '<span class="badge badge-success">Validado</span>';
+         }
+     } 
+      $row[] = [$q->cod_apertura, $q->fechacierre_apertura, $q->nomb_puntoventa,$q->origen, $q->NombreUsuario, $q->destino, $q->obs_movimiento,$boton_estado, $q->monto_movimiento, $q->efectivo_apertura, $q->tarjeta_apertura,$q->yape_apertura, $q->bonos_apertura, $q->credito_apertura, $q->total_apertura, $buttons];
     }
 
     $result['aaData'] = $row;

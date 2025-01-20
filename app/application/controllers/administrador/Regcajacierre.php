@@ -241,6 +241,59 @@ class Regcajacierre extends CI_Controller
 
 		echo json_encode($res);
 	}
+	public function validarCierre()
+	{
+
+		// Obtener los parámetros desde la solicitud POST
+		$cod_cierre = $this->input->post('cod_cierre');
+		$estado_cierre = $this->input->post('estado');
+		$motivoRechazo = 'Hola';
+		$password_cierre = $this->input->post('password');
+
+		// Validar que los parámetros no sean nulos
+		if (is_null($cod_cierre) || is_null($estado_cierre) || empty($password_cierre)) {
+			echo json_encode(['success' => false, 'message' => 'Parámetros insuficientes para validar el traspaso.']);
+			return;
+		}
+
+		// Obtener al usuario autenticado desde la sesión
+		$usuario_actual = $this->session->userdata('cod_usu');
+
+		// Obtener el cierre
+		$cierre = $this->db->get_where('tb_caja_apertura', ['cod_apertura' => $cod_cierre])->row_array();
+
+		if (!$cierre) {
+			echo json_encode(['success' => false, 'message' => 'Cierre no encontrado.']);
+			return;
+		}
+		// Verificar que el usuario que valida no sea el mismo que transfiere
+		if ($cierre['cod_usu'] === $usuario_actual) {
+			echo json_encode(['success' => false, 'message' => 'No puedes validar tu propio cierre.']);
+			return;
+		}
+
+		// Verificar la contraseña del usuario autenticado
+		$usuario = $this->db->get_where('tb_usuario', ['cod_usu' => $usuario_actual])->row_array();
+
+		if (!$usuario || sha1($password_cierre) !== $usuario['passwoord_usu']) {
+			echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta.']);
+			return;
+		}
+
+		// Cambiar el estado del cierre a aceptado o rechazado
+		$actualizar_data = [
+			'cash_status' => $estado_cierre,
+			//'cod_usu_valida' => $usuario_actual // Guardar el usuario que valida
+		];
+		// if ($estado == 2 && !empty($motivoRechazo)) {
+		// 	$actualizar_data['motivo_rechazo'] = $motivoRechazo;
+		// }
+
+		$this->db->where('cod_apertura', $cod_cierre);
+		$this->db->update('tb_caja_apertura', $actualizar_data);
+
+		echo json_encode(['success' => true, 'message' => 'Cierre de caja  validado correctamente.']);
+	}
 
 }
 

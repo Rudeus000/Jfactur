@@ -213,6 +213,70 @@ class Regcajaapertura extends CI_Controller {
 		echo json_encode($resp);
 	}
 
+	public function verificarCashStatus()
+	{
+		$cod_puntoventa = $this->session->userdata('puntoventa');
+		$cod_usu = $this->session->userdata('cod_usu');
+	
+		if (empty($cod_puntoventa) || empty($cod_usu)) {
+			echo json_encode([
+				'success' => false,
+				'message' => 'El código del punto de venta no está disponible. Verifica tu sesión.'
+			]);
+			return;
+		}
+	
+		// Obtener estado de cajas
+		$cajas_pendientes = $this->cajaapertura_model->validarCajasPendientes($cod_puntoventa, $cod_usu);
+		$hora_actual = (int)date('H'); // Hora actual en formato 24 horas
+	
+		// Validar estado de la caja
+		switch ($cajas_pendientes['estado']) {
+			case 'pendiente_validacion':
+				if ($hora_actual >= 11) {
+					echo json_encode([
+						'success' => false,
+						'block_sales' => true,
+						'message' => 'El módulo de ventas está bloqueado porque la caja no ha sido validada. Contacta a tu jefe directo.'
+					]);
+				} else {
+					echo json_encode([
+						'success' => true,
+						'message' => 'La caja está cerrada y pendiente de validación, pero puedes continuar trabajando.'
+					]);
+				}
+				break;
+	
+			case 'pendiente_cierre':
+				echo json_encode([
+					'success' => false,
+					'message' => 'No puedes abrir una nueva caja porque: ' . $cajas_pendientes['mensaje']
+				]);
+				break;
+	
+			case 'pendiente':
+				echo json_encode([
+					'success' => false,
+					'message' => 'No puedes abrir una nueva caja porque: ' . $cajas_pendientes['mensaje']
+				]);
+				break;
+	
+			case 'disponible':
+				echo json_encode([
+					'success' => true,
+					'message' => 'La caja está disponible para apertura. Procede con confianza.'
+				]);
+				break;
+	
+			default:
+				echo json_encode([
+					'success' => false,
+					'message' => 'Ocurrió un error inesperado en la validación de cajas.'
+				]);
+				break;
+		}
+	}
+	
 }
 
 /* End of file Regcajaapertura.php */

@@ -66,15 +66,14 @@
                               <input type="text" name="caja" class="form-control">
                             </div>
                           </div>
-                          <?php if ($this->session->userdata('perfil') == 1): ?>
+                          <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4) : ?>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
                                 <input type="text" name="usuario" class="form-control">
                               </div>
                             </div>
-                          <?php endif ?>
-                          <?php if ($this->session->userdata('perfil') != 1): ?>
+                          <?php else : ?>                         
                             <div class="col-md-4" hidden="">
                               <div class="form-group">
                                 <label class="control-label">Usuario:</label>
@@ -116,6 +115,7 @@
                             <th>Usuario</th>
                             <th>Caja Destino</th>
                             <th>Observacion</th>
+                            <th>Estado</th>
                             <th class="bg-danger">Egresos</th>
                             <th class="bg-primary">Efectivo</th>
                             <th class="bg-warning">Tarjeta</th>
@@ -128,15 +128,15 @@
                         </thead>
                         <tfoot>
                           <tr>
-                            <th colspan="13" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
+                            <th colspan="14" style="text-align:right"><span class="text-primary">Ingresos caja:</th>
                             <th><strong><span id="Totalingresos"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="13" style="text-align:right"><span class="text-danger">Egresos caja:</th>
+                            <th colspan="14" style="text-align:right"><span class="text-danger">Egresos caja:</th>
                             <th><strong><span id="Totalegresos" class="label label-danger"></span></strong></th>
                           </tr>
                           <tr>
-                            <th colspan="13" style="text-align:right">Total en caja:</th>
+                            <th colspan="14" style="text-align:right">Total en caja:</th>
                             <th><strong><span id="Totalcaja"></span></strong></th>
                           </tr>
                         </tfoot>
@@ -591,3 +591,43 @@
     </div>
   </div>
 </div><!-- /.modal -->
+
+<div class="modal" id="modalValidacionCierre" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Validar cierre</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="idCierre">
+        <label>Contraseña del administrador</label>
+        <input type="password" class="form-control" id="passwordCierre" required>
+        <br>
+        <label>Acción</label>
+        <select id="accionCierre" class="form-control">
+          <option value="1">Aceptar</option>
+          <option value="2">Rechazar</option>
+        </select>
+        <br>
+        <div id="motivoRechazoContainer" style="display: none;">
+          <label>Motivo de Rechazo</label>
+          <textarea class="form-control" id="motivoRechazoCierre" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnValidarCierre" class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function abrirModalValidacionCierre(cod_apertura) {
+    // Asignar el valor de cod_tras al input oculto
+    $('#idCierre').val(cod_apertura);
+
+    // Mostrar el modal de validación
+    $('#modalValidacionCierre').modal('show');
+}
+
+</script>

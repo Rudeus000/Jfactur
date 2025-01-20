@@ -63,7 +63,16 @@
                                                       <option value="1">Activado</option>
                                                       <option value="2">Inactivo</option>
                                                    </select>
-                                                </div>   
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label  class="col-form-label">Rol</label>
+                                                    <select class="form-control select2 select2-hidden-accessible" name="estado" >
+                                                      <option value="1">Admin</option>
+                                                      <option value="2">Asesor</option>
+                                                      <option value="3">Almacenero</option>
+                                                      <option value="4">Supervisor</option>
+                                                   </select>
+                                                </div>     
                                             </div>
                                             <div class="form-group mb-0 justify-content-end row">
                                                 <div class="col-0">

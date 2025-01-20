@@ -62,15 +62,14 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Vendedor:</label>
-                          <?php if ($this->session->userdata('perfil') == 1) : ?>
+                          <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4) : ?>
                             <select name="vendedor" class="form-control">
                               <option value="">Seleccione</option>
                               <?php foreach ($vendedores as $v) : ?>
                                 <option value="<?= $v->cod_usu ?>"><?= $v->apell_usu . ' ' . $v->nomb_usu ?></option>
                               <?php endforeach ?>
                             </select>
-                          <?php endif  ?>
-                          <?php if ($this->session->userdata('perfil') != 1) : ?>
+                          <?php else:  ?>                          
                             <input type="text" id="vendedor" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
                             <input type="text" name="vendedor" readonly class="form-control" value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
                           <?php endif ?>

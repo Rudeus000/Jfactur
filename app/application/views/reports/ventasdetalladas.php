@@ -63,15 +63,15 @@
                         </div> -->
                         <div class="form-group">
                           <label class="control-label">Agentes:</label>
-                          <?php if ($this->session->userdata('perfil') == 1): ?>
-                            <select name="vendedor" class="form-control">
+                          <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4): ?>
+                            <select name="vendedor" class="form-control select2">
                               <option value="">Seleccione</option>
                               <?php foreach ($vendedores as $v): ?>
                                 <option value="<?= $v->cod_usu ?>"><?= $v->apell_usu . ' ' . $v->nomb_usu ?></option>
                               <?php endforeach ?>
                             </select>
-                          <?php endif ?>
-                          <?php if ($this->session->userdata('perfil') != 1): ?>
+                          <?php else: ?>
+                            <!-- Mostrar input oculto -->
                             <input type="text" id="vendedorcod" name="vendedorcod"
                               value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
                             <input type="text" name="vendedorname" readonly class="form-control"
@@ -154,37 +154,37 @@
 
 <!-- Modal para mostrar los resultados de la comparación -->
 <div class="modal" id="miModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-success">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Comparación de ISDN</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulario para subir el archivo -->
-                <form id="form-comparacion" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="archivo" class="form-label">Seleccione el archivo Excel</label>
-                        <input type="file" class="form-control" id="archivo" name="archivo" accept=".xlsx, .xls">
-                    </div>
-                    <!-- Filtro de fecha -->
-                    <div class="input-group">
-                            <!-- <input type="text" name="desde" class="form-control datepicker" value="2020-07-23"> -->
-                            <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control datepicker"
-                              value="<?= date('Y-m-d') ?>">
-                            <input type="date" id="fecha_fin" name="fecha_fin" class="form-control datepicker"
-                              value="<?= date('Y-m-d') ?>">
-                              <button type="button" id="btnSubirYComparar" class="btn btn-primary">Comparar</button>
-                          </div>                   
-                    
-                </form>
-                <!-- Contenedor para mostrar el resultado de la comparación -->
-                <div id="resultado-comparacion" style="margin-top: 20px;"></div>
-            </div>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h5 class="modal-title text-white" id="exampleModalLabel">Comparación de ISDN</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario para subir el archivo -->
+        <form id="form-comparacion" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="archivo" class="form-label">Seleccione el archivo Excel</label>
+            <input type="file" class="form-control" id="archivo" name="archivo" accept=".xlsx, .xls">
+          </div>
+          <!-- Filtro de fecha -->
+          <div class="input-group">
+            <!-- <input type="text" name="desde" class="form-control datepicker" value="2020-07-23"> -->
+            <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control datepicker"
+              value="<?= date('Y-m-d') ?>">
+            <input type="date" id="fecha_fin" name="fecha_fin" class="form-control datepicker"
+              value="<?= date('Y-m-d') ?>">
+            <button type="button" id="btnSubirYComparar" class="btn btn-primary">Comparar</button>
+          </div>
+
+        </form>
+        <!-- Contenedor para mostrar el resultado de la comparación -->
+        <div id="resultado-comparacion" style="margin-top: 20px;"></div>
+      </div>
     </div>
+  </div>
 </div>
 
 
