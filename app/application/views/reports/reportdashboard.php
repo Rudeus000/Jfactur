@@ -184,22 +184,23 @@
     <button type="button" class="close" onclick="Custombox.close();">
         <span>&times;</span><span class="sr-only">Close</span>
     </button>
-    <h4 class="custom-modal-title">Oferta por tiempo limitado</h4>
+    <h4 class="custom-modal-title">Aviso importante</h4>
     <div class="custom-modal-text">
-        <h5>Estimado socio estamos muy contentos de ser su aliado de gestion comercial por eso queremos premiarlo con 3 meses gratis.</h5>
+        <h5>Estimados usuarios se actualizo el sistema con la version del 2025 de manera exitosa.</h5>
         <br>
-        Para acceder al beneficio de 3 meses gratis debe seguir los siguientes pasos.
+        Es posible que veas algunos cambios como.
         <br>
-        -Registrar 2 recomendados a usar el servicio de bfacturas
+        -Validacion de cierre y apertura de caja
         <br>
-        -Escanea el codigo QR.
+        -Agregacion de perfiles y grupos.
         <br>
-        -Rellene los datos solicitados.
-        <br>       
+        -Reporte de comparatividad de bipay.
+        <br>
+        -Correccion de errores y seguridad       
     </div>
     <div class="modal-body text-center">
         <!-- Aquí mostramos el código QR -->
-        <iframe src="https://qr-codes-svg-wapp.s3.amazonaws.com/bmTIVM.svg?1733223794025" width="50%" height="200px" frameborder="0"></iframe>
+        <iframe src="<?php echo base_url_app(); ?>assets/images/advertisement/anuncioqr.png" width="50%" height="300" frameborder="0"></iframe>
         <!-- Aquí mostramos el código aleatorio generado -->
         <p id="codigoAleatorio" class="mt-3"></p>
     </div>
@@ -220,7 +221,7 @@
             const codigo = generarCodigo();
 
             // Actualizar el contenido del modal con el código generado
-            document.getElementById('codigoAleatorio').textContent = `Código referido: ${codigo}`;
+            document.getElementById('codigoAleatorio').textContent = `Código de averias: ${codigo}`;
 
             // Abrir el modal con Custombox
             if (showModal) {
