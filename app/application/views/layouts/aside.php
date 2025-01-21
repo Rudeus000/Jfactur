@@ -85,7 +85,7 @@
 
 
 
-         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 3) : ?>
+         <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 3 || $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-shopping-cart"></i> <span> Compras </span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">
