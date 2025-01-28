@@ -104,12 +104,13 @@ class Cajacierre_model extends CI_Model
     $result = array();
     $result['sEcho'] = $data['sEcho'];
     $result['iTotalRecords'] = $queryTotal->num_rows();
-    $result['iTotalDisplayRecords'] = $query->num_rows();
+    $result['iTotalDisplayRecords'] = $queryLike->num_rows();
     $result['efectivo_apertura'] = $total_apertura;
     $result['totalEgresos'] = $totalEgresos;
     $result['totalCierre'] = $total_apertura - $totalEgresos;
 
     $row = [];
+    // $query = $this->db->get();
     foreach ($query->result() as $q) {
 
       $turnos = ['M' => 'Mañana', 'T' => 'Tarde', 'N' => 'Noche'];
@@ -138,6 +139,11 @@ class Cajacierre_model extends CI_Model
 
     $result['aaData'] = $row;
     return $result;
+  }
+
+  function getCierreexport($data){
+    
+
   }
 }
 

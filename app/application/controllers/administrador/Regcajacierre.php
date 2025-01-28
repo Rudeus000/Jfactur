@@ -222,7 +222,7 @@ class Regcajacierre extends CI_Controller
 
 		// Consulta en la base de datos para validar el usuario y contraseña de un supervisor
 		$query = $this->db->from('tb_usuario')
-			->where('cod_perfil', 1) // perfil de supervisor
+			->where_in('cod_perfil', [1, 4]) // perfil de supervisor
 			->where('login_usu', $usuariosuper) // Verificar el nombre de usuario
 			->where('passwoord_usu', sha1($contrasenasuper)) // Verificar la contraseña
 			->get();

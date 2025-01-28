@@ -66,7 +66,7 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
 </head>
 
-<body  onload="iniNevada(100,80)" data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>" data-multibusiness="<?= $this->session->userdata('multi_business') ?>">
+<body  data-path="<?= base_url() ?>" data-path-app="<?= base_url_app() ?>" data-movilexpert="<?= $this->session->userdata('movil_expert') ?>" data-multibusiness="<?= $this->session->userdata('multi_business') ?>">
 
     <!-- Begin page -->
     <div id="wrapper">

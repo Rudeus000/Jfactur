@@ -102,7 +102,7 @@
                     </fieldset>
                     <br>
 
-                    <div>
+                    <div class="table-responsive">
                       <table id="TableCierre"
                         class="table  table-striped tblcierre tblcierree tblcierret tblcierrey tblcierrea"
                         cellspacing="0" width="100%">

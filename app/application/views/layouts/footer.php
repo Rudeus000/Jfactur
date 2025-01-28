@@ -423,7 +423,7 @@ var path = '<?= base_url_app(); ?>';
     });
 </script>
 
-<script>
+<!-- <script>
 
 
 class oCopo{
@@ -607,4 +607,4 @@ setTimeout(nevar, vel, copos,  coposAncho, coposAlto, vel);
 
 
 
-</script>
+</script> -->

@@ -93,46 +93,47 @@
                         </div>
                       </div>
                     </div>
+                    <!-- </div> -->
+                  </form>
+                </fieldset>
+                <br>
+                <div class="table-responsive">
+                  <table id="TableReporteDetalladoVentas" class="table table-sm" cellspacing="0" width="100%">
+
+                    <thead class="table-light">
+
+                      <tr class="">
+                        <th style="text-align: center; width: 50px">Fecha</th>
+                        <th style="text-align: center;">Almacen</th>
+                        <th style="text-align: center;">Punto de Venta</th>
+                        <th style="text-align: center;">DNI-RUC</th>
+                        <th style="text-align: center;">Cliente</th>
+                        <th style="text-align: center;">Documento</th>
+                        <th style="text-align: center;">Vendedor</th>
+                        <th style="text-align: center;">Unidad.M.</th>
+                        <th style="text-align: center;">Producto</th>
+                        <th style="text-align: center;">ISDN</th>
+                        <th style="text-align: center;">Serie</th>
+                        <th style="text-align: center;">T.Pago</th>
+                        <th style="text-align: center;">N.Opracion</th>
+                        <th style="text-align: center;">Prec.Unid.</th>
+                        <th style="text-align: center;">Descuento</th>
+                        <th style="text-align: center;">Prec.Desc.</th>
+                        <th class="bg-danger" tyle="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th colspan="17" style="text-align:right">Total:</th>
+                        <th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+
+                </div>
+                <!-- End #wizard-vertical -->
               </div>
-              </form>
-              </fieldset>
-              <br>
-              <!-- <div class="table-responsive"> -->
-              <table id="TableReporteDetalladoVentas" class="table table-striped table-sm mb-0" cellspacing="0"
-                width="100%">
-
-                <thead>
-                  <tr class="btn-dark">
-                    <th style="text-align: center; width: 50px">Fecha</th>
-                    <th style="text-align: center;">Almacen</th>
-                    <th style="text-align: center;">Punto de Venta</th>
-                    <th style="text-align: center;">DNI-RUC</th>
-                    <th style="text-align: center;">Cliente</th>
-                    <th style="text-align: center;">Documento</th>
-                    <th style="text-align: center;">Vendedor</th>
-                    <th style="text-align: center;">Unidad.M.</th>
-                    <th style="text-align: center;">Producto</th>
-                    <th style="text-align: center;">ISDN</th>
-                    <th style="text-align: center;">Serie</th>
-                    <th style="text-align: center;">T.Pago</th>
-                    <th style="text-align: center;">N.Opracion</th>
-                    <th style="text-align: center;">Prec.Unid.</th>
-                    <th style="text-align: center;">Descuento</th>
-                    <th style="text-align: center;">Prec.Desc.</th>
-                    <th class="bg-danger" tyle="text-align: center;">Cantidad</th>
-                    <th style="text-align: center;">Subtotal</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th colspan="17" style="text-align:right">Total:</th>
-                    <th><strong><span id="TotalReporteVentasDetalladas"></span></strong></th>
-                  </tr>
-                </tfoot>
-              </table>
-
-              <!-- </div> -->
-              <!-- End #wizard-vertical -->
             </div>
           </div>
         </div>

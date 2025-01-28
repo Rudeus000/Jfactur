@@ -29,7 +29,8 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header bg-success">
-                <h3 class="my-0 text-white">Lista de ventas<a href="<?= base_url('administrador/regventas/agregar') ?>" class="btn btn-pink float-right"><i class="fa fa-plus m-r-5"></i>Vender</a></h3>
+                <h3 class="my-0 text-white">Lista de ventas<a href="<?= base_url('administrador/regventas/agregar') ?>"
+                    class="btn btn-pink float-right"><i class="fa fa-plus m-r-5"></i>Vender</a></h3>
               </div>
               <div class="card-body">
                 <!-- <div class="row">
@@ -47,8 +48,10 @@
                         <div class="form-group">
                           <label class="control-label">Fecha</label>
                           <div class="input-group">
-                            <input type="text" name="desde" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
-                            <input type="text" name="hasta" class="form-control datepicker" value="<?= date('Y-m-d') ?>">
+                            <input type="text" name="desde" class="form-control datepicker"
+                              value="<?= date('Y-m-d') ?>">
+                            <input type="text" name="hasta" class="form-control datepicker"
+                              value="<?= date('Y-m-d') ?>">
                           </div>
                         </div>
                       </div>
@@ -62,17 +65,22 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="control-label">Vendedor:</label>
-                          <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4) : ?>
+                          <?php if ($this->session->userdata('perfil') == 1 || $this->session->userdata('perfil') == 4): ?>
+                            <!-- Mostrar select -->
                             <select name="vendedor" class="form-control">
                               <option value="">Seleccione</option>
-                              <?php foreach ($vendedores as $v) : ?>
+                              <?php foreach ($vendedores as $v): ?>
                                 <option value="<?= $v->cod_usu ?>"><?= $v->apell_usu . ' ' . $v->nomb_usu ?></option>
                               <?php endforeach ?>
                             </select>
-                          <?php else:  ?>                          
-                            <input type="text" id="vendedor" name="vendedor" value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
-                            <input type="text" name="vendedor" readonly class="form-control" value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
+                          <?php else: ?>
+                            <!-- Mostrar input oculto -->
+                            <input type="text" id="vendedorcod" name="vendedorcod"
+                              value="<?= $this->session->userdata('cod_usu') ?>" style="display:none">
+                            <input type="text" name="vendedorname" readonly class="form-control"
+                              value="<?= $this->session->userdata('nomb_usu') . ' ' . $this->session->userdata('apell_usu') ?>">
                           <?php endif ?>
+
                         </div>
 
                       </div>
@@ -81,7 +89,7 @@
                           <label class="control-label">Punto de venta:</label>
                           <select name="punto" class="form-control">
                             <option value="">Seleccione</option>
-                            <?php foreach ($puntos as $p) : ?>
+                            <?php foreach ($puntos as $p): ?>
                               <option value="<?= $p->cod_puntoventa ?>"><?= $p->nomb_puntoventa ?></option>
                             <?php endforeach ?>
                           </select>
@@ -103,15 +111,20 @@
                         </div>
                       </div>
                       <div class="col-md-1">
-                        <div class="form-group">                          
-                          <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i class="fa fa-search"></i></button>
+                        <div class="form-group">
+                          <button class="btn btn-success waves-effect waves-light" style="margin-top: 29px"><i
+                              class="fa fa-search"></i></button>
                         </div>
-                      </div>                     
-                      <div class="col-md-6">                      
+                      </div>
+                      <div class="col-md-6">
 
-                        <a id="VentasReportePdf" href="#" class="btn btn-danger" style="margin-top: 29px" target="_blank"><i class="far fa-file-pdf m-r-5"></i>Vista PDF</a>
-                        <a id="VentasReporteExcel" href="#" class="btn btn-primary" style="margin-top: 29px" target="_blank"><i class="fas fa-angle-double-up m-r-5"></i> Vistas EXCEL</a>
-                        <a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>" class="btn btn-purple" style="margin-top: 29px" target="_blank"><i class="fab fa-accessible-icon m-r-5"></i>Ir a ventas detalladas</a>
+                        <a id="VentasReportePdf" href="#" class="btn btn-danger" style="margin-top: 29px"
+                          target="_blank"><i class="far fa-file-pdf m-r-5"></i>Vista PDF</a>
+                        <a id="VentasReporteExcel" href="#" class="btn btn-primary" style="margin-top: 29px"
+                          target="_blank"><i class="fas fa-angle-double-up m-r-5"></i> Vistas EXCEL</a>
+                        <a href="<?= base_url('reportes/regreportedetallado/Ventas') ?>" class="btn btn-purple"
+                          style="margin-top: 29px" target="_blank"><i class="fab fa-accessible-icon m-r-5"></i>Ir a
+                          ventas detalladas</a>
                       </div>
 
                     </div>
@@ -119,7 +132,8 @@
                 </fieldset>
                 <br>
                 <div class="table-responsive">
-                  <table id="TableVentas" class="table  mb-0 table-hover table-striped table-borderless" cellspacing="0" width="100%">
+                  <table id="TableVentas" class="table  mb-0 table-hover table-striped table-borderless" cellspacing="0"
+                    width="100%">
                     <thead>
                       <tr class="bg-success text-white">
                         <th></th>
@@ -160,7 +174,8 @@
 
 
 
-<div id="ModalEnviarWhatsapp" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalEnviarWhatsapp" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -177,16 +192,17 @@
           </div>
           <input id="numero-whatsapp" type="text" class="form-control" placeholder="Número de whatsapp">
           <div class="input-group-append">
-            
-            <button id="generar-documento-whatsapp" data-id="99999" data-telefono="222222" 
-            class="btn btn-success waves-effect waves-light" type="button">Generar documento a enviar</button>
+
+            <button id="generar-documento-whatsapp" data-id="99999" data-telefono="222222"
+              class="btn btn-success waves-effect waves-light" type="button">Generar documento a enviar</button>
           </div>
         </div>
-     
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-        <a href="" target="_blank" class="btn btn-primary disabled" id="enviar-whatsapp"><i class="ion ion-logo-whatsapp"></i> Enviar Whatsapp</a>
+        <a href="" target="_blank" class="btn btn-primary disabled" id="enviar-whatsapp"><i
+            class="ion ion-logo-whatsapp"></i> Enviar Whatsapp</a>
       </div>
     </div>
   </div>
@@ -194,7 +210,8 @@
 
 
 
-<div id="ModalEnviarEmail" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="ModalEnviarEmail" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -205,7 +222,8 @@
       </div>
       <div class="modal-body">
         <h4 id="email-cliente"></h4>
-        <button id="generar-documento-email" class="btn btn-success btn-md btn-lg btn-block"><i class="fa fa-envelope"></i> Enviar Email</button>
+        <button id="generar-documento-email" class="btn btn-success btn-md btn-lg btn-block"><i
+            class="fa fa-envelope"></i> Enviar Email</button>
       </div>
     </div>
   </div>
