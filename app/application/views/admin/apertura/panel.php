@@ -120,7 +120,7 @@
         <div class="modal-body">
           <div class="row">
 						<div class="col-md-12">         
-							<label>Confirmar permiso del Administrador</label>
+							<label>Valide la apertura con tu jefe directo</label>
 							<input type="password" name="contrasena" class="form-control">
 						</div>
 					</div>

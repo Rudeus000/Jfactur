@@ -48,7 +48,7 @@ class Regcajaapertura extends CI_Controller {
 	{
 		$contrasena = $this->input->post('contrasena');
 		$query = $this->db->from('tb_usuario')
-		->where('cod_perfil',1)
+		->where_in('cod_perfil', [1, 4]) // perfil de supervisor
 		//->where('cod_grupo',5)
 		->where('passwoord_usu',sha1($contrasena))
 		->get();
