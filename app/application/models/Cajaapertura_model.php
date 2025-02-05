@@ -86,20 +86,24 @@ class Cajaapertura_model extends CI_Model
         // 1. Verificar cajas abiertas pendientes de validación
         //$hora_actual = (int)date('H'); // Obtiene la hora actual en formato 24h
 
-        $query_abiertas_pendientes = $this->db->select('cod_apertura, fecha_apertura, horainicio_apertura, cod_usu')
-            ->from('tb_caja_apertura')
-            ->where('cod_puntoventa', $cod_puntoventa)
-            ->where('cod_usu', $cod_usu)
-            ->where('estado_apertura', 'A') // Caja abierta
-            ->where('cash_status', 0) // Pendiente de validación
-            ->get();
-    
-        if ($query_abiertas_pendientes->num_rows() > 0 && $hora_actual >= 11) {
-            return [
-                'estado' => 'pendiente_validacion',
-                'mensaje' => 'No puedes operar porque la caja está abierta pero pendiente de validación por el administrador.'
-            ];
-        }
+     // 1. Verificar cajas abiertas pendientes de validación
+     $query_abiertas_pendientes = $this->db->select('cod_apertura, fecha_apertura, horainicio_apertura, cod_usu')
+     ->from('tb_caja_apertura')
+     ->where('cod_puntoventa', $cod_puntoventa)
+     ->where('cod_usu', $cod_usu)
+     ->where('estado_apertura', 'A') // Caja abierta
+     ->where('cash_status', 0) // Pendiente de validación
+     ->get();
+
+ if ($query_abiertas_pendientes->num_rows() > 0) {
+     // Bloqueo solo si es después de la hora establecida
+     if ($hora_actual >= 11) {
+         return [
+             'estado' => 'pendiente_validacion',
+             'mensaje' => 'No puedes operar porque la caja está abierta pero pendiente de validación por el administrador.'
+         ];
+     }
+ }
 
     // 1. Verificar si hay cajas de días anteriores no cerradas
     $query_pendientes_cierre = $this->db->select('cod_apertura, fecha_apertura, horainicio_apertura, horafin_apertura, cod_usu')

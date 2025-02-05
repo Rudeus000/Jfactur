@@ -2237,9 +2237,10 @@ $(function () {
 					text: data.message,
 					type: "success"
 				}).then(() => {
-					$('input[name=contrasena]').val('');
-					$('#ModalAgregarConfirmar').modal();
-					$('#FormApertura').find('button:submit').prop('disabled', false).html('Guardar');
+					$('#ModalAgregarApertura').modal();
+					// $('input[name=contrasena]').val('');
+					// $('#ModalAgregarConfirmar').modal();
+					// $('#FormApertura').find('button:submit').prop('disabled', false).html('Guardar');
 				});
 			} else if (data.block_sales) {
 				Swal.fire({
@@ -2275,30 +2276,30 @@ $(function () {
 	
 
 
-	$('#FormConfirmarAgregar').validate({
-		rules: {
-			contrasena: { required: true }
-		},
-		submitHandler: function () {
-			var contrasena = $('input[name=contrasena]').val();
-			$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
-				function (data, textStatus, jqXHR) {
-					if (data['success'] == true) {
-						$('#ModalAgregarApertura').modal();
-						$('#ModalAgregarConfirmar').modal('hide');
-					} else {
-						$('#ModalAgregarConfirmar').modal('hide');
-						Swal.fire({
-							title: "Error",
-							text: "La contraseña es incorrecta.",
-							type: "error"
-						});
-					}
-				},
-				"JSON"
-			);
-		}
-	});
+	// $('#FormConfirmarAgregar').validate({
+	// 	rules: {
+	// 		contrasena: { required: true }
+	// 	},
+	// 	submitHandler: function () {
+	// 		var contrasena = $('input[name=contrasena]').val();
+	// 		$.post(path + "administrador/regcajaapertura/verificaContrasena", { contrasena },
+	// 			function (data, textStatus, jqXHR) {
+	// 				if (data['success'] == true) {
+	// 					$('#ModalAgregarApertura').modal();
+	// 					$('#ModalAgregarConfirmar').modal('hide');
+	// 				} else {
+	// 					$('#ModalAgregarConfirmar').modal('hide');
+	// 					Swal.fire({
+	// 						title: "Error",
+	// 						text: "La contraseña es incorrecta.",
+	// 						type: "error"
+	// 					});
+	// 				}
+	// 			},
+	// 			"JSON"
+	// 		);
+	// 	}
+	// });
 
 	function verificaDisponibilidadApertura(callback) {
 		var form = $('#FormApertura').serializeObject();
