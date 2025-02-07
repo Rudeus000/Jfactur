@@ -247,7 +247,7 @@ class Regcajacierre extends CI_Controller
 		// Obtener los parámetros desde la solicitud POST
 		$cod_cierre = $this->input->post('cod_cierre');
 		$estado_cierre = $this->input->post('estado');
-		$motivoRechazo = 'Hola';
+		//$motivoRechazo = 'Hola';
 		$password_cierre = $this->input->post('password');
 
 		// Validar que los parámetros no sean nulos
