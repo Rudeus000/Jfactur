@@ -197,7 +197,7 @@
 
          <?php endif ?>
 
-         <?php if ($this->session->userdata('perfil') == 1) : ?>
+         <?php if ($this->session->userdata('perfil') == 1|| $this->session->userdata('perfil') == 4) : ?>
            <li>
              <a href="javascript: void(0);"><i class="fas fa-users"></i><span>Gestion de clientes</span> <span class="menu-arrow"></span></a>
              <ul class="nav-second-level" aria-expanded="false">

@@ -118,26 +118,26 @@ class Regventas extends CI_Controller
 	{
 		$cod_puntoventa = $this->session->userdata('puntoventa');
 		$cod_usu = $this->session->userdata('cod_usu');
-	
+
 		// Validar sesión del usuario
 		if (empty($cod_puntoventa) || empty($cod_usu)) {
 			// Redirigir al login si no hay sesión activa
 			redirect('auth/login');
 			return;
 		}
-	
+
 		// Llamar al modelo para verificar el estado de la caja
 		$cajas_pendientes = $this->cajaapertura_model->validarCajasPendientes($cod_puntoventa, $cod_usu);
-		$hora_actual = (int)date('H'); // Hora actual en formato 24 horas
-	
+		$hora_actual = (int) date('H'); // Hora actual en formato 24 horas
+
 		// Bloquear acceso si hay cajas pendientes de validación después de las 11:00 am
 		if ($cajas_pendientes['estado'] === 'pendiente_validacion' && $hora_actual >= 11) {
 			$this->session->set_flashdata('error', 'El módulo de ventas está bloqueado porque la caja no ha sido validada. Contacta a tu jefe directo.');
 			//redirect('home/saleblock'); // Redirigir a una página de error o advertencia
 			$this->load->view('layouts/header');
-		$this->load->view('layouts/aside');
-		$this->load->view('home/saleblock');
-		$this->load->view('layouts/footer');
+			$this->load->view('layouts/aside');
+			$this->load->view('home/saleblock');
+			$this->load->view('layouts/footer');
 			return;
 		}
 		$data['cod_medio_pay'] = $this->modelgeneral->getTable('sunat_mediosdepago');
@@ -238,7 +238,8 @@ class Regventas extends CI_Controller
 		$almacen = $this->input->get('almacen');
 		$cambio = $this->input->get('cambio');
 		$precioCliente = $this->input->get('precio_cliente');
-
+	
+		// Definir el campo de precio según el tipo de cliente
 		if ($precioCliente == 'Normal') {
 			$precioVenta = 'prec_venta';
 		} elseif ($precioCliente == 'Mayor') {
@@ -246,7 +247,22 @@ class Regventas extends CI_Controller
 		} elseif ($precioCliente == 'Especial') {
 			$precioVenta = 'prec_especial_venta';
 		}
-
+	
+		// Determinar si se debe buscar en el almacén central
+		$almacenBusqueda = $almacen;
+		$productoInfo = $this->db->select('typeAssignmentProducto, typeAssignmentProductoBipay')
+								 ->where('nomb_product LIKE', "%$queryLike%")
+								 ->or_where('barra_product LIKE', "%$queryLike%")
+								 ->limit(1)
+								 ->get('tb_producto')
+								 ->row_array();
+	
+		if (!empty($productoInfo) && 
+			($productoInfo['typeAssignmentProductoBipay'] == 'D' || $productoInfo['typeAssignmentProducto'] == 'G')) {
+			$almacenBusqueda = 1; // Almacén central
+		}
+	
+		// Consulta de productos
 		$resultProducto = $this->db->from('tb_producto')
 			->select("tb_producto.cod_producto as id, nomb_product as nombre, 
 					  (prec_costo / $cambio) as costo, ($precioVenta / $cambio) as venta, 
@@ -260,20 +276,20 @@ class Regventas extends CI_Controller
 				'tb_producto_serie',
 				'tb_producto_serie.cod_producto = tb_producto.cod_producto 
 				 AND tb_producto_serie.cod_almacen = tb_producto_stock.cod_almacen 
-				 AND tb_producto_serie.serie_estado = "D"', // Condición para incluir solo series disponibles
+				 AND tb_producto_serie.serie_estado = "D"',
 				'left'
 			)
-			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+			->where_in('tb_producto.typeAssignmentProduct', ['H', 'N']) // Filtro obligatorio
 			->where('est_product', 1)
 			->where('cod_tiparticulo', 1)
-			->where('(tb_producto_stock.cod_almacen = "' . $almacen . '" 
+			->where('(tb_producto_stock.cod_almacen = "' . $almacenBusqueda . '" 
 					 AND (nomb_product LIKE "%' . $queryLike . '%" 
 					 OR barra_product LIKE "%' . $queryLike . '%" 
 					 OR tb_producto_serie.serie_descripcion LIKE "%' . $queryLike . '%"))', NULL)
-			->group_by('tb_producto.cod_producto')  // Agrupar por el código de producto para evitar duplicados
+			->group_by('tb_producto.cod_producto')
 			->get()->result_array();
-
-		// Si no encuentra resultados en tb_producto_stock
+	
+		// Si no hay resultados, se intenta buscar en la tabla alternativa
 		if (empty($resultProducto)) {
 			$resultProducto = $this->db->from('tb_producto')
 				->select("tb_producto.cod_producto as id, nomb_product as nombre, 
@@ -288,41 +304,44 @@ class Regventas extends CI_Controller
 					'tb_producto_serie',
 					'tb_producto_serie.cod_producto = tb_producto.cod_producto 
 					 AND tb_producto_serie.cod_almacen = tb_producto_stock.cod_almacen 
-					 AND tb_producto_serie.serie_estado = "D"', // Condición para incluir solo series disponibles
+					 AND tb_producto_serie.serie_estado = "D"',
 					'left'
 				)
-				->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+				->where_in('tb_producto.typeAssignmentProduct', ['H', 'N']) // Filtro obligatorio
 				->where('est_product', 1)
 				->where('cod_tiparticulo', 1)
-				->where('(tb_producto_stock.cod_almacen = "' . $almacen . '" 
+				->where('(tb_producto_stock.cod_almacen = "' . $almacenBusqueda . '" 
 						 AND (nomb_product LIKE "%' . $queryLike . '%" 
 						 OR barra_product LIKE "%' . $queryLike . '%" 
 						 OR tb_producto_serie.serie_descripcion LIKE "%' . $queryLike . '%"))', NULL)
-				->group_by('tb_producto.cod_producto')  // Agrupar por el código de producto para evitar duplicados
+				->group_by('tb_producto.cod_producto')
 				->get()->result_array();
 		}
-
+	
 		$this->db->flush_cache();
-
+	
+		// Búsqueda de servicios
 		$resultServicio = $this->db->from('tb_producto')
 			->select("tb_producto.cod_producto as id, nomb_product as nombre, 
-                  (prec_costo / $cambio) as costo, ($precioVenta / $cambio) as venta, 
-                  nomb_unid as unidad, descuento_prod as descuentop, 
-                  '1' as estado, peso_product, cod_tiparticulo, fecha_vencimiento", FALSE)
+					  (prec_costo / $cambio) as costo, ($precioVenta / $cambio) as venta, 
+					  nomb_unid as unidad, descuento_prod as descuentop, 
+					  '1' as estado, peso_product, cod_tiparticulo, fecha_vencimiento", FALSE)
 			->join('tb_unidades', 'tb_producto.cod_unid = tb_unidades.cod_unid')
-			->where_in('tb_producto.typeAssignmentProduct', array('H', 'N'))
+			->where_in('tb_producto.typeAssignmentProduct', ['H', 'N']) // Filtro obligatorio
 			->where('est_product', 1)
 			->where('(cod_tiparticulo = 2 AND (nomb_product LIKE "%' . $queryLike . '%" 
-                 OR barra_product LIKE "%' . $queryLike . '%"))', NULL)
+				 OR barra_product LIKE "%' . $queryLike . '%"))', NULL)
 			->get()->result_array();
-
+	
+		// Unir resultados
 		$productos_array = array_merge($resultProducto, $resultServicio);
-
+	
+		// Procesar fechas de vencimiento
 		foreach ($productos_array as $k => $p) {
 			if ($p['fecha_vencimiento'] == 1) {
 				$productos_array[$k]['fechas'] = $this->db->from('tb_producto_fecha')
 					->where('cod_producto', $p['id'])
-					->where('cod_almacen', $almacen)
+					->where('cod_almacen', $almacenBusqueda)
 					->where('cantidad_prodfec > ', 0)
 					->where('fecha_alerta_prodfec <=', date('Y-m-d'))
 					->order_by('fecha_vencimiento_prodfec', 'asc')
@@ -331,11 +350,12 @@ class Regventas extends CI_Controller
 				$productos_array[$k]['fechas'] = null;
 			}
 		}
-
+	
+		// Respuesta en JSON
 		header('content-type: application/json; charset=utf-8');
 		echo json_encode($productos_array);
 	}
-
+	
 
 
 	public function getProductoBusquedanormal()
@@ -923,15 +943,15 @@ class Regventas extends CI_Controller
 						$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $codtalonario]);
 						//var_export($objTalonario);
 						/*
-																																if (($this->input->post('documento') =="15")) {
-																																	$arrboleta['tip_doc_ref']="01";
-																																}
-																																elseif ($this->input->post('documento') =="16") {
-																																	$arrboleta['tip_doc_ref']="03";
-																																}
-																																else{
-																																	$arrboleta['tip_doc_ref']="00";
-																																}*/
+																																													  if (($this->input->post('documento') =="15")) {
+																																														  $arrboleta['tip_doc_ref']="01";
+																																													  }
+																																													  elseif ($this->input->post('documento') =="16") {
+																																														  $arrboleta['tip_doc_ref']="03";
+																																													  }
+																																													  else{
+																																														  $arrboleta['tip_doc_ref']="00";
+																																													  }*/
 						$arrboleta['tip_doc_ref'] = $objTalonario->cod_tipdocu;
 						$arrboleta['serie_doc_ref'] = $this->input->post('serie');
 						$arrboleta['num_doc_ref'] = $this->input->post('correlativo');
@@ -970,15 +990,15 @@ class Regventas extends CI_Controller
 						$objTalonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $this->input->post('tipoPedido')]);
 						$arrnota['tip_doc_ref'] = $objTalonario->cod_tipdocu;
 						/*
-																																if ($this->input->post('documento') =="15") {
-																																	$arrnota['tip_doc_ref']="01";
-																																}
-																																elseif ($this->input->post('documento') =="16") {
-																																	$arrnota['tip_doc_ref']="03";
-																																}
-																																else{
-																																	$arrnota['tip_doc_ref']="00";
-																																}*/
+																																													  if ($this->input->post('documento') =="15") {
+																																														  $arrnota['tip_doc_ref']="01";
+																																													  }
+																																													  elseif ($this->input->post('documento') =="16") {
+																																														  $arrnota['tip_doc_ref']="03";
+																																													  }
+																																													  else{
+																																														  $arrnota['tip_doc_ref']="00";
+																																													  }*/
 						$arrnota['serie_doc_ref'] = $this->input->post('serie');
 						$arrnota['num_doc_ref'] = $this->input->post('correlativo');
 						$arrnota['ccod_mon'] = 'S';
@@ -1170,10 +1190,10 @@ class Regventas extends CI_Controller
 				$diferencia = $data['precunit_ventdet'] - $bipay;
 
 				// Restar la cantidad vendida del stock del almacén actual
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['precunit_ventdet'] . " WHERE cod_almacen = 1 AND cod_producto = " . $idTypeAssignmentProduct);
 
-				// Sumar la diferencia al stock del almacén con cod_almacen=8
-				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $diferencia . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
+				// Sumar la diferencia al stock del almacén con cod_almacen=1
+				$this->db->query("UPDATE tb_producto_stock SET stock = stock + " . $diferencia . " WHERE cod_almacen = 1 AND cod_producto = " . $idTypeAssignmentProduct);
 			} else {
 				// Si no cumple con ambas asignaciones o solo tiene la asignación 'G', realizar descuento de stock basado en el precio de venta como antes
 				$this->db->query("UPDATE tb_producto_stock SET stock = stock - " . $data['cant_ventdet'] . " WHERE cod_almacen = " . $almacen . " AND cod_producto = " . $idTypeAssignmentProduct);
@@ -1522,25 +1542,87 @@ class Regventas extends CI_Controller
 	function imprimirticketVenta($archivoxml)
 	{
 		$data['ventas'] = $this->ventas_model->getImpresionVenta($archivoxml);
-		$filas = count($data['ventas']->detalle);
-		$alturaTicket = 200 + ($filas * 80);
+		$detalleVentas = $data['ventas']->detalle;
 
+		// Alturas base: encabezado y pie de ticket (puedes ajustarlas según tu diseño)
+		$alturaEncabezado = 100;
+		$alturaPie = 200;
+
+		// Altura base para cada línea (valor aproximado, depende del tamaño de fuente y estilo)
+		$lineHeight = 20;
+
+		// Ancho aproximado de caracteres por línea en el ticket (ajusta según tu fuente y ancho de papel)
+		$maxCaracteresPorLinea = 45;
+
+		// Inicializamos la altura total con encabezado y pie
+		$alturaTicket = $alturaEncabezado + $alturaPie;
+
+		// Recorremos cada detalle y calculamos la altura adicional según la descripción
+		foreach ($detalleVentas as $detalle) {
+			// Obtenemos la descripción del producto
+			$descripcion = $detalle->descripcion;
+
+			// Calculamos el número de líneas que ocupará la descripción
+			$num_lineas = ceil(strlen($descripcion) / $maxCaracteresPorLinea);
+
+			// Altura para este detalle (puedes sumar otras alturas si tienes más información por producto)
+			$alturaDetalle = $lineHeight * $num_lineas;
+
+			// Sumamos la altura de este detalle al ticket
+			$alturaTicket += $alturaDetalle;
+		}
+
+		// También puedes agregar una altura extra en caso de que existan otros elementos dinámicos
+		// $alturaTicket += $otrasAlturas;
+
+		// Definición del ancho del ticket (ajústalo según el tipo de impresora: 58mm o 80mm)
+		$tamano_impresora = $this->config->item('tamano_impresora'); // '80mm' o '58mm'
+		$ancho = ($tamano_impresora == '80mm') ? 75 : 50;
+
+		// Inicializamos mPDF con el tamaño calculado
 		$this->mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8', //MODE
-			'format' => [75, $alturaTicket], //FORMAT
+			'mode' => 'utf-8',
+			'format' => [$ancho, $alturaTicket],
 			'margin_left' => 2,
 			'margin_right' => 2,
 			'margin_top' => 2,
 			'margin_bottom' => 2,
 			'margin_header' => 0,
 			'margin_footer' => 0
+
 		]);
+		// Generamos un SVG que contenga el texto de la marca de agua
+		$watermarkText = 'bfacturas';
+		$svg = '
+	  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+		  <text x="0" y="50" font-size="20" fill="black" opacity="0.1" transform="rotate(-45)">
+			  ' . $watermarkText . '
+		  </text>
+	  </svg>';
+
+		// Convertimos el SVG a una URL en base64 para usarlo como background-image
+		$dataUri = 'data:image/svg+xml;base64,' . base64_encode($svg);
+
+		// CSS para repetir el fondo con la marca de agua de texto
+		$css = "
+	  body {
+		  background-image: url('{$dataUri}');
+		  background-repeat: repeat;
+		  background-size: 100px 100px; /* Ajusta el tamaño de cada repetición */
+	  }
+	  ";
+
+		// Aplicamos el CSS
+		$this->mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+		// Agregar marca de agua de texto
+
+		//$this->mpdf->SetHTMLFooter($htmlFooter);
+
 		$data['qr'] = $this->getQR($data['ventas']->cod_vent);
 		$data['empresa'] = $this->empresa_model->getEmpresa($data);
-		// $talonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $data['cod_talonario']]);
 		$talonario = $this->modelgeneral->getTableWhereRow('tb_talonario', ['cod_talonario' => $data['ventas']->cod_talonario]);
 
-
+		// Selección de la vista según el tipo de talonario
 		if ($talonario->siglas_talonario == 'RB') {
 			$html = $this->load->view('admin/ventas/ticketventaSe', $data, TRUE);
 		} else {
@@ -1549,12 +1631,11 @@ class Regventas extends CI_Controller
 
 		$css = file_get_contents(APP_PATH . 'assets/styles_pdf.css');
 		$this->mpdf->SetTitle($data['ventas']->archivoxml_vent);
-		//$this->mpdf->setHTMLHeader($htmlHeader);
-		//$this->mpdf->setHTMLFooter($htmlFooter);
 		$this->mpdf->writeHTML($css, 1);
 		$this->mpdf->writeHTML($html, 2);
 		$this->mpdf->Output($data['ventas']->archivoxml_vent . '.pdf', 'I');
 	}
+
 
 	public function xmlHash($id, $firmar = NULL)
 	{

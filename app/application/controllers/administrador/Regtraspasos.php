@@ -176,52 +176,41 @@ class Regtraspasos extends CI_Controller
 		$data['observacion_tras'] = $this->input->post('observacion');
 		$data['cod_usu'] = $this->session->userdata('cod_usu');
 		$data['estado_tras'] = 0; // Estado pendiente
-
-		// Insertar el traspaso en la tabla tb_traspasos con estado pendiente
+	
+		// Insertar el traspaso en la tabla tb_traspasos
 		$insert = $this->modelgeneral->insertRegist('tb_traspasos', $data);
-
+	
 		$resp = [];
 		if (!is_null($insert)) {
-			// Insertar los detalles del traspaso sin actualizar el stock ni las series
-			foreach ($_POST['id_producto'] as $key => $value) {
+			// Procesar los productos
+			foreach ($_POST['id_producto'] as $key => $id_producto) {
 				$detalle['cod_tras'] = $insert;
-				$detalle['cod_producto'] = $_POST['id_producto'][$key];
+				$detalle['cod_producto'] = $id_producto;
 				$detalle['cant_trasdet'] = $_POST['cant_producto'][$key];
-
-				// Asegurarse de que la función traspasarSerie se ejecute incluso si la cantidad es 1
-				if (isset($_POST['serie_producto'][$value])) {
-					if (is_array($_POST['serie_producto'][$value])) {
-						// Iterar por cada serie y crear una nueva fila para cada serie
-						foreach ($_POST['serie_producto'][$value] as $serie) {
-							// Crear una nueva fila para cada serie
-							$detalle['serie_trasdet'] = $serie;
-							$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
-						}
-
-						// No actualizamos el stock ni traspasamos las series aún
-						// Se hará cuando se valide el traspaso (aceptación o rechazo)
-					} else {
-						// Si solo hay una serie, agregar una fila con esa serie
-						$detalle['serie_trasdet'] = $_POST['serie_producto'][$value];
+	
+				// Verificar si el producto tiene serie (cambiando la forma de acceder al array)
+				if (isset($_POST['serie_producto'][$id_producto]) && is_array($_POST['serie_producto'][$id_producto]) && !empty($_POST['serie_producto'][$id_producto])) {
+					// Producto con serie
+					foreach ($_POST['serie_producto'][$id_producto] as $serie) {
+						$detalle['serie_trasdet'] = trim($serie); // Asegurar que no haya espacios extra
 						$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
-						// No traspasamos la serie aún
 					}
 				} else {
-					// Manejar productos sin series o con una sola unidad
-					$detalle['serie_trasdet'] = ''; // Serie vacía para productos sin serie
+					// Producto sin serie
+					$detalle['serie_trasdet'] = 'No aplica';
 					$this->modelgeneral->insertRegist('tb_traspasos_detalles', $detalle);
 				}
 			}
-
-			// Devolver respuesta de éxito
+	
 			$resp['success'] = true;
 		} else {
-			// Si hubo error al insertar, devolver respuesta de error
 			$resp['success'] = false;
 		}
-
+	
 		echo json_encode($resp);
 	}
+	
+
 
 	public function validarTraspaso()
 	{

@@ -12,6 +12,7 @@ $config['url_suffix'] = '';
 $config['language']	= 'english';
 $config['charset'] = 'UTF-8';
 $config['enable_hooks'] = true;
+$config['tamano_impresora'] = '80mm'; // Cambia a '58mm' si usas ese tamaño
 
 /*
 |--------------------------------------------------------------------------
