@@ -259,7 +259,7 @@ class Regventas extends CI_Controller
 	
 		if (!empty($productoInfo) && 
 			($productoInfo['typeAssignmentProductoBipay'] == 'D' || $productoInfo['typeAssignmentProducto'] == 'G')) {
-			$almacenBusqueda = 1 || 7; // Almacén central
+			$almacenBusqueda = 7; // Almacén central
 		}
 	
 		// Consulta de productos
