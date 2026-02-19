@@ -1,0 +1,23 @@
+# =============================================================================
+# Jfactur - Backend (Django)
+# Instalación:  pip install -r requirements.txt
+# Entorno:       python -m venv venv   luego   venv\Scripts\activate (Windows)
+# =============================================================================
+
+# Django y servidor
+Django>=5.0
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.3
+django-cors-headers>=4.0
+
+# Base de datos
+psycopg2-binary>=2.9
+
+# Configuración y variables de entorno
+python-decouple>=3.8
+
+# HTTP y SUNAT (facturación electrónica)
+requests>=2.28
+signxml>=4.0
+lxml>=4.9
+cryptography>=41.0
