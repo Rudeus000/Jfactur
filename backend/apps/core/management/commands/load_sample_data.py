@@ -14,8 +14,14 @@ from apps.core.models import (
     User,
 )
 from apps.catalog.models import Customer, Supplier, ProductCategory, Product
-from apps.inventory.models import Warehouse, WarehouseLocation, StockQuant
-from apps.invoicing.models import InvoiceSeries, Invoice, InvoiceLine
+from apps.inventory.models import Warehouse, WarehouseLocation, StockQuant, StockMovement, StockTransfer, StockTransferLine
+from apps.invoicing.models import InvoiceSeries, Invoice, InvoiceLine, Quote, QuoteLine, CustomerPayment
+from apps.accounting.models import (
+    Currency, AccountType, Account, Bank,
+    CashRegister, CashRegisterOpening,
+    ExpenseType, Expense,
+)
+from apps.purchasing.models import Purchase, PurchaseLine, PurchasePayment
 
 
 # UUIDs fijos para datos de prueba reproducibles
@@ -36,6 +42,20 @@ UUID_INVOICE = uuid.UUID('00000000-0000-0000-0000-00000000000e')
 UUID_LINE = uuid.UUID('00000000-0000-0000-0000-00000000000f')
 UUID_QUANT_1 = uuid.UUID('00000000-0000-0000-0000-000000000010')
 UUID_QUANT_2 = uuid.UUID('00000000-0000-0000-0000-000000000011')
+# Contabilidad, caja, cotización, compra, traspaso
+UUID_CURRENCY = uuid.UUID('00000000-0000-0000-0000-000000000012')
+UUID_ACCOUNT_TYPE = uuid.UUID('00000000-0000-0000-0000-000000000013')
+UUID_ACCOUNT = uuid.UUID('00000000-0000-0000-0000-000000000014')
+UUID_BANK = uuid.UUID('00000000-0000-0000-0000-000000000015')
+UUID_CASH_REGISTER = uuid.UUID('00000000-0000-0000-0000-000000000016')
+UUID_OPENING = uuid.UUID('00000000-0000-0000-0000-000000000017')
+UUID_EXPENSE_TYPE = uuid.UUID('00000000-0000-0000-0000-000000000018')
+UUID_EXPENSE = uuid.UUID('00000000-0000-0000-0000-000000000019')
+UUID_WAREHOUSE_2 = uuid.UUID('00000000-0000-0000-0000-00000000001a')
+UUID_QUOTE = uuid.UUID('00000000-0000-0000-0000-00000000001b')
+UUID_PURCHASE = uuid.UUID('00000000-0000-0000-0000-00000000001c')
+UUID_TRANSFER = uuid.UUID('00000000-0000-0000-0000-00000000001d')
+UUID_STOCK_MOVEMENT = uuid.UUID('00000000-0000-0000-0000-00000000001e')
 
 # Productos adicionales estilo demodb (2).sql - más INSERTs para base no vacía
 PRODUCTOS_DEMO = [
@@ -56,7 +76,7 @@ PRODUCTOS_DEMO = [
 
 
 class Command(BaseCommand):
-    help = 'Carga datos de prueba (estilo demodb): empresa demo, usuario admin@demo.com, clientes, productos, facturas y stock. Ejecutar después de migrate.'
+    help = 'Carga datos de prueba (estilo demodb): empresa demo, usuario rudeus / rudeus123, clientes, productos, facturas y stock. Ejecutar después de migrate.'
 
     def handle(self, *args, **options):
         now = timezone.now()
@@ -123,15 +143,15 @@ class Command(BaseCommand):
         )
         self.stdout.write('Role OK')
 
-        # 1 User admin@demo.com / admin123
+        # 1 User rudeus / rudeus123 (superuser Django)
         user, created = User.objects.update_or_create(
             id=UUID_USER,
             defaults={
-                'email': 'admin@demo.com',
+                'email': 'rudeus@jfactur.local',
                 'company': company,
                 'role': role,
-                'first_name': 'Admin',
-                'last_name': 'Demo',
+                'first_name': 'Rudeus',
+                'last_name': 'Admin',
                 'tipo_documento': '1',
                 'numero_documento': '00000000',
                 'is_active': True,
@@ -139,9 +159,9 @@ class Command(BaseCommand):
                 'is_superuser': True,
             },
         )
-        user.set_password('admin123')
+        user.set_password('rudeus123')
         user.save()
-        self.stdout.write('User admin@demo.com OK')
+        self.stdout.write('User rudeus@jfactur.local (rudeus / rudeus123) OK')
 
         # 1 Customer
         Customer.objects.update_or_create(
@@ -388,6 +408,27 @@ class Command(BaseCommand):
                 )
         self.stdout.write('StockQuant OK')
 
+        # 1 StockMovement (muestra de kardex)
+        StockMovement.objects.update_or_create(
+            id=UUID_STOCK_MOVEMENT,
+            defaults={
+                'company': company,
+                'product': product1,
+                'warehouse': warehouse,
+                'movement_type': 'in',
+                'quantity': Decimal('20'),
+                'quantity_after': Decimal('120'),
+                'reference': 'AJUSTE-DEMO',
+                'reference_model': 'adjustment',
+                'date': now - timedelta(days=1),
+                'unit_cost': Decimal('5.00'),
+                'total_cost': Decimal('100.00'),
+                'notes': 'Ajuste inicial de muestra',
+                'created_by': user,
+            },
+        )
+        self.stdout.write('StockMovement OK')
+
         # Facturas adicionales (F001-2 y F001-3) para que la base no esté vacía
         customer2 = Customer.objects.filter(company=company, numero_documento='20100000010').first()
         if customer2:
@@ -465,4 +506,242 @@ class Command(BaseCommand):
         InvoiceSeries.objects.filter(id=UUID_SERIE_F).update(next_number=4, last_number=3)
         self.stdout.write('Invoices adicionales OK')
 
-        self.stdout.write(self.style.SUCCESS('Datos de prueba cargados (estilo demodb). Login: admin@demo.com / admin123'))
+        # --- Contabilidad: moneda, tipos de cuenta, cuentas, banco ---
+        currency, _ = Currency.objects.update_or_create(
+            id=UUID_CURRENCY,
+            defaults={
+                'company': company,
+                'code': 'PEN',
+                'name': 'Sol peruano',
+                'symbol': 'S/',
+                'is_default': True,
+                'is_active': True,
+            },
+        )
+        account_type, _ = AccountType.objects.update_or_create(
+            id=UUID_ACCOUNT_TYPE,
+            defaults={
+                'company': company,
+                'code': 'GASTO',
+                'name': 'Gastos',
+                'is_active': True,
+            },
+        )
+        account, _ = Account.objects.update_or_create(
+            id=UUID_ACCOUNT,
+            defaults={
+                'company': company,
+                'account_type': account_type,
+                'code': '62',
+                'name': 'Gastos de administración',
+                'parent': None,
+                'order': 1,
+                'is_active': True,
+            },
+        )
+        bank, _ = Bank.objects.update_or_create(
+            id=UUID_BANK,
+            defaults={
+                'company': company,
+                'name': 'Banco de Crédito',
+                'code': 'BCP',
+                'account_number': '193-12345678-0-00',
+                'cci': '00219300123456780000',
+                'is_active': True,
+            },
+        )
+        self.stdout.write('Currency, AccountType, Account, Bank OK')
+
+        # --- Caja y apertura ---
+        cash_register, _ = CashRegister.objects.update_or_create(
+            id=UUID_CASH_REGISTER,
+            defaults={
+                'company': company,
+                'name': 'Caja Principal',
+                'code': 'CAJA01',
+                'warehouse': warehouse,
+                'is_active': True,
+            },
+        )
+        opening, _ = CashRegisterOpening.objects.update_or_create(
+            id=UUID_OPENING,
+            defaults={
+                'cash_register': cash_register,
+                'opened_at': now - timedelta(hours=2),
+                'opening_balance': Decimal('100.00'),
+                'opened_by': user,
+                'notes': 'Apertura demo',
+            },
+        )
+        self.stdout.write('CashRegister, CashRegisterOpening OK')
+
+        # --- Tipo de gasto y un gasto ---
+        expense_type, _ = ExpenseType.objects.update_or_create(
+            id=UUID_EXPENSE_TYPE,
+            defaults={
+                'company': company,
+                'code': 'OFI',
+                'name': 'Gastos de oficina',
+                'account': account,
+                'is_active': True,
+            },
+        )
+        Expense.objects.update_or_create(
+            id=UUID_EXPENSE,
+            defaults={
+                'company': company,
+                'expense_type': expense_type,
+                'account': account,
+                'date': today,
+                'amount': Decimal('50.00'),
+                'currency': currency,
+                'description': 'Material de oficina',
+                'reference': 'REF-001',
+                'cash_register': cash_register,
+                'created_by': user,
+            },
+        )
+        self.stdout.write('ExpenseType, Expense OK')
+
+        # --- Segundo almacén (sucursal) ---
+        warehouse2, _ = Warehouse.objects.update_or_create(
+            id=UUID_WAREHOUSE_2,
+            defaults={
+                'company': company,
+                'name': 'Almacén Sucursal',
+                'code': 'ALM02',
+                'is_active': True,
+            },
+        )
+        WarehouseLocation.objects.update_or_create(
+            warehouse=warehouse2,
+            code='B1',
+            defaults={'name': 'Estante B', 'is_active': True},
+        )
+        self.stdout.write('Warehouse 2 (sucursal) OK')
+
+        # --- Cotización con líneas ---
+        quote, _ = Quote.objects.update_or_create(
+            id=UUID_QUOTE,
+            defaults={
+                'company': company,
+                'customer': customer,
+                'number': 'COT-001',
+                'date': today,
+                'valid_until': today + timedelta(days=15),
+                'cliente_tipo_documento': customer.tipo_documento,
+                'cliente_numero_documento': customer.numero_documento,
+                'cliente_razon_social': customer.razon_social,
+                'cliente_direccion': customer.direccion or '',
+                'subtotal': Decimal('8.47'),
+                'igv_total': Decimal('1.53'),
+                'total': Decimal('10.00'),
+                'status': 'draft',
+                'notes': 'Cotización de muestra',
+                'created_by': user,
+            },
+        )
+        QuoteLine.objects.update_or_create(
+            quote=quote,
+            line_number=1,
+            defaults={
+                'product': product1,
+                'description': 'Producto Uno',
+                'quantity': Decimal('1'),
+                'unit_price': Decimal('8.47'),
+                'subtotal': Decimal('8.47'),
+                'igv_amount': Decimal('1.53'),
+                'total': Decimal('10.00'),
+            },
+        )
+        self.stdout.write('Quote, QuoteLine OK')
+
+        # --- Pago de cliente (sobre factura existente) ---
+        CustomerPayment.objects.update_or_create(
+            company=company,
+            invoice=invoice,
+            reference='PAGO-DEMO-001',
+            defaults={
+                'date': today,
+                'amount': Decimal('10.00'),
+                'payment_method': 'Efectivo',
+                'cash_register': cash_register,
+                'cash_opening': opening,
+                'created_by': user,
+            },
+        )
+        self.stdout.write('CustomerPayment OK')
+
+        # --- Compra con líneas y un pago ---
+        supplier = Supplier.objects.get(id=UUID_SUPPLIER)
+        purchase, _ = Purchase.objects.update_or_create(
+            id=UUID_PURCHASE,
+            defaults={
+                'company': company,
+                'supplier': supplier,
+                'warehouse': warehouse,
+                'number': 'COMP-001',
+                'date': today,
+                'due_date': today + timedelta(days=30),
+                'subtotal': Decimal('42.37'),
+                'igv_total': Decimal('7.63'),
+                'total': Decimal('50.00'),
+                'status': 'draft',
+                'provider_document_type': '01',
+                'provider_document_series': 'F001',
+                'provider_document_number': '00000001',
+                'notes': 'Compra de muestra',
+                'created_by': user,
+            },
+        )
+        PurchaseLine.objects.update_or_create(
+            purchase=purchase,
+            line_number=1,
+            defaults={
+                'product': product1,
+                'description': 'Producto Uno',
+                'quantity': Decimal('5'),
+                'unit_price': Decimal('8.47'),
+                'subtotal': Decimal('42.37'),
+                'igv_amount': Decimal('7.63'),
+                'total': Decimal('50.00'),
+            },
+        )
+        PurchasePayment.objects.update_or_create(
+            company=company,
+            purchase=purchase,
+            reference='PAG-PROV-DEMO-001',
+            defaults={
+                'date': today,
+                'amount': Decimal('25.00'),
+                'payment_method': 'Transferencia',
+                'bank': bank,
+                'created_by': user,
+            },
+        )
+        self.stdout.write('Purchase, PurchaseLine, PurchasePayment OK')
+
+        # --- Traspaso entre almacenes ---
+        transfer, _ = StockTransfer.objects.update_or_create(
+            id=UUID_TRANSFER,
+            defaults={
+                'company': company,
+                'warehouse_origin': warehouse,
+                'warehouse_dest': warehouse2,
+                'date': today,
+                'status': 'pending',
+                'notes': 'Traspaso demo',
+                'created_by': user,
+            },
+        )
+        StockTransferLine.objects.update_or_create(
+            transfer=transfer,
+            line_number=1,
+            defaults={
+                'product': product1,
+                'quantity': Decimal('10'),
+            },
+        )
+        self.stdout.write('StockTransfer, StockTransferLine OK')
+
+        self.stdout.write(self.style.SUCCESS('Datos de prueba cargados (estilo demodb). Login: rudeus@jfactur.local / rudeus123'))

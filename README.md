@@ -49,11 +49,13 @@ python manage.py migrate
 
 # 5. Datos de prueba (opcional)
 python manage.py load_sample_data
-# Usuario: admin@demo.com / admin123
+# Usuario: rudeus@jfactur.local / rudeus123
 
 # 6. Ejecutar
 python manage.py runserver
 ```
+
+Los pasos 4 a 6 se ejecutan desde la carpeta `backend` (quedas en ella tras el paso 1). Si más adelante abres otra terminal en la raíz del repo, entra antes con `cd backend`.
 
 **URL base:** http://localhost:8000  
 **API:** http://localhost:8000/api/v1/
@@ -249,10 +251,14 @@ Jfactur/
 
 ## Tests
 
+Desde la **raíz del repositorio** (si no estás en `backend`, entra antes con `cd backend`):
+
 ```bash
 cd backend
 python manage.py test apps.core apps.catalog apps.inventory apps.accounting apps.purchasing apps.invoicing
 ```
+
+Si ya estás en la carpeta `backend`, ejecuta solo la segunda línea.
 
 ---
 

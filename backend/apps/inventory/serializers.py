@@ -17,10 +17,16 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 
 class StockQuantSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.nombre', read_only=True)
+    product_sku = serializers.CharField(source='product.sku', read_only=True)
+    product_unit = serializers.CharField(source='product.unidad_medida', read_only=True)
+    warehouse_name = serializers.CharField(source='warehouse.name', read_only=True)
+
     class Meta:
         model = StockQuant
         fields = [
-            'id', 'product', 'warehouse', 'location', 'quantity', 'reserved_quantity',
+            'id', 'product', 'product_name', 'product_sku', 'product_unit', 'warehouse', 'warehouse_name',
+            'location', 'quantity', 'reserved_quantity',
             'created_at', 'updated_at',
         ]
 

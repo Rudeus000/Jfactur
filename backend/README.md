@@ -39,7 +39,7 @@ pip install -r requirements.txt
    ```bash
    python manage.py load_sample_data
    ```
-   Inserta datos al estilo **demodb (2).sql**: empresa demo, usuario **admin@demo.com** / **admin123**, varios clientes, proveedor, categoría, productos (ABONO 50KG, ALIMENT CAT 20KG, SIM REGALO, BITEL ILIMITADO, etc.), series F001/B001, 3 facturas de ejemplo y stock por producto.
+   Inserta datos al estilo **demodb (2).sql**: empresa demo, usuario **rudeus@jfactur.local** / **rudeus123**, varios clientes, proveedor, categoría, productos (ABONO 50KG, ALIMENT CAT 20KG, SIM REGALO, BITEL ILIMITADO, etc.), series F001/B001, 3 facturas de ejemplo y stock por producto.
 
 ## Ejecutar
 
@@ -79,8 +79,8 @@ Referencia: [Pautas servicio BETA - SUNAT](https://orientacion.sunat.gob.pe/12-p
   Body (JSON):
   ```json
   {
-    "email": "admin@demo.com",
-    "password": "admin123"
+  "email": "rudeus@jfactur.local",
+  "password": "rudeus123"
   }
   ```
   Respuesta: `{ "access": "...", "refresh": "..." }`

@@ -9,5 +9,5 @@ echo.
 echo Cargando datos de prueba...
 python manage.py load_sample_data
 echo.
-echo Listo. Base con datos. Login: admin@demo.com / admin123
+echo Listo. Base con datos. Login: rudeus@jfactur.local / rudeus123
 pause
