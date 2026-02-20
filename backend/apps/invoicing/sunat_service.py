@@ -368,3 +368,65 @@ def get_sunat_ws_url():
     if getattr(settings, 'SUNAT_USE_BETA', True):
         return getattr(settings, 'SUNAT_WS_BILL_BETA', '')
     return getattr(settings, 'SUNAT_WS_BILL_PROD', '')
+
+
+def send_invoice_to_sunat(invoice, clave_sol, cert_password=None):
+    """
+    Envía una factura/boleta a SUNAT: genera XML, firma, envía y actualiza el estado del invoice.
+    Retorna dict: respuesta, cod_sunat, mensaje, (cdr_path si ok).
+    Requiere: invoice con company, certificado activo en company, usuario_sol configurado.
+    """
+    import tempfile
+    company = invoice.company
+    cert_password = cert_password or clave_sol
+    cert = company.digital_certificates.filter(is_active=True).first()
+    if not cert or not cert.pfx_file_path or not os.path.isfile(cert.pfx_file_path):
+        return {'respuesta': 'error', 'cod_sunat': '', 'mensaje': 'No hay certificado digital activo con archivo PFX válido para esta empresa.'}
+    usuario_sol = (company.usuario_sol or '').strip()
+    if not usuario_sol:
+        return {'respuesta': 'error', 'cod_sunat': '', 'mensaje': 'La empresa no tiene configurado usuario SOL (usuario_sol).'}
+    ruta_ws = get_sunat_ws_url()
+    if not ruta_ws:
+        return {'respuesta': 'error', 'cod_sunat': '', 'mensaje': 'No está configurada la URL del servicio SUNAT.'}
+    nombre_archivo = f"{invoice.serie}-{invoice.numero}"
+    try:
+        xml_bytes = build_ubl_invoice_xml(company, invoice)
+    except Exception as e:
+        return {'respuesta': 'error', 'cod_sunat': '', 'mensaje': f'Error al generar XML UBL: {e}'}
+    try:
+        signed_bytes = sign_xml_with_pfx(xml_bytes, cert.pfx_file_path, cert_password)
+    except Exception as e:
+        return {'respuesta': 'error', 'cod_sunat': '', 'mensaje': f'Error al firmar XML: {e}'}
+    with tempfile.NamedTemporaryFile(suffix='.xml', delete=False) as f:
+        f.write(signed_bytes)
+        xml_path = f.name
+    try:
+        result = send_bill_to_sunat(
+            ruc=company.ruc,
+            usuario_sol=usuario_sol,
+            clave_sol=clave_sol,
+            xml_path=xml_path,
+            nombre_archivo=nombre_archivo,
+            ruta_ws=ruta_ws,
+        )
+    finally:
+        try:
+            os.unlink(xml_path)
+        except OSError:
+            pass
+        zip_path = xml_path + '.ZIP'
+        if os.path.isfile(zip_path):
+            try:
+                os.unlink(zip_path)
+            except OSError:
+                pass
+    invoice.sunat_response_code = result.get('cod_sunat', '')
+    invoice.sunat_response_message = result.get('mensaje', '')
+    if result.get('respuesta') == 'ok':
+        invoice.status = 'accepted' if result.get('cod_sunat') == '0' else 'rejected'
+        if result.get('cdr_path') and os.path.isfile(result['cdr_path']):
+            invoice.cdr_path = result['cdr_path']
+    else:
+        invoice.status = 'rejected'
+    invoice.save(update_fields=['sunat_response_code', 'sunat_response_message', 'status', 'cdr_path', 'updated_at'])
+    return result

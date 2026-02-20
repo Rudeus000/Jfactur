@@ -90,6 +90,79 @@ class CompanySubscription(models.Model):
         return f"{self.company.razon_social} - {self.plan.name}"
 
 
+class Branch(models.Model):
+    """
+    Sucursal: punto de venta o establecimiento de la empresa (Lima, Ica, Cusco, etc.).
+    No es lo mismo que almacén: una sucursal puede tener varios almacenes y varias cajas.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='branches'
+    )
+    name = models.CharField(max_length=120)
+    code = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'branches'
+        verbose_name = 'Sucursal'
+        verbose_name_plural = 'Sucursales'
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name}" + (f" ({self.code})" if self.code else "")
+
+
+class Announcement(models.Model):
+    """
+    Tablón de anuncios: avisos del dueño/gerente para los empleados.
+    Reuniones, citas, recordatorios, etc. Visibles al ingresar (p. ej. en elegir sucursal).
+    branch en null = aviso para toda la empresa; si tiene branch = solo esa sucursal.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='announcements'
+    )
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name='announcements',
+        null=True,
+        blank=True,
+        help_text='Si está vacío, el aviso es para toda la empresa.'
+    )
+    title = models.CharField(max_length=200)
+    content = models.TextField(blank=True)
+    created_by = models.ForeignKey(
+        'User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='announcements_created'
+    )
+    is_pinned = models.BooleanField(default=False)
+    valid_until = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'announcements'
+        verbose_name = 'Anuncio'
+        verbose_name_plural = 'Anuncios'
+        ordering = ['-is_pinned', '-created_at']
+
+    def __str__(self):
+        return self.title
+
+
 class InvoiceUsageLog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(
@@ -201,8 +274,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     tipo_documento = models.CharField(max_length=10, blank=True)
     numero_documento = models.CharField(max_length=20, blank=True)
     phone = models.CharField(max_length=20, blank=True)
+    default_branch = models.ForeignKey(
+        'core.Branch',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='default_for_users'
+    )
     default_warehouse = models.ForeignKey(
         'inventory.Warehouse',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='default_for_users'
+    )
+    default_cash_register = models.ForeignKey(
+        'accounting.CashRegister',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

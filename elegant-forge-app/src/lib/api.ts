@@ -114,6 +114,11 @@ export const getErrorMessage = (error: unknown): string => {
     const status = error.response?.status;
     const data = error.response?.data;
 
+    // Sin respuesta = servidor no alcanzable (backend apagado, CORS, red)
+    if (!error.response) {
+      return "No se pudo conectar con el servidor. Compruebe que el backend esté en ejecución (http://localhost:8000) y vuelva a intentar.";
+    }
+
     if (typeof data === "object" && data !== null) {
       const detail = (data as Record<string, unknown>).detail;
       if (typeof detail === "string") return detail;
@@ -123,6 +128,7 @@ export const getErrorMessage = (error: unknown): string => {
 
     switch (status) {
       case 400: return "Datos inválidos. Revise el formulario.";
+      case 401: return "Correo o contraseña incorrectos.";
       case 403: return "No tiene permisos para esta acción.";
       case 404: return "Recurso no encontrado.";
       case 500: return "Error del servidor. Intente más tarde.";

@@ -20,7 +20,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await login(email, password);
-      navigate("/");
+      navigate("/elegir-sucursal");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     } finally {
@@ -60,8 +60,8 @@ const Login = () => {
           </div>
 
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold tracking-tight">Iniciar sesión</h2>
-            <p className="text-muted-foreground text-sm mt-1">Ingrese sus credenciales para acceder al sistema</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Iniciar sesión</h2>
+            <p className="text-muted-foreground text-sm mt-1.5">Ingrese su correo y contraseña para acceder al sistema</p>
           </div>
 
           {error && (
@@ -106,7 +106,7 @@ const Login = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full h-10 font-medium" disabled={isLoading}>
               {isLoading ? "Ingresando…" : "Ingresar"}
             </Button>
           </form>

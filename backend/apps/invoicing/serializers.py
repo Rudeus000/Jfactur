@@ -13,6 +13,19 @@ class InvoiceLineSerializer(serializers.ModelSerializer):
         ]
 
 
+class InvoiceLineWriteSerializer(serializers.ModelSerializer):
+    """Para crear factura: line_number es opcional (se asigna por orden)."""
+    line_number = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = InvoiceLine
+        fields = [
+            'id', 'line_number', 'product', 'descripcion', 'cantidad',
+            'valor_unitario', 'valor_venta', 'codigo_tipo_afectacion',
+            'igv_monto', 'importe_total',
+        ]
+
+
 class InvoiceSerializer(serializers.ModelSerializer):
     invoice_lines = InvoiceLineSerializer(many=True, read_only=True)
 
@@ -43,7 +56,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceWriteSerializer(serializers.ModelSerializer):
-    invoice_lines = InvoiceLineSerializer(many=True, required=False)
+    invoice_lines = InvoiceLineWriteSerializer(many=True, required=False)
 
     class Meta:
         model = Invoice
@@ -71,6 +84,7 @@ class InvoiceWriteSerializer(serializers.ModelSerializer):
         validated_data['created_by_id'] = self.context['request'].user.id
         invoice = Invoice.objects.create(**validated_data)
         for i, line_data in enumerate(lines_data, start=1):
+            line_data.pop('id', None)
             line_data['invoice_id'] = invoice.id
             line_data['line_number'] = line_data.get('line_number') or i
             InvoiceLine.objects.create(**line_data)

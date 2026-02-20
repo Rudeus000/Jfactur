@@ -1,5 +1,3 @@
-import os
-import tempfile
 from datetime import datetime
 from decimal import Decimal
 
@@ -18,12 +16,7 @@ from .serializers import (
     QuoteSerializer, QuoteWriteSerializer,
     CustomerPaymentSerializer, CustomerPaymentWriteSerializer,
 )
-from .sunat_service import (
-    build_ubl_invoice_xml,
-    sign_xml_with_pfx,
-    send_bill_to_sunat,
-    get_sunat_ws_url,
-)
+from .sunat_service import send_invoice_to_sunat
 
 
 def filter_by_company(queryset, request):
@@ -69,7 +62,6 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         Body: { "clave_sol": "clave SOL", "certificado_password": "opcional, si difiere" }
         """
         invoice = self.get_object()
-        company = invoice.company
         clave_sol = request.data.get('clave_sol') or request.query_params.get('clave_sol')
         if not clave_sol:
             return Response(
@@ -77,77 +69,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         cert_password = request.data.get('certificado_password') or clave_sol
-
-        cert = company.digital_certificates.filter(is_active=True).first()
-        if not cert or not cert.pfx_file_path or not os.path.isfile(cert.pfx_file_path):
+        result = send_invoice_to_sunat(invoice, clave_sol, cert_password)
+        if result.get('respuesta') == 'error' and not result.get('cod_sunat'):
             return Response(
-                {'error': 'No hay certificado digital activo con archivo PFX válido para esta empresa.'},
+                {'error': result.get('mensaje', 'Error al enviar a SUNAT')},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        usuario_sol = (company.usuario_sol or '').strip()
-        if not usuario_sol:
-            return Response(
-                {'error': 'La empresa no tiene configurado usuario SOL (usuario_sol).'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        ruta_ws = get_sunat_ws_url()
-        if not ruta_ws:
-            return Response(
-                {'error': 'No está configurada la URL del servicio SUNAT (SUNAT_WS_BILL_BETA o SUNAT_WS_BILL_PROD).'},
-                status=status.HTTP_503_SERVICE_UNAVAILABLE
-            )
-
-        nombre_archivo = f"{invoice.serie}-{invoice.numero}"
-        try:
-            xml_bytes = build_ubl_invoice_xml(company, invoice)
-        except Exception as e:
-            return Response(
-                {'error': 'Error al generar XML UBL.', 'detail': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        try:
-            signed_bytes = sign_xml_with_pfx(xml_bytes, cert.pfx_file_path, cert_password)
-        except Exception as e:
-            return Response(
-                {'error': 'Error al firmar el XML con el certificado.', 'detail': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        with tempfile.NamedTemporaryFile(suffix='.xml', delete=False) as f:
-            f.write(signed_bytes)
-            xml_path = f.name
-        try:
-            result = send_bill_to_sunat(
-                ruc=company.ruc,
-                usuario_sol=usuario_sol,
-                clave_sol=clave_sol,
-                xml_path=xml_path,
-                nombre_archivo=nombre_archivo,
-                ruta_ws=ruta_ws,
-            )
-        finally:
-            try:
-                os.unlink(xml_path)
-            except OSError:
-                pass
-            zip_path = xml_path + '.ZIP'
-            if os.path.isfile(zip_path):
-                try:
-                    os.unlink(zip_path)
-                except OSError:
-                    pass
-
-        invoice.sunat_response_code = result.get('cod_sunat', '')
-        invoice.sunat_response_message = result.get('mensaje', '')
-        if result.get('respuesta') == 'ok':
-            invoice.status = 'accepted' if result.get('cod_sunat') == '0' else 'rejected'
-            if result.get('cdr_path') and os.path.isfile(result['cdr_path']):
-                invoice.cdr_path = result['cdr_path']
-        else:
-            invoice.status = 'rejected'
-        invoice.save(update_fields=['sunat_response_code', 'sunat_response_message', 'status', 'cdr_path', 'updated_at'])
-
         return Response({
             'respuesta': result.get('respuesta'),
             'cod_sunat': result.get('cod_sunat'),
@@ -157,32 +84,57 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'], url_path='ticket')
     def ticket(self, request, pk=None):
-        """Ticket HTML de la factura/boleta (para impresión o conversión a PDF)."""
+        """Ticket/volante HTML de la factura/boleta (formato representación impresa, con logo empresa)."""
         invoice = self.get_object()
+        company = invoice.company
+        tipo_label = 'FACTURA' if invoice.tipo_documento == '01' else 'BOLETA DE VENTA'
+        hora = getattr(invoice, 'hora_emision', None) or ''
+        if hora and len(str(hora)) > 8:
+            hora = str(hora)[:8]
+        logo_html = ''
+        if company and getattr(company, 'logo_url', None) and company.logo_url.strip():
+            logo_html = f'<img src="{company.logo_url}" alt="Logo" style="max-width: 120px; max-height: 80px; display: block; margin: 0 auto 0.5rem;" />'
+        company_block = ''
+        if company:
+            company_block = f'''
+  <div style="text-align: center; margin-bottom: 0.75rem;">
+    {logo_html}
+    <p style="margin: 0; font-weight: bold;">{company.nombre_comercial or company.razon_social}</p>
+    <p style="margin: 0.2rem 0; font-size: 0.9em;">{company.razon_social}</p>
+    <p style="margin: 0; font-size: 0.85em;">RUC: {company.ruc}</p>
+    <p style="margin: 0.2rem 0; font-size: 0.85em;">{company.domicilio_fiscal or ""}</p>
+  </div>'''
         lines_html = ''.join(
-            f'<tr><td>{l.descripcion or (l.product.sku if l.product else "-")}</td>'
-            f'<td>{l.cantidad}</td><td>{l.valor_unitario}</td><td>{l.importe_total}</td></tr>'
+            f'<tr><td style="border:1px solid #ddd; padding:4px;">{l.descripcion or (l.product.sku if l.product else "-")}</td>'
+            f'<td style="border:1px solid #ddd; padding:4px; text-align:right;">{l.cantidad}</td>'
+            f'<td style="border:1px solid #ddd; padding:4px; text-align:right;">{l.valor_unitario}</td>'
+            f'<td style="border:1px solid #ddd; padding:4px; text-align:right;">{l.importe_total}</td></tr>'
             for l in invoice.invoice_lines.all()
         )
         html = f'''
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>{invoice.tipo_documento} {invoice.serie}-{invoice.numero}</title></head>
-<body style="font-family: monospace; max-width: 320px; margin: 1rem;">
-  <h3>{invoice.tipo_documento} {invoice.serie}-{invoice.numero}</h3>
-  <p><b>Fecha:</b> {invoice.fecha_emision} {getattr(invoice, "hora_emision", "") or ""}</p>
-  <p><b>Cliente:</b> {invoice.cliente_razon_social or ""}</p>
-  <p><b>RUC/DNI:</b> {invoice.cliente_numero_documento or ""}</p>
-  <p><b>Dirección:</b> {invoice.cliente_direccion or ""}</p>
+<head><meta charset="utf-8"><title>{tipo_label} {invoice.serie}-{invoice.numero}</title></head>
+<body style="font-family: Arial, sans-serif; max-width: 320px; margin: 1rem auto; font-size: 12px;">
+  {company_block}
+  <div style="text-align: center; border: 1px solid #333; padding: 0.5rem; margin-bottom: 0.75rem;">
+    <p style="margin: 0; font-weight: bold;">{tipo_label}</p>
+    <p style="margin: 0.2rem 0;">{invoice.serie}-{invoice.numero}</p>
+  </div>
+  <p><b>Fecha:</b> {invoice.fecha_emision} {hora}</p>
+  <p><b>Cliente:</b> {invoice.cliente_razon_social or "—"}</p>
+  <p><b>RUC/DNI:</b> {invoice.cliente_numero_documento or "—"}</p>
+  <p><b>Dirección:</b> {invoice.cliente_direccion or "—"}</p>
   <hr/>
-  <table style="width:100%; border-collapse: collapse;">
-    <tr><th>Descripción</th><th>Cant</th><th>P.Unit</th><th>Total</th></tr>
+  <table style="width:100%; border-collapse: collapse; font-size: 11px;">
+    <tr style="background: #f0f0f0;"><th style="border:1px solid #ddd; padding:4px; text-align:left;">Descripción</th><th style="border:1px solid #ddd; padding:4px;">Cant</th><th style="border:1px solid #ddd; padding:4px;">P.Unit</th><th style="border:1px solid #ddd; padding:4px;">Total</th></tr>
     {lines_html}
   </table>
   <hr/>
   <p>Subtotal: S/ {invoice.subtotal}</p>
   <p>IGV: S/ {invoice.igv_total}</p>
   <p><b>Total: S/ {invoice.total}</b></p>
+  <p style="font-size: 10px; color: #666; margin-top: 1rem;">Representación impresa del comprobante electrónico. Consulte en SUNAT si corresponde.</p>
 </body>
 </html>'''
         return HttpResponse(html, content_type='text/html; charset=utf-8')
@@ -324,6 +276,7 @@ class LibroVentasReport(APIView):
         for inv in qs:
             company = inv.company
             rows.append({
+                'id': str(inv.id),
                 'ruc': company.ruc,
                 'tipo_documento': inv.tipo_documento,
                 'serie': inv.serie,

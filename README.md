@@ -60,6 +60,8 @@ Los pasos 4 a 6 se ejecutan desde la carpeta `backend` (quedas en ella tras el p
 **URL base:** http://localhost:8000  
 **API:** http://localhost:8000/api/v1/
 
+**Guía de uso:** Ver [docs/CASOS_DE_USO.md](docs/CASOS_DE_USO.md) para orden de configuración, qué hacer antes de cada cosa (facturar, cobrar, abrir caja, compras, traspasos, etc.) y casos de uso por módulo.
+
 ---
 
 ## APIs para seguir desarrollando

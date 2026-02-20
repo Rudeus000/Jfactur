@@ -24,6 +24,7 @@ import {
   Receipt,
   TrendingUp,
   Banknote,
+  HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,8 @@ interface NavItem {
 
 const navigation: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { label: "Punto de venta", icon: Receipt, path: "/ventas" },
+  { label: "Cómo usar el sistema", icon: HelpCircle, path: "/como-usar" },
   {
     label: "Catálogo",
     icon: Package,
@@ -65,6 +68,7 @@ const navigation: NavItem[] = [
       { label: "Plan de Cuentas", path: "/contabilidad/cuentas", icon: BookOpen },
       { label: "Bancos", path: "/contabilidad/bancos", icon: Banknote },
       { label: "Cajas", path: "/contabilidad/cajas", icon: CreditCard },
+      { label: "Aperturas de caja", path: "/contabilidad/aperturas", icon: Receipt },
       { label: "Gastos", path: "/contabilidad/gastos", icon: Receipt },
     ],
   },
@@ -97,6 +101,7 @@ const navigation: NavItem[] = [
       { label: "Cuentas por Pagar", path: "/reportes/cuentas-pagar", icon: Receipt },
     ],
   },
+  { label: "Mi empresa", icon: Building2, path: "/config/mi-empresa" },
 ];
 
 const AppSidebar = () => {
@@ -120,7 +125,9 @@ const AppSidebar = () => {
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 h-14 border-b border-sidebar-border shrink-0">
-        <Building2 className="h-6 w-6 text-sidebar-primary shrink-0" />
+        <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-sidebar-accent/50 shrink-0">
+          <Building2 className="h-5 w-5 text-sidebar-primary" />
+        </div>
         {!collapsed && (
           <span className="font-semibold text-sidebar-primary tracking-tight text-lg">Jfactur</span>
         )}
@@ -151,10 +158,10 @@ const AppSidebar = () => {
                 to={item.path}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   isActive(item.path)
                     ? "bg-sidebar-accent text-sidebar-primary"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent/80 hover:text-sidebar-accent-foreground"
                 )}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
@@ -199,7 +206,7 @@ const AppSidebar = () => {
                         "flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm transition-colors",
                         isActive(child.path)
                           ? "bg-sidebar-accent text-sidebar-primary font-medium"
-                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent/80 hover:text-sidebar-accent-foreground"
                       )}
                     >
                       <child.icon className="h-3.5 w-3.5 shrink-0" />

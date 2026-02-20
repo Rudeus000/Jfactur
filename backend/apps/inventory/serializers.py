@@ -13,7 +13,7 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Warehouse
-        fields = ['id', 'name', 'code', 'is_active', 'locations', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'code', 'branch', 'is_active', 'locations', 'created_at', 'updated_at']
 
 
 class StockQuantSerializer(serializers.ModelSerializer):

@@ -120,11 +120,18 @@ class Bank(models.Model):
 
 
 class CashRegister(models.Model):
-    """Caja (punto de venta / caja física)."""
+    """Caja (punto de venta / caja física). Pertenece a una sucursal (branch)."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(
         'core.Company',
         on_delete=models.CASCADE,
+        related_name='cash_registers'
+    )
+    branch = models.ForeignKey(
+        'core.Branch',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name='cash_registers'
     )
     name = models.CharField(max_length=100)

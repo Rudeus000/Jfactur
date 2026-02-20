@@ -41,7 +41,7 @@ const Stock = () => {
         </Button>
       </div>
 
-      <DataTable columns={columns} data={data} isLoading={isLoading} />
+      <DataTable columns={columns} data={data} isLoading={isLoading} emptyMessage="No hay existencias. Realice compras o traspasos para ver stock." />
     </div>
   );
 };

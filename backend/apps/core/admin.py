@@ -4,6 +4,8 @@ from .models import (
     SubscriptionPlan,
     Company,
     CompanySubscription,
+    Branch,
+    Announcement,
     InvoiceUsageLog,
     Role,
     DigitalCertificate,
@@ -39,6 +41,23 @@ class CompanySubscriptionAdmin(admin.ModelAdmin):
     list_display = ('company', 'plan', 'started_at', 'expires_at', 'is_active')
     list_filter = ('is_active',)
     raw_id_fields = ('company', 'plan')
+
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'company', 'is_active')
+    list_filter = ('is_active', 'company')
+    search_fields = ('name', 'code')
+    raw_id_fields = ('company',)
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'company', 'branch', 'is_pinned', 'is_active', 'valid_until', 'created_at')
+    list_filter = ('is_active', 'is_pinned', 'company')
+    search_fields = ('title', 'content')
+    raw_id_fields = ('company', 'branch', 'created_by')
+    date_hierarchy = 'created_at'
 
 
 @admin.register(InvoiceUsageLog)

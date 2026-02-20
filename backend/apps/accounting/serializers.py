@@ -33,16 +33,20 @@ class BankSerializer(serializers.ModelSerializer):
 
 
 class CashRegisterSerializer(serializers.ModelSerializer):
+    warehouse_name = serializers.CharField(source='warehouse.name', read_only=True)
+
     class Meta:
         model = CashRegister
-        fields = ['id', 'name', 'code', 'warehouse', 'is_active', 'company']
+        fields = ['id', 'name', 'code', 'warehouse', 'warehouse_name', 'branch', 'is_active', 'company']
 
 
 class CashRegisterOpeningSerializer(serializers.ModelSerializer):
+    cash_register_name = serializers.CharField(source='cash_register.name', read_only=True)
+
     class Meta:
         model = CashRegisterOpening
         fields = [
-            'id', 'cash_register', 'opened_at', 'opening_balance', 'opened_by',
+            'id', 'cash_register', 'cash_register_name', 'opened_at', 'opening_balance', 'opened_by',
             'notes', 'closed_at', 'closing_balance', 'closed_by'
         ]
 
