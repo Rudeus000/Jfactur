@@ -1,0 +1,41 @@
+# Jfactur - archivos que no se suben a GitHub
+
+# Entorno y secretos
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+backend/venv/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Django
+backend/staticfiles/
+backend/media/
+*.log
+db.sqlite3
+*.sqlite3
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Certificados y datos sensibles (no subir a GitHub)
+*.pfx
+*.pem
+backend/**/certificados/
+
+# Odoo (referencia, no se sube)
+odoo17/
