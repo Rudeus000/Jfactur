@@ -5,7 +5,7 @@ import { DataTable, Column } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Search, RefreshCw, Pencil } from "lucide-react";
+import { Plus, Search, RefreshCw, Pencil, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+
+const NO_PARENT = "__none__";
 
 interface Category {
   id: string;
@@ -45,15 +57,16 @@ const columns: Column<Category>[] = [
 ];
 
 const Categories = () => {
-  const { data, isLoading, refresh } = useApiList<Category>({ endpoint: "/categories/" });
+  const { data, isLoading, refresh, deleteItem } = useApiList<Category>({ endpoint: "/categories/" });
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [saving, setSaving] = useState(false);
+  const [toDelete, setToDelete] = useState<Category | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
-  const [form, setForm] = useState({ name: "", parent: "", is_active: true });
+  const [form, setForm] = useState({ name: "", parent: NO_PARENT, is_active: true });
 
   useEffect(() => {
     api.get<Category[]>("/categories/").then((r) => setCategories(Array.isArray(r.data) ? r.data : [])).catch(() => setCategories([]));
@@ -61,7 +74,7 @@ const Categories = () => {
 
   const openCreate = () => {
     setEditing(null);
-    setForm({ name: "", parent: "", is_active: true });
+    setForm({ name: "", parent: NO_PARENT, is_active: true });
     setOpen(true);
   };
 
@@ -69,7 +82,7 @@ const Categories = () => {
     setEditing(row);
     setForm({
       name: (row.name as string) || "",
-      parent: (row.parent as string) || "",
+      parent: (row.parent as string) || NO_PARENT,
       is_active: row.is_active !== false,
     });
     setOpen(true);
@@ -83,7 +96,7 @@ const Categories = () => {
     }
     setSaving(true);
     try {
-      const payload = { name: form.name.trim(), parent: form.parent || null, is_active: form.is_active };
+      const payload = { name: form.name.trim(), parent: form.parent === NO_PARENT || !form.parent ? null : form.parent, is_active: form.is_active };
       if (editing) {
         await api.patch(`/categories/${editing.id}/`, payload);
         toast({ title: "Categoría actualizada" });
@@ -100,7 +113,31 @@ const Categories = () => {
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!toDelete) return;
+    await deleteItem(toDelete.id);
+    setToDelete(null);
+  };
+
   const filtered = data.filter((c) => c.name?.toLowerCase().includes(search.toLowerCase()));
+
+  const columnsWithActions: Column<Category>[] = [
+    ...columns,
+    {
+      key: "_actions",
+      label: "",
+      render: (row) => (
+        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(row)} aria-label="Editar">
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setToDelete(row)} aria-label="Eliminar">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -127,10 +164,10 @@ const Categories = () => {
                 </div>
                 <div className="grid gap-2">
                   <Label>Categoría padre</Label>
-                  <Select value={form.parent} onValueChange={(v) => setForm((f) => ({ ...f, parent: v }))}>
+                  <Select value={form.parent || NO_PARENT} onValueChange={(v) => setForm((f) => ({ ...f, parent: v }))}>
                     <SelectTrigger><SelectValue placeholder="Ninguna" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Ninguna</SelectItem>
+                      <SelectItem value={NO_PARENT}>Ninguna</SelectItem>
                       {categories.filter((c) => !editing || c.id !== editing.id).map((c) => (
                         <SelectItem key={c.id} value={c.id}>{c.name as string}</SelectItem>
                       ))}
@@ -161,11 +198,24 @@ const Categories = () => {
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
-      <DataTable
-        columns={[...columns, { key: "_action", label: "", render: (row) => <Button variant="ghost" size="sm" onClick={() => openEdit(row)}><Pencil className="h-4 w-4" /></Button> }]}
-        data={filtered}
-        isLoading={isLoading}
-      />
+      <DataTable columns={columnsWithActions} data={filtered} isLoading={isLoading} />
+
+      <AlertDialog open={!!toDelete} onOpenChange={(open) => !open && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar categoría?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará la categoría &quot;{toDelete?.name}&quot;. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

@@ -19,6 +19,20 @@ const ComoUsar = () => {
         </p>
       </div>
 
+      {/* Barra superior (header) */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Barra superior (header)</CardTitle>
+          <CardDescription>
+            Buscador y selectores que puedes usar en cualquier página.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground space-y-2">
+          <p><strong>Buscador:</strong> Escribe un texto y pulsa <kbd className="px-1.5 py-0.5 rounded bg-muted text-xs">Enter</kbd>. Si escribes <strong>clientes</strong> vas a Catálogo → Clientes; si escribes <strong>productos</strong>, a Catálogo → Productos. Cualquier otro texto te lleva a Facturación → Facturas con ese criterio de búsqueda (por serie o cliente).</p>
+          <p><strong>Almacén y Caja:</strong> Los desplegables &quot;Almacén&quot; y &quot;Caja&quot; guardan tu elección para la sesión (se actualiza tu usuario). Así, al facturar o registrar cobros, se suele proponer ese almacén y caja por defecto.</p>
+        </CardContent>
+      </Card>
+
       {/* Uso diario */}
       <Card className="mb-6">
         <CardHeader>
@@ -28,12 +42,12 @@ const ComoUsar = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
-          <p><strong>1. Iniciar sesión</strong> con tu correo y contraseña. El sistema filtra datos por tu empresa.</p>
+          <p><strong>1. Iniciar sesión</strong> con tu correo y contraseña. Si tienes varias sucursales, elige una la primera vez.</p>
           <p><strong>2. Revisar el Dashboard</strong> (inicio): ventas del día, facturas pendientes de envío a SUNAT, total por cobrar y por pagar, y alertas (ej. certificado faltante).</p>
-          <p><strong>3. Si trabajas con caja:</strong> abre la caja al inicio del turno; emite facturas y registra cobros vinculados a esa apertura; al cierre, genera el cierre de caja con el resumen y valida.</p>
+          <p><strong>3. Si trabajas con caja:</strong> asigna <strong>Caja</strong> en el header si hace falta; abre la caja en Contabilidad → Aperturas; emite facturas y registra cobros vinculados a esa apertura; al cierre, genera el cierre de caja.</p>
           <p><strong>4. Facturación:</strong> crea facturas o boletas (cliente, líneas, serie), envía a SUNAT si corresponde, y registra los cobros en Facturación → Cobros.</p>
           <p><strong>5. Compras:</strong> crea órdenes de compra, confírmalas para que actualicen el stock; registra los pagos a proveedores.</p>
-          <p><strong>6. Reportes:</strong> libro de ventas, ventas por cliente/producto y cuentas por cobrar/pagar (aged) desde el menú Reportes.</p>
+          <p><strong>6. Reportes:</strong> libro de ventas, ventas por cliente/producto y cuentas por cobrar/pagar desde el menú Reportes.</p>
         </CardContent>
       </Card>
 
@@ -50,16 +64,16 @@ const ComoUsar = () => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <ol className="list-decimal list-inside space-y-1.5 text-muted-foreground">
-            <li>Empresa y usuarios (ya vienen con datos de prueba o se crean vía admin).</li>
-            <li><strong>Catálogo:</strong> Categorías → Productos → Clientes → Proveedores.</li>
-            <li><strong>Inventario:</strong> Al menos un <Link to="/inventario/almacenes" className="text-primary underline">almacén</Link> (requisito para series y cajas).</li>
+            <li>Empresa y usuarios (datos de prueba o admin).</li>
+            <li><strong>Catálogo:</strong> <Link to="/catalogo/categorias" className="text-primary underline">Categorías</Link> → <Link to="/catalogo/productos" className="text-primary underline">Productos</Link> → <Link to="/catalogo/clientes" className="text-primary underline">Clientes</Link> → <Link to="/catalogo/proveedores" className="text-primary underline">Proveedores</Link>. En cada pantalla puedes crear, editar y eliminar registros.</li>
+            <li><strong>Inventario:</strong> Al menos un <Link to="/inventario/almacenes" className="text-primary underline">almacén</Link> (crear/editar/eliminar); opcionalmente <Link to="/inventario/stock" className="text-primary underline">Stock</Link> y <Link to="/inventario/kardex" className="text-primary underline">Kardex</Link> manuales; <Link to="/inventario/traspasos" className="text-primary underline">Traspasos</Link> para mover entre almacenes (crear, editar pendientes, validar).</li>
             <li><strong>Contabilidad:</strong> Monedas → Cuentas → Bancos → <Link to="/contabilidad/cajas" className="text-primary underline">Cajas</Link>.</li>
             <li><strong>Facturación:</strong> <Link to="/facturacion/series" className="text-primary underline">Series</Link> de factura/boleta (asociadas a almacén).</li>
-            <li>Opcional: Asigna <strong>Mi caja</strong> y <strong>Mi almacén</strong> en el menú superior (barra del header) para que queden por defecto al facturar y cobrar.</li>
+            <li>En la <strong>barra superior</strong> asigna <strong>Almacén</strong> y <strong>Caja</strong> para que queden por defecto al facturar y cobrar.</li>
             <li>Opcional: <Link to="/contabilidad/aperturas" className="text-primary underline">Apertura de caja</Link> si cobrarás en efectivo y quieres cierre de caja.</li>
           </ol>
           <p className="pt-2 text-muted-foreground">
-            Sin almacén no hay series ni cajas por punto de venta. Sin series no puedes emitir facturas.
+            Sin almacén no hay series ni cajas. Sin series no puedes emitir facturas.
           </p>
         </CardContent>
       </Card>
@@ -116,8 +130,15 @@ const ComoUsar = () => {
               <AccordionTrigger>Traspaso entre almacenes</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 <p>1. Necesitas al menos dos <Link to="/inventario/almacenes" className="text-primary underline">almacenes</Link> y <Link to="/inventario/stock" className="text-primary underline">stock</Link> en origen.</p>
-                <p>2. Crea el <Link to="/inventario/traspasos" className="text-primary underline">traspaso</Link> (origen, destino, líneas).</p>
-                <p>3. Valida el traspaso: se descuenta en origen, se suma en destino y se registra en el kardex.</p>
+                <p>2. En <Link to="/inventario/traspasos" className="text-primary underline">Traspasos</Link> crea uno nuevo (origen, destino, fecha, líneas producto + cantidad). Puedes editar o eliminar solo los que estén en estado Pendiente.</p>
+                <p>3. Pulsa <strong>Validar</strong> (icono de check): se descuenta en origen, se suma en destino y se registra en el <Link to="/inventario/kardex" className="text-primary underline">kardex</Link>.</p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="inventario">
+              <AccordionTrigger>Stock y kardex manual</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                <p><Link to="/inventario/stock" className="text-primary underline">Stock</Link>: puedes crear registros producto + almacén + cantidad (si ya existe, se suma). Editar cantidad o eliminar el registro.</p>
+                <p><Link to="/inventario/kardex" className="text-primary underline">Kardex</Link>: puedes crear movimientos manuales (entrada, salida, ajuste) con producto, almacén, cantidad y fecha. También editar o eliminar.</p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -187,7 +208,7 @@ const ComoUsar = () => {
           <ul className="text-sm space-y-2 text-muted-foreground">
             <li><strong>“No existe serie activa”:</strong> Crea o activa una serie para ese tipo (01/03) y código (ej. F001), asociada a un almacén.</li>
             <li><strong>No puedo abrir caja:</strong> Debe existir al menos una caja creada.</li>
-            <li><strong>No se actualiza el stock:</strong> La compra debe estar confirmada; el traspaso debe estar validado.</li>
+            <li><strong>No se actualiza el stock:</strong> La compra debe estar confirmada; el traspaso debe estar validado. Si creas stock manual y el producto+almacén ya existe, el sistema suma la cantidad (no da error).</li>
             <li><strong>SUNAT rechaza:</strong> RUC, usuario SOL, certificado y datos del comprobante correctos. En beta usar usuario MODDATOS.</li>
             <li><strong>No puedo convertir cotización en factura:</strong> Debe haber una serie activa para el tipo de documento.</li>
           </ul>

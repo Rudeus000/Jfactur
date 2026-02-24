@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import api from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -31,11 +31,16 @@ export function MiAlmacenSelector() {
   }, []);
 
   const branchId = user?.default_branch ?? null;
-  const optionsForBranch = branchId
-    ? options.filter((o) => o.branch == null || o.branch === branchId)
-    : options;
+  const optionsForBranch = useMemo(() => {
+    return branchId ? options.filter((o) => o.branch == null || o.branch === branchId) : options;
+  }, [options, branchId]);
 
   const value = user?.default_warehouse || "none";
+  const currentOption = value !== "none" ? options.find((o) => o.id === value) : null;
+  const listToShow = useMemo(() => {
+    if (!currentOption || optionsForBranch.some((o) => o.id === currentOption.id)) return optionsForBranch;
+    return [currentOption, ...optionsForBranch];
+  }, [optionsForBranch, currentOption]);
 
   const handleChange = async (v: string) => {
     const newId = v === "none" ? null : v;
@@ -53,13 +58,13 @@ export function MiAlmacenSelector() {
   return (
     <div className="hidden sm:flex items-center gap-2 text-sm">
       <span className="text-muted-foreground whitespace-nowrap">Almacén:</span>
-      <Select value={value} onValueChange={handleChange} disabled={loading || optionsForBranch.length === 0}>
+      <Select value={value} onValueChange={handleChange} disabled={loading || listToShow.length === 0}>
         <SelectTrigger className="w-[140px] sm:w-[160px] h-8 text-xs">
           <SelectValue placeholder="Elegir almacén" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="none">Sin asignar</SelectItem>
-          {optionsForBranch.map((o) => (
+          {listToShow.map((o) => (
             <SelectItem key={o.id} value={o.id}>
               {o.name} {o.code ? `(${o.code})` : ""}
             </SelectItem>

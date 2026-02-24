@@ -424,7 +424,7 @@ class AgedPayableReport(APIView):
             if balance <= 0:
                 continue
             due = pur.due_date or pur.date
-            key = (pur.supplier.ruc or '', pur.supplier.razon_social or 'Sin nombre')
+            key = (pur.supplier.numero_documento or '', pur.supplier.razon_social or 'Sin nombre')
             if key not in rows_by_supplier:
                 rows_by_supplier[key] = {
                     'supplier_ruc': key[0],

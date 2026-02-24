@@ -1,3 +1,7 @@
+from decimal import Decimal
+import json
+import os
+
 from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -37,11 +41,35 @@ class StockQuantViewSet(viewsets.ModelViewSet):
     serializer_class = StockQuantSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        if self.request.user.company_id:
-            serializer.save(company_id=self.request.user.company_id)
-        else:
-            serializer.save()
+    # #region agent log
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        company_id = getattr(request.user, 'company_id', None)
+        product = serializer.validated_data.get('product')
+        warehouse = serializer.validated_data.get('warehouse')
+        quantity = serializer.validated_data.get('quantity', 0)
+        pid = str(product.id) if product else None
+        wid = str(warehouse.id) if warehouse else None
+        try:
+            _log_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'debug-976499.log'))
+            _exists = StockQuant.objects.filter(company_id=company_id, product=product, warehouse=warehouse).exists() if (company_id and product and warehouse) else False
+            with open(_log_path, 'a', encoding='utf-8') as _f:
+                _f.write(json.dumps({'sessionId': '976499', 'hypothesisId': 'H1', 'location': 'inventory/views.py:StockQuant create', 'message': 'stock_quant create', 'data': {'company_id': str(company_id), 'product_id': pid, 'warehouse_id': wid, 'quantity': str(quantity), 'existing_exists': _exists}, 'timestamp': timezone.now().timestamp() * 1000}) + '\n')
+        except Exception:
+            pass
+        if not company_id:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError('Usuario sin empresa asignada.')
+        qty = Decimal(str(quantity))
+        quant, created = StockQuant.objects.get_or_create(
+            company_id=company_id, product=product, warehouse=warehouse,
+            defaults={'quantity': 0, 'reserved_quantity': 0}
+        )
+        quant.quantity += qty
+        quant.save(update_fields=['quantity', 'updated_at'])
+        return Response(StockQuantSerializer(quant).data, status=status.HTTP_201_CREATED)
+    # #endregion
 
     def get_queryset(self):
         qs = filter_by_company(StockQuant.objects.all(), self.request)

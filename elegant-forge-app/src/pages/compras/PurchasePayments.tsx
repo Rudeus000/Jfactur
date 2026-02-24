@@ -80,6 +80,10 @@ const PurchasePayments = () => {
     bank: "",
   });
 
+  // #region agent log
+  fetch('http://127.0.0.1:7540/ingest/19ec7c1b-2775-421b-b4c9-517a7bc396b9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'976499'},body:JSON.stringify({sessionId:'976499',location:'PurchasePayments.tsx:formState',message:'PurchasePayments form state',data:{formPurchase:form.purchase,formBank:form.bank,open,purchasesLen:purchases.length,banksLen:banks.length},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+  // #endregion
+
   useEffect(() => {
     const load = async () => {
       try {

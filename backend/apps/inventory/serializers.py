@@ -89,3 +89,26 @@ class StockTransferWriteSerializer(serializers.ModelSerializer):
                 quantity=line_data['quantity'],
             )
         return transfer
+
+    def update(self, instance, validated_data):
+        if instance.status != 'pending':
+            validated_data.pop('lines', None)
+            validated_data.pop('warehouse_origin', None)
+            validated_data.pop('warehouse_dest', None)
+            validated_data.pop('date', None)
+        lines_data = validated_data.pop('lines', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        if lines_data is not None and instance.status == 'pending':
+            instance.lines.all().delete()
+            for i, line_data in enumerate(lines_data, start=1):
+                product = line_data.get('product')
+                product_id = product.id if hasattr(product, 'id') else product
+                StockTransferLine.objects.create(
+                    transfer=instance,
+                    line_number=line_data.get('line_number', i),
+                    product_id=product_id,
+                    quantity=line_data['quantity'],
+                )
+        return instance

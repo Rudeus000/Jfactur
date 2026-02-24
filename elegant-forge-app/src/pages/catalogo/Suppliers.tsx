@@ -5,7 +5,7 @@ import { DataTable, Column } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Search, RefreshCw, Pencil } from "lucide-react";
+import { Plus, Search, RefreshCw, Pencil, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface Supplier {
@@ -49,11 +59,12 @@ const columns: Column<Supplier>[] = [
 ];
 
 const Suppliers = () => {
-  const { data, isLoading, refresh } = useApiList<Supplier>({ endpoint: "/suppliers/" });
+  const { data, isLoading, refresh, deleteItem } = useApiList<Supplier>({ endpoint: "/suppliers/" });
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Supplier | null>(null);
   const [saving, setSaving] = useState(false);
+  const [toDelete, setToDelete] = useState<Supplier | null>(null);
   const { toast } = useToast();
 
   const [form, setForm] = useState({
@@ -131,11 +142,35 @@ const Suppliers = () => {
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!toDelete) return;
+    await deleteItem(toDelete.id);
+    setToDelete(null);
+  };
+
   const filtered = data.filter(
     (s) =>
       s.razon_social?.toLowerCase().includes(search.toLowerCase()) ||
       s.numero_documento?.includes(search)
   );
+
+  const columnsWithActions: Column<Supplier>[] = [
+    ...columns,
+    {
+      key: "_actions",
+      label: "",
+      render: (row) => (
+        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(row)} aria-label="Editar">
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setToDelete(row)} aria-label="Eliminar">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -220,11 +255,24 @@ const Suppliers = () => {
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
-      <DataTable
-        columns={[...columns, { key: "_action", label: "", render: (row) => <Button variant="ghost" size="sm" onClick={() => openEdit(row)}><Pencil className="h-4 w-4" /></Button> }]}
-        data={filtered}
-        isLoading={isLoading}
-      />
+      <DataTable columns={columnsWithActions} data={filtered} isLoading={isLoading} />
+
+      <AlertDialog open={!!toDelete} onOpenChange={(open) => !open && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar proveedor?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará el proveedor &quot;{toDelete?.razon_social}&quot; ({toDelete?.tipo_documento === "1" ? "DNI" : "RUC"} {toDelete?.numero_documento}). Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

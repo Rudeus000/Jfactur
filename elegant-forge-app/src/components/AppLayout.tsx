@@ -19,11 +19,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
   const handleGlobalSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
-    const term = globalSearch.trim();
+    const term = globalSearch.trim().toLowerCase();
     if (!term) return;
     e.preventDefault();
-    navigate(`/facturacion/facturas?search=${encodeURIComponent(term)}`);
     setGlobalSearch("");
+    if (term === "clientes") {
+      navigate("/catalogo/clientes");
+      return;
+    }
+    if (term === "productos") {
+      navigate("/catalogo/productos");
+      return;
+    }
+    navigate(`/facturacion/facturas?search=${encodeURIComponent(term)}`);
   };
 
   return (
@@ -37,7 +45,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground shrink-0" />
               <Input
-                placeholder="Buscar facturas (Enter) o ir a Clientes/Productos…"
+                placeholder="Buscar facturas (Enter); escribir clientes o productos para ir"
                 className="pl-9 h-9 bg-muted/50 border-transparent focus:border-border focus:ring-1"
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}

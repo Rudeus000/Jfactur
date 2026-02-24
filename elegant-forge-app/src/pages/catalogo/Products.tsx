@@ -6,7 +6,7 @@ import { DataTable, Column } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Search, RefreshCw, Pencil } from "lucide-react";
+import { Plus, Search, RefreshCw, Pencil, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +22,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+
+const ALL_WAREHOUSES = "__all__";
+const NO_CATEGORY = "__none__";
 
 interface Product {
   id: string;
@@ -97,14 +110,15 @@ const getColumns = (categories: Category[]): Column<Product>[] => [
 
 const Products = () => {
   const { user } = useAuth();
-  const { data, isLoading, refresh } = useApiList<Product>({ endpoint: "/products/" });
+  const { data, isLoading, refresh, deleteItem } = useApiList<Product>({ endpoint: "/products/" });
   const [search, setSearch] = useState("");
-  const [warehouseFilter, setWarehouseFilter] = useState<string>("");
+  const [warehouseFilter, setWarehouseFilter] = useState<string>(ALL_WAREHOUSES);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [stockQuants, setStockQuants] = useState<StockQuant[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
+  const [toDelete, setToDelete] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
@@ -131,7 +145,7 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    if (!warehouseFilter) {
+    if (warehouseFilter === ALL_WAREHOUSES || !warehouseFilter) {
       setStockQuants([]);
       return;
     }
@@ -148,7 +162,7 @@ const Products = () => {
       (p.sku as string)?.toLowerCase().includes(search.toLowerCase())
   );
   const filtered =
-    warehouseFilter && productIdsInWarehouse.size > 0
+    warehouseFilter !== ALL_WAREHOUSES && productIdsInWarehouse.size > 0
       ? filteredBySearch.filter((p) => productIdsInWarehouse.has(p.id))
       : filteredBySearch;
 
@@ -164,7 +178,7 @@ const Products = () => {
       costo_unitario: "",
       afecto_igv: true,
       codigo_tipo_afectacion: "10",
-      category: "",
+      category: NO_CATEGORY,
       is_active: true,
     });
     setOpen(true);
@@ -182,7 +196,7 @@ const Products = () => {
       costo_unitario: String(row.costo_unitario ?? ""),
       afecto_igv: row.afecto_igv !== false,
       codigo_tipo_afectacion: (row.codigo_tipo_afectacion as string) || "10",
-      category: (row.category as string) || "",
+      category: (row.category as string) || NO_CATEGORY,
       is_active: row.is_active !== false,
     });
     setOpen(true);
@@ -206,7 +220,7 @@ const Products = () => {
         costo_unitario: form.costo_unitario ? parseFloat(form.costo_unitario) : 0,
         afecto_igv: form.afecto_igv,
         codigo_tipo_afectacion: form.codigo_tipo_afectacion,
-        category: form.category || null,
+        category: form.category === NO_CATEGORY || !form.category ? null : form.category,
         is_active: form.is_active,
       };
       if (editing) {
@@ -224,6 +238,30 @@ const Products = () => {
       setSaving(false);
     }
   };
+
+  const handleDeleteConfirm = async () => {
+    if (!toDelete) return;
+    await deleteItem(toDelete.id);
+    setToDelete(null);
+  };
+
+  const columnsWithActions = [
+    ...getColumns(categories),
+    {
+      key: "_actions",
+      label: "",
+      render: (row: Product) => (
+        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(row)} aria-label="Editar">
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setToDelete(row)} aria-label="Eliminar">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ] as Column<Product>[];
 
   return (
     <div>
@@ -260,10 +298,10 @@ const Products = () => {
                 </div>
                 <div className="grid gap-2">
                   <Label>Categoría</Label>
-                  <Select value={form.category} onValueChange={(v) => setForm((f) => ({ ...f, category: v }))}>
+                  <Select value={form.category || NO_CATEGORY} onValueChange={(v) => setForm((f) => ({ ...f, category: v }))}>
                     <SelectTrigger><SelectValue placeholder="Ninguna" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Ninguna</SelectItem>
+                      <SelectItem value={NO_CATEGORY}>Ninguna</SelectItem>
                       {categories.map((c) => (
                         <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                       ))}
@@ -326,7 +364,7 @@ const Products = () => {
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos los productos</SelectItem>
+              <SelectItem value={ALL_WAREHOUSES}>Todos los productos</SelectItem>
               {warehouses.map((w) => (
                 <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
               ))}
@@ -337,11 +375,24 @@ const Products = () => {
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
-      <DataTable
-        columns={[...getColumns(categories), { key: "_action", label: "", render: (row) => <Button variant="ghost" size="sm" onClick={() => openEdit(row)}><Pencil className="h-4 w-4" /></Button> }]}
-        data={filtered}
-        isLoading={isLoading}
-      />
+      <DataTable columns={columnsWithActions} data={filtered} isLoading={isLoading} />
+
+      <AlertDialog open={!!toDelete} onOpenChange={(open) => !open && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar producto?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará el producto &quot;{toDelete?.nombre}&quot; (SKU: {toDelete?.sku || "—"}). Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

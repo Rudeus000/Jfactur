@@ -22,10 +22,17 @@ const AgedPayable = () => {
   const [asOf, setAsOf] = useState(() => new Date().toISOString().slice(0, 10));
   const { toast } = useToast();
 
+  // #region agent log
+  fetch('http://127.0.0.1:7540/ingest/19ec7c1b-2775-421b-b4c9-517a7bc396b9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'976499'},body:JSON.stringify({sessionId:'976499',location:'AgedPayable.tsx:render',message:'AgedPayable render',data:{dataLen:data?.length,loading},timestamp:Date.now(),hypothesisId:'H3'})}).catch(()=>{});
+  // #endregion
+
   const fetchReport = async () => {
     setLoading(true);
     try {
       const { data: res } = await api.get<{ data: AgedRow[] }>("/reports/aged-payable/", { params: { as_of: asOf } });
+      // #region agent log
+      fetch('http://127.0.0.1:7540/ingest/19ec7c1b-2775-421b-b4c9-517a7bc396b9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'976499'},body:JSON.stringify({sessionId:'976499',location:'AgedPayable.tsx:fetchReport',message:'API response shape',data:{resType:typeof res,resKeys:res?Object.keys(res):[],isDataArray:Array.isArray(res?.data),dataLen:Array.isArray(res?.data)?res.data.length:null},timestamp:Date.now(),hypothesisId:'H3'})}).catch(()=>{});
+      // #endregion
       setData(res?.data ?? []);
     } catch (err) {
       toast({ title: "Error", description: getErrorMessage(err), variant: "destructive" });

@@ -113,7 +113,7 @@ const Purchases = () => {
   const { user } = useAuth();
   const { data, isLoading, refresh } = useApiList<Purchase>({ endpoint: "/purchases/" });
   const [search, setSearch] = useState("");
-  const [sucursalFilter, setSucursalFilter] = useState<string>("");
+  const [sucursalFilter, setSucursalFilter] = useState<string>("__all__");
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -126,19 +126,19 @@ const Purchases = () => {
       const list = Array.isArray(r.data) ? r.data : [];
       setWarehouses(list);
       setSucursalFilter((prev) => {
-        if (prev && list.some((w) => w.id === prev)) return prev;
+        if (prev && prev !== "__all__" && list.some((w) => w.id === prev)) return prev;
         if (list.length > 0 && user?.default_warehouse && list.some((w) => w.id === user.default_warehouse)) {
           return user.default_warehouse;
         }
         if (list.length > 0) return list[0].id;
-        return "";
+        return "__all__";
       });
     }).catch(() => setWarehouses([]));
   }, [user?.default_warehouse]);
 
   const [form, setForm] = useState({
-    supplier: "",
-    warehouse: "",
+    supplier: "__none__",
+    warehouse: "__none__",
     date: new Date().toISOString().slice(0, 10),
     due_date: "",
     lines: [{ product: "", quantity: "1", unit_price: "", description: "" }] as LineRow[],
@@ -166,8 +166,8 @@ const Purchases = () => {
 
   const openCreate = () => {
     setForm({
-      supplier: suppliers[0]?.id ?? "",
-      warehouse: user?.default_warehouse ?? warehouses[0]?.id ?? "",
+      supplier: suppliers[0]?.id ?? "__none__",
+      warehouse: user?.default_warehouse ?? warehouses[0]?.id ?? "__none__",
       date: new Date().toISOString().slice(0, 10),
       due_date: "",
       lines: [{ product: "", quantity: "1", unit_price: "", description: "" }],
@@ -195,7 +195,7 @@ const Purchases = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.supplier) {
+    if (!form.supplier || form.supplier === "__none__") {
       toast({ title: "Seleccione un proveedor", variant: "destructive" });
       return;
     }
@@ -229,7 +229,7 @@ const Purchases = () => {
     try {
       await api.post("/purchases/", {
         supplier: form.supplier,
-        warehouse: form.warehouse || null,
+        warehouse: form.warehouse === "__none__" || !form.warehouse ? null : form.warehouse,
         date: form.date,
         due_date: form.due_date || null,
         status: "draft",
@@ -264,7 +264,7 @@ const Purchases = () => {
 
   const filtered = data
     .filter((p) => (p.number as string)?.toLowerCase().includes(search.toLowerCase()))
-    .filter((p) => !sucursalFilter || (p.warehouse as string) === sucursalFilter);
+    .filter((p) => sucursalFilter === "__all__" || (p.warehouse as string) === sucursalFilter);
 
   return (
     <div>
@@ -293,6 +293,7 @@ const Purchases = () => {
                         <SelectValue placeholder="Seleccionar" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="__none__">Seleccionar</SelectItem>
                         {suppliers.map((s) => (
                           <SelectItem key={s.id} value={s.id}>
                             {s.razon_social} {s.ruc ? `(${s.ruc})` : ""}
@@ -308,7 +309,7 @@ const Purchases = () => {
                         <SelectValue placeholder="Opcional" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Sin almacén</SelectItem>
+                        <SelectItem value="__none__">Sin almacén</SelectItem>
                         {warehouses.map((w) => (
                           <SelectItem key={w.id} value={w.id}>
                             {w.name}
@@ -341,13 +342,14 @@ const Purchases = () => {
                       <div key={idx} className="grid grid-cols-12 gap-2 items-end">
                         <div className="col-span-5">
                           <Select
-                            value={line.product}
-                            onValueChange={(v) => updateLine(idx, "product", v)}
+                            value={line.product || "__none__"}
+                            onValueChange={(v) => updateLine(idx, "product", v === "__none__" ? "" : v)}
                           >
                             <SelectTrigger className="h-8">
                               <SelectValue placeholder="Producto" />
                             </SelectTrigger>
                             <SelectContent>
+                              <SelectItem value="__none__">Seleccionar</SelectItem>
                               {products.map((p) => (
                                 <SelectItem key={p.id} value={p.id}>
                                   {p.nombre} {p.sku ? `(${p.sku})` : ""}
@@ -427,7 +429,7 @@ const Purchases = () => {
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas las sucursales</SelectItem>
+              <SelectItem value="__all__">Todas las sucursales</SelectItem>
               {warehouses.map((w) => (
                 <SelectItem key={w.id} value={w.id}>{w.name} {w.code ? `(${w.code})` : ""}</SelectItem>
               ))}

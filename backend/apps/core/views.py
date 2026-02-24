@@ -2,10 +2,12 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.db.models import Q
+from django.contrib.auth import authenticate
 from django.utils import timezone
-from .models import Company, Branch, Announcement
+from .models import Company, Branch, Announcement, User
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer,
     BranchSerializer,
@@ -13,6 +15,59 @@ from .serializers import (
     AnnouncementSerializer,
 )
 from .dni_lookup import consultar_dni
+
+
+def _companies_queryset(user):
+    """Misma lógica que CompanyListAPIView.get_queryset()."""
+    qs = Company.objects.filter(is_active=True)
+    if not user.is_superuser:
+        if user.company_id:
+            qs = qs.filter(id=user.company_id)
+        else:
+            qs = qs.none()
+    return qs
+
+
+@api_view(["POST"])
+@permission_classes([])
+def auth_login(request):
+    """
+    Login compatible con facturafacil-pos: recibe email/password y devuelve
+    { token, user, companies } usando JWT (access) del backend.
+    """
+    email = request.data.get("email", "").strip()
+    password = request.data.get("password", "")
+    if not email or not password:
+        return Response(
+            {"detail": "email y password son requeridos"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    user = authenticate(request, username=email, password=password)
+    if user is None:
+        return Response(
+            {"detail": "Credenciales inválidas"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+    if not user.is_active:
+        return Response(
+            {"detail": "Usuario inactivo"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    refresh = RefreshToken.for_user(user)
+    access = str(refresh.access_token)
+    companies_qs = _companies_queryset(user)
+    return Response({
+        "token": access,
+        "user": UserMeSerializer(user).data,
+        "companies": CompanySerializer(companies_qs, many=True).data,
+    })
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def auth_verify(request):
+    """Compat facturafacil-pos: mismo contenido que GET users/me/."""
+    return Response(UserMeSerializer(request.user).data)
 
 
 class CompanyListAPIView(generics.ListAPIView):

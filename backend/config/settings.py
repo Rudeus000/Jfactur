@@ -11,10 +11,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+from decouple import Config, RepositoryEnv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Cargar .env siempre desde la carpeta del backend (evita "no password supplied" si se ejecuta desde otra ruta).
+_env_file = BASE_DIR / '.env'
+if _env_file.exists():
+    config = Config(RepositoryEnv(str(_env_file)))
+else:
+    from decouple import config  # fallback al comportamiento por defecto
 
 
 # Quick-start development settings - unsuitable for production
@@ -82,17 +89,26 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# En desarrollo sin PostgreSQL: USE_SQLITE=True en .env
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='Sistema Jfactur'),
-        'USER': config('DB_USER', default='postgres'),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5434'),
+if config('USE_SQLITE', default=True, cast=bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='Sistema Jfactur'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
 
 # Custom user model
 AUTH_USER_MODEL = 'core.User'
@@ -149,9 +165,25 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS (development)
-CORS_ALLOW_ALL_ORIGINS = DEBUG
-CORS_ALLOWED_ORIGINS = [] if DEBUG else []
+# CORS: el front envía Authorization (Bearer), por eso no vale *; hay que listar orígenes y permitir credenciales.
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:8080',
+]
+CORS_ALLOW_CREDENTIALS = True
+# Asegurar que el navegador permita enviar Authorization y X-Company-ID en el GET
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'origin',
+    'x-company-id',
+    'x-requested-with',
+]
 
 # Consulta DNI (RENIEC / proveedor). Opcional: URL de API que recibe ?dni= y devuelve nombres/apellidos.
 DNI_LOOKUP_API_URL = config('DNI_LOOKUP_API_URL', default='')

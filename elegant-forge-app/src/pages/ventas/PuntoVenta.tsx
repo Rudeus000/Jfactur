@@ -42,6 +42,7 @@ interface InvoiceSeries {
   tipo_documento: string;
   serie: string;
   warehouse: string;
+  is_active?: boolean;
 }
 
 interface Customer {
@@ -70,6 +71,7 @@ const PuntoVenta = () => {
   const [stockQuants, setStockQuants] = useState<{ product: string; quantity: number }[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [series, setSeries] = useState<InvoiceSeries[]>([]);
+  const [montoRecibido, setMontoRecibido] = useState("");
   const { toast } = useToast();
 
   const [emitForm, setEmitForm] = useState({
@@ -116,7 +118,7 @@ const PuntoVenta = () => {
   const defaultSerie = seriesForType.find((s) => s.warehouse === user?.default_warehouse) || seriesForType[0];
 
   const productIdsInWarehouse = new Set(stockQuants.filter((q) => Number(q.quantity) > 0).map((q) => q.product));
-  const stockByProduct = new Map(stockQuants.map((q) => [q.product, Number(q.quantity) ?? 0]));
+  const stockByProduct = new Map(stockQuants.map((q) => [q.product, Number(q.quantity) || 0]));
   const filteredProducts = products
     .filter(
       (p) =>
@@ -152,6 +154,10 @@ const PuntoVenta = () => {
   const IGV_RATE = 0.18;
   const igv = round2(subtotal * IGV_RATE);
   const total = round2(subtotal + igv);
+
+  const montoNum = montoRecibido.trim() ? parseFloat(montoRecibido.replace(",", ".")) : NaN;
+  const vuelto = !Number.isNaN(montoNum) && montoNum >= total ? round2(montoNum - total) : null;
+  const falta = !Number.isNaN(montoNum) && montoNum > 0 && montoNum < total ? round2(total - montoNum) : null;
 
   const openCobrarDialog = () => {
     if (cart.length === 0) {
@@ -235,6 +241,7 @@ const PuntoVenta = () => {
       setLastInvoiceType(emitForm.tipo_documento as "01" | "03");
       toast({ title: `Comprobante ${invoice.serie}-${invoice.numero} emitido. Puede imprimir ticket, boleta o factura.` });
       setCart([]);
+      setMontoRecibido("");
       setOpenCobrar(false);
       openTicket(invoice.id);
     } catch (e) {
@@ -349,6 +356,30 @@ const PuntoVenta = () => {
             <p>IGV: S/ {igv.toFixed(2)}</p>
             <p className="font-bold text-base">Total: S/ {total.toFixed(2)}</p>
           </div>
+          {cart.length > 0 && (
+            <div className="mt-3 space-y-2">
+              <Label htmlFor="monto-recibido" className="text-sm">Monto recibido (S/)</Label>
+              <Input
+                id="monto-recibido"
+                type="text"
+                inputMode="decimal"
+                placeholder="Ej. 50"
+                value={montoRecibido}
+                onChange={(e) => setMontoRecibido(e.target.value)}
+                className="font-medium"
+              />
+              {vuelto !== null && (
+                <p className="text-base font-bold text-green-600 dark:text-green-500">
+                  Vuelto: S/ {vuelto.toFixed(2)}
+                </p>
+              )}
+              {falta !== null && (
+                <p className="text-sm text-destructive font-medium">
+                  Falta: S/ {falta.toFixed(2)}
+                </p>
+              )}
+            </div>
+          )}
           <Button className="w-full mt-4" onClick={openCobrarDialog} disabled={cart.length === 0}>
             <Receipt className="h-4 w-4 mr-2" />
             Cobrar (Boleta / Factura)
