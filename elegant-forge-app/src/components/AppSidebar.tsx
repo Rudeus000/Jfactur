@@ -69,6 +69,7 @@ const navigation: NavItem[] = [
       { label: "Bancos", path: "/contabilidad/bancos", icon: Banknote },
       { label: "Cajas", path: "/contabilidad/cajas", icon: CreditCard },
       { label: "Aperturas de caja", path: "/contabilidad/aperturas", icon: Receipt },
+      { label: "Tipos de Gasto", path: "/contabilidad/tipos-gasto", icon: Layers },
       { label: "Gastos", path: "/contabilidad/gastos", icon: Receipt },
     ],
   },

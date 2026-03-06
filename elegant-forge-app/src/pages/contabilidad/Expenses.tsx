@@ -76,13 +76,13 @@ const Expenses = () => {
   const { toast } = useToast();
 
   const [form, setForm] = useState({
-    expense_type: "",
+    expense_type: "__none__",
     date: new Date().toISOString().slice(0, 10),
     amount: "",
-    currency: "",
+    currency: "__none__",
     description: "",
     reference: "",
-    cash_register: "",
+    cash_register: "__none__",
   });
 
   useEffect(() => {
@@ -106,22 +106,22 @@ const Expenses = () => {
   }, [open]);
 
   const openCreate = () => {
-    const defaultCurrency = currencies.find((c) => (c as { is_default?: boolean }).is_default)?.id || currencies[0]?.id || "";
+    const defaultCurrency = currencies.find((c) => (c as { is_default?: boolean }).is_default)?.id || currencies[0]?.id || "__none__";
     setForm({
-      expense_type: types[0]?.id ?? "",
+      expense_type: types[0]?.id ?? "__none__",
       date: new Date().toISOString().slice(0, 10),
       amount: "",
       currency: defaultCurrency,
       description: "",
       reference: "",
-      cash_register: "",
+      cash_register: "__none__",
     });
     setOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.expense_type || !form.amount) {
+    if (!form.expense_type || form.expense_type === "__none__" || !form.amount) {
       toast({ title: "Tipo de gasto y monto son obligatorios", variant: "destructive" });
       return;
     }
@@ -136,10 +136,10 @@ const Expenses = () => {
         expense_type: form.expense_type,
         date: form.date,
         amount,
-        currency: form.currency || undefined,
+        currency: form.currency === "__none__" ? undefined : form.currency || undefined,
         description: form.description.trim() || undefined,
         reference: form.reference.trim() || undefined,
-        cash_register: form.cash_register || undefined,
+        cash_register: form.cash_register === "__none__" ? undefined : form.cash_register || undefined,
       });
       toast({ title: "Gasto registrado correctamente" });
       setOpen(false);
@@ -179,6 +179,7 @@ const Expenses = () => {
                       <SelectValue placeholder="Seleccionar tipo" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="__none__">Seleccionar</SelectItem>
                       {types.map((t) => (
                         <SelectItem key={t.id} value={t.id}>
                           {t.name} {t.code ? `(${t.code})` : ""}
@@ -218,6 +219,7 @@ const Expenses = () => {
                         <SelectValue placeholder="Opcional" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="__none__">Sin moneda</SelectItem>
                         {currencies.map((c) => (
                           <SelectItem key={c.id} value={c.id}>
                             {c.code} — {c.name}
@@ -251,7 +253,7 @@ const Expenses = () => {
                         <SelectValue placeholder="Sin caja" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Sin caja</SelectItem>
+                        <SelectItem value="__none__">Sin caja</SelectItem>
                         {registers.map((r) => (
                           <SelectItem key={r.id} value={r.id}>
                             {r.name}

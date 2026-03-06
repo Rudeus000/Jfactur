@@ -16,62 +16,58 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 
-interface Currency {
+interface ExpenseType {
   id: string;
-  code: string;
+  code?: string;
   name: string;
-  symbol?: string;
-  is_default?: boolean;
   is_active?: boolean;
   [key: string]: unknown;
 }
 
-const Currencies = () => {
-  const { data, isLoading, refresh } = useApiList<Currency>({ endpoint: "/currencies/" });
+const ExpenseTypes = () => {
+  const { data, isLoading, refresh } = useApiList<ExpenseType>({ endpoint: "/expense-types/" });
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Currency | null>(null);
+  const [editing, setEditing] = useState<ExpenseType | null>(null);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ code: "", name: "", symbol: "", is_default: false });
+  const [form, setForm] = useState({ name: "", code: "", is_active: true });
   const { toast } = useToast();
 
   const openCreate = () => {
     setEditing(null);
-    setForm({ code: "", name: "", symbol: "", is_default: false });
+    setForm({ name: "", code: "", is_active: true });
     setOpen(true);
   };
 
-  const openEdit = (row: Currency) => {
+  const openEdit = (row: ExpenseType) => {
     setEditing(row);
     setForm({
-      code: row.code || "",
       name: row.name || "",
-      symbol: row.symbol || "",
-      is_default: row.is_default || false,
+      code: row.code || "",
+      is_active: row.is_active !== false,
     });
     setOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.code.trim() || !form.name.trim()) {
-      toast({ title: "Código y nombre son obligatorios", variant: "destructive" });
+    if (!form.name.trim()) {
+      toast({ title: "El nombre es obligatorio", variant: "destructive" });
       return;
     }
     setSaving(true);
     try {
       const payload = {
-        code: form.code.trim().toUpperCase(),
         name: form.name.trim(),
-        symbol: form.symbol.trim() || undefined,
-        is_default: form.is_default,
+        code: form.code.trim() || undefined,
+        is_active: form.is_active,
       };
       if (editing) {
-        await api.patch(`/currencies/${editing.id}/`, payload);
-        toast({ title: "Moneda actualizada" });
+        await api.patch(`/expense-types/${editing.id}/`, payload);
+        toast({ title: "Tipo de gasto actualizado" });
       } else {
-        await api.post("/currencies/", payload);
-        toast({ title: "Moneda creada" });
+        await api.post("/expense-types/", payload);
+        toast({ title: "Tipo de gasto creado" });
       }
       setOpen(false);
       refresh();
@@ -82,79 +78,71 @@ const Currencies = () => {
     }
   };
 
-  const columns: Column<Currency>[] = [
-    { key: "code", label: "Código" },
+  const columns: Column<ExpenseType>[] = [
+    { key: "code", label: "Código", render: (item) => (item.code as string) || "—" },
     { key: "name", label: "Nombre" },
-    { key: "symbol", label: "Símbolo" },
     {
-      key: "is_default",
-      label: "Por defecto",
-      render: (item) => (item.is_default ? "Sí" : "—"),
+      key: "is_active",
+      label: "Activo",
+      render: (item) => (
+        <span className={`erp-status-badge ${item.is_active !== false ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
+          {item.is_active !== false ? "Sí" : "No"}
+        </span>
+      ),
     },
   ];
 
   const filtered = data.filter(
-    (c) => c.code?.toLowerCase().includes(search.toLowerCase()) || c.name?.toLowerCase().includes(search.toLowerCase())
+    (t) => t.name?.toLowerCase().includes(search.toLowerCase()) || (t.code as string)?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div>
       <div className="erp-page-header flex items-start justify-between">
         <div>
-          <h1 className="erp-page-title">Monedas</h1>
-          <p className="erp-page-subtitle">Monedas disponibles para comprobantes y reportes.</p>
+          <h1 className="erp-page-title">Tipos de Gasto</h1>
+          <p className="erp-page-subtitle">Categorías de gasto para clasificar egresos. Cree tipos antes de registrar gastos.</p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <Button onClick={openCreate}>
             <Plus className="h-4 w-4 mr-2" />
-            Nueva Moneda
+            Nuevo Tipo
           </Button>
           <DialogContent className="max-w-md">
             <form onSubmit={handleSubmit}>
               <DialogHeader>
-                <DialogTitle>{editing ? "Editar moneda" : "Nueva moneda"}</DialogTitle>
-                <DialogDescription>Código ISO (ej. PEN, USD), nombre y símbolo.</DialogDescription>
+                <DialogTitle>{editing ? "Editar tipo de gasto" : "Nuevo tipo de gasto"}</DialogTitle>
+                <DialogDescription>Nombre y código opcional para clasificar gastos.</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Código *</Label>
+                    <Label>Nombre *</Label>
                     <Input
-                      value={form.code}
-                      onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
-                      placeholder="PEN"
-                      maxLength={5}
+                      value={form.name}
+                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                      placeholder="Alquiler"
                       required
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Símbolo</Label>
+                    <Label>Código</Label>
                     <Input
-                      value={form.symbol}
-                      onChange={(e) => setForm((f) => ({ ...f, symbol: e.target.value }))}
-                      placeholder="S/"
-                      maxLength={5}
+                      value={form.code}
+                      onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
+                      placeholder="ALQ01"
                     />
                   </div>
-                </div>
-                <div className="grid gap-2">
-                  <Label>Nombre *</Label>
-                  <Input
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    placeholder="Sol peruano"
-                    required
-                  />
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    id="is_default"
-                    checked={form.is_default}
-                    onChange={(e) => setForm((f) => ({ ...f, is_default: e.target.checked }))}
+                    id="is_active"
+                    checked={form.is_active}
+                    onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))}
                     className="rounded border-input"
                   />
-                  <Label htmlFor="is_default">Moneda por defecto</Label>
+                  <Label htmlFor="is_active">Activo</Label>
                 </div>
               </div>
               <DialogFooter>
@@ -162,7 +150,7 @@ const Currencies = () => {
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={saving}>
-                  {saving ? "Guardando…" : editing ? "Guardar" : "Crear moneda"}
+                  {saving ? "Guardando…" : editing ? "Guardar" : "Crear tipo"}
                 </Button>
               </DialogFooter>
             </form>
@@ -193,10 +181,10 @@ const Currencies = () => {
         ]}
         data={filtered}
         isLoading={isLoading}
-        emptyMessage="No hay monedas configuradas"
+        emptyMessage="No hay tipos de gasto. Cree uno para poder registrar gastos."
       />
     </div>
   );
 };
 
-export default Currencies;
+export default ExpenseTypes;

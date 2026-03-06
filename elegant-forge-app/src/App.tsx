@@ -23,6 +23,7 @@ import Banks from "@/pages/contabilidad/Banks";
 import CashRegisters from "@/pages/contabilidad/CashRegisters";
 import CashOpenings from "@/pages/contabilidad/CashOpenings";
 import Expenses from "@/pages/contabilidad/Expenses";
+import ExpenseTypes from "@/pages/contabilidad/ExpenseTypes";
 import Purchases from "@/pages/compras/Purchases";
 import PurchasePayments from "@/pages/compras/PurchasePayments";
 import Invoices from "@/pages/facturacion/Invoices";
@@ -85,6 +86,7 @@ const App = () => (
             <Route path="/contabilidad/cajas" element={<ProtectedLayout><CashRegisters /></ProtectedLayout>} />
             <Route path="/contabilidad/aperturas" element={<ProtectedLayout><CashOpenings /></ProtectedLayout>} />
             <Route path="/contabilidad/gastos" element={<ProtectedLayout><Expenses /></ProtectedLayout>} />
+            <Route path="/contabilidad/tipos-gasto" element={<ProtectedLayout><ExpenseTypes /></ProtectedLayout>} />
 
             {/* Compras */}
             <Route path="/compras/ordenes" element={<ProtectedLayout><Purchases /></ProtectedLayout>} />

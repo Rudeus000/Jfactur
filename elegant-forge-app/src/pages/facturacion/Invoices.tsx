@@ -462,11 +462,12 @@ const Invoices = () => {
                     {form.lines.map((line, idx) => (
                       <div key={idx} className="grid grid-cols-12 gap-2 items-end">
                         <div className="col-span-4">
-                          <Select value={line.product} onValueChange={(v) => updateLine(idx, "product", v)}>
+                          <Select value={line.product || "__none__"} onValueChange={(v) => updateLine(idx, "product", v === "__none__" ? "" : v)}>
                             <SelectTrigger className="h-8">
                               <SelectValue placeholder="Producto" />
                             </SelectTrigger>
                             <SelectContent>
+                              <SelectItem value="__none__">Seleccionar</SelectItem>
                               {products.map((p) => (
                                 <SelectItem key={p.id} value={p.id}>
                                   {p.nombre} {p.sku ? `(${p.sku})` : ""}

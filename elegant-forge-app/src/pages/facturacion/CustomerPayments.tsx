@@ -97,14 +97,14 @@ const CustomerPayments = () => {
   const { toast } = useToast();
 
   const [form, setForm] = useState({
-    invoice: "",
+    invoice: "__none__",
     date: new Date().toISOString().slice(0, 10),
     amount: "",
     payment_method: "efectivo",
     reference: "",
-    bank: "",
-    cash_register: "",
-    cash_opening: "",
+    bank: "__none__",
+    cash_register: "__none__",
+    cash_opening: "__none__",
     notes: "",
   });
 
@@ -132,21 +132,23 @@ const CustomerPayments = () => {
   }, [open]);
 
   const defaultRegisterId = user?.default_cash_register || "";
-  const openingsForRegister = form.cash_register
-    ? openings.filter((o) => o.cash_register === form.cash_register)
+  const activeCashRegister = form.cash_register !== "__none__" ? form.cash_register : "";
+  const openingsForRegister = activeCashRegister
+    ? openings.filter((o) => o.cash_register === activeCashRegister)
     : openings;
 
   const openCreate = () => {
-    const firstOpen = openingsForRegister.length ? openingsForRegister[0]?.id : "";
+    const regId = defaultRegisterId || (registers[0]?.id ?? "__none__");
+    const firstOpen = regId !== "__none__" ? (openings.filter((o) => o.cash_register === regId)[0]?.id ?? "__none__") : "__none__";
     setForm({
-      invoice: "",
+      invoice: invoices[0]?.id ?? "__none__",
       date: new Date().toISOString().slice(0, 10),
       amount: "",
       payment_method: "efectivo",
       reference: "",
-      bank: "",
-      cash_register: defaultRegisterId || (registers[0]?.id ?? ""),
-      cash_opening: defaultRegisterId ? (openings.filter((o) => o.cash_register === defaultRegisterId)[0]?.id ?? "") : firstOpen,
+      bank: "__none__",
+      cash_register: regId,
+      cash_opening: firstOpen,
       notes: "",
     });
     setOpen(true);
@@ -154,7 +156,7 @@ const CustomerPayments = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.invoice || !form.amount) {
+    if (!form.invoice || form.invoice === "__none__" || !form.amount) {
       toast({ title: "Factura y monto son obligatorios", variant: "destructive" });
       return;
     }
@@ -171,9 +173,9 @@ const CustomerPayments = () => {
         amount,
         payment_method: form.payment_method,
         reference: form.reference.trim() || undefined,
-        bank: form.bank || undefined,
-        cash_register: form.cash_register || undefined,
-        cash_opening: form.cash_opening || undefined,
+        bank: form.bank === "__none__" ? undefined : form.bank || undefined,
+        cash_register: form.cash_register === "__none__" ? undefined : form.cash_register || undefined,
+        cash_opening: form.cash_opening === "__none__" ? undefined : form.cash_opening || undefined,
         notes: form.notes.trim() || undefined,
       });
       toast({ title: "Cobro registrado correctamente" });
@@ -230,6 +232,7 @@ const CustomerPayments = () => {
                       <SelectValue placeholder="Seleccionar factura" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="__none__">Seleccionar</SelectItem>
                       {invoices.map((inv) => (
                         <SelectItem key={inv.id} value={inv.id}>
                           {inv.serie}-{inv.numero} — {inv.cliente_razon_social} — S/ {Number(inv.total ?? 0).toFixed(2)}
@@ -284,6 +287,7 @@ const CustomerPayments = () => {
                         <SelectValue placeholder="Opcional" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="__none__">Sin banco</SelectItem>
                         {banks.map((b) => (
                           <SelectItem key={b.id} value={b.id}>
                             {b.name}
@@ -301,7 +305,7 @@ const CustomerPayments = () => {
                       setForm((f) => ({
                         ...f,
                         cash_register: v,
-                        cash_opening: openings.filter((o: CashOpening) => o.cash_register === v)[0]?.id ?? "",
+                        cash_opening: v === "__none__" ? "__none__" : (openings.filter((o: CashOpening) => o.cash_register === v)[0]?.id ?? "__none__"),
                       }))
                     }
                   >
@@ -309,7 +313,7 @@ const CustomerPayments = () => {
                       <SelectValue placeholder="Sin caja" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Sin caja</SelectItem>
+                      <SelectItem value="__none__">Sin caja</SelectItem>
                       {registers.map((r) => (
                         <SelectItem key={r.id} value={r.id}>
                           {r.name}
@@ -318,7 +322,7 @@ const CustomerPayments = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                {form.cash_register && openingsForRegister.length > 0 && (
+                {form.cash_register && form.cash_register !== "__none__" && openingsForRegister.length > 0 && (
                   <div className="grid gap-2">
                     <Label>Apertura de caja</Label>
                     <Select value={form.cash_opening} onValueChange={(v) => setForm((f) => ({ ...f, cash_opening: v }))}>
@@ -326,6 +330,7 @@ const CustomerPayments = () => {
                         <SelectValue placeholder="Seleccionar apertura" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="__none__">Sin apertura</SelectItem>
                         {openingsForRegister.map((o) => (
                           <SelectItem key={o.id} value={o.id}>
                             {o.cash_register_name || o.opened_at}
